@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
   res.json({ message: "欢迎访问我们的后端服务器" });
 });
 
-app.use('/users', activityRouter)
+app.use('/activity', activityRouter)
 
 // 设置监听端口
 const PORT = process.env.PORT || 8081;
