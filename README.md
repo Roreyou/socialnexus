@@ -2,6 +2,5 @@
 only for the SSE_Project
 change 20:40
 
-test
-
-client2
+client:
+1、安装依赖：npm install
