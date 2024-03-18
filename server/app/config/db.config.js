@@ -1,7 +1,7 @@
 module.exports = {
     HOST: 'localhost',
     USER: "root",
-    PASSWORD: '0921',
+    PASSWORD: 'byc12138',
     DB: "socialnexus",
     port:3306,
     dialect: "mysql",
