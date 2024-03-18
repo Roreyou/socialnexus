@@ -1,17 +1,67 @@
-const { sequelize, activities } = require('../models');
+const Result = require('../common/Result');
+const db = require('../models/index');
 
-const UserController = {
-  getAllUsers: async (req, res) => {
+class ActivityController {
+  static async getAllActivities(req, res) {
     try {
-      const users = await activities.findAll(); // 使用 Sequelize 查询所有用户数据
-      res.json(users);
+      const activities = await db.activity.findAll();
+      return res.json(Result.success(activities));
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.json(Result.fail(error.message));
     }
-  },
+  }
 
-  // 其他方法...
+  static async createActivity(req, res) {
+    const { name, email } = req.body;
+    try {
+      const user = await db.User.create({ name, email });
+      return res.json(Result.success(user));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
 
-};
+  static async getActivityById(req, res) {
+    const { id } = req.params;
+    try {
+      const user = await db.User.findByPk(id);
+      if (!user) {
+        return res.json(Result.fail('用户不存在'));
+      }
+      return res.json(Result.success(user));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
 
-module.exports = UserController;
+  static async updateActivity(req, res) {
+    const { id } = req.params;
+    const { name, email } = req.body;
+    try {
+      const user = await db.User.findByPk(id);
+      if (!user) {
+        return res.json(Result.fail('用户不存在'));
+      }
+      await user.update({ name, email });
+      return res.json(Result.success(user));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+  static async deleteActivity(req, res) {
+    const { id } = req.params;
+    try {
+      const user = await db.User.findByPk(id);
+      if (!user) {
+        return res.json(Result.fail('活动不存在'));
+      }
+      await user.destroy();
+      return res.json(Result.success('互动删除成功'));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+}
+
+module.exports = ActivityController;

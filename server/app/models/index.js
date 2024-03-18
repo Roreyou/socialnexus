@@ -19,7 +19,8 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.activities = require("./activity.js")(sequelize, Sequelize);
-db.community = require("./community.js")
+db.activity = require("./activity.js")(sequelize, Sequelize);
+db.community = require("./community.js")(sequelize, Sequelize);
+
 
 module.exports = db;
