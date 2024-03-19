@@ -10,8 +10,12 @@ import Vue from 'vue'
 
 // main.js
 import uView from "uview-ui";
+
+import store from './store'
+
 Vue.use(uView);
 
+Vue.prototype.$store = store
 
 import App from './App'
 import './uni.promisify.adaptor'
@@ -21,6 +25,7 @@ Vue.config.productionTip = false
 App.mpType = 'app'
 
 const app = new Vue({
+  store,
   ...App
 })
 app.$mount()
