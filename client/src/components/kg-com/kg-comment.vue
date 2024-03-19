@@ -1,3 +1,5 @@
+<!-- 高校帖子评论 -->
+
 <template>
 	<view class="warp">
 		<view class="cot" v-for="(item,index) in commentList">

@@ -49,7 +49,7 @@
 		color: #8f8f94;
 	}
 </style> -->
-
+<!-- 高校首页 -->
 <template>
 	<view class="u-p-l-10 u-p-r-10">
 		<u-navbar :is-back="false">
@@ -290,7 +290,7 @@
 					// }else{
 					// 	this.$u.route('/pages/detail/preHouse');
 					// }
-					this.$u.route('/pages/pyq/pyq');
+					this.$u.route('/pages/pyq/home');
 				}
 				if(type === "3"){
 					// this.$u.route('/pages/search/searchList');

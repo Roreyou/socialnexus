@@ -1,3 +1,5 @@
+<!-- 输入框 -->
+
 <template>
 	<view class="m-input-view">
 		<input :focus="focus" :type="inputType" :value="value" @input="onInput" class="m-input-input" :placeholder="placeholder"

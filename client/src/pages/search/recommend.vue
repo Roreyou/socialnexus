@@ -1,3 +1,4 @@
+<!-- 高校活动推荐 -->
 <template>
 	<view class="content">
 		<image class="logo" src="/static/logo.png"></image>

@@ -1,3 +1,5 @@
+<!-- 统一注册页面 -->
+
 <template>
 	<view class="content">
     <image class="banner" src="../../static/logo.png"></image>
@@ -107,6 +109,8 @@
 </script>
 
 <style>
+@import url("../../static/styles/login.css");
+
   .title {
     width: 90px;
   }

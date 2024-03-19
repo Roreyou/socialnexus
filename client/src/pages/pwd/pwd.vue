@@ -2,10 +2,11 @@
  * @Author: 19875196595 2458190458@qq.com
  * @Date: 2024-03-19 18:02:01
  * @LastEditors: 19875196595 2458190458@qq.com
- * @LastEditTime: 2024-03-19 18:07:35
+ * @LastEditTime: 2024-03-19 20:52:02
  * @FilePath: \socialnexus\client\src\pages\pwd\pwd.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
+<!-- 统一找回密码页面 -->
 <template>
 	<view class="content">
 		<view class="input-group">
@@ -57,5 +58,5 @@
 </script>
 
 <style>
-
+@import url("../../static/styles/login.css");
 </style>

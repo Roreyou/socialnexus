@@ -1,3 +1,4 @@
+<!-- 高校我的活动 -->
 <template>
 	<view class="content">
 		<image class="logo" src="/static/logo.png"></image>

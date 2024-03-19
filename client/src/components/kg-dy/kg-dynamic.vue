@@ -1,3 +1,5 @@
+<!-- 高校帖子 -->
+
 <template>
 	<view>
 		<view class="dynamic" @click.stop="isInfo?'':goInfo(dyInfo.id)">

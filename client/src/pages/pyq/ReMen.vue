@@ -1,6 +1,6 @@
+<!-- 高校朋友圈 -- 热门 -->
 <template>
-	<view>
-		<u-navbar :is-back="true" title="动态列表"></u-navbar>
+	<view class="parent-container">
 		<view class="content">
 			<block v-for="(item,index) in dyList" :key="item.id">
 				<kgDynamics :dyInfo="item" :key="index"></kgDynamics>
@@ -15,13 +15,13 @@
 </template>
 <script>
 	import kgDynamics from "../../components/kg-dy/kg-dynamic.vue"
+	
 	export default {
 		components: {
-			kgDynamics
+			kgDynamics,
 		},
 		data() {
-			return {
-				
+			return {			
 				dyList: [{
 					id:1,
 					type: 1,
@@ -29,7 +29,7 @@
 					avatarUrl: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
 					userName: '25555',
 					pushTime: '2021-12-17 12:51:55',
-					content: '山不在高，有仙则名。水不在深，有龙则灵。斯是陋室，惟吾德馨。苔痕上阶绿，草色入帘青。谈笑有鸿儒，往来无白丁。可以调素琴，阅金经。无丝竹之乱耳，无案牍之劳形。南阳诸葛庐，西蜀子云亭。孔子云：何陋之有？',
+					content: '我是热门',
 					dyImgs: [
 						'https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
 					],
@@ -119,11 +119,11 @@
 				}],
 			};
 		},
-		
+		methods:{
+		}
 	};
 </script>
 
 
 <style lang="scss">
-
 </style>

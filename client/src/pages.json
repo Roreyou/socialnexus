@@ -6,19 +6,19 @@
 		{
 			"path": "pages/login/login",
 			"style": {
-		  	"navigationBarTitleText": "登录"
+				"navigationBarTitleText": "登录"
 			}
 		},
 		{
 			"path": "pages/reg/reg",
 			"style": {
-		  	"navigationBarTitleText": "注册"
+				"navigationBarTitleText": "注册"
 			}
 		},
 		{
 			"path": "pages/pwd/pwd",
 			"style": {
-		  	"navigationBarTitleText": "忘记密码"
+				"navigationBarTitleText": "忘记密码"
 			}
 		},
 		{
@@ -36,18 +36,6 @@
 				}
 			}
 		},
-		// {
-		// 	"path": "pages/center",
-		// 	"style": {
-		// 		"navigationBarTitleText": "center"
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/center/center",
-		// 	"style": {
-		// 		"navigationBarTitleText": "center"
-		// 	}
-		// },
 		{
 			"path": "pages/center/center",
 			"style": {
@@ -67,12 +55,6 @@
 			}
 		},
 		{
-			"path": "pages/pyq/pyq",
-			"style": {
-				"navigationBarTitleText": "朋友圈"
-			}
-		},
-		{
 			"path": "pages/search/recommend",
 			"style": {
 				"navigationBarTitleText": "活动推荐"
@@ -82,6 +64,12 @@
 			"path": "pages/pyq/dynamicInfo",
 			"style": {
 				"navigationBarTitleText": "详情"
+			}
+		},
+		{
+			"path": "pages/pyq/home",
+			"style": {
+				"navigationBarTitleText": "朋友圈"
 			}
 		}
 	],

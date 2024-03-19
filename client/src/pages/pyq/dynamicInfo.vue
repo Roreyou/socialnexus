@@ -1,3 +1,4 @@
+<!-- 帖子详情 -->
 <template>
 	<view>
 		<u-navbar :is-back="true" title="动态详情">

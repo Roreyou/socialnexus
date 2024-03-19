@@ -35,6 +35,7 @@ export default Vue.extend({
 </script>
 
 <style scoped></style> -->
+<!-- 高校个人中心 -->
 
 <template>
 	<view class="content">

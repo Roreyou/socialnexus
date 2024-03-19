@@ -1,3 +1,4 @@
+<!-- 统一登录界面 -->
 <template>
 	<view class="content">
     <image class="logo" src="../../static/logo.png"></image>
@@ -60,6 +61,7 @@
 				 * 客户端对账号信息进行一些必要的校验。
 				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
 				 */
+				/* 先删掉校验逻辑，之后再来补充
 				if (this.account.length < 5) {
 					uni.showToast({
 						icon: 'none',
@@ -73,7 +75,7 @@
 						title: '密码最短为 6 个字符'
 					});
 					return;
-				}
+				}*/
 				/**
 				 * 下面简单模拟下服务端的处理
 				 * 检测用户账号密码是否在已注册的用户列表中
@@ -116,7 +118,7 @@
 				 */
 				if (this.forcedLogin) {
 					uni.reLaunch({
-						url: '../main/main',
+						url: '../index/index',   /*进入高校首页*/
 					});
 				} else {
 					uni.navigateBack();
@@ -131,6 +133,7 @@
 </script>
 
 <style>
+@import url("../../static/styles/login.css");
 	.action-row {
 		display: flex;
 		flex-direction: row;
