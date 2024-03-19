@@ -59,6 +59,12 @@
 			"style": {
 				"navigationBarTitleText": "活动推荐"
 			}
+		},
+		{
+			"path": "pages/pyq/dynamicInfo",
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
 		}
 	],
 	"globalStyle": {
