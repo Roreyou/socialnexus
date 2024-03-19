@@ -138,9 +138,9 @@
 					'行万里路，知中国情',
 				],
 				navList:[
-				   {name:"加入活动",src:"/static/img/index/cover/index_cover1.png",type:"1"},
-				   {name:"朋友圈",src:"/static/img/index/cover/index_cover2.png",type:"1"},
-				   {name:"活动推荐",src:"/static/img/index/cover/index_cover3.png",type:"1"},
+				   {name:"我的活动",src:"/static/img/index/cover/index_cover1.png",type:"1"},
+				   {name:"朋友圈",src:"/static/img/index/cover/index_cover2.png",type:"2"},
+				   {name:"活动推荐",src:"/static/img/index/cover/index_cover3.png",type:"3"},
 				//    {name:"发布房源",src:"/static/img/index/cover/index_cover4.png",type:"2"}
 				],
 				loadStatus: 'loadmore',
@@ -204,53 +204,53 @@
 					this.$refs.uWaterfall.clear();
 				}
 				let url = "/api/houseApi/findHouseRoomList";
-				this.$u.get(url, {
-					pageNum: this.pageNum,
-					pageSize: this.pageSize,
-					orderByColumn: 'update_time,create_time',
-					isAsc: 'desc'
-				}).then(result => {
-					const data = result.rows;
-					if(this.pageNum>1 && data.length < this.pageSize){
-						return this.loadStatus = 'nomore';
-					}
-					this.houseList = data;
-					for (let i = 0; i < this.houseList.length; i++) {
-					    // 先转成字符串再转成对象，避免数组对象引用导致数据混乱
-					    let item = this.houseList[i]
-						item.image = item.faceUrl
-						if(item.type == 0){
-							item.type = '整租'
-						}else if(item.type == 1){
-							item.type = '合租'
-						}
-						if(item.roomType == 1){
-							item.roomType = '主卧'
-						}else if(item.roomType == 2){
-							item.roomType = '次卧'
-						}else{
-							item.roomType = '未知'
-						}
+				// this.$u.get(url, {
+				// 	pageNum: this.pageNum,
+				// 	pageSize: this.pageSize,
+				// 	orderByColumn: 'update_time,create_time',
+				// 	isAsc: 'desc'
+				// }).then(result => {
+				// 	const data = result.rows;
+				// 	if(this.pageNum>1 && data.length < this.pageSize){
+				// 		return this.loadStatus = 'nomore';
+				// 	}
+				// 	this.houseList = data;
+				// 	for (let i = 0; i < this.houseList.length; i++) {
+				// 	    // 先转成字符串再转成对象，避免数组对象引用导致数据混乱
+				// 	    let item = this.houseList[i]
+				// 		item.image = item.faceUrl
+				// 		if(item.type == 0){
+				// 			item.type = '整租'
+				// 		}else if(item.type == 1){
+				// 			item.type = '合租'
+				// 		}
+				// 		if(item.roomType == 1){
+				// 			item.roomType = '主卧'
+				// 		}else if(item.roomType == 2){
+				// 			item.roomType = '次卧'
+				// 		}else{
+				// 			item.roomType = '未知'
+				// 		}
 						
-						if(this.$u.test.isEmpty(item.houseNum)){
-							item.houseNum = ''
-						}
-						if(this.$u.test.isEmpty(item.houseHall)){
-							item.houseHall = ''
-						}
-						if(this.$u.test.isEmpty(item.toiletNum)){
-							item.toiletNum = ''
-						}
-						if(this.$u.test.isEmpty(item.floor)){
-							item.floor = ''
-						}else{
-							item.floor = item.floor + '层'
-						}
-					    this.flowList.push(item);
-					}
-					++ this.pageNum 
-					this.loadStatus = 'loadmore';
-				});
+				// 		if(this.$u.test.isEmpty(item.houseNum)){
+				// 			item.houseNum = ''
+				// 		}
+				// 		if(this.$u.test.isEmpty(item.houseHall)){
+				// 			item.houseHall = ''
+				// 		}
+				// 		if(this.$u.test.isEmpty(item.toiletNum)){
+				// 			item.toiletNum = ''
+				// 		}
+				// 		if(this.$u.test.isEmpty(item.floor)){
+				// 			item.floor = ''
+				// 		}else{
+				// 			item.floor = item.floor + '层'
+				// 		}
+				// 	    this.flowList.push(item);
+				// 	}
+				// 	++ this.pageNum 
+				// 	this.loadStatus = 'loadmore';
+				// });
 			},
 			checkUpdate(){
 				uni.getSystemInfo({
@@ -275,20 +275,26 @@
 			},
 			clickNav(type){
 				if(type === "1"){
-					this.$u.route('/pages/search/searchList');
+					// this.$u.route('/pages/search/searchList');
+					this.$u.route('/pages/search/myactivity');
 				}
 				if(type === "2"){
-					// 判断Token是否有效
-					let lifeData = uni.getStorageSync('lifeData');
-					let token = lifeData.vuex_token
-					if(!token){
-						// 没有token 则跳转到登录
-						return uni.reLaunch({
-							url:'../login/login'
-						})
-					}else{
-						this.$u.route('/pages/detail/preHouse');
-					}
+					// 判断Token是否有效   这个逻辑最后再来加
+					// let lifeData = uni.getStorageSync('lifeData');
+					// let token = lifeData.vuex_token
+					// if(!token){
+					// 	// 没有token 则跳转到登录
+					// 	return uni.reLaunch({
+					// 		url:'../login/login'
+					// 	})
+					// }else{
+					// 	this.$u.route('/pages/detail/preHouse');
+					// }
+					this.$u.route('/pages/pyq/pyq');
+				}
+				if(type === "3"){
+					// this.$u.route('/pages/search/searchList');
+					this.$u.route('/pages/search/recommend');
 				}
 			},
 			code(){

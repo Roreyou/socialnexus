@@ -11,7 +11,7 @@
 	export default {
 		data() {
 			return {
-				title: '高校 -- 找活动'
+				title: '高校 -- 朋友圈'
 			}
 		},
 		onLoad() {

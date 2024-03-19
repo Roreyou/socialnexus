@@ -33,13 +33,31 @@
 		{
 			"path": "pages/center/center",
 			"style": {
-				"navigationBarTitleText": "center"
+				"navigationBarTitleText": "个人中心"
 			}
 		},
 		{
 			"path": "pages/search/search",
 			"style": {
-				"navigationBarTitleText": "search"
+				"navigationBarTitleText": "找活动"
+			}
+		},
+		{
+			"path": "pages/search/myactivity",
+			"style": {
+				"navigationBarTitleText": "我的活动"
+			}
+		},
+		{
+			"path": "pages/pyq/pyq",
+			"style": {
+				"navigationBarTitleText": "朋友圈"
+			}
+		},
+		{
+			"path": "pages/search/recommend",
+			"style": {
+				"navigationBarTitleText": "活动推荐"
 			}
 		}
 	],
