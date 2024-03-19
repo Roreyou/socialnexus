@@ -4,7 +4,7 @@ const activityService = require('../services/activityService');
 class ActivityController {
   static async getAllActivities(req, res) {
     try {
-      const activities = await activityService.getAllActivities();
+      const activities = await activityService.getActivities();
       return res.json(Result.success(activities));
     } catch (error) {
       return res.json(Result.fail(error.message));
@@ -13,7 +13,7 @@ class ActivityController {
 
   static async createActivity(req, res) {
     try {
-      const activity = await activityService.createActivity(req.body);
+      await activityService.createActivity(req.body);
       return res.json(Result.success('活动添加成功'));
     } catch (error) {
       return res.json(Result.fail(error.message));
@@ -21,7 +21,7 @@ class ActivityController {
   }
 
   static async getActivityById(req, res) {
-    console.log('req.query:',req.query);
+    // console.log('req.query:',req.query);
     const { id } = req.query;
     try {
       const activity = await activityService.getActivityById(id);
@@ -34,11 +34,11 @@ class ActivityController {
     }
   }
 
-  static async updateActivity(req, res) {
-    const { id } = req.params;
-    const newActivity = req.body;
+  static async getActivityByCommu(req, res) {
+    const commu_id = req.query.community_id;
+    const status=req.query.status;
     try {
-      const activity = await activityService.updateActivity(id, newActivity);
+      const activity = await activityService.getActivityByCommu(commu_id,status);
       if (!activity) {
         return res.json(Result.fail('活动不存在'));
       }
@@ -48,14 +48,41 @@ class ActivityController {
     }
   }
 
+  static async updateActivity(req, res) {
+    const id = req.query.id;
+    const newActivity = req.body;
+    try {
+      const activity = await activityService.updateActivity(id, newActivity);
+      if (!activity) {
+        return res.json(Result.fail('活动不存在'));
+      }
+      return res.json(Result.success('活动修改成功'));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
   static async deleteActivity(req, res) {
-    const { id } = req.params;
+    const id  = req.query.id;
     try {
       const activity = await activityService.deleteActivity(id);
       if (!activity) {
         return res.json(Result.fail('活动不存在'));
       }
       return res.json(Result.success('活动删除成功'));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+  static async queryActivity(req,res){
+    const name =req.query.name;
+    try {
+      const activities = await activityService.queryActivity(name);
+      if (!activities) {
+        return res.json(Result.fail('活动不存在'));
+      }
+      return res.json(Result.success(activities));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }
