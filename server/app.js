@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
-const activityRouter = require('./app/routes/test_route')
+const communityRouter = require('./app/routes/communityRouter')
 
 var corsOptions = {
   origin: "*"
@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
   res.json({ message: "欢迎访问我们的后端服务器" });
 });
 
-app.use('/activity', activityRouter)
+app.use('/community', communityRouter)
 
 // 设置监听端口
 const PORT = process.env.PORT || 8081;
