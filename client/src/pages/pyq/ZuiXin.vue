@@ -34,7 +34,7 @@
 					type: 1,
 					dyLike: 10,
 					avatarUrl: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
-					userName: '25555',
+					userName: '用户名',
 					pushTime: '2021-12-17 12:51:55',
 					content: '我是最新',
 					dyImgs: [
@@ -133,4 +133,5 @@
 
 
 <style lang="scss">
+
 </style>
