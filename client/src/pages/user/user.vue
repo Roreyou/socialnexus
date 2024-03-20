@@ -1,5 +1,4 @@
 <!-- 高校-我的 -->
-
 <template>
 	<view class="content">
 		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
@@ -36,35 +35,41 @@
 				userinfo: {},
 				index: 0,
 				avatar: "../../static/logo.png",
-				list: [{
+				list: [
+					{
+						icon: 'cuIcon-usefull text-cyan',
+						text: '修改密码',
+						url: '/pages/user/password',
+					},
+					{
 						icon: 'cuIcon-lock text-red',
 						text: '我的评价',
-						url: '/pages/user/password',
+						url: '/pages/user/mycomment',
 					},
 					{
 						icon: 'cuIcon-attention text-green',
 						text: '收到评价',
-						url: '/pages/user/password2',
+						url: '/pages/user/becomment',
 					},
 					{
 						icon: 'cuIcon-question text-pink',
 						text: '队伍信息管理',
-						url: '/pages/user/news',
+						url: '/pages/user/teaminfomana',
 					},
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '队伍资料',
-						url: '/pages/user/about',
+						url: '/pages/user/teaminfo',
 					},
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '所属高校',
-						url: '/pages/user/about',
+						url: '/pages/user/school',
 					},
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '活动收藏',
-						url: '/pages/user/about',
+						url: '/pages/user/like',
 					},
 				]
 			};

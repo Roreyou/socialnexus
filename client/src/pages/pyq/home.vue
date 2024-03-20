@@ -28,12 +28,11 @@
  
 <script>
 	import indexTabbar from '../../components/top-tabbar/top-tabbar.vue';
-    //推荐选项卡  具体内容
+
 	import ZuiXin from './ZuiXin.vue';
   import ReMen from './ReMen.vue';
   import TongQvYv from './TongQvYv.vue';
-    // 关注选项卡  具体内容
-	// import GuanZhu from './topBarComponent/guanzhu.vue';
+
 	export default {
 		components:{
 			indexTabbar,
