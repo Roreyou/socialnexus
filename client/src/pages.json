@@ -135,7 +135,7 @@
 	},
 	"tabBar": {
 		"color": "#909399",
-		"selectedColor": "#2979ff",
+		"selectedColor": "#39b54a",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [
@@ -147,14 +147,12 @@
 			},
 			{
 				"pagePath": "pages/search/search",
-				// "pagePath": "pages/index/index",
 				"iconPath": "static/search.png",
 				"selectedIconPath": "static/search_select.png",
 				"text": "找活动"
 			},
 			{
 				"pagePath": "pages/user/user",
-				// "pagePath": "pages/index/index",
 				"iconPath": "static/center.png",
 				"selectedIconPath": "static/center-selected.png",
 				"text": "我"

@@ -53,5 +53,10 @@
 	}
 </script>
 <style>
-
+.tabbar{
+    height: 55px;
+}
+.action {
+  transform: scale(1.2); /* 将元素放大为原来的 1.2 倍 */
+}
 </style>

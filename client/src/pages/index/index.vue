@@ -99,6 +99,8 @@
 
 		data() {
 			return {
+				avatar:'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
+
 				keyword: '',
 				pageNum: 1,
 				pageSize: 20,
@@ -405,5 +407,11 @@
 
 	.margin-left-sm{
 		margin-left: 87rpx;
+	}
+
+	.cu-btn{
+		border-radius: 15px;
+    	background-color: rgba(255, 255, 255, 0.3);
+    	backdrop-filter: blur(10px);
 	}
 </style>
