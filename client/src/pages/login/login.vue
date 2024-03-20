@@ -1,7 +1,14 @@
 <!-- 统一登录界面 -->
 <template>
 	<view class="content">
-    <image class="logo" src="../../static/logo.png"></image>
+    	<!-- <image class="logo" src="../../static/logo.png"></image> -->
+		
+		<!-- 切换身份按钮 -->
+		<view style="padding: 30rpx;">
+			<!-- 由于应用场景可能存在边距，所有组件中没有默认设置边距，可以通过父元素来控制 -->
+			<YtabBtns :data="list" :index.sync="index"></YtabBtns>
+		</view>
+
 		<view class="input-group">
 			<view class="input-row border">
 				<text class="title">账号：</text>
@@ -30,13 +37,106 @@
 		mapMutations
 	} from 'vuex'
 	import mInput from '../../components/m-input.vue'
-
+	import YtabBtns from '../../components/login-tab/YtabBtns.vue'
+	
 	export default {
 		components: {
-			mInput
+			mInput,
+			YtabBtns
 		},
+
+		// 身份按钮
+		// props: {
+		// 	/**
+		// 	 * 展示字段的key 值为一个字符串
+		// 	 */
+		// 	listKey: {
+		// 		type: String,
+		// 		default: 'name'
+		// 	},
+		// 	/**
+		// 	 * 按钮列表 [{name:'按钮1', ...其他参数},{name:'按钮2', ...其他参数}]
+		// 	 */
+		// 	data: {
+		// 		type: Array,
+		// 		default: []
+		// 	},
+		// 	/**
+		// 	 * 前景色 文字 边框 及选中时的背景颜色
+		// 	 */
+		// 	color: {
+		// 		type: String,
+		// 		default: '#1E5EFF'
+		// 	},
+
+		// 	/**
+		// 	 * 背景色 未选中时背景色 及 选中时的文字颜色
+		// 	 */
+		// 	background: {
+		// 		type: String,
+		// 		default: '#FFFFFF'
+		// 	},
+		// 	/**
+		// 	 * 索引值 用来指定选中的值 绑定时需使用 .sync 
+		// 	 */
+		// 	borderColor: {
+		// 		type: String,
+		// 		default: '#1E5EFF'
+		// 	},
+		// 	/**
+		// 	 * 索引值 用来指定选中的值 绑定时需使用 .sync 
+		// 	 */
+		// 	index: {
+		// 		type: Number,
+		// 		default: 0
+		// 	},
+		// },
+
 		data() {
 			return {
+				// 身份按钮
+				index: 0,
+				list: [{
+					name: '校团委',
+					id: 1,
+				}, {
+					name: '高校队伍',
+					id: 2,
+				}, {
+
+					name: '基层工作人员',
+					id: 3,
+				}, ],
+
+				index1: 0,
+				list1: [{
+
+					name: 'Java',
+					id: 1,
+				}, {
+
+					name: 'Python',
+					id: 2,
+				}, {
+
+					name: 'PHP',
+					id: 3,
+				}, {
+
+					name: 'C/C++',
+					id: 3,
+				}, {
+
+					name: '.NET',
+					id: 3,
+				}, {
+
+					name: 'JavaScript',
+					id: 3,
+				}, ],
+
+
+
 				providerList: [],
 				hasProvider: false,
 				account: '',
@@ -124,15 +224,25 @@
 					uni.navigateBack();
 				}
 
+			},
+			
+			// 身份按钮
+			change(info) {
+				// 可以通过change事件来获取切换 也可以通过watch来监听index变化来获取切换
+				uni.showToast({
+					title: `你点击了${info.name}`
+				})
 			}
 		},
 		onReady() {
 			this.initPosition();
-    }
+    	},
+
+
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 @import url("../../static/styles/login.css");
 	.action-row {
 		display: flex;
@@ -152,4 +262,5 @@
     border-radius: 50%;
     margin: 50px auto 20px auto;
   }
+
 </style>

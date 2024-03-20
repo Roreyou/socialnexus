@@ -9,9 +9,20 @@
     <!-- <ReMen></ReMen> -->
     <!-- <TongQvYv></TongQvYv> -->
         <!-- 每个tab标题对应的具体组件内容 -->
-    <ZuiXin v-if="currentTabComponent === 'ZuiXin'"></ZuiXin>
+    <!-- <ZuiXin v-if="currentTabComponent === 'ZuiXin'"></ZuiXin>
     <ReMen v-if="currentTabComponent === 'ReMen'"></ReMen>
-    <TongQvYv v-if="currentTabComponent === 'TongQvYv'"></TongQvYv>    <!-- 每个tab标题对应的具体组件内容 -->
+    <TongQvYv v-if="currentTabComponent === 'TongQvYv'"></TongQvYv>    每个tab标题对应的具体组件内容 -->
+    <uni-transition name="fade">
+      <ZuiXin v-if="currentTabComponent === 'ZuiXin'"></ZuiXin>
+    </uni-transition>
+
+    <uni-transition name="fade">
+      <ReMen v-if="currentTabComponent === 'ReMen'"></ReMen>
+    </uni-transition>
+
+    <uni-transition name="fade">
+      <TongQvYv v-if="currentTabComponent === 'TongQvYv'"></TongQvYv>
+    </uni-transition>
 	</view>
 </template>
  
@@ -72,4 +83,13 @@
 </script>
  
 <style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
