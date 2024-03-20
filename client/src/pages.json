@@ -37,7 +37,7 @@
 			}
 		},
 		{
-			"path": "pages/center/center",
+			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "个人中心"
 			}
@@ -99,7 +99,7 @@
 				"text": "找活动"
 			},
 			{
-				"pagePath": "pages/center/center",
+				"pagePath": "pages/user/user",
 				// "pagePath": "pages/index/index",
 				"iconPath": "static/center.png",
 				"selectedIconPath": "static/center-selected.png",
