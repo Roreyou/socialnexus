@@ -1,6 +1,6 @@
 <!-- 高校 - 收到评价 -->
 <template>
-<view>
+<!-- <view>
 	<view>
 		<index-tabbar :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ></index-tabbar>
 	</view>
@@ -10,7 +10,11 @@
 		<YiJieShu v-if="currentTabComponent === 'YiJieShu'"></YiJieShu>
 		<DaiKaiZhan v-if="currentTabComponent === 'DaiKaiZhan'"></DaiKaiZhan>
 	</view>
-</view>
+</view> -->
+
+<!-- 尝试使用全屏组件： -->
+<utabsswiper ref="tabs" :list="list" :is-scroll="false"></utabsswiper>
+
 </template>
  
 <script>
@@ -21,16 +25,28 @@
 	import YiJieShu from './YiJieShu.vue';
 	import DaiKaiZhan from './DaiKaiZhan.vue';
 
+	import utabsswiper from '../../uview-ui/components/u-tabs-swiper/u-tabs-swiper.vue';
+
 	export default {
 		components:{
 			indexTabbar,
 			QuanBu,
 			DaiKaiZhan,
 			KaiZhanZhong,
-			YiJieShu
+			YiJieShu,
+			utabsswiper
 		},
 		data() {
 			return {
+				// 全屏组件
+				list: [{
+					name: '待收货'
+				}, {
+					name: '待付款'
+				}, {
+					name: '待评价'
+				}],
+
 				title: 'Hello',
 				tabIndex: "QuanBu",
 				tabBars:[

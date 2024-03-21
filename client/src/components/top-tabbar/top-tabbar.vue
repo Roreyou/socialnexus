@@ -54,6 +54,7 @@
 		line-height: 100rpx;
 		height: 100rpx;
 		border-bottom: 1px solid #eee;
+		margin-bottom: -5px;
 	}
 	.uni-tab-item-title{
 		color: #969696;
@@ -66,6 +67,7 @@
 	}
 	.tabActive{
 		color: #e02828;
+		background-color: white;
 	}
 	.tabActive .tab-item-title-line{
 		display: block;
