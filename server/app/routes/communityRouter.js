@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const ActivityController = require('../controllers/activityController.js');
 const CommunityController= require('../controllers/communityController.js');
+const TeamController= require('../controllers/teamController.js');
 
 //我的
 router.get('/myInfo', CommunityController.getCommunityById);//查询byID
@@ -16,5 +17,11 @@ router.put('/activityInfo',ActivityController.updateActivity);//修改
 router.delete('/deleteActivity',ActivityController.deleteActivity);//删除
 router.get('/activities',ActivityController.getActivityByCommu);//查询By社区和status
 router.get('/queryActivity',ActivityController.queryActivity);//模糊查询活动byName
+
+//我的队伍
+router.get('/teamInfo', TeamController.getTeamById);//查询by活动ID
+router.get('/teams',TeamController.getTeamByCommu);//查询by社区和status
+router.get('/queryTeamByName',TeamController.queryTeamByName);//模糊查询队伍by队伍名
+router.get('/queryTeamByAct',TeamController.queryTeamByAct);//模糊查询队伍by活动名
 
 module.exports = router;

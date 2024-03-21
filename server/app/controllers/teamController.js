@@ -1,0 +1,100 @@
+//controllers/teasmController.js
+const Result = require('../common/Result');
+const teamService = require('../services/teamService');
+
+class teamController {
+  static async getAllTeams(req, res) {
+    try {
+      const teams = await teamService.getAllTeams();
+      return res.json(Result.success(teams));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+
+  static async getTeamById(req, res) {
+    // console.log('req.query:',req.query);
+    const { id } = req.query;
+    try {
+      const team = await teamService.getTeamById(id);
+      if (!team) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success(team));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+  static async getTeamByCommu(req, res) {
+    const commu_id = req.query.community_id;
+    const status=req.query.status;
+    try {
+      const team = await teamService.getTeamByCommu(commu_id,status);
+      if (!team) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success(team));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+  static async updateTeam(req, res) {
+    const id = req.body.id;
+    const newteam = req.body;
+    try {
+      const team = await teamService.updateteam(id, newteam);
+      if (!team) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success('队伍修改成功'));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+  static async deleteTeam(req, res) {
+    const id  = req.query.id;
+    try {
+      const team = await teamService.deleteTeam(id);
+      if (!team) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success('队伍删除成功'));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+  static async queryTeamByName(req,res){
+    const commu_id=req.query.community_id;
+    const team_name =req.query.team_name;
+    try {
+      const teams = await teamService.queryTeamByName(commu_id,team_name);
+      if (!teams) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success(teams));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+  static async queryTeamByAct(req,res){
+    const commu_id=req.query.community_id;
+    const act_name =req.query.act_name;
+    try {
+      const teams = await teamService.queryTeamByAct(commu_id,act_name);
+      if (!teams) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success(teams));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+}
+
+module.exports = teamController;
