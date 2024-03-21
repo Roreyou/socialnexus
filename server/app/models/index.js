@@ -21,6 +21,15 @@ db.sequelize = sequelize;
 
 db.activity = require("./activity.js")(sequelize, Sequelize);
 db.community = require("./community.js")(sequelize, Sequelize);
+db.school=require("./school.js")(sequelize, Sequelize);
+db.schoolteam=require("./schoolteam.js")(sequelize, Sequelize);
+db.activity_type=require("./activity_type.js")(sequelize, Sequelize);
+db.comment=require("./comment.js")(sequelize, Sequelize);
+db.favorate=require("./favorate.js")(sequelize, Sequelize);//发现这里拼错了,yogi好尴尬
+db.post=require("./post.js")(sequelize, Sequelize);
+db.teamactivity=require("./teamactivity.js")(sequelize, Sequelize);
+db.teammember=require("./teammember.js")(sequelize, Sequelize);
+
 
 
 module.exports = db;

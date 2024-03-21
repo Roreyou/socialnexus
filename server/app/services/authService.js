@@ -5,10 +5,18 @@ const generateToken=require('../utils/jwtUtils');
 class AuthService {
     static login = async (loginData) => {
         let model; // 声明 model 变量
-        // 从数据库中获取用户信息
-        if (loginData.identity === 'community') {
-            model = db.community; // 不同的身份identity修改这里的model
-        }
+        // identity指名身份
+        switch (loginData.identity) {
+            case 'community':
+                model=db.community;
+                break;
+            case 'school':
+                model=db.school;
+                break;
+            case 'schoolteam':
+                model=db.schoolteam;
+                break;
+        } 
 
         const user = await model.findOne({
             where: {
@@ -35,9 +43,18 @@ class AuthService {
     static register = async (registerData) => {
         let model; // 声明 model 变量
     
-        if (registerData.identity === 'community') {
-            model = db.community; // 根据 identity 选择不同的 model
-        }
+        // identity指名身份，选择不同的table
+        switch (loginData.identity) {
+            case 'community':
+                model=db.community;
+                break;
+            case 'school':
+                model=db.school;
+                break;
+            case 'schoolteam':
+                model=db.schoolteam;
+                break;
+        } 
     
         const user = { ...registerData };
         delete user.identity;
