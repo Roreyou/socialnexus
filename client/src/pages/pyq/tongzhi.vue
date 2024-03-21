@@ -1,4 +1,5 @@
 <!-- 高校 评论点赞通知 -->
+//可以用colorUI的消息列表
 <template>
 	<view class="content">
 		<image class="logo" src="/static/logo.png"></image>
