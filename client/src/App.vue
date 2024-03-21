@@ -1,13 +1,3 @@
-<!--
- * @Author: 19875196595 2458190458@qq.com
- * @Date: 2024-03-18 20:25:27
- * @LastEditors: 19875196595 2458190458@qq.com
- * @LastEditTime: 2024-03-19 20:42:36
- * @FilePath: \socialnexus\client\src\App.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
-
-
 
 <script>
 	export default {
@@ -150,5 +140,7 @@
   
 //   button.lg {
 //   }
-  
+  .tab-bar-active{
+	color: #39b54a
+  }
 </style>

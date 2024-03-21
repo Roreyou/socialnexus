@@ -11,10 +11,18 @@
 :disabled="true" style="width: 565rpx;" @click="search"></u-search>
 			</view>
 		</u-navbar>
-		<view>
+		<!-- 轮播图 -->
+		<!-- <view>
 			<u-swiper :list="swiperList" height="400"></u-swiper>
+		</view>	 -->  
+		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
+			<view class="user-section">
+				<image :src="avatar" class="cu-avatar xl round"></image>
+				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
+				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication">认证信息</view>
+			</view>
 		</view>
-		clickImage		<view>
+		<view> 
 			<view class="rowClass">
 				<u-row>
 					<u-col span="4" text-align="center" v-for="(item,index) in navList" :key="index">
@@ -31,10 +39,9 @@
 				bg-color="#fff" :duration="5000" border-radius="15"></u-notice-bar>
 			</view>
 			<u-gap height="5"></u-gap>
-			<u-waterfall v-model="flowList" ref="uWaterfall">
+			<!-- <u-waterfall v-model="flowList" ref="uWaterfall">
 			    <template v-slot:left="{leftList}">
 			        <view class="demo-warter" v-for="(item, index) in leftList" :key="index">
-			            <!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
 			            <u-lazy-load threshold="300" border-radius="12" :image="item.image" :index="index"
 			                         @click="clickImage(item.id)"></u-lazy-load>
 			            <view class="item-title">{{item.villageName}} {{item.type == '整租' ? item.houseNum + item.houseHall + item.toiletNum : item.roomType+'-朝'+item.direction}}</view>
@@ -51,8 +58,20 @@
 						<view class="item-desc">{{item.type}} | {{item.type == '整租' ? item.houseArea : item.roomArea}}㎡ {{item.floor}}</view>
 			        </view>
 			    </template>
-			</u-waterfall>
+			</u-waterfall> -->
+		</view> 
+		
+		<!-- 活动推荐列表 -->
+		<view>
+			<view>
+				活动推荐
+			</view>
+			<view>
+
+			</view>
+
 		</view>
+		
 		<u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="findHouseList"></u-loadmore>
 		<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
 		<u-no-network></u-no-network>
@@ -67,10 +86,21 @@
 </template>
 
 <script>
-	
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
+	import actilist from '../../components/acti-list/acti-list.vue';
+
 	export default {
+		components: {
+			actilist
+		},
+
 		data() {
 			return {
+				avatar:'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
+
 				keyword: '',
 				pageNum: 1,
 				pageSize: 20,
@@ -97,6 +127,11 @@
 				uvCode: uni.getStorageSync('uvCode')
 			}
 		},
+
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','userName'])
+		},
+
 		onLoad() {
 			uni.$on('findIndexHouseList', (obj) => {
 				// 获取数据
@@ -131,6 +166,11 @@
 			uni.stopPullDownRefresh();
 		},
 		methods: {
+			handleAuthentication(){
+				this.$u.route({
+					url: 'pages/index/verify',
+				  })
+			},
 			location(){
 				  this.$u.route({
 					url: 'pages/location/location',
@@ -239,7 +279,7 @@
 					// }else{
 					// 	this.$u.route('/pages/detail/preHouse');
 					// }
-					this.$u.route('/pages/pyq/home');
+					this.$u.route('/pages/pyq/entry');
 				}
 				if(type === "3"){
 					// this.$u.route('/pages/search/searchList');
@@ -265,6 +305,12 @@
 </script>
 
 <style lang="scss" scoped>
+	// 用户名
+	.user-section {
+		display: flex;
+		align-items: center;
+	}
+
 	.nomore {
 		background-color: $u-bg-color;
 	}
@@ -357,5 +403,15 @@
 			-webkit-box-shadow: 0px 1px 20px 0px rgba(0,0,0,0.1),inset 0px -1px 0px 0px rgba(0,0,0,0.1);
 			box-shadow: 0px 1px 20px 0px rgba(0,0,0,0.1),inset 0px -1px 0px 0px rgba(0,0,0,0.1);
 		}
+	}
+
+	.margin-left-sm{
+		margin-left: 87rpx;
+	}
+
+	.cu-btn{
+		border-radius: 15px;
+    	background-color: rgba(255, 255, 255, 0.3);
+    	backdrop-filter: blur(10px);
 	}
 </style>

@@ -10,7 +10,7 @@
 				<view class="cot_flirt_name">
 					{{item.nickName}}
 				</view>
-				<image @click="delCom(item.comId)" class="cot_flirt_shanchu" src="../../static/icon/shanchu.png"></image>
+				<image @click="delCom(item.id)" class="cot_flirt_shanchu" src="../../static/icon/shanchu.png"></image>
 			</view>
 			<view class="cot_content">
 				{{item.comInfo}}
@@ -23,14 +23,16 @@
 			</view>
 			<view class="cot_operate">
 				<view class="cot_operate_time">
-					{{item.comTime | timeago}}
+					<!-- 过滤器，之后需要用到的时候再来定义
+					{{item.comTime | timeago}}    -->
+					{{item.comTime}}
 				</view>
 				<view class="cot_operate_icon">
 					<image src="../../static/icon/pinglun1.png" mode="" @click="replyContent(item.comId)" ></image>
-					<view class="" @click="replyContent(item.comId)" >
+					<view class="" @click="replyContent(item.id)" >
 						{{item.replyList.length}}
 					</view>
-					<image :src="item.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
+					<image class="like_icon" :src="item.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
 					 mode=""  @click="replyLike(index)"></image>
 					<view class="" @click="replyLike(index)">
 						{{item.comLike}}
@@ -201,4 +203,7 @@
 		}
 	}
 	
+	.like_icon{
+		margin-left: 5px;
+	}
 </style>

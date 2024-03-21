@@ -13,9 +13,9 @@
 						<view class="dynamic_header_user_info_time">{{dyInfo.pushTime}}</view>
 					</view>
 				</view>
-				<view class="dynamic_header_operate">
+				<!-- <view class="dynamic_header_operate">
 					<u-button :ripple="true" ripple-bg-color="#003d99" size="mini" type="warning">关注</u-button>
-				</view>
+				</view> -->
 			</view>
 
 			<view class="dynamic_cont">
@@ -72,7 +72,7 @@
 					<view class="" @click="isInfo?comContent(dyInfo.id):''">
 						{{dyInfo.comNum}}
 					</view>
-					<image :src="dyInfo.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
+					<image class="like_icon" :src="dyInfo.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
 					 mode="" @click="isInfo?comLike(dyInfo.id):''"></image>
 					<view class="" @click="isInfo?comLike(dyInfo.id):''">
 						{{dyInfo.dyLike}}
@@ -268,4 +268,16 @@
 		}
 	}
 	
+	.dynamic_tag{
+		margin-top: 10px;
+	}
+	.operate{
+		margin-top: 5px;
+	}
+	.dynamic_header{
+		font-size: 15px;
+	}
+	.like_icon{
+		margin-left: 5px;
+	}
 </style>

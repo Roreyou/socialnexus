@@ -113,6 +113,18 @@
 			"style": {
 				"navigationBarTitleText": "队伍信息管理"
 			}
+		},
+		{
+			"path": "pages/index/verify",
+			"style": {
+				"navigationBarTitleText": "认证信息"
+			}
+		},
+		{
+			"path": "pages/pyq/entry",
+			"style": {
+				"navigationBarTitleText": "朋友圈"
+			}
 		}
 	],
 	"globalStyle": {
@@ -123,7 +135,7 @@
 	},
 	"tabBar": {
 		"color": "#909399",
-		"selectedColor": "#2979ff",
+		"selectedColor": "#39b54a",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [
@@ -135,14 +147,12 @@
 			},
 			{
 				"pagePath": "pages/search/search",
-				// "pagePath": "pages/index/index",
 				"iconPath": "static/search.png",
 				"selectedIconPath": "static/search_select.png",
 				"text": "找活动"
 			},
 			{
 				"pagePath": "pages/user/user",
-				// "pagePath": "pages/index/index",
 				"iconPath": "static/center.png",
 				"selectedIconPath": "static/center-selected.png",
 				"text": "我"

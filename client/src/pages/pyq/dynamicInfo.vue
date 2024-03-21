@@ -1,8 +1,8 @@
 <!-- 帖子详情 -->
 <template>
 	<view>
-		<u-navbar :is-back="true" title="动态详情">
-		</u-navbar>
+		<!-- <u-navbar :is-back="true" title="动态详情">
+		</u-navbar> -->
 		
 		<view class="warp" >
 			<kgDynamics :dyInfo="dyInfo" :isInfo="true"  @comContent="comContent" @comLikes="comLikes" ></kgDynamics>
@@ -56,8 +56,8 @@
 </template>
 
 <script>
-	import kgComment from "../../components/kg-com/kg-comment"
-	import kgDynamics from "../../components/kg-dy/kg-dynamic"
+	import kgComment from "../../components/kg-com/kg-comment.vue"
+	import kgDynamics from "../../components/kg-dy/kg-dynamic.vue"
 	export default {
 		components: {
 			kgComment,
@@ -182,7 +182,10 @@
 			//喜欢数
 			comLikes(id){
 				if(this.dyInfo.fabulous){
-					this.$u.toast(`不能重复点赞哦~`);
+					//去掉点赞逻辑
+					this.dyInfo.fabulous = false
+					this.dyInfo.dyLike = this.dyInfo.dyLike - 1
+					this.$u.toast(`成功取消点赞`);
 					return
 				}
 				this.dyInfo.fabulous = true
@@ -191,7 +194,10 @@
 			},
 			replyLike(index){
 				if(this.dyInfo.comList[index].fabulous){
-					this.$u.toast(`不能重复点赞哦~`);
+					this.dyInfo.comList[index].fabulous = false
+					this.dyInfo.comList[index].comLike = this.dyInfo.comList[index].comLike - 1
+					// this.$set(this.dyInfo.comList[index], 'dyLike', this.dyInfo.comList[index].dyLike - 1);
+					this.$u.toast(`成功取消点赞`);
 					return
 				}
 				this.dyInfo.comList[index].fabulous = true
@@ -200,7 +206,11 @@
 			},
 			// 删除评论
 			delCom(comId){
-				this.$u.toast(`删除成功~`);
+				//这里需要发送一个删除这条评论的请求
+				//先在前端删掉
+				const filteredList = this.dyInfo.comList.filter(item => item.id !== comId);
+				this.dyInfo.comList = filteredList;
+				this.$u.toast(`删除成功！`);
 			},
 			previewImage(url, urls) {
 				uni.previewImage({
