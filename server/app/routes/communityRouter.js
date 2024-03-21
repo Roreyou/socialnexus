@@ -3,6 +3,11 @@
 const express = require('express');
 const router = express.Router();
 const ActivityController = require('../controllers/activityController.js');
+const CommunityController= require('../controllers/communityController.js');
+
+//我的
+router.get('/myInfo', CommunityController.getCommunityById);//查询byID
+router.put('/myInfo',CommunityController.updateCommunity);//修改社区信息
 
 // 我的活动
 router.get('/activityInfo', ActivityController.getActivityById);//查询byID

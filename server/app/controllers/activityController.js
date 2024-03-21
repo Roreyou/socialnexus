@@ -49,7 +49,7 @@ class ActivityController {
   }
 
   static async updateActivity(req, res) {
-    const id = req.query.id;
+    const id = req.body.id;
     const newActivity = req.body;
     try {
       const activity = await activityService.updateActivity(id, newActivity);

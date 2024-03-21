@@ -4,8 +4,8 @@ const cors = require("cors");
 
 const app = express();
 
-const jwtUtils = require('./utils/jwtUtils');
-const jwtMiddleware = require('./middleware/jwtMiddleware');
+const jwtUtils = require('./app/utils/jwtUtils');
+const jwtMiddleware = require('./app/middleware/jwtMiddleware');
 
 var corsOptions = {
   origin: "*"
@@ -24,11 +24,13 @@ app.get("/", (req, res) => {
   res.json({ message: "欢迎访问我们的后端服务器" });
 });
 
-const communityRouter = require('./app/routes/communityRouter')
+const communityRouter = require('./app/routes/communityRouter');
+const authRouter = require('./app/routes/authRouter');
 
 
 //使用路由
 app.use('/community', communityRouter)
+app.use('/auth', authRouter)
 
 
 
