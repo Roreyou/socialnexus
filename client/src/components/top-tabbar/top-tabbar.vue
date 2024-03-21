@@ -57,16 +57,18 @@
 		margin-bottom: -5px;
 	}
 	.uni-tab-item-title{
-		color: #969696;
+		color: #524f4f;
 		font-weight: bold;
-		font-size: 38rpx;
+		font-size: 32rpx;
 		width: 150rpx;
 		display: inline-block;
 		text-align: center;
-		color: #555;
+		/* color: #555; */
+		/* color: #000; */
 	}
 	.tabActive{
-		color: #e02828;
+		color: #000;
+		font-size: 40rpx;
 		background-color: white;
 	}
 	.tabActive .tab-item-title-line{

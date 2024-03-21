@@ -2,27 +2,14 @@
 
 <template>
 	<view>
-		<index-tabbar :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ></index-tabbar>
-		<!-- 每个tab标题对应的具体组件内容 -->
-		<!-- <component v-bind:is="currentTabComponent"></component> -->
-    <!-- <ZuiXin></ZuiXin> -->
-    <!-- <ReMen></ReMen> -->
-    <!-- <TongQvYv></TongQvYv> -->
-        <!-- 每个tab标题对应的具体组件内容 -->
-    <!-- <ZuiXin v-if="currentTabComponent === 'ZuiXin'"></ZuiXin>
-    <ReMen v-if="currentTabComponent === 'ReMen'"></ReMen>
-    <TongQvYv v-if="currentTabComponent === 'TongQvYv'"></TongQvYv>    每个tab标题对应的具体组件内容 -->
-    <uni-transition name="fade">
+		<index-tabbar class="index-tabbar" :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ></index-tabbar>
+	<view class="content">
       <ZuiXin v-if="currentTabComponent === 'ZuiXin'"></ZuiXin>
-    </uni-transition>
 
-    <uni-transition name="fade">
       <ReMen v-if="currentTabComponent === 'ReMen'"></ReMen>
-    </uni-transition>
 
-    <uni-transition name="fade">
       <TongQvYv v-if="currentTabComponent === 'TongQvYv'"></TongQvYv>
-    </uni-transition>
+	</view>	
 	</view>
 </template>
  
@@ -75,7 +62,13 @@
 				//设置id，来显示选中那个标签，显示下划线
 				this.tabIndex = item.id;
 				//显示标签对应的组件内容
-				this.currentTabComponent = item.id
+				this.currentTabComponent = item.id;
+				
+				// 切换组件时页面滚动到顶部
+  				wx.pageScrollTo({
+  				  scrollTop: 0,
+  				  duration: 0
+  				});
 			}
 		}
 	}
@@ -90,5 +83,19 @@
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+.index-tabbar {
+  background-color: white;
+  position: fixed;
+  top: 0; /* 或者设置为底部时使用 bottom: 0; */
+  left: 0;
+  width: 100%;
+  z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
+
+}
+
+.content{
+	margin-top: 37px;
 }
 </style>
