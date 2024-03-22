@@ -2307,7 +2307,7 @@ button.cuIcon.lg {
 .cu-card.article>.cu-item .content .text-content {
 	font-size: 28upx;
 	color: #888;
-	height: 4.8em;
+	height: auto;
 	overflow: hidden;
 }
 
