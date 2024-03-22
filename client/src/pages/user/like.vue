@@ -1,51 +1,125 @@
-<!-- 高校 - 活动收藏 -->
-<!-- 高校 - 收到评价 -->
-
-<!-- 朋友圈页面 -- 顶部导航栏 -->
-
+<!-- 高校 活动收藏 -->
 <template>
-	<view>
-		<index-tabbar :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ></index-tabbar>
+	<view class="content">
+		<view class="cu-item" v-for="(item,index) in acList" :key="index">
+			<view class="cu-card article" :class="isCard?'no-card':''">
+					<view class="cu-item shadow">
+						<view class="title"><view class="text-cut">{{item.title}}</view></view>
+						<view class="content">
+							<view class="desc">
+								<view class="text-content"> 日期: {{item.time}}</view>
+								<view class="text-content"> 地点: {{item.place}}</view>
+								<view class="text-content"> 岗位: {{item.job}}</view>
+								<view class="wordcont">	
+									<view class="ackeywords" v-for="(word,index) in item.keywords.split(',')" :key="index">
+										<view class="cu-tag bg-red light sm round">{{word}}</view>
+									</view>
+								</view>
+							</view>
+							<view class="favorite-button">
+        						<button class="cancel-favorite" @click="cancelFavorite(item.id)">取消收藏</button>
+      						</view>
+						</view>
+					</view>
+			</view>
+		</view>
+		<view v-if="acList.length === 0" class="no-activities">
+    		没有收藏的活动
+  		</view>
 	</view>
 </template>
- 
+
 <script>
-	import indexTabbar from '../../components/top-tabbar/top-tabbar.vue';
 	export default {
-		components:{
-			indexTabbar,
-		},
 		data() {
 			return {
-				title: 'Hello',
-				tabIndex: "ZuiXin",
-				tabBars:[
+				acList:[
 					{
-						name: "最新",
-						id: "ZuiXin"
+						id: 0,
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
 					},
 					{
-						name:"热门",
-						id:"ReMen"
+						id: 1,
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
 					},
-					{
-						name: "同区域",
-						id: "TongQvYv"
+					{	
+						id: 2,
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
 					}
-				],
-				currentTabComponent: "ZuiXin"
+				]
 			}
 		},
-		methods:{
-			TarData(item){
-				//设置id，来显示选中那个标签，显示下划线
-				this.tabIndex = item.id;
-				//显示标签对应的组件内容
-				this.currentTabComponent = item.id
+		onLoad() {
+
+		},
+		methods: {
+			cancelFavorite(likeid){
+				uni.showModal({
+    			    title: '确认取消收藏',
+    			    content: '确定取消收藏吗？',
+    			    success: (res) => {
+    			      if (res.confirm) {
+    			        // 用户点击了确认按钮
+						const filteredList = this.acList.filter(item => item.id !== likeid);
+						this.acList = filteredList;
+						this.$u.toast(`取消收藏成功！`);
+    			      }
+    			    }
+    			});
 			}
 		}
 	}
 </script>
- 
-<style>
+<style scoped>
+.no-activitis{
+	text-align: center;
+    line-height: 100rpx;
+}
+
+.text-cut{
+	margin-top: 10px;
+	line-height: 60rpx;
+}
+.cu-bar .action:first-child{
+	margin-left: 24rpx;
+}
+
+.cu-item .shadow{
+	margin: 0;
+	margin-top: 10rpx;
+}
+.text-content{
+	height: auto;
+}
+.wordcont{
+	margin-top: 10rpx;
+}
+.wordcont view {
+	display: inline-block;
+  margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
+}
+.favorite-button{
+	display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+.cancel-favorite{
+	font-size: small;
+}
 </style>
