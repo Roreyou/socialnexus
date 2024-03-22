@@ -23,5 +23,7 @@ router.get('/teamInfo', TeamController.getTeamById);//查询by活动ID
 router.get('/teams',TeamController.getTeamByCommu);//查询by社区和status
 router.get('/queryTeamByName',TeamController.queryTeamByName);//模糊查询队伍by队伍名
 router.get('/queryTeamByAct',TeamController.queryTeamByAct);//模糊查询队伍by活动名
+router.post('/admitTeam',TeamController.admitTeam);//录取或驳回队伍
+router.post('/commentTeam',TeamController.commentTeam);//评价队伍的成果
 
 module.exports = router;
