@@ -95,6 +95,37 @@ class teamController {
       return res.json(Result.fail(error.message));
     }
   }
+
+  static async admitTeam(req,res){
+    const team_id=req.body.team_id;
+    const activity_id =req.body.activity_id;
+    const admit = req.body.admit;
+    try {
+      const team = await teamService.admitTeam(team_id,activity_id,admit);
+      if (!team) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success('录取成功'));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+  static async commentTeam(req,res){
+    const team_id=req.body.team_id;
+    const activity_id =req.body.activity_id;
+    const comment = req.body.comment;
+    try {
+      const team = await teamService.commentTeam(team_id,activity_id,comment);
+      if (!team) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success('评价成功'));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+    
+  }
 }
 
 module.exports = teamController;

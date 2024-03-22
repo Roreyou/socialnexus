@@ -144,6 +144,60 @@ class teamService {
 
   }
 
+  //录取或驳回一个队伍
+static async admitTeam(team_id, activity_id, admit) {
+  console.log(team_id, activity_id, admit);
+
+  // 先查询符合条件的行
+  const teamActivity = await db.teamactivity.findOne({
+    where: {
+      activity_id: activity_id,
+      team_id: team_id
+    }
+  });
+
+  // 如果未找到符合条件的记录，返回null
+  if (!teamActivity) {
+    return null;
+  }
+
+  // 更新找到的记录
+  const updatedActivity = await teamActivity.update(
+    { status: admit },
+    { returning: true }
+  );
+
+  return updatedActivity;
+}
+
+  //评价一个队伍
+static async commentTeam(team_id, activity_id, comment) {
+  // 先查询符合条件的记录
+  const teamActivity = await db.teamactivity.findOne({
+    where: {
+      activity_id: activity_id,
+      team_id: team_id
+    }
+  });
+
+  // 如果未找到符合条件的记录，返回null
+  if (!teamActivity) {
+    return null;
+  }
+
+  // 更新找到的记录
+  const updatedActivity = await teamActivity.update(
+    {
+      com_to_team: comment,
+      status: 5
+    },
+    { returning: true }
+  );
+
+  return updatedActivity;
+}
+
+
 }
 
 module.exports = teamService;
