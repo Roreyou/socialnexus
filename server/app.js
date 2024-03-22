@@ -24,11 +24,12 @@ app.get("/", (req, res) => {
   res.json({ message: "欢迎访问我们的后端服务器" });
 });
 
+// 获取路由
 const communityRouter = require('./app/routes/communityRouter');
 const authRouter = require('./app/routes/authRouter');
 
 
-//使用路由
+// 使用路由
 app.use('/community', communityRouter)
 app.use('/auth', authRouter)
 

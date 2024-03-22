@@ -25,7 +25,7 @@ class Result {
      */
     constructor(code, msg, data) {
         this.code = code;
-        this.message = msg;
+        this.msg = msg;
         this.data = data;
     }
 

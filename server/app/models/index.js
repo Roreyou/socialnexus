@@ -30,6 +30,7 @@ db.post=require("./post.js")(sequelize, Sequelize);
 db.teamactivity=require("./teamactivity.js")(sequelize, Sequelize);
 db.teammember=require("./teammember.js")(sequelize, Sequelize);
 
+db.schoolteam=require("./schoolteam.js")(sequelize,Sequelize);
 
 
 module.exports = db;
