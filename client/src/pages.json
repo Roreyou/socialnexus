@@ -155,7 +155,7 @@
 				"pagePath": "pages/user/user",
 				"iconPath": "static/center.png",
 				"selectedIconPath": "static/center-selected.png",
-				"text": "我"
+				"text": "我的"
 			}
 		]
 	}
