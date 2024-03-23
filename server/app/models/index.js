@@ -29,6 +29,8 @@ db.favorate=require("./favorate.js")(sequelize, Sequelize);//发现这里拼错�
 db.post=require("./post.js")(sequelize, Sequelize);
 db.teamactivity=require("./teamactivity.js")(sequelize, Sequelize);
 db.teammember=require("./teammember.js")(sequelize, Sequelize);
+db.datawall_act=require("./datawall_act.js")(sequelize, Sequelize);
+db.datawall_com=require("./datawall_com.js")(sequelize, Sequelize);
 
 db.schoolteam=require("./schoolteam.js")(sequelize,Sequelize);
 
