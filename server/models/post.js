@@ -1,46 +1,58 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('schoolteam', {
+  return sequelize.define('post', {
     id: {
       type: DataTypes.STRING(20),
       allowNull: false,
       primaryKey: true
     },
-    pwd: {
-      type: DataTypes.STRING(60),
+    team_id: {
+      type: DataTypes.STRING(20),
       allowNull: true
     },
-    team_name: {
-      type: DataTypes.STRING(45),
-      allowNull: true
-    },
-    school_id: {
-      type: DataTypes.STRING(45),
-      allowNull: true
-    },
-    setup_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
-    },
-    remark: {
+    content: {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    status: {
+    star: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    leader_id: {
-      type: DataTypes.STRING(20),
+    picture: {
+      type: DataTypes.STRING(45),
       allowNull: true
     },
-    instructor_id: {
-      type: DataTypes.STRING(20),
+    start_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    end_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    province: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    },
+    city: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    },
+    address: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    },
+    post_time: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    like: {
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'schoolteam',
+    tableName: 'post',
     timestamps: false,
     indexes: [
       {

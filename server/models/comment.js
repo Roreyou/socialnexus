@@ -1,46 +1,30 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('school', {
+  return sequelize.define('comment', {
     id: {
       type: DataTypes.STRING(20),
       allowNull: false,
       primaryKey: true
     },
-    pwd: {
-      type: DataTypes.STRING(60),
-      allowNull: true
-    },
-    name: {
-      type: DataTypes.STRING(45),
-      allowNull: true
-    },
-    manager: {
-      type: DataTypes.STRING(45),
-      allowNull: true
-    },
-    setup_date: {
-      type: DataTypes.STRING(45),
-      allowNull: true
-    },
-    tel: {
+    my_id: {
       type: DataTypes.STRING(20),
       allowNull: true
     },
-    province: {
-      type: DataTypes.STRING(45),
+    post_id: {
+      type: DataTypes.STRING(20),
       allowNull: true
     },
-    city: {
-      type: DataTypes.STRING(45),
+    content: {
+      type: DataTypes.TEXT,
       allowNull: true
     },
-    address: {
-      type: DataTypes.STRING(45),
+    time: {
+      type: DataTypes.DATE,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'school',
+    tableName: 'comment',
     timestamps: false,
     indexes: [
       {
