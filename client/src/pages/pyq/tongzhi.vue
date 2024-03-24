@@ -48,12 +48,11 @@
 			</view>
 		</view> -->
 
-		<!-- 莫甘娜 -->
 		<view class="cu-item ">
-			<view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
+			<view class="cu-avatar radius lg" style="background-image:url(https://n.sinaimg.cn/sinacn21/200/w500h500/20180710/24f8-hfefkqp7840363.jpg);"></view>
 			<view class="content">
-				<view class="text-pink"><view class="text-cut">软件工程学院</view></view>
-				<view class="text-gray text-sm flex"> <view class="text-cut">评论评论评论评论</view></view>
+				<view class="text-pink"><view class="text-cut">人工智能学院</view></view>
+				<view class="text-gray text-sm flex"> <view class="text-cut">评论评论评论评论评论评论</view></view>
 			</view>
 			<view class="action">
 				<view class="text-grey text-xs">22:20</view>
@@ -61,9 +60,8 @@
 			</view>
 		</view>
 
-		<!-- 伊泽瑞尔 -->
 		<view class="cu-item">
-			<view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big81007.jpg);"></view>
+			<view class="cu-avatar radius lg" style="background-image:url(https://ts1.cn.mm.bing.net/th/id/R-C.b3fc225f8d8274008f6e26ac7446cd99?rik=pvTqzLJCPQzY4A&riu=http%3a%2f%2fpic24.photophoto.cn%2f20120701%2f0005018385696950_b.jpg&ehk=vnpcrOQ7aNi3mpjFrBJtM1CecIwXAYZbAvGrn5C3wBM%3d&risl=&pid=ImgRaw&r=0);"></view>
 			<view class="content">
 				<view><view class="text-cut">软件工程学院</view>
 					<!-- <view class="cu-tag round bg-orange sm">断开连接...</view> -->
@@ -73,6 +71,18 @@
 			<view class="action">
 				<view class="text-grey text-xs">22:20</view>
 				<view class="cu-tag round bg-grey sm">1</view>
+			</view>
+		</view>
+
+		<view class="cu-item ">
+			<view class="cu-avatar radius lg" style="background-image:url(https://c-ssl.dtstatic.com/uploads/blog/202207/28/20220728161450_66b3d.thumb.1000_0.jpg);"></view>
+			<view class="content">
+				<view class="text-pink"><view class="text-cut">测绘科学与技术学院</view></view>
+				<view class="text-gray text-sm flex"> <view class="text-cut">这是另一条评论</view></view>
+			</view>
+			<view class="action">
+				<view class="text-grey text-xs">22:20</view>
+				<view class="cu-tag round bg-red sm">1</view>
 			</view>
 		</view>
 
