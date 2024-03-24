@@ -10,6 +10,6 @@ router.post('/authentification', TeamController.authentification);
 
 router.get('/activsquare/filter', ActivityController.filterActivity);
 router.get('/activsquare/search', ActivityController.searchActivities);
-
+router.put('/favor', TeamController.favoriteActivity);
 
 module.exports = router;

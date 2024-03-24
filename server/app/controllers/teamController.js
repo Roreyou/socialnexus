@@ -145,6 +145,29 @@ class teamController {
       return  re.json(response);
     }
   }
+
+  static async favoriteActivity(req, res) {
+    try {
+        // 获取前端传来的队伍ID和活动ID
+        const { team_id, activity_id } = req.query;
+        console.log("debug teamid, activ id",team_id," ",activity_id);
+        // 检查记录是否存在
+        const existingFavorite = await teamService.getFavorite(team_id, activity_id);
+        if (existingFavorite) {
+            return res.status(400).json({ code: 400, msg: 'Activity already favorited' });
+        }
+
+        // 创建新记录
+        await teamService.createFavorite(team_id, activity_id);
+
+        // 返回成功响应
+        return res.json({code:ResultCode.SUCCESS.code, msg: 'Activity favorited successfully' });
+    } catch (error) {
+        console.error('Error favoriting activity:', error);
+        return res.status(500).json({ code: 500, msg: 'Internal server error' });
+    }
+  }
+
 }
 
 module.exports = teamController;
