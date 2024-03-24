@@ -9,6 +9,7 @@ var _favorate = require("./favorate");
 var _post = require("./post");
 var _school = require("./school");
 var _schoolteam = require("./schoolteam");
+var _teacher = require("./teacher");
 var _teamactivity = require("./teamactivity");
 var _teammember = require("./teammember");
 
@@ -23,6 +24,7 @@ function initModels(sequelize) {
   var post = _post(sequelize, DataTypes);
   var school = _school(sequelize, DataTypes);
   var schoolteam = _schoolteam(sequelize, DataTypes);
+  var teacher = _teacher(sequelize, DataTypes);
   var teamactivity = _teamactivity(sequelize, DataTypes);
   var teammember = _teammember(sequelize, DataTypes);
 
@@ -38,6 +40,7 @@ function initModels(sequelize) {
     post,
     school,
     schoolteam,
+    teacher,
     teamactivity,
     teammember,
   };

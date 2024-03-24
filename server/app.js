@@ -27,12 +27,13 @@ app.get("/", (req, res) => {
 // 获取路由
 const communityRouter = require('./app/routes/communityRouter');
 const authRouter = require('./app/routes/authRouter');
-
+const teamRouter = require('./app/routes/teamRouter');
 
 // 使用路由
 app.use('/community', communityRouter)
 app.use('/auth', authRouter)
-
+console.log("debug 04");
+app.use('/schoolteam',teamRouter)
 
 
 // 设置监听端口
