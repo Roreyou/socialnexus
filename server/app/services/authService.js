@@ -14,7 +14,7 @@ class AuthService {
                 model=db.school;
                 break;
             case 'schoolteam':
-                model=db.schoolteam;
+                model=db.team;
                 break;
         } 
 
@@ -37,14 +37,22 @@ class AuthService {
         }
 
         // 在这里可以生成 JWT 
-        return generateToken(loginData);
+        const token = generateToken(loginData);
+
+        // 检查高校队伍的认证情况
+        if (model === db.team) {
+            const status = user.status; // 认证状态字段为 "status"
+            return {token, status} ; // 返回认证状态字段和生成的 JWT
+        }
+
+        return token;
     };
 
     static register = async (registerData) => {
         let model; // 声明 model 变量
     
         // identity指名身份，选择不同的table
-        switch (loginData.identity) {
+        switch (registerData.identity) {
             case 'community':
                 model=db.community;
                 break;
@@ -52,7 +60,7 @@ class AuthService {
                 model=db.school;
                 break;
             case 'schoolteam':
-                model=db.schoolteam;
+                model=db.team;
                 break;
         } 
     
@@ -61,10 +69,11 @@ class AuthService {
         
         // 加密密码
         user.pwd = await bcrypt.hash(user.pwd, 10);
-        // console.log(user);
+        // console.log("debug user:", user);
         
         try {
             // 注册成功
+            console.log("debug model:",model);
             if (model) {
                 await model.create(user);
                 return model;

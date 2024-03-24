@@ -87,6 +87,48 @@ class ActivityController {
       return res.json(Result.fail(error.message));
     }
   }
+
+  // 全部活动条件筛选
+  static async filterActivity(req,res){
+    
+    try {
+      const { location, category_id, activity_time } = req.body;
+
+      // 调用服务层方法进行活动筛选
+      const activities = await activityService.filterActivities(location, category_id, activity_time);
+
+      // 构造返回数据
+      const responseData = {
+        code: 200,
+        msg: 'Success',
+        data: { activ_list: activities }
+      };
+
+      // 发送响应
+      res.json(responseData);
+    } catch (error) {
+      console.error(error);
+      const responseData = { code: 500, msg: 'Internal Server Error', data: null };
+      res.status(500).json(responseData);
+    }
+  }
+
+  // 模糊查询活动信息
+  static async searchActivities(req, res) {
+    try {
+      const { text } = req.query;
+  
+      // 调用服务层方法进行活动模糊查询
+      const activities = await activityService.queryActivity2(text);
+  
+  
+      // 返回成功响应
+      res.json(Result.success(activities));
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(Result.fail('Internal Server Error'));
+    }
+  }
 }
 
 module.exports = ActivityController;

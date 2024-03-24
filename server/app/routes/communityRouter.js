@@ -5,6 +5,7 @@ const router = express.Router();
 const ActivityController = require('../controllers/activityController.js');
 const CommunityController= require('../controllers/communityController.js');
 const TeamController= require('../controllers/teamController.js');
+const DatawallController= require('../controllers/datawallController.js');
 
 //我的
 router.get('/myInfo', CommunityController.getCommunityById);//查询byID
@@ -25,5 +26,8 @@ router.get('/queryTeamByName',TeamController.queryTeamByName);//模糊查询队�
 router.get('/queryTeamByAct',TeamController.queryTeamByAct);//模糊查询队伍by活动名
 router.post('/admitTeam',TeamController.admitTeam);//录取或驳回队伍
 router.post('/commentTeam',TeamController.commentTeam);//评价队伍的成果
+
+//数据墙
+router.get('/datawall_com',DatawallController.getDatawallByCommunity);//查询by社区
 
 module.exports = router;

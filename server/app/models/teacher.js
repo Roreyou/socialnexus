@@ -1,46 +1,26 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('schoolteam', {
+  return sequelize.define('teacher', {
     id: {
       type: DataTypes.STRING(20),
       allowNull: false,
       primaryKey: true
     },
-    pwd: {
-      type: DataTypes.STRING(60),
-      allowNull: true
-    },
-    team_name: {
+    name: {
       type: DataTypes.STRING(45),
       allowNull: true
     },
-    school_id: {
+    tel: {
       type: DataTypes.STRING(45),
       allowNull: true
     },
-    setup_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
-    },
-    remark: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    status: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    leader_id: {
-      type: DataTypes.STRING(20),
-      allowNull: true
-    },
-    instructor_id: {
-      type: DataTypes.STRING(20),
+    major: {
+      type: DataTypes.STRING(45),
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'schoolteam',
+    tableName: 'teacher',
     timestamps: false,
     indexes: [
       {

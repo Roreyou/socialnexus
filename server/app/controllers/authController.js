@@ -6,8 +6,8 @@ const Result = require('../common/Result'); // 假设您的 Result 类定义在�
 class AuthController {
     static login = async (req, res) => {
         try {
-            const token = await AuthService.login(req.body);
-            res.json(Result.success({ token }));
+            const result = await AuthService.login(req.body);
+            res.json(Result.success(result));
         } catch (error) {
             res.json(Result.fail(error.message));
         }

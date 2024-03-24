@@ -1,4 +1,5 @@
 //controllers/teasmController.js
+const ResultCode = require('../common/BaseResultCode');
 const Result = require('../common/Result');
 const teamService = require('../services/teamService');
 
@@ -125,6 +126,24 @@ class teamController {
       return res.json(Result.fail(error.message));
     }
     
+  }
+
+  static async authentification(req,res){
+    try {
+      const { id, status, instructor, members } = req.body;
+  
+      // 保存指导老师和队伍成员的信息到数据库
+      const { instructor: savedInstructor, members: savedMembers } = await teamService.saveInstructorAndMembers(instructor, members);
+  
+      // 返回响应告诉前端该信息正在被团委审核
+      const response = new Result(ResultCode.SUCCESS.code, 'The information is being reviewed by the committee.', {
+        status: 3});
+      return res.json(response);
+    } catch (error) {
+      console.error(error);
+      const response = new Result(ResultCode.FAILED.code, 'Internal Server Error', {status:0});
+      return  re.json(response);
+    }
   }
 }
 

@@ -145,59 +145,88 @@ class teamService {
   }
 
   //录取或驳回一个队伍
-static async admitTeam(team_id, activity_id, admit) {
-  console.log(team_id, activity_id, admit);
+  static async admitTeam(team_id, activity_id, admit) {
+    console.log(team_id, activity_id, admit);
 
-  // 先查询符合条件的行
-  const teamActivity = await db.teamactivity.findOne({
-    where: {
-      activity_id: activity_id,
-      team_id: team_id
+    // 先查询符合条件的行
+    const teamActivity = await db.teamactivity.findOne({
+      where: {
+        activity_id: activity_id,
+        team_id: team_id
+      }
+    });
+
+    // 如果未找到符合条件的记录，返回null
+    if (!teamActivity) {
+      return null;
     }
-  });
 
-  // 如果未找到符合条件的记录，返回null
-  if (!teamActivity) {
-    return null;
+    // 更新找到的记录
+    const updatedActivity = await teamActivity.update(
+      { status: admit },
+      { returning: true }
+    );
+
+    return updatedActivity;
   }
 
-  // 更新找到的记录
-  const updatedActivity = await teamActivity.update(
-    { status: admit },
-    { returning: true }
-  );
+      //评价一个队伍
+    static async commentTeam(team_id, activity_id, comment) {
+      // 先查询符合条件的记录
+      const teamActivity = await db.teamactivity.findOne({
+        where: {
+          activity_id: activity_id,
+          team_id: team_id
+        }
+      });
 
-  return updatedActivity;
-}
+      // 如果未找到符合条件的记录，返回null
+      if (!teamActivity) {
+        return null;
+      }
 
-  //评价一个队伍
-static async commentTeam(team_id, activity_id, comment) {
-  // 先查询符合条件的记录
-  const teamActivity = await db.teamactivity.findOne({
-    where: {
-      activity_id: activity_id,
-      team_id: team_id
+      // 更新找到的记录
+      const updatedActivity = await teamActivity.update(
+        {
+          com_to_team: comment,
+          status: 5
+        },
+        { returning: true }
+      );
+
+      return updatedActivity;
     }
-  });
 
-  // 如果未找到符合条件的记录，返回null
-  if (!teamActivity) {
-    return null;
-  }
-
-  // 更新找到的记录
-  const updatedActivity = await teamActivity.update(
-    {
-      com_to_team: comment,
-      status: 5
-    },
-    { returning: true }
-  );
-
-  return updatedActivity;
-}
-
-
+    // 存储队伍中指导老师和学生成员的信息
+    static async saveInstructorAndMembers(instructorData, membersData) {
+      try {
+        const existingInstructor = await db.teacher.findOne({ where: { id: instructorData.id } });
+        // 如果存在该指导教师，则删除其信息
+        if (existingInstructor) {
+          await existingInstructor.destroy();
+        }
+        // 保存指导老师信息
+        const instructor = await db.teacher.create(instructorData);
+  
+        // 保存队伍成员信息
+        const members = await Promise.all(membersData.map(async memberData => {
+          // 查询数据库中是否存在该成员
+          const existingMember = await db.teammember.findOne({ where: { id: memberData.id } });
+      
+          // 如果存在该成员，则删除该成员的信息
+          if (existingMember) {
+            await existingMember.destroy();
+          }
+      
+          // 创建新的成员信息
+          return db.teammember.create(memberData);
+        }));
+  
+        return { instructor, members };
+      } catch (error) {
+        throw error;
+      }
+    }
 }
 
 module.exports = teamService;
