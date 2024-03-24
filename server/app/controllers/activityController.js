@@ -112,6 +112,23 @@ class ActivityController {
       res.status(500).json(responseData);
     }
   }
+
+  // 模糊查询活动信息
+  static async searchActivities(req, res) {
+    try {
+      const { text } = req.query;
+  
+      // 调用服务层方法进行活动模糊查询
+      const activities = await activityService.queryActivity2(text);
+  
+  
+      // 返回成功响应
+      res.json(Result.success(activities));
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(Result.fail('Internal Server Error'));
+    }
+  }
 }
 
 module.exports = ActivityController;

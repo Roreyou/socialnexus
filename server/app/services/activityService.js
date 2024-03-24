@@ -54,9 +54,30 @@ class ActivityService {
   static async queryActivity(name) {
     const activities = await db.activity.findAll({
         [Op.or]: [
-            { name: { [Op.like]: '%' + name + '%' } },
+            { name: { [Op.like]: '%' + name + '%' } }, //`%${text}%`
         ]
       });
+    if (!activities) {
+      return null; // 返回null表示活动不存在
+    }
+    return activities;
+  }
+
+  static async queryActivity2(text) {
+    const whereCondition = {
+      [Op.and]: [
+          {
+              name: {
+                  [Op.like]: `%${text}%`
+              }
+          },
+          db.Sequelize.literal(`name NOT LIKE '%${text} %'`),
+          db.Sequelize.literal(`name NOT LIKE '% ${text}%'`)
+      ]
+    };
+    const activities = await db.activity.findAll({
+      where: whereCondition
+    });
     if (!activities) {
       return null; // 返回null表示活动不存在
     }
