@@ -14,7 +14,7 @@ class AuthService {
                 model=db.school;
                 break;
             case 'schoolteam':
-                model=db.schoolteam;
+                model=db.team;
                 break;
         } 
 
@@ -40,7 +40,7 @@ class AuthService {
         const token = generateToken(loginData);
 
         // 检查高校队伍的认证情况
-        if (model === db.schoolteam) {
+        if (model === db.team) {
             const status = user.status; // 认证状态字段为 "status"
             return {token, status} ; // 返回认证状态字段和生成的 JWT
         }
@@ -60,7 +60,7 @@ class AuthService {
                 model=db.school;
                 break;
             case 'schoolteam':
-                model=db.schoolteam;
+                model=db.team;
                 break;
         } 
     
@@ -73,7 +73,7 @@ class AuthService {
         
         try {
             // 注册成功
-            //console.log("debug model:",model);
+            console.log("debug model:",model);
             if (model) {
                 await model.create(user);
                 return model;
