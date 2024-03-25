@@ -13,10 +13,11 @@ class AuthService {
             case 'school':
                 model=db.school;
                 break;
-            case 'schoolteam':
+            case 'team':
                 model=db.team;
                 break;
         } 
+        // console.log(loginData)
 
         const user = await model.findOne({
             where: {
@@ -59,7 +60,7 @@ class AuthService {
             case 'school':
                 model=db.school;
                 break;
-            case 'schoolteam':
+            case 'team':
                 model=db.team;
                 break;
         } 
