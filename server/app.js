@@ -28,10 +28,12 @@ app.get("/", (req, res) => {
 const communityRouter = require('./app/routes/communityRouter');
 const authRouter = require('./app/routes/authRouter');
 const teamRouter = require('./app/routes/teamRouter');
+const schoolRouter = require('./app/routes/schoolRouter');
 
 // 使用路由
-app.use('/community', communityRouter)
 app.use('/auth', authRouter)
+app.use('/community', communityRouter)
+app.use('/school',schoolRouter)
 app.use('/schoolteam',teamRouter)
 
 
