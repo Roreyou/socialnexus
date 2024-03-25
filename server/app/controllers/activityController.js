@@ -87,6 +87,20 @@ class ActivityController {
       return res.json(Result.fail(error.message));
     }
   }
+  //审核活动
+  static async approveActivity(req,res){
+    const activity_id=req.body.id;
+    const approve = req.body.approve;
+    try {
+      const activity = await activityService.approveActivity(activity_id,approve);
+      if (!activity) {
+        return res.json(Result.fail('活动不存在'));
+      }
+      return res.json(Result.success('审核成功'));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
 
   // 全部活动条件筛选
   static async filterActivity(req,res){

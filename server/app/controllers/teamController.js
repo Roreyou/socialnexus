@@ -128,6 +128,20 @@ class teamController {
     
   }
 
+  static async approveTeam(req,res){
+    const team_id=req.body.id;
+    const approve = req.body.approve;
+    try {
+      const team = await teamService.approveTeam(team_id,approve);
+      if (!team) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success('审核成功'));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
   static async authentification(req,res){
     try {
       const { id, status, instructor, members } = req.body;
@@ -167,6 +181,7 @@ class teamController {
         return res.status(500).json({ code: 500, msg: 'Internal server error' });
     }
   }
+
 
 }
 
