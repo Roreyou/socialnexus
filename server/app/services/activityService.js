@@ -63,6 +63,21 @@ class ActivityService {
     return activities;
   }
 
+  //审核社区活动
+  static async approveActivity(id,approve) {
+    const activity = await db.activity.findByPk(id);
+    if (!activity) {
+      return null; // 返回null表示队伍不存在
+    }
+    await activity.update(
+      {
+        status: approve
+      },
+      { returning: true }
+    );
+    return activity;
+  }
+
   static async queryActivity2(text) {
     const whereCondition = {
       [Op.and]: [
