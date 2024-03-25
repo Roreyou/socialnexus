@@ -29,13 +29,13 @@
 		<!-- <uni-card :is-shadow="false" is-full>
 			<text class="uni-h6">uni-forms 组件</text>
 		</uni-card> -->
-		<uni-section title="所属院校信息认证" type="line">
+		<uni-section title="队伍基本信息认证" type="line">
 			<view class="example">
 				<!-- 基础用法，不包含校验规则 -->
 				<uni-forms ref="baseForm" :model="baseFormData" labelWidth="80px">
-					<uni-forms-item label="所属高校" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入所属高校" />
-					</uni-forms-item>
+					<!-- <uni-forms-item label="所属高校" required>
+						<uni-easyinput v-model="baseFormData.name" placeholder="中山大学" ref="inputElement" />
+					</uni-forms-item> -->
 					<uni-forms-item label="所属学院" required>
 						<uni-easyinput v-model="baseFormData.age" placeholder="请输入所属学院" />
 					</uni-forms-item>
@@ -64,10 +64,10 @@
 						<uni-datetime-picker type="datetime" return-type="timestamp"
 							v-model="baseFormData.datetimesingle" />
 					</uni-forms-item> -->
-					<uni-forms-item label="选择队伍所在城市">
+					<!-- <uni-forms-item label="选择队伍所在城市">
 						<uni-data-picker v-model="baseFormData.city" :localdata="cityData" popup-title="选择队伍所在城市">
 						</uni-data-picker>
-					</uni-forms-item>
+					</uni-forms-item> -->
 
 					<!-- <uni-forms-item label="选择队伍人数">
 						<uni-data-select v-model="baseFormData.skills" :localdata="skillsRange" >
@@ -130,18 +130,23 @@
 		</uni-section> -->
 
 
-		<uni-section title="队员(除负责人外)信息认证" type="line">
+		<uni-section title="队员信息认证" type="line">
 			<view class="example">
 				<!-- 动态表单校验 -->
 				<uni-forms ref="dynamicForm" :rules="dynamicRules" :model="dynamicFormData" labelWidth="80px">
 					<!-- <uni-forms-item label="邮箱" required name="email">
 						<uni-easyinput v-model="dynamicFormData.email" placeholder="请输入姓名" />
 					</uni-forms-item> -->
-					<uni-forms-item v-for="(item,index) in dynamicFormData.domains" :key="item.id"
-						:label="item.label+' '+index" required :rules="item.rules" :name="['domains',index,'value']">
-						<view class="form-item">
-							<uni-easyinput v-model="dynamicFormData.domains[index].value" placeholder="请输入队员工号" />
-							<button class="button" size="mini" type="default" @click="del(item.id)">删除</button>
+					<uni-forms-item v-for="(item,index) in dynamicFormData.domains" :key="index"
+						:label="'队员'+' '+index" required :rules="item[1].rules" :name="['domains',index,'value']">
+						<uni-forms-item v-for="(item1,index1) in item" :key="item1.id"
+						:label="item1.label+' '" required :rules="item1.rules" :name="['domains',index1,'value']">
+							<view class="form-item">
+								<uni-easyinput v-model="dynamicFormData.domains[index][index1].value" :placeholder="dynamicFormData.domains[index][index1].holder" />
+							</view>
+						</uni-forms-item>
+						<view class="button-del">
+							<button class="button" size="mini" type="default" @click="del(index, item.id)">删除</button>
 						</view>
 					</uni-forms-item>
 				</uni-forms>
@@ -570,7 +575,69 @@
 							errorMessage: '域名格式错误'
 						}]
 					}
-				}
+				},
+				addinput : [
+				{
+					label: '学号',
+					value: '',
+					rules: [{
+						'required': true,
+						errorMessage: '队员学号项必填'
+					}],
+					holder: '请输入队员学号',
+					id: Math.floor(Math.random() * Date.now())
+				},
+				{
+					label: '姓名',
+					value: '',
+					rules: [{
+						'required': true,
+						errorMessage: '队员姓名项必填'
+					}],
+					holder: '请输入队员姓名',
+					id: Math.floor(Math.random() * Date.now())
+				},
+				{
+					label: '所属院系',
+					value: '',
+					rules: [{
+						'required': true,
+						errorMessage: '队员所属院系项必填'
+					}],
+					holder: '请输入队员所属院系',
+					id: Math.floor(Math.random() * Date.now())
+				},
+				{
+					label: '所属年级',
+					value: '',
+					rules: [{
+						'required': true,
+						errorMessage: '队员所属年级项必填'
+					}],
+					holder: '请输入队员所属年级',
+					id: Math.floor(Math.random() * Date.now())
+				},
+				{
+					label: '联系电话',
+					value: '',
+					rules: [{
+						'required': true,
+						errorMessage: '队员联系电话项必填'
+					}],
+					holder: '请输入队员联系电话',
+					id: Math.floor(Math.random() * Date.now())
+				},
+				{
+					label: '邮箱',
+					value: '',
+					rules: [{
+						'required': true,
+						errorMessage: '队员邮箱项必填'
+					}],
+					holder: '请输入队员邮箱',
+					id: Math.floor(Math.random() * Date.now())
+				},
+				]
 			}
 		},
 		computed: {
@@ -581,6 +648,10 @@
 				return 'left'
 			}
 		},
+		// mounted() {
+		// 	this.$refs.inputElement.placeholder = "中山大学";
+		// 	this.$refs.inputElement.readOnly = true;
+		// },
 		onLoad() {},
 		onReady() {
 			// 设置自定义表单校验规则，必须在节点渲染完毕后执行
@@ -592,19 +663,24 @@
 				this.current = e.currentIndex
 			},
 			add() {
-				this.dynamicFormData.domains.push({
-					label: '队员',
-					value: '',
-					rules: [{
-						'required': true,
-						errorMessage: '队员工号项必填'
-					}],
-					id: Date.now()
-				})
+				// this.dynamicFormData.domains.push({
+				// 	label: '队员',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员工号项必填'
+				// 	}],
+				// 	id: Date.now()
+				// })
+				this.dynamicFormData.domains.push(
+					this.addinput,
+				)
 			},
-			del(id) {
-				let index = this.dynamicLists.findIndex(v => v.id === id)
-				this.dynamicLists.splice(index, 1)
+			del(i, id) {
+				// let index = this.dynamicLists.findIndex(v => v.id === id)
+				console.log("del", i)
+				this.dynamicFormData.domains.splice(i, 1)
+				console.log(this.dynamicFormData.domains)
 			},
 			submit(ref) {
 				console.log(this.baseFormData);
@@ -666,6 +742,9 @@
 		height: 35px;
 		line-height: 35px;
 		margin-left: 10px;
+	}
+	.button-del{
+		text-align: center;
 	}
 
 	.button-group{
