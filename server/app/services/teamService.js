@@ -227,6 +227,13 @@ class teamService {
         throw error;
       }
     }
+  static async getFavorite(team_id, activity_id) {
+      return await db.favorate.findOne({ where: { team_id, activity_id } });
+  }
+
+  static async createFavorite(team_id, activity_id) {
+      return await db.favorate.create({ team_id, activity_id });
+  }
 }
 
 module.exports = teamService;

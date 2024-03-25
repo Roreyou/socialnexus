@@ -1,18 +1,16 @@
 const Sequelize = require('sequelize');
+
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('favorate', {
-    id: {
+    team_id: {
       type: DataTypes.STRING(20),
       allowNull: false,
       primaryKey: true
     },
-    team_id: {
-      type: DataTypes.STRING(20),
-      allowNull: true
-    },
     activity_id: {
       type: DataTypes.STRING(20),
-      allowNull: true
+      allowNull: false,
+      primaryKey: true
     }
   }, {
     sequelize,
@@ -24,9 +22,10 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "team_id" },
+          { name: "activity_id" }
         ]
-      },
+      }
     ]
   });
 };
