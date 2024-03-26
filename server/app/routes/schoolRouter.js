@@ -19,7 +19,8 @@ router.put('/approveTeam',TeamController.approveTeam);//审核队伍
 router.put('/approveActivity',ActivityController.approveActivity);//审核活动
 
 //数据墙
-router.get('/datawall_act',DatawallController.getDatawallByActivity);//查询by活动
+router.get('/datawall_act',DatawallController.getDatawallByActivity);//活动数据
+router.get('/datawall_com',DatawallController.getDatawallByCommunity);//社区数据
 
 
 module.exports = router;
