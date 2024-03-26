@@ -143,6 +143,12 @@
 			"style": {
 				"navigationBarTitleText": "筛活动"
 			}
+		},
+		{
+			"path": "pages/details/details",
+			"style": {
+				"navigationBarTitleText": "details"
+			}
 		}
 	],
 	"globalStyle": {
