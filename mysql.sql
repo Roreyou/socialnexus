@@ -35,6 +35,7 @@ CREATE TABLE `activity` (
   `community_id` varchar(20) DEFAULT NULL,
   `remark` text,
   `status` int DEFAULT NULL,
+  `keywords_id` varchar(90) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -45,7 +46,7 @@ CREATE TABLE `activity` (
 
 LOCK TABLES `activity` WRITE;
 /*!40000 ALTER TABLE `activity` DISABLE KEYS */;
-INSERT INTO `activity` VALUES ('1','社区趣味运动会','2002-09-21','2022-06-15 09:30:45','2022-06-18 09:30:45','广东省','佛山市','1','1','1','1',1),('2','关爱老人活动','2002-09-21','2023-06-15 09:30:45','2023-06-18 09:30:45','广东省','珠海市','1','2','1','1',1),('3','社区大扫除','2002-09-21','2023-06-15 09:30:45','2023-06-16 09:30:45','广东省','珠海市','1','1','1','1',1),('4','运动会','2002-09-21','2023-06-15 09:30:45','2023-06-16 09:30:45','浙江省','嘉兴市','1','1','1','1',1);
+INSERT INTO `activity` VALUES ('1','社区趣味运动会','2002-09-21','2022-06-15 09:30:45','2022-06-18 09:30:45','广东省','佛山市','1','1','1','1',1,NULL),('2','关爱老人活动','2002-09-21','2023-06-15 09:30:45','2023-06-18 09:30:45','广东省','珠海市','1','2','1','1',1,NULL),('3','社区大扫除','2002-09-21','2023-06-15 09:30:45','2023-06-16 09:30:45','广东省','珠海市','1','1','1','1',1,NULL),('4','运动会','2002-09-21','2023-06-15 09:30:45','2023-06-16 09:30:45','浙江省','嘉兴市','1','1','1','1',1,NULL);
 /*!40000 ALTER TABLE `activity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,6 +201,29 @@ LOCK TABLES `favorate` WRITE;
 /*!40000 ALTER TABLE `favorate` DISABLE KEYS */;
 INSERT INTO `favorate` VALUES ('1','2');
 /*!40000 ALTER TABLE `favorate` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `key_words`
+--
+
+DROP TABLE IF EXISTS `key_words`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `key_words` (
+  `id` int NOT NULL,
+  `key_name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `key_words`
+--
+
+LOCK TABLES `key_words` WRITE;
+/*!40000 ALTER TABLE `key_words` DISABLE KEYS */;
+/*!40000 ALTER TABLE `key_words` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -387,4 +411,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-25 14:48:39
+-- Dump completed on 2024-03-26 10:57:57

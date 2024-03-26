@@ -51,15 +51,26 @@ class ActivityService {
     return activity;
   }
 
-  static async queryActivity(name) {
-    const activities = await db.activity.findAll({
-        [Op.or]: [
-            { name: { [Op.like]: '%' + name + '%' } }, //`%${text}%`
-        ]
-      });
-    if (!activities) {
-      return null; // 返回null表示活动不存在
+  static async queryActivity(community_id, name) {
+    let whereClause = {};
+  
+    // 添加活动名称的模糊查询条件
+    whereClause.name = { [Op.like]: `%${name}%` };
+  
+    // 如果 community_id 不为 0，则添加 community_id 的查询条件
+    if (community_id !== '0') {
+      whereClause.community_id = community_id;
     }
+  
+    // 执行查询
+    const activities = await db.activity.findAll({
+      where: whereClause
+    });
+
+    if (activities.length === 0) {
+      return null
+    }
+  
     return activities;
   }
 

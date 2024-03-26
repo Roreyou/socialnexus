@@ -76,9 +76,10 @@ class ActivityController {
   }
 
   static async queryActivity(req,res){
+    const community_id = req.query.community_id;
     const name =req.query.name;
     try {
-      const activities = await activityService.queryActivity(name);
+      const activities = await activityService.queryActivity(community_id,name);
       if (!activities) {
         return res.json(Result.fail('活动不存在'));
       }

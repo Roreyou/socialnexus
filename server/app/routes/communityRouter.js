@@ -20,7 +20,7 @@ router.get('/activities',ActivityController.getActivityByCommu);//查询By社区
 router.get('/queryActivity',ActivityController.queryActivity);//模糊查询活动byName
 
 //我的队伍
-router.get('/teamInfo', TeamController.getTeamById);//查询by活动ID
+router.get('/teamInfo', TeamController.getTeamById);//查询by队伍ID
 router.get('/teams',TeamController.getTeamByCommu);//查询by社区和status
 router.get('/queryTeamByName',TeamController.queryTeamByName);//模糊查询队伍by队伍名
 router.get('/queryTeamByAct',TeamController.queryTeamByAct);//模糊查询队伍by活动名
