@@ -49,6 +49,10 @@ module.exports = function(sequelize, DataTypes) {
     status: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    keywords_id: {
+      type: DataTypes.STRING(90),
+      allowNull: true
     }
   }, {
     sequelize,

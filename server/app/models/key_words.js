@@ -1,19 +1,18 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('favorate', {
-    team_id: {
-      type: DataTypes.STRING(20),
+  return sequelize.define('key_words', {
+    id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    activity_id: {
-      type: DataTypes.STRING(20),
-      allowNull: false,
-      primaryKey: true
+    key_name: {
+      type: DataTypes.STRING(45),
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'favorate',
+    tableName: 'key_words',
     timestamps: false,
     indexes: [
       {
@@ -21,8 +20,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "team_id" },
-          { name: "activity_id" },
+          { name: "id" },
         ]
       },
     ]
