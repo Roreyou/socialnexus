@@ -41,12 +41,16 @@ class teamService {
       [Op.in]: activityIds
     }
 
+    console.log(whereCondition_status)
+
     const teamActivities = await db.teamactivity.findAll({
       where: whereCondition_status,
       attributes: ['team_id']
     });
 
     const teamIds = teamActivities.map(teamActivity => teamActivity.team_id);
+
+    // console.log(teamIds)
 
     if (teamIds.length === 0) {
       return null;
