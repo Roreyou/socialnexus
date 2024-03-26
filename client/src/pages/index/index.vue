@@ -91,9 +91,13 @@
 					</view>
 				</view>
 			</view>
+			<view class="re-but">
+				<button @click="torec">点击加载更多推荐的活动</button>
+			</view>
 		</view>
 		
-		<u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="findHouseList"></u-loadmore>
+		
+		<!-- <u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="findHouseList"></u-loadmore> -->
 		<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
 		<u-no-network></u-no-network>
 		<view class="buttom">
@@ -188,14 +192,14 @@
 			...mapState(['hasLogin', 'forcedLogin','userName'])
 		},
 
-		onLoad() {
-			uni.$on('findIndexHouseList', (obj) => {
-				// 获取数据
-				this.findHouseList(1);
-			})
-			// 获取数据
-			this.findHouseList();
-		},
+		// onLoad() {
+		// 	uni.$on('findIndexHouseList', (obj) => {
+		// 		// 获取数据
+		// 		this.findHouseList(1);
+		// 	})
+		// 	// 获取数据
+		// 	this.findHouseList();
+		// },
 		onUnload() {
 			// 移除监听事件  
 			uni.$off('findIndexHouseList');
@@ -209,18 +213,18 @@
 		onPageScroll(e) {
 		    this.scrollTop = e.scrollTop;
 		},
-		onReachBottom() {
-		    this.loadStatus = 'loading';
-		    // 获取数据
-			this.findHouseList()
-		},
+		// onReachBottom() {
+		//     this.loadStatus = 'loading';
+		//     // 获取数据
+		// 	this.findHouseList()
+		// },
 		// 下拉刷新
-		onPullDownRefresh() {
-			// 获取数据
-			this.findHouseList(1);
-			// 关闭刷新
-			uni.stopPullDownRefresh();
-		},
+		// onPullDownRefresh() {
+		// 	// 获取数据
+		// 	this.findHouseList(1);
+		// 	// 关闭刷新
+		// 	uni.stopPullDownRefresh();
+		// },
 		methods: {
 			handleAuthentication(){
 				this.$u.route({
@@ -242,61 +246,61 @@
 					url: 'pages/notice/notice'
 				})
 			},
-			findHouseList(type = 0) {
-				if(type == 1){
-					this.pageNum = 1
-					this.flowList = []
-					this.$refs.uWaterfall.clear();
-				}
-				let url = "/api/houseApi/findHouseRoomList";
-				// this.$u.get(url, {
-				// 	pageNum: this.pageNum,
-				// 	pageSize: this.pageSize,
-				// 	orderByColumn: 'update_time,create_time',
-				// 	isAsc: 'desc'
-				// }).then(result => {
-				// 	const data = result.rows;
-				// 	if(this.pageNum>1 && data.length < this.pageSize){
-				// 		return this.loadStatus = 'nomore';
-				// 	}
-				// 	this.houseList = data;
-				// 	for (let i = 0; i < this.houseList.length; i++) {
-				// 	    // 先转成字符串再转成对象，避免数组对象引用导致数据混乱
-				// 	    let item = this.houseList[i]
-				// 		item.image = item.faceUrl
-				// 		if(item.type == 0){
-				// 			item.type = '整租'
-				// 		}else if(item.type == 1){
-				// 			item.type = '合租'
-				// 		}
-				// 		if(item.roomType == 1){
-				// 			item.roomType = '主卧'
-				// 		}else if(item.roomType == 2){
-				// 			item.roomType = '次卧'
-				// 		}else{
-				// 			item.roomType = '未知'
-				// 		}
+			// findHouseList(type = 0) {
+			// 	if(type == 1){
+			// 		this.pageNum = 1
+			// 		this.flowList = []
+			// 		this.$refs.uWaterfall.clear();
+			// 	}
+			// 	let url = "/api/houseApi/findHouseRoomList";
+			// 	// this.$u.get(url, {
+			// 	// 	pageNum: this.pageNum,
+			// 	// 	pageSize: this.pageSize,
+			// 	// 	orderByColumn: 'update_time,create_time',
+			// 	// 	isAsc: 'desc'
+			// 	// }).then(result => {
+			// 	// 	const data = result.rows;
+			// 	// 	if(this.pageNum>1 && data.length < this.pageSize){
+			// 	// 		return this.loadStatus = 'nomore';
+			// 	// 	}
+			// 	// 	this.houseList = data;
+			// 	// 	for (let i = 0; i < this.houseList.length; i++) {
+			// 	// 	    // 先转成字符串再转成对象，避免数组对象引用导致数据混乱
+			// 	// 	    let item = this.houseList[i]
+			// 	// 		item.image = item.faceUrl
+			// 	// 		if(item.type == 0){
+			// 	// 			item.type = '整租'
+			// 	// 		}else if(item.type == 1){
+			// 	// 			item.type = '合租'
+			// 	// 		}
+			// 	// 		if(item.roomType == 1){
+			// 	// 			item.roomType = '主卧'
+			// 	// 		}else if(item.roomType == 2){
+			// 	// 			item.roomType = '次卧'
+			// 	// 		}else{
+			// 	// 			item.roomType = '未知'
+			// 	// 		}
 						
-				// 		if(this.$u.test.isEmpty(item.houseNum)){
-				// 			item.houseNum = ''
-				// 		}
-				// 		if(this.$u.test.isEmpty(item.houseHall)){
-				// 			item.houseHall = ''
-				// 		}
-				// 		if(this.$u.test.isEmpty(item.toiletNum)){
-				// 			item.toiletNum = ''
-				// 		}
-				// 		if(this.$u.test.isEmpty(item.floor)){
-				// 			item.floor = ''
-				// 		}else{
-				// 			item.floor = item.floor + '层'
-				// 		}
-				// 	    this.flowList.push(item);
-				// 	}
-				// 	++ this.pageNum 
-				// 	this.loadStatus = 'loadmore';
-				// });
-			},
+			// 	// 		if(this.$u.test.isEmpty(item.houseNum)){
+			// 	// 			item.houseNum = ''
+			// 	// 		}
+			// 	// 		if(this.$u.test.isEmpty(item.houseHall)){
+			// 	// 			item.houseHall = ''
+			// 	// 		}
+			// 	// 		if(this.$u.test.isEmpty(item.toiletNum)){
+			// 	// 			item.toiletNum = ''
+			// 	// 		}
+			// 	// 		if(this.$u.test.isEmpty(item.floor)){
+			// 	// 			item.floor = ''
+			// 	// 		}else{
+			// 	// 			item.floor = item.floor + '层'
+			// 	// 		}
+			// 	// 	    this.flowList.push(item);
+			// 	// 	}
+			// 	// 	++ this.pageNum 
+			// 	// 	this.loadStatus = 'loadmore';
+			// 	// });
+			// },
 			checkUpdate(){
 				uni.getSystemInfo({
 					success:(res) => {
@@ -355,7 +359,14 @@
 			},
 			server(){
 				// window.open('https://sourcebyte.cn')
-			}
+			},
+			//点击加载更多活动
+			torec(){
+				this.$u.route({
+					url: 'pages/search/recommend',
+				  })
+			},
+
 		}
 	}
 </script>
@@ -471,6 +482,7 @@
     	backdrop-filter: blur(10px);
 	}
 
+	//活动推荐列表
 	.cu-item .shadow{
 	margin: 0;
 	margin-top: 10rpx;

@@ -125,6 +125,24 @@
 			"style": {
 				"navigationBarTitleText": "朋友圈"
 			}
+		},
+		{
+			"path": "pages/SCHindex/SCHindex",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/SCHsearchTeam/SCHsearchTeam",
+			"style": {
+				"navigationBarTitleText": "筛队伍"
+			}
+		},
+		{
+			"path": "pages/SCHsearchActivity/SCHsearchActivity",
+			"style": {
+				"navigationBarTitleText": "筛活动"
+			}
 		}
 	],
 	"globalStyle": {

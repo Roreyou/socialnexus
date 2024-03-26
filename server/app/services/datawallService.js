@@ -4,7 +4,7 @@ const db = require('../models/index');
 class DatawallService {
     static async getDatawallByActivity(activity_id) {
         // 建立关联关系
-        db.datawall_com.belongsTo(db.activity, { foreignKey: 'activity_id' });
+        db.datawall_act.belongsTo(db.activity, { foreignKey: 'activity_id' });
         let queryOptions = {
             include: [{ model: db.activity, as: 'activity' }]
         };
@@ -13,7 +13,7 @@ class DatawallService {
         }
 
         try {
-            const data = await db.datawall_com.findAll(queryOptions);
+            const data = await db.datawall_act.findAll(queryOptions);
             if(data.length === 0)
                 return null;
             return data;
