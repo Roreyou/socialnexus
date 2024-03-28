@@ -1,4 +1,4 @@
-<!-- 高校 - 收到评价 -->
+<!-- 高校 - 我的活动 -->
 <template>
 <view>
 	<view class="top_fix">

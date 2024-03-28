@@ -111,7 +111,7 @@
 .wordcont{
 	margin-top: 10rpx;
 }
-.wordcont view {
+.wordcont .ackeywords {
 	display: inline-block;
   margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 }

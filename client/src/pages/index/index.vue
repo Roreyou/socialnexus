@@ -62,7 +62,7 @@
 		</view> 
 		
 		<!-- 活动推荐列表 -->
-		<view>
+		<!-- <view>
 			<view class="cu-bar bg-white">
 				<view class="action">
 					<text class="cuIcon-titles text-green"></text>
@@ -94,9 +94,11 @@
 			<view class="re-but">
 				<button @click="torec">点击加载更多推荐的活动</button>
 			</view>
+		</view> -->
+		<actilist :acList="acList"></actilist>
+		<view class="re-but">
+				<button @click="torec">点击加载更多推荐的活动</button>
 		</view>
-		
-		
 		<!-- <u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="findHouseList"></u-loadmore> -->
 		<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
 		<u-no-network></u-no-network>
