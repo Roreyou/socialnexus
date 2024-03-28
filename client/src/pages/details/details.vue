@@ -182,8 +182,10 @@ import bttab from '../../components/detail-btm/uni-goods-nav.vue';
     components: {
 			bttab,
 		},
-		data() {
-
+		data(){
+			return{
+				
+			}
 		},
 	}
 </script>
@@ -205,15 +207,16 @@ import bttab from '../../components/detail-btm/uni-goods-nav.vue';
 	}
 
 	.de_total_title {
-		font-size: 36rpx;
-		font-weight: bold;
+		font-size: 42rpx;
+		font-weight: 900;
 		color: #333333;
 		margin-top: 30rpx;
 		margin-bottom: 20rpx;
 	}
 
 	.sub_title{
-		font-weight: 500;
+		font-size: 36rpx;
+		font-weight: 600;
 	}
 
 	.de_key_value{

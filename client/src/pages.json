@@ -149,6 +149,12 @@
 			"style": {
 				"navigationBarTitleText": "活动详情"
 			}
+		},
+		{
+			"path": "pages/details/application",
+			"style": {
+				"navigationBarTitleText": "活动报名"
+			}
 		}
 	],
 	"globalStyle": {

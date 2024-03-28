@@ -31,7 +31,7 @@
 			</view>
 			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right ">
 				<view v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
-				 class="flex uni-tab__cart-button-right" @click="buttonClick(index,item)"><text :style="{color:item.color}" class="uni-tab__cart-button-right-text">{{ item.text }}</text></view>
+				 class="flex uni-tab__cart-button-right" @click="application()"><text :style="{color:item.color}" class="uni-tab__cart-button-right-text">{{ item.text }}</text></view>
 			</view>
 		</view>
 	</view>
@@ -174,6 +174,11 @@
 			// 	// path: path
 			// 	// }
 			// }
+			application(){
+			this.$u.route({
+				url: 'pages/details/application'
+				})
+			},
 		},
 		onShareAppMessage: function(res) {
 			console.log("分享")
@@ -185,7 +190,7 @@
 				title: '不凡',
 				path: ""
 			}
-		}
+		},
 }
 </script>
 
