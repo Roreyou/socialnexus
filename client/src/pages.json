@@ -147,7 +147,7 @@
 		{
 			"path": "pages/details/details",
 			"style": {
-				"navigationBarTitleText": "details"
+				"navigationBarTitleText": "活动详情"
 			}
 		}
 	],
