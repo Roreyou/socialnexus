@@ -212,6 +212,36 @@
 			"style": {
 				"navigationBarTitleText": "已结束"
 			}
+		},
+		{
+			"path": "pages/community/myTeam/myTeam",
+			"style": {
+				"navigationBarTitleText": "队伍信息"
+			}
+		},
+		{
+			"path": "pages/community/myTeam/all",
+			"style": {
+				"navigationBarTitleText": "全部"
+			}
+		},
+		{
+			"path": "pages/community/myTeam/toAdmit",
+			"style": {
+				"navigationBarTitleText": "待录取"
+			}
+		},
+		{
+			"path": "pages/community/myTeam/toEvaluate",
+			"style": {
+				"navigationBarTitleText": "待评价"
+			}
+		},
+		{
+			"path": "pages/community/myTeam/evaluated",
+			"style": {
+				"navigationBarTitleText": "已评价"
+			}
 		}
 	],
 	"globalStyle": {

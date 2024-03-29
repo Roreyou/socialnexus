@@ -268,7 +268,7 @@
 				}
 				if(type === "3"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/community/teamInfo');
+					this.$u.route('/pages/community/myTeam/myTeam');
 				}
 			},
 			code(){

@@ -6,7 +6,7 @@
       <view class="cu-bar search bg-white">
         <view class="search-form round">
           <text class="cuIcon-search"></text>
-          <input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索活动"
+          <input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索队伍"
             confirm-type="search">
         </view>
         <view class="action">
@@ -23,9 +23,9 @@
     </view>
     <view class="accontent">
       <All v-if="TabCur === 0"></All>
-      <WillDo v-if="TabCur === 1"></WillDo>
-      <Doing v-if="TabCur === 2"></Doing>
-      <Done v-if="TabCur === 3"></Done>
+      <ToAdmit v-if="TabCur === 1"></ToAdmit>
+      <ToEvaluate v-if="TabCur === 2"></ToEvaluate>
+      <Evaluated v-if="TabCur === 3"></Evaluated>
   
     </view>
   </view>
@@ -36,9 +36,9 @@
     import indexTabbar from '../../../components/top-tabbar/top-tabbar.vue';
 
     import All from './all.vue';
-    import WillDo from './willDo.vue';
-    import Doing from './doing.vue';
-    import Done from './done.vue';
+    import ToAdmit from './toAdmit.vue';
+    import ToEvaluate from './toEvaluate.vue';
+    import Evaluated from './evaluated.vue';
     // import utabsswiper from '../../uview-ui/components/u-tabs-swiper/u-tabs-swiper.vue';
   
     export default {
@@ -46,9 +46,9 @@
         
         indexTabbar,
         All,
-        WillDo,
-        Doing,
-        Done,
+        ToAdmit,
+        ToEvaluate,
+        Evaluated,
         // utabsswiper
       },
       data() {
@@ -60,11 +60,11 @@
           list: [{
             name: '全部'
           }, {
-            name: '待开展'
+            name: '待录取'
           }, {
-            name: '开展中'
+            name: '待录取'
           }, {
-            name: '已结束'
+            name: '已评价'
           }],
   
           title: 'Hello',
@@ -75,16 +75,16 @@
               id: "All"
             },
             {
-              name:"待开展",
-              id:"WillDo"
+              name:"待录取",
+              id:"ToAdmit"
             },
             {
-              name: "开展中",
-              id: "Doing"
+              name: "待录取",
+              id: "ToEvaluate"
             },
             {
-              name: "已结束",
-              id: "Done"
+              name: "已评价",
+              id: "Evaluated"
             }
           ],
           currentTabComponent: "All"
