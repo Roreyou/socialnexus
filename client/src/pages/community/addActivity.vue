@@ -4,38 +4,43 @@
 		<!-- <uni-card :is-shadow="false" is-full>
 			<text class="uni-h6">uni-forms 组件</text>
 		</uni-card> -->
-		<uni-section title="社区基本信息认证" type="line">
+		<uni-section title="新增活动" type="line">
 			<view class="example">
 				<!-- 基础用法，不包含校验规则 -->
-				<uni-forms ref="baseForm" :model="baseFormData" labelWidth="80px">
+				<uni-forms ref="baseForm" :model="activityInfo" labelWidth="80px">
 					<!-- <uni-forms-item label="所属高校" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="中山大学" ref="inputElement" />
+						<uni-easyinput v-model="activityInfo.name" placeholder="中山大学" ref="inputElement" />
 					</uni-forms-item> -->
-					<uni-forms-item label="社区名字" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入社区名字" />
+					<uni-forms-item label="活动名称" required>
+						<uni-easyinput v-model="activityInfo.name" placeholder="请输入活动名称" />
 					</uni-forms-item>
-					<uni-forms-item label="联系方式" required>
-						<uni-easyinput v-model="baseFormData.phone" placeholder="请输入社区联系方式" />
+					<uni-forms-item label="开始时间" required>
+						<uni-easyinput v-model="activityInfo.startTime" placeholder="请输入活动开始时间" />
 					</uni-forms-item>
-					<uni-forms-item label="省" required>
-						<uni-easyinput v-model="baseFormData.province" placeholder="请输入社区所在省" />
+					<uni-forms-item label="结束时间" required>
+						<uni-easyinput v-model="activityInfo.endTime" placeholder="请输入活动结束时间" />
 					</uni-forms-item>
-					<uni-forms-item label="市" required>
-						<uni-easyinput v-model="baseFormData.city" placeholder="请输入社区所在市" />
+					<uni-forms-item label="活动省份" required>
+						<uni-easyinput v-model="activityInfo.province" placeholder="请输入活动省份" />
 					</uni-forms-item>
-					<uni-forms-item label="详细地址" required>
-						<uni-easyinput v-model="baseFormData.address" placeholder="请输入社区详细地址" />
+					<uni-forms-item label="活动城市" required>
+						<uni-easyinput v-model="activityInfo.city" placeholder="请输入活动城市" />
 					</uni-forms-item>
-					<uni-forms-item label="成立日期" required>
-						<uni-easyinput v-model="baseFormData.foundDate" placeholder="请输入社区成立日期" />
+					<uni-forms-item label="活动地址" required>
+						<uni-easyinput v-model="activityInfo.address" placeholder="请输入活动地址" />
 					</uni-forms-item>
-					<uni-forms-item label="社区介绍">
-						<uni-easyinput type="textarea" v-model="baseFormData.introduction" placeholder="请输入社区介绍" />
+					<uni-forms-item label="活动类型" required>
+						<uni-data-picker v-model="activityInfo.activityType" :localdata="typeData" popup-title="请选择活动类型"></uni-data-picker>
+					</uni-forms-item>
+          <uni-forms-item label="活动关键词" required>
+						<uni-easyinput v-model="activityInfo.keywords" placeholder="请输入活动关键词(用逗号隔开)" />
+					</uni-forms-item>
+          <uni-forms-item label="活动简介" required>
+						<uni-easyinput type="textarea" v-model="activityInfo.remark" placeholder="请输入简介" />
 					</uni-forms-item>
 				</uni-forms>
 			</view>
 			<view class="button-group">
-				<button type="primary" size="mini" @click="modifyPassword">修改密码</button>
 				<button type="primary" size="mini" @click="submit('dynamicForm')">提交</button>
 			</view>
 		</uni-section>
@@ -47,15 +52,47 @@
 		data() {
 			return {
 				// 基础表单数据
-				baseFormData: {
+				activityInfo: {
 					name: '',
-					phone: '',
+					startTime: '',
+					endTime: '',
 					province: '',
 					city: '',
 					address: '',
-					foundDate: '',
-					introduction: '',
+					activityType: '',
+					keywords: '',
+					remark: '',
 				},
+        typeData: [
+          {
+            text: '社区经济发展',
+            value: '1',
+          },
+          {
+            text: '社区团建工作',
+            value: '2',
+          },
+          {
+            text: '社区社会调查',
+            value: '3',
+          },
+          {
+            text: '社区文体活动',
+            value: '4',
+          },
+          {
+            text: '社区教育服务',
+            value: '5',
+          },
+          {
+            text: '社区环境治理',
+            value: '6',
+          },
+          {
+            text: '其他',
+            value: '7',
+          },
+        ],
 				// 分段器数据
 				current: 0,
 				items: ['左对齐', '顶部对齐'],
@@ -191,7 +228,7 @@
 
 			},
 			submit(ref) {
-				console.log(this.baseFormData);
+				console.log(this.activityInfo);
 				this.$refs[ref].validate().then(res => {
 					console.log('success', res);
 					uni.showToast({

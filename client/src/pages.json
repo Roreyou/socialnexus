@@ -176,6 +176,12 @@
 			"style": {
 				"navigationBarTitleText": "社区基础信息"
 			}
+		},
+		{
+			"path": "pages/community/addActivity",
+			"style": {
+				"navigationBarTitleText": "新增活动"
+			}
 		}
 	],
 	"globalStyle": {
