@@ -37,6 +37,21 @@
 			}
 		},
 		{
+			"path": "pages/community/index",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh": true,
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"color": "#2979ff", //小圈圈的颜色
+						"style": "circle" //小圈圈的样式
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "个人中心"
@@ -148,6 +163,12 @@
 			"path": "pages/details/details",
 			"style": {
 				"navigationBarTitleText": "details"
+			}
+		},
+		{
+			"path": "pages/community/communityInfo",
+			"style": {
+				"navigationBarTitleText": "社区基础信息"
 			}
 		}
 	],
