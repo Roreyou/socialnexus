@@ -11,10 +11,10 @@
 							<!-- <button v-if="index == 0" type="default" open-type="share" size="20" class="tran-but" >
 								<image :src="shareIcon" mode="aspectFit" style="width:20px; height: 20px;"></image>
 							</button> -->
-							<button v-if="index == 0" type="default" open-type="share" size="20" class="cu-btn tran-but" >
+							<!-- <button v-if="index == 0" type="default" open-type="share" size="20" class="cu-btn tran-but" >
 								<image :src="shareIcon" mode="aspectFit" style="width:18px; height: 18px; background-color: white; margin-bottom: -4px;"></image>
-							</button>
-							<!-- <uni-icons v-if="index == 0" :type="item.icon_noac"></uni-icons> -->
+							</button> -->
+							<uni-icons v-if="index == 0" :type="item.icon_noac"></uni-icons>
 							<uni-icons v-if="index == 1" :type="isActive ? item.icon : item.icon_noac" size="20" color="#646566"></uni-icons>
 						<!-- <uni-icons  v-if="isActive1" :type="item.icon" size="20" color="#646566"></uni-icons>
 						<uni-icons  v-if="!isActive1" :type="item.icon_noac" size="20" color="#646566"></uni-icons> -->
@@ -31,7 +31,7 @@
 			</view>
 			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right ">
 				<view v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
-				 class="flex uni-tab__cart-button-right" @click="buttonClick(index,item)"><text :style="{color:item.color}" class="uni-tab__cart-button-right-text">{{ item.text }}</text></view>
+				 class="flex uni-tab__cart-button-right" @click="application()"><text :style="{color:item.color}" class="uni-tab__cart-button-right-text">{{ item.text }}</text></view>
 			</view>
 		</view>
 	</view>
@@ -174,6 +174,11 @@
 			// 	// path: path
 			// 	// }
 			// }
+			application(){
+			this.$u.route({
+				url: 'pages/details/application'
+				})
+			},
 		},
 		onShareAppMessage: function(res) {
 			console.log("分享")
@@ -185,7 +190,7 @@
 				title: '不凡',
 				path: ""
 			}
-		}
+		},
 }
 </script>
 
