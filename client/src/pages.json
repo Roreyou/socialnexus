@@ -182,6 +182,36 @@
 			"style": {
 				"navigationBarTitleText": "新增活动"
 			}
+		},
+		{
+			"path": "pages/community/myActivity/myActivity",
+			"style": {
+				"navigationBarTitleText": "我的活动"
+			}
+		},
+		{
+			"path": "pages/community/myActivity/all",
+			"style": {
+				"navigationBarTitleText": "全部"
+			}
+		},
+		{
+			"path": "pages/community/myActivity/willDo",
+			"style": {
+				"navigationBarTitleText": "待开展"
+			}
+		},
+		{
+			"path": "pages/community/myActivity/doing",
+			"style": {
+				"navigationBarTitleText": "开展中"
+			}
+		},
+		{
+			"path": "pages/community/myActivity/done",
+			"style": {
+				"navigationBarTitleText": "已结束"
+			}
 		}
 	],
 	"globalStyle": {

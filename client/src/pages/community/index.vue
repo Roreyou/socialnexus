@@ -264,7 +264,7 @@
 					// }else{
 					// 	this.$u.route('/pages/detail/preHouse');
 					// }
-					this.$u.route('/pages/community/myActivity');
+					this.$u.route('/pages/community/myActivity/myActivity');
 				}
 				if(type === "3"){
 					// this.$u.route('/pages/search/searchList');
