@@ -109,33 +109,6 @@
 				}, ],
 
 				index1: 0,
-				list1: [{
-
-					name: 'Java',
-					id: 1,
-				}, {
-
-					name: 'Python',
-					id: 2,
-				}, {
-
-					name: 'PHP',
-					id: 3,
-				}, {
-
-					name: 'C/C++',
-					id: 3,
-				}, {
-
-					name: '.NET',
-					id: 3,
-				}, {
-
-					name: 'JavaScript',
-					id: 3,
-				}, ],
-
-
 
 				providerList: [],
 				hasProvider: false,
@@ -189,7 +162,7 @@
 					return data.account === user.account && data.password === user.password;
 				});
 				if (validUser) {
-          console.log(this.account)
+          			console.log(this.account)
 					this.toMain(this.account);
 				} else {
 					uni.showToast({

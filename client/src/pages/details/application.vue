@@ -36,8 +36,8 @@
 			</view>
 		</view>
 		<view class="custom-container">
-    		<hr class="horizontal-line">
-  		</view>
+    	<hr class="horizontal-line">
+  	</view>
 		<!-- 第二块 -->
 		<view>
 			<view class="part first">
@@ -158,6 +158,7 @@ import bttab from '../../components/detail-btm/uni-goods-nav.vue';
 	border-top: 1px solid #ccc; /* 设置上边框为 1px 灰色实线 */
 	width: 100%; /* 设置水平线的宽度为容器的宽度 */
 	}
+  
 	.key{
 		display: inline-block;
 		width: 600rpx;
