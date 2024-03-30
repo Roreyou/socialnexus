@@ -7,7 +7,7 @@
 			<view class="search-form round">
 				<text class="cuIcon-search"></text>
 				<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索活动"
-					confirm-type="search"></input>
+					confirm-type="search">
 			</view>
 			<view class="action">
 				<button class="cu-btn bg-green shadow-blur round">搜索</button>

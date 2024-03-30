@@ -37,6 +37,21 @@
 			}
 		},
 		{
+			"path": "pages/community/index",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh": true,
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"color": "#2979ff", //小圈圈的颜色
+						"style": "circle" //小圈圈的样式
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "个人中心"
@@ -154,6 +169,78 @@
 			"path": "pages/details/application",
 			"style": {
 				"navigationBarTitleText": "活动报名"
+			}
+		},
+		{
+			"path": "pages/community/communityInfo",
+			"style": {
+				"navigationBarTitleText": "社区基础信息"
+			}
+		},
+		{
+			"path": "pages/community/addActivity",
+			"style": {
+				"navigationBarTitleText": "新增活动"
+			}
+		},
+		{
+			"path": "pages/community/myActivity/myActivity",
+			"style": {
+				"navigationBarTitleText": "我的活动"
+			}
+		},
+		{
+			"path": "pages/community/myActivity/all",
+			"style": {
+				"navigationBarTitleText": "全部"
+			}
+		},
+		{
+			"path": "pages/community/myActivity/willDo",
+			"style": {
+				"navigationBarTitleText": "待开展"
+			}
+		},
+		{
+			"path": "pages/community/myActivity/doing",
+			"style": {
+				"navigationBarTitleText": "开展中"
+			}
+		},
+		{
+			"path": "pages/community/myActivity/done",
+			"style": {
+				"navigationBarTitleText": "已结束"
+			}
+		},
+		{
+			"path": "pages/community/myTeam/myTeam",
+			"style": {
+				"navigationBarTitleText": "队伍信息"
+			}
+		},
+		{
+			"path": "pages/community/myTeam/all",
+			"style": {
+				"navigationBarTitleText": "全部"
+			}
+		},
+		{
+			"path": "pages/community/myTeam/toAdmit",
+			"style": {
+				"navigationBarTitleText": "待录取"
+			}
+		},
+		{
+			"path": "pages/community/myTeam/toEvaluate",
+			"style": {
+				"navigationBarTitleText": "待评价"
+			}
+		},
+		{
+			"path": "pages/community/myTeam/evaluated",
+			"style": {
+				"navigationBarTitleText": "已评价"
 			}
 		}
 	],
