@@ -176,7 +176,7 @@
 			// }
 			application(){
 			this.$u.route({
-				url: 'pages/details/application'
+				url: 'pages/school/details/application'
 				})
 			},
 		},

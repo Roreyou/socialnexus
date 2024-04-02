@@ -1,17 +1,18 @@
-<!-- 高校 活动列表 -->
+<!-- 高校活动推荐 -->
 <template>
+	<view class="content">
 		<!-- 活动推荐列表 -->
 		<view>
-			<!-- <text class="cuIcon-titles text-green"></text> -->
-			<!-- <view class="cu-bar bg-white">
-				<view class="action">					
-					<text class="text-xl text-bold" style="font-family: 'pangmen'; font-style: italic; font-size: 52rpx; font-weight: 600">活动推荐</text>
+			<view class="cu-bar bg-white">
+				<view class="action">
+					<text class="cuIcon-titles text-green"></text>
+					<text class="text-xl text-bold">活动推荐</text>
 				</view>
-			</view> -->
+			</view>
 			<view>
 				<view class="cu-item" v-for="(item,index) in acList" :key="index">
-					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail">
-							<view class="cu-item shadow" :class="{ 'indexstyle': isindex }">
+					<view class="cu-card article" :class="isCard?'no-card':''">
+							<view class="cu-item shadow">
 								<view class="title"><view class="text-cut">{{item.title}}</view></view>
 								<view class="content">
 									<view class="desc">
@@ -31,37 +32,59 @@
 				</view>
 			</view>
 		</view>
+	</view>
 </template>
 
 <script>
 	export default {
-		props: {
-    		acList: Array,
-			isindex:{
-				type:Boolean,
-				default:false
-			}
-  		},
 		data() {
 			return {
-				title: '高校 -- 活动列表'
+				// title: '高校 -- 活动推荐'
+				acList:[
+					{	
+						state: "已结束",
+						title: "5月15日实践活动",
+						time: "2020-05-15",
+						place: "北京",
+						job: "志愿者",
+						keywords: "服务,实践"
+					},
+					{
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
+					},
+					{
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
+					},
+					{
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
+					}
+				]
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
-			//前往详情页
-			todetail(){
-				this.$u.route({
-					url: 'pages/school/details/details',
-				  })
-			},
+
 		}
 	}
 </script>
-<style scoped>
-	/* 活动推荐列表 */
+<style lang="scss" scoped>
 	.cu-item .shadow{
 	margin: 0;
 	margin-top: 10rpx;
@@ -71,19 +94,11 @@
 	margin-left: 24rpx;
 	}
 
-	/* tag */
 	.wordcont{
 	margin-top: 10rpx;
 	}
 	.wordcont .ackeywords {
 		display: inline-block;
 	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
-	}
-
-	/* 首页推荐列表样式 */
-	.indexstyle{
-	margin: 0 20rpx;
-    /* border-radius: 10px; */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	}
 </style>

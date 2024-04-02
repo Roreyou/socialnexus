@@ -1,4 +1,4 @@
-<!-- 社区基层首页 -->
+<!-- 高校首页 -->
 <template>
 	<view class="u-p-l-10 u-p-r-10">
 		<u-navbar :is-back="false">
@@ -7,6 +7,8 @@
 					杭州
 					<u-icon name="arrow-down-fill" class="u-p-l-20" color="#515356"></u-icon>
 				</view>
+				<u-search placeholder="搜索实践活动" v-model="keyword" input-align="center"  :show-action="false" :clearabled="true"
+:disabled="true" style="width: 565rpx;" @click="search"></u-search>
 			</view>
 		</u-navbar>
 		<!-- 轮播图 -->
@@ -16,8 +18,8 @@
 		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
 			<view class="user-section">
 				<image :src="avatar" class="cu-avatar xl round"></image>
-				<view class="text-white text-xl padding">社区基层: {{userName}}</view>
-				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication">编辑信息</view>
+				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
+				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view>
 			</view>
 		</view>
 		<view> 
@@ -32,6 +34,10 @@
 				</u-row>
 			</view>
 			<u-gap height="10"></u-gap>
+			<view @click="notice">
+				<u-notice-bar mode="vertical" :list="noticeList" type="primary" more-icon
+				bg-color="#fff" :duration="5000" border-radius="15"></u-notice-bar>
+			</view>
 			<u-gap height="5"></u-gap>
 			<!-- <u-waterfall v-model="flowList" ref="uWaterfall">
 			    <template v-slot:left="{leftList}">
@@ -56,41 +62,17 @@
 		</view> 
 		
 		<!-- 活动推荐列表 -->
-		<view>
-			<view class="cu-bar bg-white">
+		<view class="board">
+			<view class="cu-bar" style="background-color: transparent">
 				<view class="action">
-					<text class="cuIcon-titles text-green"></text>
-					<text class="text-xl text-bold">正在招募</text>
+					<text class="text-xl text-bold" style="color: #ffffff; font-size: 52rpx; font-weight: 600; font-family: 'pangmen'; font-style: italic; background-color: transparent">活动推荐</text>
 				</view>
 			</view>
-			<view>
-				<view class="cu-item" v-for="(item,index) in acList" :key="index">
-					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail">
-							<view class="cu-item shadow">
-								<view class="title"><view class="text-cut">{{item.title}}</view></view>
-								<view class="content">
-									<view class="desc">
-										<view class="text-content"> 日期: {{item.time}}</view>
-										<view class="text-content"> 地点: {{item.place}}</view>
-										<view class="text-content"> 岗位: {{item.job}}</view>
-										
-										<view class="wordcont">	
-											<view class="ackeywords" v-for="(word,index) in item.keywords.split(',')" :key="index">
-												<view class="cu-tag bg-red light sm round">{{word}}</view>
-											</view>
-										</view>
-									</view>
-								</view>
-							</view>
-					</view>
-				</view>
-			</view>
-			<view class="re-but">
-				<button @click="torec">点击加载更多推荐的活动</button>
-			</view>
+			<actilist :acList="acList" :isindex="true"></actilist>
 		</view>
-		
-		
+		<view class="re-but">
+				<button @click="torec">点击加载更多推荐的活动</button>
+		</view>
 		<!-- <u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="findHouseList"></u-loadmore> -->
 		<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
 		<u-no-network></u-no-network>
@@ -109,7 +91,7 @@
 		mapState,
 		mapMutations
 	} from 'vuex'
-	import actilist from '../../components/acti-list/acti-list.vue';
+	import actilist from '../../../components/acti-list/acti-list.vue';
 
 	export default {
 		components: {
@@ -132,10 +114,14 @@
 					    title: '身无彩凤双飞翼，心有灵犀一点通'
 					},
                 ],
+				noticeList: [
+					'强国有我，青春有为',
+					'行万里路，知中国情',
+				],
 				navList:[
-				   {name:"新增活动",src:"/static/img/index/cover/index_cover1.png",type:"1"},
-				   {name:"我的活动",src:"/static/img/index/cover/index_cover2.png",type:"2"},
-				   {name:"队伍信息",src:"/static/img/index/cover/index_cover3.png",type:"3"},
+				   {name:"我的活动",src:"/static/img/index/cover/index_cover1.png",type:"1"},
+				   {name:"朋友圈",src:"/static/img/index/cover/index_cover2.png",type:"2"},
+				   {name:"活动推荐",src:"/static/img/index/cover/index_cover3.png",type:"3"},
 				//    {name:"发布房源",src:"/static/img/index/cover/index_cover4.png",type:"2"}
 				],
 				loadStatus: 'loadmore',
@@ -218,7 +204,7 @@
 		methods: {
 			handleAuthentication(){
 				this.$u.route({
-					url: 'pages/community/communityInfo',
+					url: 'pages/school/index/verify',
 				  })
 			},
 			location(){
@@ -226,6 +212,71 @@
 					url: 'pages/location/location',
 				  })
 			},
+			search(){
+				this.$u.route({
+					url: 'pages/search/search',
+				})
+			},
+			notice(){
+				this.$u.route({
+					url: 'pages/notice/notice'
+				})
+			},
+			// findHouseList(type = 0) {
+			// 	if(type == 1){
+			// 		this.pageNum = 1
+			// 		this.flowList = []
+			// 		this.$refs.uWaterfall.clear();
+			// 	}
+			// 	let url = "/api/houseApi/findHouseRoomList";
+			// 	// this.$u.get(url, {
+			// 	// 	pageNum: this.pageNum,
+			// 	// 	pageSize: this.pageSize,
+			// 	// 	orderByColumn: 'update_time,create_time',
+			// 	// 	isAsc: 'desc'
+			// 	// }).then(result => {
+			// 	// 	const data = result.rows;
+			// 	// 	if(this.pageNum>1 && data.length < this.pageSize){
+			// 	// 		return this.loadStatus = 'nomore';
+			// 	// 	}
+			// 	// 	this.houseList = data;
+			// 	// 	for (let i = 0; i < this.houseList.length; i++) {
+			// 	// 	    // 先转成字符串再转成对象，避免数组对象引用导致数据混乱
+			// 	// 	    let item = this.houseList[i]
+			// 	// 		item.image = item.faceUrl
+			// 	// 		if(item.type == 0){
+			// 	// 			item.type = '整租'
+			// 	// 		}else if(item.type == 1){
+			// 	// 			item.type = '合租'
+			// 	// 		}
+			// 	// 		if(item.roomType == 1){
+			// 	// 			item.roomType = '主卧'
+			// 	// 		}else if(item.roomType == 2){
+			// 	// 			item.roomType = '次卧'
+			// 	// 		}else{
+			// 	// 			item.roomType = '未知'
+			// 	// 		}
+						
+			// 	// 		if(this.$u.test.isEmpty(item.houseNum)){
+			// 	// 			item.houseNum = ''
+			// 	// 		}
+			// 	// 		if(this.$u.test.isEmpty(item.houseHall)){
+			// 	// 			item.houseHall = ''
+			// 	// 		}
+			// 	// 		if(this.$u.test.isEmpty(item.toiletNum)){
+			// 	// 			item.toiletNum = ''
+			// 	// 		}
+			// 	// 		if(this.$u.test.isEmpty(item.floor)){
+			// 	// 			item.floor = ''
+			// 	// 		}else{
+			// 	// 			item.floor = item.floor + '层'
+			// 	// 		}
+			// 	// 	    this.flowList.push(item);
+			// 	// 	}
+			// 	// 	++ this.pageNum 
+			// 	// 	this.loadStatus = 'loadmore';
+			// 	// });
+			// },
 			checkUpdate(){
 				uni.getSystemInfo({
 					success:(res) => {
@@ -237,11 +288,11 @@
 				})
 			},
 			clickSearch() {
-			    this.$u.route('/pages/search/search');
+			    this.$u.route('/pages/school/search/search');
 			},
 			clickImage(houseId) {
 				this.$u.route({
-					url: '/pages/detail/detail',
+					url: '/pages/school/detail/detail',
 					params: {
 						houseId: houseId
 					}
@@ -250,7 +301,7 @@
 			clickNav(type){
 				if(type === "1"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/community/addActivity');
+					this.$u.route('/pages/school/search/myactivity');
 				}
 				if(type === "2"){
 					// 判断Token是否有效   这个逻辑最后再来加
@@ -264,11 +315,11 @@
 					// }else{
 					// 	this.$u.route('/pages/detail/preHouse');
 					// }
-					this.$u.route('/pages/community/myActivity/myActivity');
+					this.$u.route('/pages/school/pyq/entry');
 				}
 				if(type === "3"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/community/myTeam/myTeam');
+					this.$u.route('/pages/school/search/recommend');
 				}
 			},
 			code(){
@@ -288,13 +339,13 @@
 			//点击加载更多活动
 			torec(){
 				this.$u.route({
-					url: 'pages/search/recommend',
+					url: 'pages/school/search/recommend',
 				  })
 			},
 			//前往详情页
 			todetail(){
 				this.$u.route({
-					url: 'pages/details/details',
+					url: 'pages/school/details/details',
 				  })
 			},
 		}
@@ -430,4 +481,21 @@
 		display: inline-block;
 	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 	}
+
+// 活动推荐列表
+.board{
+	border-radius: 10px;
+	background-color: #37c4568f
+}
+
+// 活动推荐标题
+.action{
+	background-color: transparent;
+}
+.text-xl text-bold{
+	font-size: 52rpx;
+	font-weight: 600;
+	font-family: 'pangmen';
+	font-style: italic;
+}
 </style>

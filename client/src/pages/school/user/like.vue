@@ -1,22 +1,9 @@
-<!-- 高校 全部 -->
+<!-- 高校 活动收藏 -->
 <template>
 	<view class="content">
-		<!-- <image class="logo" src="/static/logo.png"></image>
-		<image class="logo" src="/static/logo.png"></image>
-		<image class="logo" src="/static/logo.png"></image>
-		<image class="logo" src="/static/logo.png"></image>
-		<view>
-			<text class="title">{{title}}</text>
-		</view> -->
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
 			<view class="cu-card article" :class="isCard?'no-card':''">
 					<view class="cu-item shadow">
-						<view class="cu-bar bg-white">
-							<view class="action">
-								<text class="cuIcon-titles text-green"></text>
-								<text class="text-xl text-bold">{{item.state}}</text>
-							</view>
-						</view>
 						<view class="title"><view class="text-cut">{{item.title}}</view></view>
 						<view class="content">
 							<view class="desc">
@@ -29,12 +16,15 @@
 									</view>
 								</view>
 							</view>
+							<view class="favorite-button">
+        						<button class="cancel-favorite" @click="cancelFavorite(item.id)">取消收藏</button>
+      						</view>
 						</view>
 					</view>
 			</view>
 		</view>
 		<view v-if="acList.length === 0" class="no-activities">
-    		没有符合要求的活动
+    		没有收藏的活动
   		</view>
 	</view>
 </template>
@@ -44,31 +34,26 @@
 		data() {
 			return {
 				acList:[
+					{
+						id: 0,
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
+					},
+					{
+						id: 1,
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
+					},
 					{	
-						state: "已结束",
-						title: "5月15日实践活动",
-						time: "2020-05-15",
-						place: "北京",
-						job: "志愿者",
-						keywords: "服务,实践"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
+						id: 2,
 						state: "开展中",
 						title: "5月5日实践活动",
 						time: "2020-05-5",
@@ -83,7 +68,20 @@
 
 		},
 		methods: {
-
+			cancelFavorite(likeid){
+				uni.showModal({
+    			    title: '确认取消收藏',
+    			    content: '确定取消收藏吗？',
+    			    success: (res) => {
+    			      if (res.confirm) {
+    			        // 用户点击了确认按钮
+						const filteredList = this.acList.filter(item => item.id !== likeid);
+						this.acList = filteredList;
+						this.$u.toast(`取消收藏成功！`);
+    			      }
+    			    }
+    			});
+			}
 		}
 	}
 </script>
@@ -94,7 +92,7 @@
 }
 
 .text-cut{
-	margin-top: -15rpx;
+	margin-top: 10px;
 	line-height: 60rpx;
 }
 .cu-bar .action:first-child{
@@ -114,5 +112,14 @@
 .wordcont .ackeywords {
 	display: inline-block;
   margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
+}
+.favorite-button{
+	display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+.cancel-favorite{
+	font-size: small;
 }
 </style>

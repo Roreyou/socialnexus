@@ -191,7 +191,7 @@
 				 */
 				if (this.forcedLogin) {
 					uni.reLaunch({
-						url: '../index/index',   /*进入高校首页*/
+						url: '../school/index/index',   /*进入高校首页*/
 					});
 				} else {
 					uni.navigateBack();

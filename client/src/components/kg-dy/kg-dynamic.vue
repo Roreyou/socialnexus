@@ -114,7 +114,7 @@
 			},
 			goInfo(id) {
 				uni.navigateTo({
-					url: "/pages/pyq/dynamicInfo?id=" + id
+					url: "/pages/school/pyq/dynamicInfo?id=" + id
 				})
 			},
 			comContent(id){
