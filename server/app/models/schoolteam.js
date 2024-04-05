@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    status: {
+    comment_status: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
@@ -36,6 +36,14 @@ module.exports = function(sequelize, DataTypes) {
     },
     instructor_id: {
       type: DataTypes.STRING(20),
+      allowNull: true
+    },
+    relevant_faculties: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    },
+    verification_status: {
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {

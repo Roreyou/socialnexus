@@ -22,7 +22,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    status: {
+    admission_status: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    comment_status: {
       type: DataTypes.INTEGER,
       allowNull: true
     }

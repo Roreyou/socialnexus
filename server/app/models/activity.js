@@ -14,12 +14,20 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATEONLY,
       allowNull: true
     },
+    application_deadline: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    },
     start_time: {
       type: DataTypes.DATE,
       allowNull: true
     },
     end_time: {
       type: DataTypes.DATE,
+      allowNull: true
+    },
+    vacancies: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     province: {
@@ -46,12 +54,16 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    status: {
+    keywords_id: {
+      type: DataTypes.STRING(90),
+      allowNull: true
+    },
+    verification_status: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    keywords_id: {
-      type: DataTypes.STRING(90),
+    activity_status: {
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {
