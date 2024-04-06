@@ -26,16 +26,19 @@ CREATE TABLE `activity` (
   `id` varchar(45) NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `setup_date` date DEFAULT NULL,
+  `application_deadline` varchar(45) DEFAULT NULL,
   `start_time` datetime DEFAULT NULL,
   `end_time` datetime DEFAULT NULL,
+  `vacancies` int DEFAULT NULL,
   `province` varchar(45) DEFAULT NULL,
   `city` varchar(45) DEFAULT NULL,
   `address` varchar(45) DEFAULT NULL,
   `category_id` varchar(20) DEFAULT NULL,
   `community_id` varchar(20) DEFAULT NULL,
   `remark` text,
-  `status` int DEFAULT NULL,
   `keywords_id` varchar(90) DEFAULT NULL,
+  `verification_status` int DEFAULT NULL,
+  `activity_status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -46,7 +49,7 @@ CREATE TABLE `activity` (
 
 LOCK TABLES `activity` WRITE;
 /*!40000 ALTER TABLE `activity` DISABLE KEYS */;
-INSERT INTO `activity` VALUES ('1','社区趣味运动会','2002-09-21','2022-06-15 09:30:45','2022-06-18 09:30:45','广东省','佛山市','1','1','1','1',1,NULL),('2','关爱老人活动','2002-09-21','2023-06-15 09:30:45','2023-06-18 09:30:45','广东省','珠海市','1','2','1','1',1,NULL),('3','社区大扫除','2002-09-21','2023-06-15 09:30:45','2023-06-16 09:30:45','广东省','珠海市','1','1','1','1',1,NULL),('4','运动会','2002-09-21','2023-06-15 09:30:45','2023-06-16 09:30:45','浙江省','嘉兴市','1','1','1','1',1,NULL);
+INSERT INTO `activity` VALUES ('1','社区趣味运动会','2002-09-21',NULL,'2022-06-15 09:30:45','2022-06-18 09:30:45',NULL,'广东省','佛山市','1','1','1','1',NULL,1,1),('2','关爱老人活动','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-18 09:30:45',NULL,'广东省','珠海市','1','2','1','1',NULL,1,1),('3','社区大扫除活动','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-16 09:30:45',NULL,'广东省','珠海市','1','1','1','1',NULL,1,3),('4','运动会','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-16 09:30:45',NULL,'浙江省','嘉兴市','1','1','1','1',NULL,1,3);
 /*!40000 ALTER TABLE `activity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -303,9 +306,11 @@ CREATE TABLE `schoolteam` (
   `school_id` varchar(45) DEFAULT NULL,
   `setup_date` date DEFAULT NULL,
   `remark` text,
-  `status` int DEFAULT NULL,
+  `comment_status` int DEFAULT NULL,
   `leader_id` varchar(20) DEFAULT NULL,
   `instructor_id` varchar(20) DEFAULT NULL,
+  `relevant_faculties` varchar(45) DEFAULT NULL,
+  `verification_status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -316,7 +321,7 @@ CREATE TABLE `schoolteam` (
 
 LOCK TABLES `schoolteam` WRITE;
 /*!40000 ALTER TABLE `schoolteam` DISABLE KEYS */;
-INSERT INTO `schoolteam` VALUES ('77','$2b$10$68PwTrwnmrP/IG4ojc0PUuo3AY9UFHprThV9ClKgagp/j3TcEO7MW','成深大持体角达','52','1993-01-29','in in laboris adipisicing ut',0,'34','53'),('97','$2b$10$wv3X3cHvgLShaZGpLRHZmeuJ8eL/SDH8n55pRyaI8jba0AS7nVlki','种战题般','37','2023-02-16','sed tempor ea occaecat',0,'19','99');
+INSERT INTO `schoolteam` VALUES ('77','$2b$10$6qe1MYwjeGq1H8VpDTha3.wzt72ty6sNK3Y9LWZ6ehPeqrYOg01O.','成深大持体角达','52','1993-01-29','in in laboris adipisicing ut',NULL,'34','53',NULL,NULL),('97','$2b$10$wv3X3cHvgLShaZGpLRHZmeuJ8eL/SDH8n55pRyaI8jba0AS7nVlki','种战题般','37','2023-02-16','sed tempor ea occaecat',NULL,'19','99',NULL,0);
 /*!40000 ALTER TABLE `schoolteam` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -354,13 +359,13 @@ DROP TABLE IF EXISTS `teamactivity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `teamactivity` (
-  `id` varchar(20) NOT NULL,
-  `activity_id` varchar(20) DEFAULT NULL,
-  `team_id` varchar(20) DEFAULT NULL,
+  `activity_id` varchar(20) NOT NULL,
+  `team_id` varchar(20) NOT NULL,
   `com_to_team` text,
   `team_to_acticity` text,
-  `status` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `admission_status` int DEFAULT NULL,
+  `comment_status` int DEFAULT NULL,
+  PRIMARY KEY (`activity_id`,`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -370,6 +375,7 @@ CREATE TABLE `teamactivity` (
 
 LOCK TABLES `teamactivity` WRITE;
 /*!40000 ALTER TABLE `teamactivity` DISABLE KEYS */;
+INSERT INTO `teamactivity` VALUES ('2','1',NULL,NULL,1,NULL),('3','1',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `teamactivity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -411,4 +417,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-26 10:57:57
+-- Dump completed on 2024-04-06 15:48:23
