@@ -274,6 +274,7 @@ class teamService {
           team_id: team_id,
       }
     });
+    console.log("debug02:",existingEvent);
     return existingEvent;
   }
 

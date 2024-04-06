@@ -272,10 +272,11 @@ class teamController {
   // 取消报名活动的控制器方法
   static async cancelRegisterEvent(req, res) {
       try {
-          const { team_id, activ_id } = req.query;
-          
-        const existingEvent = teamService.findEvent(activ_id, team_id);
-        if(!existingEvent){
+        const { team_id, activ_id } = req.query;
+
+        const existingEvent = await teamService.findEvent(activ_id, team_id);
+        
+        if(!existingEvent || team_id == null || activ_id ==null ){
           res.status(500).json({code: 500, msg: 'Can not cancel non-existed registration', data: null });
         }
 
@@ -283,7 +284,7 @@ class teamController {
         await activityService.cancelRegisterEvent(team_id, activ_id);
 
         // 返回成功响应
-        res.json({code: 500,msg: 'Successfully canceled registration'});
+        res.json({code: 200 ,msg: 'Successfully canceled registration'});
       } catch (error) {
           // 返回错误响应
           console.error('Error canceling registration:', error);
