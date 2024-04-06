@@ -292,6 +292,69 @@ class teamController {
       }
   }
 
+  // 获取高校队伍对活动的评价
+  static async getMyComments(req, res) { 
+    try {
+      const { my_id: team_id } = req.query;
+      const myComments = await teamService.getMyComments(team_id);
+      return res.status(200).json({ code: 200, msg: 'Success', data: { com_llist: myComments } });
+    } catch (error) {
+      console.error('Failed to get my comments:', error);
+      return res.status(500).json({ code: 500, msg: 'Failed to get my comments', data: null });
+    }
+  }
+
+  // 发表对未评价活动的评价
+  static async commentActivity(req, res) {
+    try {
+      const { team_id, activity_id, content } = req.body;
+      const { text, picture, time, stars } = content;
+
+      // Here you can implement your logic to handle the comment activity
+      await teamService.commentActivity(team_id);
+      // Assuming successful comment activity handling
+      return res.status(200).json({ code: 200, msg: 'Comment activity successful' });
+    } catch (error) {
+      console.error('Failed to comment activity:', error);
+      return res.status(500).json({ code: 500, msg: 'Failed to comment activity' });
+    }
+  }
+
+  //获取基层人员对队伍的评价
+  static async getCommunityComments(req, res) {
+    try {
+      const { team_id, activity_id } = req.query;
+      const communityComments = await teamService.getCommunityComments(team_id,activity_id);
+      return res.status(200).json({ code: 200, msg: 'Success', data: { com_list: communityComments } });
+    } catch (error) {
+      console.error('Failed to get community comments:', error);
+      return res.status(500).json({ code: 500, msg: 'Failed to get community comments', data: null });
+    }
+  }
+
+  //获取本队伍的信息
+  static async getTeamInfo(req, res) {
+    try {
+      const { team_id } = req.query;
+      const teamInfo = await teamService.getTeamInfo(team_id);
+      return res.status(200).json({ code: 200, msg: 'Success', data: { info: teamInfo } });
+    } catch (error) {
+      console.error('Failed to get team info:', error);
+      return res.status(500).json({ code: 500, msg: 'Failed to get team info', data: null });
+    }
+  }
+
+  // 获取收藏的活动
+  static async getTeamFavorites(req, res) {
+    try {
+      const { team_id } = req.query;
+      const teamFavorites = await teamService.getTeamFavorites(team_id);
+      return res.status(200).json({ code: 200, msg: 'Success', data: { acti_list: teamFavorites } });
+    } catch (error) {
+      console.error('Failed to get team favorites:', error);
+      return res.status(500).json({ code: 500, msg: 'Failed to get team favorites', data: null });
+    }
+  }
 }
 
 module.exports = teamController;

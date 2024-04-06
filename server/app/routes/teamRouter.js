@@ -10,15 +10,19 @@ const router = express.Router();
 router.get('/getRecommend', TeamController.getRecommend);
 router.get('/activsquare/filter', ActivityController.filterActivity);
 router.get('/activsquare/search', ActivityController.searchActivities);
-// 获取已报名活动
 router.get('/getmyactiv', TeamController.getMyActiv);
-// 搜索已报名活动
 router.get('/searchmyactiv', TeamController.searchMyActiv);
+router.get('/team2activ', TeamController.getMyComments);
+router.get('/commu2team', TeamController.getCommunityComments);
+router.get('/getteamInfo', TeamController.getTeamInfo);
+router.get('/getteamfavor', TeamController.getTeamFavorites);
 
 router.put('/favor', TeamController.favoriteActivity);
 
 router.post('/activsquare/register_event', TeamController.registerEvent);
 router.post('/authentification', TeamController.authentification);
+router.post('/commentactivity', TeamController.commentActivity);
+
 
 // 取消报名活动
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);

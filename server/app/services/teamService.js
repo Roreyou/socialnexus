@@ -274,7 +274,6 @@ class teamService {
           team_id: team_id,
       }
     });
-    console.log("debug02:",existingEvent);
     return existingEvent;
   }
 
@@ -308,6 +307,51 @@ class teamService {
     } catch (error) {
         throw error;
     }
+  }
+
+  static async getTeamInfo(teamId) {
+    try {
+      // 获取队伍信息
+      const teamInfo = await db.team.findOne({ where: { id: teamId } });
+
+      if (!teamInfo) {
+        return { code: '404', msg: 'Team not found', data: null };
+      }
+
+      // 获取指导老师信息
+      const instructorInfo = await db.teacher.findOne({ where: { id: teamInfo.instructor_id } });
+
+      // 获取队伍成员信息
+      const memberInfo = await db.teammember.findAll({ where: { team_id: teamId } });
+
+      // 组合数据
+      const responseData = {
+        team_info: teamInfo,
+        member_info: memberInfo,
+        instructor_info: instructorInfo
+      };
+      return { code: '200', msg: 'Success', data: responseData };
+    } catch (error) {
+      console.error('Failed to get team info:', error);
+      return { code: '500', msg: 'Failed to get team info', data: null };
+    }
+
+  }
+
+  static async getTeamFavorites(my_id) {
+    const favoActiIds = await db.favorate.findAll({
+      where: { team_id: my_id }
+    });      
+    
+    // 将查询到的活动 ID 转换为数组
+    const activityIdsArray = favoActiIds.map(activity => activity.activity_id);
+
+    const teamFavorites = await db.activity.findAll({
+      where:{
+        id: activityIdsArray
+      }
+    }); 
+    return teamFavorites;
   }
 
 }
