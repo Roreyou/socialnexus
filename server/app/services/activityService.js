@@ -137,6 +137,91 @@ class ActivityService {
 
     return activities;
   }
+
+  // 获取已报名活动列表的服务方法
+  static async getMyActiv(team_id, activity_status) {
+    try {
+      // 在活动表中根据团队 ID 查找所有相关的活动 ID
+      const activityIds = await db.teamactivity.findAll({
+          where: {
+            team_id: team_id
+          }
+      });
+
+      // 将查询到的活动 ID 转换为数组
+      const activityIdsArray = activityIds.map(activity => activity.activity_id);
+
+      console.log("debug: ", activity_status);
+      // 在团队活动表中根据活动 ID 和活动开展状态返回对应记录
+      const myActivList = await db.activity.findAll({
+          where: {
+              id: activityIdsArray,
+              activity_status: activity_status
+          }
+      });
+      return myActivList;
+    } catch (error) {
+        throw error;
+    }
+  }
+
+  // 搜索已报名活动列表的服务方法
+  static async searchMyActiv(team_id, activity_name) {
+    try {
+      // 在这里编写搜索已报名活动列表的逻辑
+      // 在活动表中根据团队 ID 查找所有相关的活动 ID
+      const activityIds = await db.teamactivity.findAll({
+          where: {
+            team_id: team_id
+          }
+      });
+
+      // 将查询到的活动 ID 转换为数组
+      const activityIdsArray = activityIds.map(activity => activity.activity_id);
+
+      // 假设根据搜索文本查询数据库中的活动信息
+      const whereCondition = {
+        [Op.and]: [
+            {
+                name: {
+                    [Op.like]: `%${activity_name}%`
+                }
+            },
+            db.Sequelize.literal(`name NOT LIKE '%${activity_name} %'`),
+            db.Sequelize.literal(`name NOT LIKE '% ${activity_name}%'`),
+            {
+              id: activityIdsArray
+            }
+        ]
+      };
+      const activList = await db.activity.findAll({
+        where: whereCondition
+      });
+      if (!activList) {
+        return null; // 返回null表示活动不存在
+      }
+      return activList;
+    } catch (error) {
+        throw error;
+    }
+  }
+
+  // 取消报名活动的服务方法
+  static async cancelRegisterEvent(team_id, activ_id) {
+    try {
+        // 在这里编写取消报名活动的逻辑
+        // 假设删除指定队伍和活动的关联记录
+        await db.teamactivity.destroy({
+            where: {
+                activity_id: activ_id,
+                team_id: team_id                
+            }
+        });
+    } catch (error) {
+        throw error;
+    }
+  }
+
 }
 
 module.exports = ActivityService;

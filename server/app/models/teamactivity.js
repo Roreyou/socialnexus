@@ -1,18 +1,15 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('teamactivity', {
-    id: {
-      type: DataTypes.STRING(20),
-      allowNull: false,
-      primaryKey: true
-    },
     activity_id: {
       type: DataTypes.STRING(20),
-      allowNull: true
+      allowNull: true,
+      primaryKey: true
     },
     team_id: {
       type: DataTypes.STRING(20),
-      allowNull: true
+      allowNull: true,
+      primaryKey: true
     },
     com_to_team: {
       type: DataTypes.TEXT,
@@ -33,16 +30,6 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'teamactivity',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "id" },
-        ]
-      },
-    ]
+    timestamps: false
   });
 };

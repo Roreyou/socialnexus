@@ -256,6 +256,59 @@ class teamService {
     return await db.favorate.create({ team_id, activity_id });
   }
 
+  static async deleteFavorite(team_id, activity_id) {
+    // 已经检查过一定存在 直接删除
+    return await db.favorate.destroy({
+      where: {
+          team_id: team_id,
+          activity_id: activity_id
+      }
+    });
+  }
+
+  static async findEvent(activ_id, team_id){
+    // 检查数据库中是否存在相同的记录
+    const existingEvent = await db.teamactivity.findOne({
+      where: {
+          activity_id: activ_id,
+          team_id: team_id,
+      }
+    });
+    return existingEvent;
+  }
+
+  static async registerEvent(activ_id, team_id){
+    try {
+      // 在这里进行报名活动的操作，例如创建新记录等
+      const result = await db.teamactivity.create({
+          activity_id: activ_id,
+          team_id: team_id,
+          admission_status: 1 // 默认为待录取状态
+      });      
+      return { admission_status: result.admission_status };
+    } catch (error) {
+        throw error;
+    }
+  }
+
+  static async getRecommend(city, province){
+    try {
+      // 在这里编写获取活动推荐列表的逻辑
+      // 假设根据省份和城市查询数据库中的活动信息
+      const recommendations = await db.activity.findAll({
+          where: {
+              province: province,
+              city: city
+          },
+          limit: 10 // 限制返回结果数量为 10 条
+      });
+      
+      return recommendations;
+    } catch (error) {
+        throw error;
+    }
+  }
+
 }
 
 module.exports = teamService;

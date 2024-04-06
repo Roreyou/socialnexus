@@ -2,6 +2,7 @@
 const ResultCode = require('../common/BaseResultCode');
 const Result = require('../common/Result');
 const teamService = require('../services/teamService');
+const activityService = require('../services/activityService');
 
 class teamController {
   static async getAllTeams(req, res) {
@@ -163,25 +164,132 @@ class teamController {
   static async favoriteActivity(req, res) {
     try {
         // 获取前端传来的队伍ID和活动ID
-        const { team_id, activity_id } = req.query;
-        console.log("debug teamid, activ id",team_id," ",activity_id);
-        // 检查记录是否存在
-        const existingFavorite = await teamService.getFavorite(team_id, activity_id);
-        if (existingFavorite) {
-            return res.status(400).json({ code: 400, msg: 'Activity already favorited' });
+        const { team_id, activity_id, favor } = req.query;
+        console.log("favor:",favor)
+        if(favor==0){
+          //收藏功能
+
+          // 检查记录是否存在
+          const existingFavorite = await teamService.getFavorite(team_id, activity_id);
+          if (existingFavorite) {
+              return res.status(400).json({ code: 400, msg: 'Activity already favorited' });
+          }
+          // 创建新记录
+          await teamService.createFavorite(team_id, activity_id);
+          // 返回成功响应
+          return res.json({code:ResultCode.SUCCESS.code, msg: 'Activity favorited successfully' });
+          }
+        else if (favor==1){
+          // 取消收藏功能
+
+          // 检查记录是否存在
+          const existingFavorite = await teamService.getFavorite(team_id, activity_id);
+          if (!existingFavorite) {
+              return res.status(400).json({ code: 400, msg: 'Activity not favorited yet' });
+          }
+          // 删除收藏记录
+          await teamService.deleteFavorite(team_id, activity_id);
+          // 返回成功响应
+          return res.json({ code: ResultCode.SUCCESS.code, msg: 'Activity unfavorited successfully' });
         }
-
-        // 创建新记录
-        await teamService.createFavorite(team_id, activity_id);
-
-        // 返回成功响应
-        return res.json({code:ResultCode.SUCCESS.code, msg: 'Activity favorited successfully' });
     } catch (error) {
         console.error('Error favoriting activity:', error);
         return res.status(500).json({ code: 500, msg: 'Internal server error' });
     }
   }
 
+  static async registerEvent(req, res){
+      try {
+        const { team_id, activity_id } = req.body;
+        
+        const existingEvent = await teamService.findEvent(activity_id, team_id);
+        if (existingEvent) {
+          // 如果记录已存在，则返回对应响应的提示
+          return res.json({code: '500', msg: 'Event already registered',data: null});
+        }
+
+        // 调用服务方法进行报名活动操作
+        const result = await teamService.registerEvent(activity_id, team_id);
+        // 返回成功响应
+        return res.json({code: '200', msg: 'Activity registered successfully',data: result});
+      } catch (error) {
+          // 返回错误响应
+          console.log("debug 01:",error)
+          res.status(500).json({code: '500', msg: 'Failed to register activity',data: null});
+      }
+  }  
+
+  static async getRecommend(req, res){
+    try {
+      const { city, province } = req.query;
+  
+      // 调用服务方法获取活动推荐列表
+      const recommendations = await teamService.getRecommend(city, province);
+
+      // 返回成功响应
+      res.json({code: 200, msg: 'Success', data: {acti_list: recommendations}});
+    } catch (error) {
+        // 返回错误响应
+        console.error('Error getting recommendations:', error);
+        res.status(500).json({code: 500, msg: 'Failed to get recommendations', data: null});
+    }
+  }
+
+  // 获取已报名活动的控制器方法
+  static async getMyActiv(req, res) {
+    try {
+        const { team_id, activity_status } = req.query;
+        
+        // 调用服务方法获取已报名活动列表
+        const myActivList = await activityService.getMyActiv(team_id, activity_status);
+
+        // 返回成功响应
+        res.json({code: 200, msg: 'Success', data: {myactiv_list: myActivList}});
+    } catch (error) {
+        // 返回错误响应
+        console.error('Error getting my activities:', error);
+        res.status(500).json({code: 500, msg: 'Failed to get my activities', data: null });
+    }
+}
+
+  // 搜索已报名活动的控制器方法
+  static async searchMyActiv(req, res) {
+      try {
+          const { team_id, activity_name } = req.query;
+          
+          // 调用服务方法搜索已报名活动列表
+          const activList = await activityService.searchMyActiv(team_id, activity_name);
+
+          // 返回成功响应
+          res.json({code: 200, msg: 'Success', data: {myactiv_list: activList}});
+      } catch (error) {
+          // 返回错误响应
+          console.error('Error searching my activities:', error);
+          res.status(500).json({code: 500, msg: 'Failed to search my activities', data: null });
+      }
+  }
+
+  // 取消报名活动的控制器方法
+  static async cancelRegisterEvent(req, res) {
+      try {
+          const { team_id, activ_id } = req.query;
+          
+        const existingEvent = teamService.findEvent(activ_id, team_id);
+        if(!existingEvent){
+          res.status(500).json({code: 500, msg: 'Can not cancel non-existed registration', data: null });
+        }
+
+        // 调用服务方法取消报名活动
+        await activityService.cancelRegisterEvent(team_id, activ_id);
+
+        // 返回成功响应
+        res.json({code: 500,msg: 'Successfully canceled registration'});
+      } catch (error) {
+          // 返回错误响应
+          console.error('Error canceling registration:', error);
+          res.status(500).json({code: 500, msg: 'Failed to cancel registration', data: null });
+      }
+  }
 
 }
 
