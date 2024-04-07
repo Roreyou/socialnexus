@@ -432,6 +432,36 @@ class teamService {
     }
 
   }
+
+  static async getMyComments(team_id, activity_id){
+    try {
+      // 在数据库中查找符合条件的所有记录;好像当前是只有一条的
+      const teamActivities = await db.teamactivity.findAll({
+          where: {
+              team_id: team_id,
+              activity_id: activity_id
+          }
+      });
+
+      // 定义用于存储评价信息的数组
+      const comments = [];
+
+      // 遍历查询结果，将每条记录的评价信息添加到数组中
+      for (const teamActivity of teamActivities) {
+          comments.push({
+              team_to_activity: teamActivity.team_to_activity,
+              comment_status: teamActivity.comment_status
+          });
+      }
+
+      // 返回所有评价信息的数组
+      return comments;
+    } catch (error) {
+        // 处理异常情况
+        console.error('Error:', error);
+        throw error;
+    }
+  }
 }
 
 module.exports = teamService;

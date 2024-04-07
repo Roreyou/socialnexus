@@ -295,9 +295,9 @@ class teamController {
   // 获取高校队伍对活动的评价
   static async getMyComments(req, res) { 
     try {
-      const { my_id: team_id } = req.query;
-      const myComments = await teamService.getMyComments(team_id);
-      return res.status(200).json({ code: 200, msg: 'Success', data: { com_llist: myComments } });
+      const { team_id, activity_id } = req.query;
+      const results = await teamService.getMyComments(team_id, activity_id);
+      return res.status(200).json({ code: 200, msg: 'Success', data: { com_llist: results } });
     } catch (error) {
       console.error('Failed to get my comments:', error);
       return res.status(500).json({ code: 500, msg: 'Failed to get my comments', data: null });
