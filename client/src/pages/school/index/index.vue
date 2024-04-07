@@ -134,7 +134,7 @@
 						time: "2020-05-15",
 						place: "北京",
 						job: "志愿者",
-						keywords: "服务,实践"
+						keywords_id: "服务,实践"
 					},
 					{
 						state: "开展中",
@@ -185,6 +185,45 @@
 			// this.checkUpdate();
 			// 流量统计
 			// this.appSysFlowInfo()
+
+			// uni.request({
+			// 	url: this.$url + '/__api.php',
+			// 	method: 'GET',
+			// 	data: {
+			// 		'a': 'list-card',
+			// 		token: this.$userinfo.token
+			// 	},
+			// 	success: res => {
+			// 		this.list = res.data.list;
+			// 		this.net_error = false;
+			// 	},
+			// 	fail: res => {
+			// 		this.net_error = true;
+			// 	},
+			// 	complete: () => {
+			// 	}
+			// })
+		
+			uni.request({
+				url: 'https://mock.apifox.com/m1/4142061-3780993-default/schoolteam/getRecommend',
+				method: 'GET',
+				data: {
+					province: '1',
+					// token: this.$userinfo.token
+				},
+				success: res => {
+					console.log(res)
+					this.acList = res.data.data.acti_list;
+					this.acList[0].keywords_id = "服务,实践"
+					console.log(this.acList)
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
 		},
 		onPageScroll(e) {
 		    this.scrollTop = e.scrollTop;

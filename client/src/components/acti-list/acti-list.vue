@@ -12,15 +12,15 @@
 				<view class="cu-item" v-for="(item,index) in acList" :key="index">
 					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail">
 							<view class="cu-item shadow" :class="{ 'indexstyle': isindex }">
-								<view class="title"><view class="text-cut">{{item.title}}</view></view>
+								<view class="title"><view class="text-cut">{{item.name}}</view></view>
 								<view class="content">
 									<view class="desc">
-										<view class="text-content"> 日期: {{item.time}}</view>
-										<view class="text-content"> 地点: {{item.place}}</view>
-										<view class="text-content"> 岗位: {{item.job}}</view>
+										<view class="text-content"> 日期: {{item.start_time}}</view>
+										<view class="text-content"> 省份: {{item.province}}</view>
+										<view class="text-content"> 详细地址: {{item.address}}</view>
 										
 										<view class="wordcont">	
-											<view class="ackeywords" v-for="(word,index) in item.keywords.split(',')" :key="index">
+											<view class="ackeywords" v-for="(word,index) in item.keywords_id.split(',')" :key="index">
 												<view class="cu-tag bg-red light sm round">{{word}}</view>
 											</view>
 										</view>
