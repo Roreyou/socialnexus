@@ -435,49 +435,69 @@ class teamService {
 
   static async getMyComments(team_id, activity_id){
     try {
-      if(activity_id == 0){
-          // 在数据库中查找符合条件的所有记录
-        const teamActivities = await db.teamactivity.findAll({
+      // 在数据库中查找符合条件的所有记录
+      const teamActivities = await db.teamactivity.findAll({
+        where: {
+            team_id: team_id
+        }
+      });
+  
+      // 定义用于存储评价信息的数组
+      const comments = [];
+  
+      // 遍历查询结果，将每条记录的评价信息添加到数组中
+        for (const teamActivity of teamActivities) {
+          // 在activity表中查找对应的活动名称
+          const activity = await db.activity.findOne({
+            where: {
+                id: teamActivity.activity_id
+            }
+          });          
+          comments.push({
+            activity_name: activity ? activity.name : null,
+              team_to_activity: teamActivity.team_to_activity,
+              comment_status: teamActivity.comment_status
+          });
+        }
+        return comments;  
+      
+      } catch (error) {
+          // 处理异常情况
+          console.error('Error:', error);
+          throw error;
+      }
+  }
+
+  static async getCommunityComments(team_id){
+    try {
+      // 在数据库中查找符合条件的所有记录
+      const teamActivities = await db.teamactivity.findAll({
           where: {
               team_id: team_id
           }
-        });
+      });
 
-        // 定义用于存储评价信息的数组
-        const comments = [];
+      // 创建一个用于存储结果的数组
+      const results = [];
 
-        // 遍历查询结果，将每条记录的评价信息添加到数组中
-        for (const teamActivity of teamActivities) {
-            comments.push({
-                team_to_activity: teamActivity.team_to_activity,
-                comment_status: teamActivity.comment_status
-            });
-        }
-        return comments;
-      }else{
-
-          // 在数据库中查找符合条件的记录
-          const teamActivity = await db.teamactivity.findOne({
+      // 遍历团队活动记录
+      for (const teamActivity of teamActivities) {
+          // 在activity表中查找对应的活动名称
+          const activity = await db.activity.findOne({
               where: {
-                  team_id: team_id,
-                  activity_id: activity_id
+                  id: teamActivity.activity_id
               }
           });
-  
-          // 如果找到了记录，则返回相应的评价信息
-          if (teamActivity) {
-              return {
-                  team_to_activity: teamActivity.team_to_activity,
-                  comment_status: teamActivity.comment_status
-              };
-          } else {
-              // 如果未找到记录，则返回空对象或者自定义的提示信息
-              return {
-                  team_to_activity: null,
-                  comment_status: null
-              };
-            }
+
+          // 将查询到的活动名称和团队评论信息添加到结果数组中
+          results.push({
+              activity_name: activity ? activity.name : null,
+              com_to_team: teamActivity.com_to_team
+          });
       }
+
+      // 返回结果
+      return results;
     } catch (error) {
         // 处理异常情况
         console.error('Error:', error);

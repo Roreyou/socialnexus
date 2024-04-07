@@ -320,8 +320,8 @@ class teamController {
   //获取基层人员对队伍的评价
   static async getCommunityComments(req, res) {
     try {
-      const { team_id, activity_id } = req.query;
-      const communityComments = await teamService.getCommunityComments(team_id,activity_id);
+      const { team_id} = req.query;
+      const communityComments = await teamService.getCommunityComments(team_id);
       return res.status(200).json({ code: 200, msg: 'Success', data: { com_list: communityComments } });
     } catch (error) {
       console.error('Failed to get community comments:', error);
