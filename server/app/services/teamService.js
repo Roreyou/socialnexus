@@ -435,27 +435,49 @@ class teamService {
 
   static async getMyComments(team_id, activity_id){
     try {
-      // 在数据库中查找符合条件的所有记录;好像当前是只有一条的
-      const teamActivities = await db.teamactivity.findAll({
+      if(activity_id == 0){
+          // 在数据库中查找符合条件的所有记录
+        const teamActivities = await db.teamactivity.findAll({
           where: {
-              team_id: team_id,
-              activity_id: activity_id
+              team_id: team_id
           }
-      });
+        });
 
-      // 定义用于存储评价信息的数组
-      const comments = [];
+        // 定义用于存储评价信息的数组
+        const comments = [];
 
-      // 遍历查询结果，将每条记录的评价信息添加到数组中
-      for (const teamActivity of teamActivities) {
-          comments.push({
-              team_to_activity: teamActivity.team_to_activity,
-              comment_status: teamActivity.comment_status
+        // 遍历查询结果，将每条记录的评价信息添加到数组中
+        for (const teamActivity of teamActivities) {
+            comments.push({
+                team_to_activity: teamActivity.team_to_activity,
+                comment_status: teamActivity.comment_status
+            });
+        }
+        return comments;
+      }else{
+
+          // 在数据库中查找符合条件的记录
+          const teamActivity = await db.teamactivity.findOne({
+              where: {
+                  team_id: team_id,
+                  activity_id: activity_id
+              }
           });
+  
+          // 如果找到了记录，则返回相应的评价信息
+          if (teamActivity) {
+              return {
+                  team_to_activity: teamActivity.team_to_activity,
+                  comment_status: teamActivity.comment_status
+              };
+          } else {
+              // 如果未找到记录，则返回空对象或者自定义的提示信息
+              return {
+                  team_to_activity: null,
+                  comment_status: null
+              };
+            }
       }
-
-      // 返回所有评价信息的数组
-      return comments;
     } catch (error) {
         // 处理异常情况
         console.error('Error:', error);
