@@ -13,12 +13,15 @@ import uView from "uview-ui";
 
 import store from './store'
 
+import App from './App'
+import './uni.promisify.adaptor'
+//url全局挂载
+import BASE_URL from './utils/api.js'
+Vue.prototype.$url = BASE_URL
+
 Vue.use(uView);
 
 Vue.prototype.$store = store
-
-import App from './App'
-import './uni.promisify.adaptor'
 
 Vue.config.productionTip = false
 
@@ -28,4 +31,5 @@ const app = new Vue({
   store,
   ...App
 })
+
 app.$mount()
