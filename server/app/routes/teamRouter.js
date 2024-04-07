@@ -3,6 +3,7 @@
 const express = require('express');
 const TeamController = require('../controllers/teamController.js');
 const ActivityController = require('../controllers/activityController.js');
+const PostController = require('../controllers/postController.js');
 
 const router = express.Router();
 
@@ -22,9 +23,8 @@ router.put('/favor', TeamController.favoriteActivity);
 router.post('/activsquare/register_event', TeamController.registerEvent);
 router.post('/authentification', TeamController.authentification);
 router.post('/commentactivity', TeamController.commentActivity);
+router.post('/pyq/createpost', PostController.createPost);
 
-
-// 取消报名活动
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 
 

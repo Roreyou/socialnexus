@@ -307,13 +307,10 @@ class teamController {
   // 发表对未评价活动的评价
   static async commentActivity(req, res) {
     try {
-      const { team_id, activity_id, content } = req.body;
-      const { text, picture, time, stars } = content;
+      const { team_id, activity_id, comment } = req.body;
 
-      // Here you can implement your logic to handle the comment activity
-      await teamService.commentActivity(team_id);
-      // Assuming successful comment activity handling
-      return res.status(200).json({ code: 200, msg: 'Comment activity successful' });
+      const result = await teamService.commentActivity(team_id, activity_id, comment);
+      return res.json(result);
     } catch (error) {
       console.error('Failed to comment activity:', error);
       return res.status(500).json({ code: 500, msg: 'Failed to comment activity' });

@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    team_to_acticity: {
+    team_to_activity: {
       type: DataTypes.TEXT,
       allowNull: true
     },

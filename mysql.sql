@@ -49,7 +49,7 @@ CREATE TABLE `activity` (
 
 LOCK TABLES `activity` WRITE;
 /*!40000 ALTER TABLE `activity` DISABLE KEYS */;
-INSERT INTO `activity` VALUES ('1','社区趣味运动会','2002-09-21',NULL,'2022-06-15 09:30:45','2022-06-18 09:30:45',NULL,'广东省','佛山市','1','1','1','1',NULL,1,1),('2','关爱老人活动','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-18 09:30:45',NULL,'广东省','珠海市','1','2','1','1',NULL,1,1),('3','社区大扫除活动','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-16 09:30:45',NULL,'广东省','珠海市','1','1','1','1',NULL,1,3),('4','运动会','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-16 09:30:45',NULL,'浙江省','嘉兴市','1','1','1','1',NULL,1,3);
+INSERT INTO `activity` VALUES ('1','社区趣味运动会','2002-09-21',NULL,'2022-06-15 09:30:45','2022-06-18 09:30:45',NULL,'广东省','佛山市','1','1','1','1','1,2,3',1,1),('2','关爱老人活动','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-18 09:30:45',NULL,'广东省','珠海市','1','2','1','1','1,3',1,1),('3','社区大扫除活动','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-16 09:30:45',NULL,'广东省','珠海市','1','1','1','1','1',1,3),('4','运动会','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-16 09:30:45',NULL,'浙江省','嘉兴市','1','1','1','1','2',1,3);
 /*!40000 ALTER TABLE `activity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,6 +130,7 @@ CREATE TABLE `community` (
 
 LOCK TABLES `community` WRITE;
 /*!40000 ALTER TABLE `community` DISABLE KEYS */;
+INSERT INTO `community` VALUES ('1','111','名字1','11','广东省','珠海市','111','1',NULL);
 /*!40000 ALTER TABLE `community` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,7 +203,7 @@ CREATE TABLE `favorate` (
 
 LOCK TABLES `favorate` WRITE;
 /*!40000 ALTER TABLE `favorate` DISABLE KEYS */;
-INSERT INTO `favorate` VALUES ('1','2');
+INSERT INTO `favorate` VALUES ('1','2'),('1','3');
 /*!40000 ALTER TABLE `favorate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,6 +227,7 @@ CREATE TABLE `key_words` (
 
 LOCK TABLES `key_words` WRITE;
 /*!40000 ALTER TABLE `key_words` DISABLE KEYS */;
+INSERT INTO `key_words` VALUES (1,'教育'),(2,'助老'),(3,'劳动');
 /*!40000 ALTER TABLE `key_words` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -239,6 +241,7 @@ DROP TABLE IF EXISTS `post`;
 CREATE TABLE `post` (
   `id` varchar(20) NOT NULL,
   `team_id` varchar(20) DEFAULT NULL,
+  `title` varchar(45) DEFAULT NULL,
   `content` text,
   `star` int DEFAULT NULL,
   `picture` varchar(45) DEFAULT NULL,
@@ -347,7 +350,7 @@ CREATE TABLE `teacher` (
 
 LOCK TABLES `teacher` WRITE;
 /*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
-INSERT INTO `teacher` VALUES ('99','南半油联信','18151694055','sse');
+INSERT INTO `teacher` VALUES ('53','吴老师','12345678910','软件工程学院'),('99','南半油联信','18151694055','软件工程学院');
 /*!40000 ALTER TABLE `teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,7 +365,7 @@ CREATE TABLE `teamactivity` (
   `activity_id` varchar(20) NOT NULL,
   `team_id` varchar(20) NOT NULL,
   `com_to_team` text,
-  `team_to_acticity` text,
+  `team_to_activity` text,
   `admission_status` int DEFAULT NULL,
   `comment_status` int DEFAULT NULL,
   PRIMARY KEY (`activity_id`,`team_id`)
@@ -375,7 +378,7 @@ CREATE TABLE `teamactivity` (
 
 LOCK TABLES `teamactivity` WRITE;
 /*!40000 ALTER TABLE `teamactivity` DISABLE KEYS */;
-INSERT INTO `teamactivity` VALUES ('2','1',NULL,NULL,1,NULL),('3','1',NULL,NULL,NULL,NULL);
+INSERT INTO `teamactivity` VALUES ('2','1',NULL,'good',NULL,2),('3','1',NULL,'good',NULL,2);
 /*!40000 ALTER TABLE `teamactivity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -404,7 +407,7 @@ CREATE TABLE `teammember` (
 
 LOCK TABLES `teammember` WRITE;
 /*!40000 ALTER TABLE `teammember` DISABLE KEYS */;
-INSERT INTO `teammember` VALUES ('19','传由较周收快需','18119155591','sse','z.efxtgychkh@qq.com','ea','97');
+INSERT INTO `teammember` VALUES ('19','传由较周收快需','18119155591','软件工程学院','z.efxtgychkh@qq.com','ea','77'),('34','哈哈哈','122','人工智能学院','xxxx@qq.com','1','77');
 /*!40000 ALTER TABLE `teammember` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -417,4 +420,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-06 15:48:23
+-- Dump completed on 2024-04-07 18:05:33
