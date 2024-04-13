@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.STRING(20),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     team_id: {
       type: DataTypes.STRING(20),
@@ -19,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     picture: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING(256),
       allowNull: true
     },
     start_date: {
