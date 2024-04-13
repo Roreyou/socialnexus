@@ -33,5 +33,6 @@ db.datawall_act=require("./datawall_act.js")(sequelize, Sequelize);
 db.datawall_com=require("./datawall_com.js")(sequelize, Sequelize);
 db.teacher=require("./teacher.js")(sequelize, Sequelize);
 db.keywords=require("./key_words.js")(sequelize, Sequelize);
+db.reply=require("./reply.js")(sequelize, Sequelize);
 
 module.exports = db;

@@ -3,12 +3,12 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('teamactivity', {
     activity_id: {
       type: DataTypes.STRING(20),
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     team_id: {
       type: DataTypes.STRING(20),
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     com_to_team: {
@@ -30,6 +30,17 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'teamactivity',
-    timestamps: false
+    timestamps: false,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "activity_id" },
+          { name: "team_id" },
+        ]
+      },
+    ]
   });
 };

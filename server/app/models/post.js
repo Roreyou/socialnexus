@@ -2,13 +2,17 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('post', {
     id: {
-      type: DataTypes.STRING(20),
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
+      primaryKey: true
     },
     team_id: {
       type: DataTypes.STRING(20),
+      allowNull: true
+    },
+    title: {
+      type: DataTypes.STRING(45),
       allowNull: true
     },
     content: {

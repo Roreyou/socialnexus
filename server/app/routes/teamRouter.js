@@ -24,6 +24,7 @@ router.post('/activsquare/register_event', TeamController.registerEvent);
 router.post('/authentification', TeamController.authentification);
 router.post('/commentactivity', TeamController.commentActivity);
 router.post('/pyq/createpost', PostController.createPost);
+router.get('/pyq/getdetail', PostController.getPostDetails);
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 
