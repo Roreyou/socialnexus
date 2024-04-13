@@ -63,6 +63,42 @@ class postController{
             res.status(500).json({ code: 'error', msg: 'Internal Server Error' });
         }
     }
+    static async getHit(req, res){
+        try {
+            // 调用服务层方法获取热门帖子
+            const posts = await postService.getHotPosts();
+            // 返回帖子列表
+            res.json(posts);
+        } catch (error) {
+            console.error('Error fetching hot posts:', error);
+            res.status(500).json({ code: 'error', msg: 'Internal Server Error' });
+        }
+    }
+    static async getSameAreaPosts(req, res){
+        const {province, city} = req.query;
+        try {
+            // 调用服务层方法获取同区域帖子
+            const posts = await postService.getSameAreaPosts(province, city);
+            
+            // 返回帖子列表
+            res.json(posts);
+        } catch (error) {
+            console.error('Error fetching same area posts:', error);
+            res.status(500).json({ code: 'error', msg: 'Internal Server Error' });
+        }
+    }
+    static async getLatestPosts(req, res){
+        try {
+            // 调用服务层方法获取最新帖子
+            const posts = await postService.getLatestPosts();
+            
+            // 返回帖子列表
+            res.json(posts);
+        } catch (error) {
+            console.error('Error fetching latest posts:', error);
+            res.status(500).json({ code: 'error', msg: 'Internal Server Error' });
+        }
+    }
 }
 
 module.exports = postController;
