@@ -4,6 +4,7 @@ const express = require('express');
 const TeamController = require('../controllers/teamController.js');
 const ActivityController = require('../controllers/activityController.js');
 const PostController = require('../controllers/postController.js');
+const postController = require('../controllers/postController.js');
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ router.post('/activsquare/register_event', TeamController.registerEvent);
 router.post('/authentification', TeamController.authentification);
 router.post('/commentactivity', TeamController.commentActivity);
 router.post('/pyq/createpost', PostController.createPost);
-
+router.post('/pyq/comment', postController.commentOnPost)
 
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);

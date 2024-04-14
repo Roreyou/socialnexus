@@ -3,11 +3,28 @@
 const db = require('../models/index');
 
 class postService{
+    static async createPost(postData){
+        try {
+            // 将数组形式的图片链接转换为逗号分隔的字符串
+            const pictureString = postData.picture.join(',');
+            // 将转换后的字符串赋值给 postData.picture
+            postData.picture = pictureString;
+            const newPost = await db.post.create(postData); // 在数据库中创建新的帖子
+            return newPost.id; // 返回新创建帖子的ID
+        } catch (error) {
+            console.error('Error creating post:', error);
+            throw new Error('Error creating post');
+        }
+    }
     static async getPostDetails(postId){
         try {
-            console.log(typeof postId)
             const post = await db.post.findByPk(postId);
-            return post;
+            const postteam = await db.team.findByPk(post.team_id);
+            post.picture = post.picture.split(','); // 将逗号分隔的图片链接字符串转换为数组
+            return {
+                ...post.dataValues,
+                team_name: postteam ? postteam.team_name : 'Unknown Team'
+            };
         } catch (error) {
             console.log(error);
             throw new Error('Error fetching post details');

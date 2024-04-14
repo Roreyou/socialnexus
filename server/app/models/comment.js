@@ -2,7 +2,8 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('comment', {
     id: {
-      type: DataTypes.STRING(20),
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
@@ -20,6 +21,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     time: {
       type: DataTypes.DATE,
+      allowNull: true
+    },
+    like: {
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {

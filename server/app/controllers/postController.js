@@ -17,7 +17,7 @@ class postController{
             res.status(200).json({
                 code: 0,
                 msg: "Success",
-                data: postId
+                data: {postId:postId}
             });
         } catch (error) {
             // 处理异常情况
@@ -35,7 +35,6 @@ class postController{
             console.log("postid:",postId);
             // 调用服务层方法获取帖子详情和评论列表
             const post = await postService.getPostDetails(postId);
-            console.log(post);
             const comments = await commentService.getCommentsForPost(postId);
 
             // 构造响应对象
@@ -44,15 +43,7 @@ class postController{
                 msg: 'Post details retrieved successfully',
                 data: {
                     post_detail: post,
-                    comment_list: comments.map(comment => {
-                        return {
-                            comment_detail: {
-                                ...comment.toJSON(),
-                                replies: undefined
-                            },
-                            reply_list: comment.replies 
-                        };
-                    })
+                    ...comments
                 }
             };
     
@@ -97,6 +88,19 @@ class postController{
         } catch (error) {
             console.error('Error fetching latest posts:', error);
             res.status(500).json({ code: 'error', msg: 'Internal Server Error' });
+        }
+    }
+    static async commentOnPost(req, res){
+        try {
+            const { post_id, text, team_id } = req.query;
+    
+            // 调用评论服务层方法
+            const { comment_list } = await commentService.commentOnPost(post_id, team_id, text);
+    
+            res.json({ code: 200, msg: 'Comment posted successfully', data: {  comment_list } });
+        } catch (error) {
+            console.error('Error commenting on post:', error);
+            res.status(500).json({ code: 2, msg: 'Internal Server Error' });
         }
     }
 }
