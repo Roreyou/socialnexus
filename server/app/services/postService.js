@@ -76,6 +76,22 @@ class postService{
         }
     }
 
+    static async likePost(postId){
+        try {
+            const post = await db.post.findByPk(postId);
+            if (!post) {
+                throw new Error('Post not found');
+            }    
+            // 更新点赞数
+            post.like += 1;
+            await post.save();
+    
+            return post;
+        } catch (error) {
+            throw new Error('Error liking post');
+        }
+    }
+
 }
 
 

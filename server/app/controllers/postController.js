@@ -103,6 +103,21 @@ class postController{
             res.status(500).json({ code: 2, msg: 'Internal Server Error' });
         }
     }
+    static async likePost(req, res){
+        const { post_id } = req.query;
+        try {
+            const updatedPost = await postService.likePost(post_id);
+            res.json({
+                code: 200,
+                msg: 'Post liked successfully',
+                data: updatedPost
+            });
+        } catch (error) {
+            console.error('Error liking post:', error);
+            res.status(500).json({ code: 'error', msg: 'Internal Server Error' });
+        }
+    }
+
 }
 
 module.exports = postController;
