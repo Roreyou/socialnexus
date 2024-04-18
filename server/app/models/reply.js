@@ -1,18 +1,17 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('comment', {
+  return sequelize.define('reply', {
     id: {
-      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    team_id: {
-      type: DataTypes.STRING(20),
+    comment_id: {
+      type: DataTypes.STRING(45),
       allowNull: true
     },
-    post_id: {
-      type: DataTypes.STRING(20),
+    reply_id: {
+      type: DataTypes.STRING(45),
       allowNull: true
     },
     content: {
@@ -29,7 +28,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'comment',
+    tableName: 'reply',
     timestamps: false,
     indexes: [
       {

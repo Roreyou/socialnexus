@@ -295,9 +295,9 @@ class teamController {
   // 获取高校队伍对活动的评价
   static async getMyComments(req, res) { 
     try {
-      const { my_id: team_id } = req.query;
-      const myComments = await teamService.getMyComments(team_id);
-      return res.status(200).json({ code: 200, msg: 'Success', data: { com_llist: myComments } });
+      const { team_id, activity_id } = req.query;
+      const results = await teamService.getMyComments(team_id, activity_id);
+      return res.status(200).json({ code: 200, msg: 'Success', data: { com_llist: results } });
     } catch (error) {
       console.error('Failed to get my comments:', error);
       return res.status(500).json({ code: 500, msg: 'Failed to get my comments', data: null });
@@ -307,13 +307,10 @@ class teamController {
   // 发表对未评价活动的评价
   static async commentActivity(req, res) {
     try {
-      const { team_id, activity_id, content } = req.body;
-      const { text, picture, time, stars } = content;
+      const { team_id, activity_id, comment } = req.body;
 
-      // Here you can implement your logic to handle the comment activity
-      await teamService.commentActivity(team_id);
-      // Assuming successful comment activity handling
-      return res.status(200).json({ code: 200, msg: 'Comment activity successful' });
+      const result = await teamService.commentActivity(team_id, activity_id, comment);
+      return res.json(result);
     } catch (error) {
       console.error('Failed to comment activity:', error);
       return res.status(500).json({ code: 500, msg: 'Failed to comment activity' });
@@ -323,8 +320,8 @@ class teamController {
   //获取基层人员对队伍的评价
   static async getCommunityComments(req, res) {
     try {
-      const { team_id, activity_id } = req.query;
-      const communityComments = await teamService.getCommunityComments(team_id,activity_id);
+      const { team_id} = req.query;
+      const communityComments = await teamService.getCommunityComments(team_id);
       return res.status(200).json({ code: 200, msg: 'Success', data: { com_list: communityComments } });
     } catch (error) {
       console.error('Failed to get community comments:', error);

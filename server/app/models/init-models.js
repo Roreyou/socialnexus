@@ -8,6 +8,7 @@ var _datawall_com = require("./datawall_com");
 var _favorate = require("./favorate");
 var _key_words = require("./key_words");
 var _post = require("./post");
+var _reply = require("./reply");
 var _school = require("./school");
 var _schoolteam = require("./schoolteam");
 var _teacher = require("./teacher");
@@ -24,6 +25,7 @@ function initModels(sequelize) {
   var favorate = _favorate(sequelize, DataTypes);
   var key_words = _key_words(sequelize, DataTypes);
   var post = _post(sequelize, DataTypes);
+  var reply = _reply(sequelize, DataTypes);
   var school = _school(sequelize, DataTypes);
   var schoolteam = _schoolteam(sequelize, DataTypes);
   var teacher = _teacher(sequelize, DataTypes);
@@ -41,6 +43,7 @@ function initModels(sequelize) {
     favorate,
     key_words,
     post,
+    reply,
     school,
     schoolteam,
     teacher,
