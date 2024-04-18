@@ -3,59 +3,60 @@
 <template>
 	<view class="warp">
 		<view class="cot" v-for="(item,index) in commentList">
-			<view class="cot_avatar">
+			<!-- <view class="cot_avatar">
 				<u-avatar :src="item.avatarUrl" mode="square" size="80"></u-avatar>
-			</view>
+			</view> -->
 			<view class="cot_flirt">
 				<view class="cot_flirt_name">
-					{{item.nickName}}
+					{{item.comment_detail.my_name}}
 				</view>
-				<image @click="delCom(item.id)" class="cot_flirt_shanchu" src="../../static/icon/shanchu.png"></image>
+				<image @click="delCom(item.comment_detail.id)" class="cot_flirt_shanchu" src="../../static/icon/shanchu.png"></image>
 			</view>
 			<view class="cot_content">
-				{{item.comInfo}}
+				{{item.comment_detail.content}}
 			</view>
-			<view class="">
+			<!-- <view class="">
 				<view class="img5">
 					<image @tap.stop="previewImage(img, item.comImgs)" :src="img" v-for="(img,index2) in item.comImgs"
 						:key="index2" mode="aspectFill"></image>
 				</view>
-			</view>
+			</view> -->
 			<view class="cot_operate">
 				<view class="cot_operate_time">
 					<!-- 过滤器，之后需要用到的时候再来定义
 					{{item.comTime | timeago}}    -->
-					{{item.comTime}}
+					{{item.comment_detail.time}}
 				</view>
 				<view class="cot_operate_icon">
-					<image src="../../static/icon/pinglun1.png" mode="" @click="replyContent(item.comId)" ></image>
-					<view class="" @click="replyContent(item.id)" >
-						{{item.replyList.length}}
+					<image src="../../static/icon/pinglun1.png" mode="" @click="replyContent(item.comment_detail.id)" ></image>
+					<view class="" @click="replyContent(item.comment_detail.id)">
+						{{item.reply_list.length}}
 					</view>
 					<image class="like_icon" :src="item.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
 					 mode=""  @click="replyLike(index)"></image>
 					<view class="" @click="replyLike(index)">
-						{{item.comLike}}
+						{{item.comment_detail.like}}
 					</view>
 				</view>
 			</view>
 
 			<!-- 回复 -->
-			<view class="reply" v-for="(rep,index2) in item.replyList">
+			<view class="reply" v-for="(rep,index2) in item.reply_list">
 				<view class="reply_user">
 					<view class="reply_user_info">
-						<u-avatar :src="rep.avatarUrlr" mode="square" size="50"></u-avatar>
+						// <u-avatar :src="rep.avatarUrlr" mode="square" size="50"></u-avatar>
 						<view class="reply_user_info_name">
-							{{rep.nickNamer}}
+							{{rep.reply_name}}
 						</view>
 					</view>
 					<view class="reply_user_like">
-						<!-- <image class="reply_user_shanchu" src="../../static/icon/like_fil.png"></image> 6 -->
+						<image class="reply_user_shanchu" src="../../static/icon/like_fil.png"></image> 
+						{{ rep.like }}
 					</view>
 
 				</view>
 				<view class="reply_content">
-					{{rep.replyInfo}}
+					{{rep.content}}
 				</view>
 				<u-line color="#FFC107" border-style="dotted" />
 			</view>

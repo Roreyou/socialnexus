@@ -1,4 +1,4 @@
-<!-- 高校帖子 -->
+<!-- 朋友圈-详情-帖子的内容 -->
 
 <template>
 	<view>
@@ -6,11 +6,11 @@
 			<view class="dynamic_header">
 				<view class="dynamic_header_user">
 					<view class="dynamic_header_user_avatar">
-						<u-avatar :src="dyInfo.avatarUrl" size="60"></u-avatar>
+						<u-avatar :src="dyInfo.picture" size="60"></u-avatar>
 					</view>
 					<view class="dynamic_header_user_info">
-						<view class="dynamic_header_user_info_name">{{dyInfo.userName}}</view>
-						<view class="dynamic_header_user_info_time">{{dyInfo.pushTime}}</view>
+						<view class="dynamic_header_user_info_name">{{dyInfo.team_name}}</view>
+						<view class="dynamic_header_user_info_time">{{dyInfo.post_time}}</view>
 					</view>
 				</view>
 				<!-- <view class="dynamic_header_operate">
@@ -26,51 +26,53 @@
 				<view class="dynamic_cont_img">
 					<block v-if="dyInfo.type == 1">
 						<!-- 单张 -->
-						<block v-if="dyInfo.dyImgs.length == 1">
-							<image @tap.stop="previewImage(img, dyInfo.dyImgs)" :src="img"
-								v-for="(img,index1) in dyInfo.dyImgs" class="img1" mode="aspectFill">
+						<block v-if="dyInfo.picture.length == 1">
+							<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
+								v-for="(img,index1) in dyInfo.picture" class="img1" mode="aspectFill">
 							</image>
 						</block>
 						<!-- 2张 -->
-						<block v-if="dyInfo.dyImgs.length == 2">
+						<block v-if="dyInfo.picture.length == 2">
 							<view class="img2">
-								<image @tap.stop="previewImage(img, dyInfo.dyImgs)" :src="img"
-									v-for="(img,index2) in dyInfo.dyImgs" :key="index2" mode="aspectFill"></image>
+								<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
+									v-for="(img,index2) in dyInfo.picture" :key="index2" mode="aspectFill"></image>
 							</view>
 						</block>
 						<!-- 4张 -->
-						<block v-if="dyInfo.dyImgs.length == 4 ">
+						<block v-if="dyInfo.picture.length == 4 ">
 							<view class="img4">
-								<image @tap.stop="previewImage(img, dyInfo.dyImgs)" :src="img"
-									v-for="(img,index3) in dyInfo.dyImgs" :key="index3" mode="aspectFill"></image>
+								<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
+									v-for="(img,index3) in dyInfo.picture" :key="index3" mode="aspectFill"></image>
 							</view>
 						</block>
 						<!-- 3/4张以上不包含4张 -->
-						<block v-if="dyInfo.dyImgs.length > 4 || dyInfo.dyImgs.length == 3">
+						<block v-if="dyInfo.picture.length > 4 || dyInfo.picture.length == 3">
 							<view class="img3">
-								<image @tap.stop="previewImage(img, dyInfo.dyImgs)" :src="img"
-									v-for="(img,index4) in dyInfo.dyImgs" :key="index4" mode="aspectFill"></image>
+								<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
+									v-for="(img,index4) in dyInfo.picture" :key="index4" mode="aspectFill"></image>
 							</view>
 						</block>
 					</block>
 				</view>
 			</view>
-			<view class="dynamic_tag">
+
+			<!-- tag，先注释掉 -->
+			<!-- <view class="dynamic_tag">
 				<u-tag class="dynamic_tag_info" :text="'#'+tag.name" :type="tag.type" plain plainFill shape="circle"
 					:key="index5" v-for="(tag,index5) in dyInfo.tags"></u-tag>
-			</view>
+			</view> -->
 
 			<view class="operate">
 				<view class="operate_icon">
 					<image src="../../static/icon/address.png" mode=""></image>
 					<view class="operate_text">
-						河北省
+						{{ dyInfo.province }}
 					</view>
 				</view>
 				<view class="operate_icon">
 					<image src="../../static/icon/pinglun1.png" mode="" @click="isInfo?comContent(dyInfo.id):''"></image>
 					<view class="" @click="isInfo?comContent(dyInfo.id):''">
-						{{dyInfo.comNum}}
+						{{dyInfo.com_num}}
 					</view>
 					<image class="like_icon" :src="dyInfo.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
 					 mode="" @click="isInfo?comLike(dyInfo.id):''"></image>
@@ -113,6 +115,7 @@
 				});
 			},
 			goInfo(id) {
+				id = '0'  //mock
 				uni.navigateTo({
 					url: "/pages/school/pyq/dynamicInfo?id=" + id
 				})

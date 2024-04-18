@@ -1,8 +1,5 @@
 <!-- 高校 - 我的评价 -->
 <!-- 高校 - 收到评价 -->
-
-<!-- 朋友圈页面 -- 顶部导航栏 -->
-
 <template>
 	<view>
 		<index-tabbar :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ></index-tabbar>

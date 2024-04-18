@@ -20,7 +20,7 @@
 										<view class="text-content"> 详细地址: {{item.address}}</view>
 										
 										<view class="wordcont">	
-											<view class="ackeywords" v-for="(word,index) in item.keywords_id.split(',')" :key="index">
+											<view class="ackeywords" v-for="(word,index) in item.keywords.split(',')" :key="index">
 												<view class="cu-tag bg-red light sm round">{{word}}</view>
 											</view>
 										</view>

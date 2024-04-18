@@ -7,9 +7,9 @@
 		<view class="warp" >
 			<kgDynamics :dyInfo="dyInfo" :isInfo="true"  @comContent="comContent" @comLikes="comLikes" ></kgDynamics>
 			<view class="fenge">
-				<u-section title="评论内容" :arrow="false" :color="bgColor" :sub-title="dyInfo.comList.length + '条评论'"></u-section>
+				<u-section title="评论内容" :arrow="false" :color="bgColor" :sub-title="comList.length + '条评论'"></u-section>
 			</view>
-			<kgComment :commentList="dyInfo.comList" @delCom="delCom()" @replyContent="replyContent" @replyLike="replyLike" ></kgComment>
+			<kgComment :commentList="comList" @delCom="delCom()" @replyContent="replyContent" @replyLike="replyLike" ></kgComment>
 				
 			<u-popup v-model="comShow" mode="bottom" border-radius="14">
 				<view class="bodys">
@@ -102,7 +102,8 @@
 					],
 					fabulous:false,
 					dyLike: 10,
-					comList: [{
+				},
+				comList: [{
 						id:1,
 						avatarUrl: "https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
 						nickName: "阿康",
@@ -117,8 +118,7 @@
 							nickNamer: "阿康",
 							replyInfo: "评论的回复"
 						}]
-					}]
-				},
+				}],
 				bgColor: '#ffcc01',
 				baseUrl:'',
 				comModal: {
@@ -168,6 +168,32 @@
 		onLoad(options) {
 			const id = options.id;
 			//发送获取这条帖子详情的请求
+
+			console.log("onload")
+			uni.request({
+				url: this.$url.BASE_URL + '/schoolteam/pyq/getdetail',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
+				method: 'GET',
+				data: {
+					post_id: id,
+					// token: this.$userinfo.token
+				},
+				success: res => {
+					console.log(res)
+					this.dyInfo = res.data.data.post_detail;
+					this.dyInfo.fabulous = false;  //
+					this.comList = res.data.data.comment_list;
+					// this.dyInfo.keywords = "服务,实践"
+					// console.log(this.acList)
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
 		},
 		methods: {
 			// 评论消息

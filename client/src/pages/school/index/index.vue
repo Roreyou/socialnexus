@@ -134,7 +134,7 @@
 						time: "2020-05-15",
 						place: "北京",
 						job: "志愿者",
-						keywords_id: "服务,实践"
+						keywords: "服务,实践"
 					},
 					{
 						state: "开展中",
@@ -206,7 +206,7 @@
 			console.log(typeof this.$url)
 			console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
 			uni.request({
-				url: this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
 				method: 'GET',
@@ -217,7 +217,7 @@
 				success: res => {
 					console.log(res)
 					this.acList = res.data.data.acti_list;
-					this.acList[0].keywords_id = "服务,实践"
+					this.acList[0].keywords = "服务,实践"
 					console.log(this.acList)
 					this.net_error = false;
 				},
