@@ -231,13 +231,13 @@
 		{
 			"path": "pages/committee/searchActivity/searchActivity",
 			"style": {
-				"navigationBarTitleText": "筛活动"
+				"navigationBarTitleText": "社区需求"
 			}
 		},
 		{
 			"path": "pages/committee/searchSchool/searchSchool",
 			"style": {
-				"navigationBarTitleText": "筛队伍"
+				"navigationBarTitleText": "高校队伍"
 			}
 		}
 	],

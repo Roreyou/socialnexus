@@ -65,13 +65,13 @@
     <u-gap height="10"></u-gap>
 		
 		<!-- 活动推荐列表 -->
-		<view class="board">
+		<!-- <view class="board">
 			<view class="cu-bar" style="background-color: transparent">
 				<view class="action">
 					<text class="text-xl text-bold" style="color: #ffffff; font-size: 52rpx; font-weight: 600; font-family: 'pangmen'; font-style: italic; background-color: transparent">数据墙</text>
 				</view>
 			</view>
-		</view>
+		</view> -->
 
     <!-- 当用户滚动页面时，提供一个快速返回页面顶部的按钮。 -->
     <!-- 当页面滚动到或超过指定的 top 值时，返回顶部按钮将显示出来。 -->
