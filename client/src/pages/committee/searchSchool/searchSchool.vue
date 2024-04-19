@@ -1,5 +1,5 @@
 <template>
-  <div class="SCHsearchActivity">SCHsearchActivity</div>
+  <div class="searchSchool">searchSchool</div>
 </template>
 
 <script lang="ts">
