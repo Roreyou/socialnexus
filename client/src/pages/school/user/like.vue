@@ -4,12 +4,12 @@
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
 			<view class="cu-card article" :class="isCard?'no-card':''">
 					<view class="cu-item shadow">
-						<view class="title"><view class="text-cut">{{item.title}}</view></view>
+						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
 							<view class="desc">
-								<view class="text-content"> 日期: {{item.time}}</view>
-								<view class="text-content"> 地点: {{item.place}}</view>
-								<view class="text-content"> 岗位: {{item.job}}</view>
+								<view class="text-content"> 日期: {{item.start_time}}-{{item.end_time}}</view>
+								<view class="text-content"> 地点: {{item.address}}</view>
+								<view class="text-content"> 活动类别: {{item.category_name}}</view>
 								<view class="wordcont">	
 									<view class="ackeywords" v-for="(word,index) in item.keywords.split(',')" :key="index">
 										<view class="cu-tag bg-red light sm round">{{word}}</view>
@@ -65,6 +65,30 @@
 			}
 		},
 		onLoad() {
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getteamfavor',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
+				method: 'GET',
+				data: {
+					team_id: '1',
+					// token: this.$userinfo.token
+				},
+				success: res => {
+					console.log("getteamfavor", res)
+					this.acList = res.data.data.acti_list;
+					this.acList[0].keywords = "服务,实践"
+					console.log(this.acList)
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
+		},
+		onshow(){
 
 		},
 		methods: {

@@ -206,7 +206,7 @@
 			console.log(typeof this.$url)
 			console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
 			uni.request({
-				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
 				method: 'GET',

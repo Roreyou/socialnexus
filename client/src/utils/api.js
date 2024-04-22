@@ -1,4 +1,4 @@
-const BASE_URL = 'https://mock.apifox.com/m1/4142061-3780993-default' //云端mock
+const BASE_URL = 'http://127.0.0.1:4523/m1' //本地mock
 
 export default {
 	BASE_URL

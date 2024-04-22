@@ -64,29 +64,29 @@
 					{
 						icon: 'cuIcon-lock text-red',
 						text: '我的评价',
-						url: '/pages/user/mycomment',
+						url: '/pages/school/user/mycomment',
 					},
 					{
 						icon: 'cuIcon-attention text-green',
 						text: '收到评价',
-						url: '/pages/user/becomment',
+						url: '/pages/school/user/becomment',
 					}
 				],
 				list2: [
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '修改密码',
-						url: '/pages/user/password',
+						url: '/pages/school/user/password',
 					},
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '队伍资料',
-						url: '/pages/user/teaminfo',
+						url: '/pages/school/user/teaminfo',
 					},
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '活动收藏',
-						url: '/pages/user/like',
+						url: '/pages/school/user/like',
 					},
 				]
 			};
