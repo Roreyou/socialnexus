@@ -1,3 +1,11 @@
+/*
+ * @Author: happy 2630391116@qq.com
+ * @Date: 2024-04-19 13:00:55
+ * @LastEditors: happy 2630391116@qq.com
+ * @LastEditTime: 2024-04-19 13:59:27
+ * @FilePath: \socialnexus\client\src\pages.json
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 {
 	"easycom": {
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
@@ -21,6 +29,7 @@
 				"navigationBarTitleText": "忘记密码"
 			}
 		},
+		// school index
 		{
 			"path": "pages/school/index/index",
 			"style": {
@@ -130,24 +139,6 @@
 			}
 		},
 		{
-			"path": "pages/SCHindex/SCHindex",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
-		{
-			"path": "pages/SCHsearchTeam/SCHsearchTeam",
-			"style": {
-				"navigationBarTitleText": "筛队伍"
-			}
-		},
-		{
-			"path": "pages/SCHsearchActivity/SCHsearchActivity",
-			"style": {
-				"navigationBarTitleText": "筛活动"
-			}
-		},
-		{
 			"path": "pages/school/details/details",
 			"style": {
 				"navigationBarTitleText": "活动详情"
@@ -229,6 +220,24 @@
 			"path": "pages/community/myTeam/evaluated",
 			"style": {
 				"navigationBarTitleText": "已评价"
+			}
+		},
+		{
+			"path": "pages/committee/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/committee/searchActivity/searchActivity",
+			"style": {
+				"navigationBarTitleText": "社区需求"
+			}
+		},
+		{
+			"path": "pages/committee/searchSchool/searchSchool",
+			"style": {
+				"navigationBarTitleText": "高校队伍"
 			}
 		}
 	],
