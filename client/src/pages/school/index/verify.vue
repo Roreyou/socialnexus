@@ -1,35 +1,10 @@
 <!-- 高校 认证信息 -->
-<!-- <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view>
-			<text class="title">{{title}}</text>
-		</view>
-	</view>
-</template>
-
-<script>
-	export default {
-		data() {
-			return {
-				title: '高校 -- 认证信息'
-			}
-		},
-		onLoad() {
-
-		},
-		methods: {
-
-		}
-	}
-</script> -->
-
 <template>
 	<view class="container">
 		<!-- <uni-card :is-shadow="false" is-full>
 			<text class="uni-h6">uni-forms 组件</text>
 		</uni-card> -->
-		<uni-section title="队伍基本信息认证" type="line">
+		<uni-section title="队伍负责人信息认证" type="line">
 			<view class="example">
 				<!-- 基础用法，不包含校验规则 -->
 				<uni-forms ref="baseForm" :model="baseFormData" labelWidth="80px">
@@ -37,19 +12,19 @@
 						<uni-easyinput v-model="baseFormData.name" placeholder="中山大学" ref="inputElement" />
 					</uni-forms-item> -->
 					<uni-forms-item label="所属学院" required>
-						<uni-easyinput v-model="baseFormData.age" placeholder="请输入所属学院" />
+						<uni-easyinput v-model="baseFormData.major" placeholder="请输入所属学院" />
 					</uni-forms-item>
 					<uni-forms-item label="负责人姓名" required>
 						<uni-easyinput v-model="baseFormData.name" placeholder="请输入队伍负责人姓名" />
 					</uni-forms-item>
 					<uni-forms-item label="负责人联系电话" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入负责人联系电话" />
+						<uni-easyinput v-model="baseFormData.tel" placeholder="请输入负责人联系电话" />
 					</uni-forms-item>
-					<uni-forms-item label="负责人邮箱" required>
+					<!-- <uni-forms-item label="负责人邮箱" required>
 						<uni-easyinput v-model="baseFormData.name" placeholder="请输入负责人邮箱" />
-					</uni-forms-item>
+					</uni-forms-item> -->
 					<uni-forms-item label="负责人工号" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入队伍负责人工号" />
+						<uni-easyinput v-model="baseFormData.id" placeholder="请输入负责人工号" />
 					</uni-forms-item>
 					<!-- <uni-forms-item label="性别" required>
 						<uni-data-checkbox v-model="baseFormData.sex" :localdata="sexs" />
@@ -57,9 +32,9 @@
 					<!-- <uni-forms-item label="兴趣爱好" required>
 						<uni-data-checkbox v-model="baseFormData.hobby" multiple :localdata="hobbys" />
 					</uni-forms-item> -->
-					<uni-forms-item label="队伍介绍">
+					<!-- <uni-forms-item label="队伍介绍">
 						<uni-easyinput type="textarea" v-model="baseFormData.introduction" placeholder="请输入队伍介绍" />
-					</uni-forms-item>
+					</uni-forms-item> -->
 					<!-- <uni-forms-item label="日期时间">
 						<uni-datetime-picker type="datetime" return-type="timestamp"
 							v-model="baseFormData.datetimesingle" />
@@ -133,26 +108,71 @@
 		<uni-section title="队员信息认证" type="line">
 			<view class="example">
 				<!-- 动态表单校验 -->
-				<uni-forms ref="dynamicForm" :rules="dynamicRules" :model="dynamicFormData" labelWidth="80px">
+				<uni-forms ref="dynamicForm1" :rules="dynamicRules" :model="dynamicFormData" labelWidth="80px">
 					<!-- <uni-forms-item label="邮箱" required name="email">
 						<uni-easyinput v-model="dynamicFormData.email" placeholder="请输入姓名" />
 					</uni-forms-item> -->
-					<uni-forms-item v-for="(item,index) in dynamicFormData.domains" :key="index"
-						:label="'队员'+' '+index" required :rules="item[1].rules" :name="['domains',index,'value']">
-						<uni-forms-item v-for="(item1,index1) in item" :key="item1.id"
-						:label="item1.label+' '" required :rules="item1.rules" :name="['domains',index1,'value']">
+					<!-- <uni-forms-item v-for="(item,index) in dynamicFormData.domains" :key="index"
+						:label="'队员'+' '+index" required :rules="dynamicRules" :name="['domains',index,'value']"> -->
+					<uni-forms ref="dynamicForm" v-for="(item,index) in dynamicFormData.domains" :key="index" :model="dynamicFormData.domains[index]" labelWidth="80px">
+						<uni-forms-item v-for="(item1,index1) in item" v-model="dynamicFormData.domains[index][index1].value" :rules="[{ required: true, errorMessage: '请输入邮箱地址', trigger: 'blur' }]" :key="item1.id"
+						:label="item1.label+' '" :name="['domains',index1,'value']">
 							<view class="form-item">
-								<uni-easyinput v-model="dynamicFormData.domains[index][index1].value" :placeholder="dynamicFormData.domains[index][index1].holder" />
+								<uni-easyinput v-model="dynamicFormData.domains[index][index1].value" :placeholder="dynamicFormData.domains[index][index1].holder"/>
+							</view>
+							<view>
+								{{ item1.value }}
 							</view>
 						</uni-forms-item>
 						<view class="button-del">
 							<button class="button" size="mini" type="default" @click="del(index, item.id)">删除</button>
 						</view>
-					</uni-forms-item>
+					<!-- </uni-forms-item> -->
+					</uni-forms>
+
+				
+					<uni-forms ref="dynamicForm2" v-for="(item,index) in dynamicFormData2.domains" :key="index" :model="dynamicFormData2.domains[index]" labelWidth="80px">
+						<uni-forms-item :rules="[{ required: true, errorMessage: '队员学号项必填', trigger: 'blur' }]"
+						:label="'学号'+' '" name="netid">
+							<view class="form-item">
+								<uni-easyinput v-model="dynamicFormData2.domains[index].netid" placeholder="请输入队员学号"/>
+							</view>
+						</uni-forms-item>
+						<uni-forms-item v-model="dynamicFormData2.domains[index].name" :rules="[{ required: true, errorMessage: '队员姓名项必填', trigger: 'blur' }]"
+						:label="'姓名'+' '" name="name">
+							<view class="form-item">
+								<uni-easyinput v-model="dynamicFormData2.domains[index].name" placeholder="请输入队员姓名"/>
+							</view>
+						</uni-forms-item>
+						<uni-forms-item v-model="dynamicFormData2.domains[index].major" :rules="[{ required: true, errorMessage: '队员所属院系项必填', trigger: 'blur' }]"
+						:label="'所属院系'+' '" name="major">
+							<view class="form-item">
+								<uni-easyinput v-model="dynamicFormData2.domains[index].major" placeholder="请输入队员所属院系"/>
+							</view>
+						</uni-forms-item>
+						<uni-forms-item v-model="dynamicFormData2.domains[index].level" :rules="[{ required: true, errorMessage: '队员所属年级项必填', trigger: 'blur' }]"
+						:label="'所属年级'+' '" name="level">
+							<view class="form-item">
+								<uni-easyinput v-model="dynamicFormData2.domains[index].level" placeholder="请输入队员所属年级"/>
+							</view>
+						</uni-forms-item>
+						<uni-forms-item v-model="dynamicFormData2.domains[index].tel" :rules="[{ required: true, errorMessage: '队员联系电话项必填', trigger: 'blur' }]"
+						:label="'联系电话'+' '" name="tel">
+							<view class="form-item">
+								<uni-easyinput v-model="dynamicFormData2.domains[index].tel" placeholder="请输入队员联系电话"/>
+							</view>
+						</uni-forms-item>
+						<view class="button-del">
+							<button class="button" size="mini" type="default" @click="del(index, item.id)">删除</button>
+						</view>
+					<!-- </uni-forms-item> -->
+					</uni-forms>
+
 				</uni-forms>
 				<view class="button-group">
 					<button type="primary" size="mini" @click="add">新增队员</button>
-					<button type="primary" size="mini" @click="submit('dynamicForm')">提交</button>
+					<!-- <button type="primary" size="mini" @click="submit('dynamicForm')">提交</button> -->
+					<button type="primary" size="mini" @click="submit('dynamicForm2')">提交</button>
 				</view>
 			</view>
 		</uni-section>
@@ -564,6 +584,12 @@
 					email: '',
 					domains: []
 				},
+
+				dynamicFormData2: {   //测试写死表单项
+					domains: []
+				},
+
+
 				dynamicLists: [],
 				dynamicRules: {
 					email: {
@@ -576,77 +602,82 @@
 						}]
 					}
 				},
-				addinput : [
-				{
-					label: '学号',
-					value: '',
-					rules: [{
-						'required': true,
-						errorMessage: '队员学号项必填'
-					}],
-					holder: '请输入队员学号',
-					id: Math.floor(Math.random() * Date.now())
-				},
-				{
-					label: '姓名',
-					value: '',
-					rules: [{
-						'required': true,
-						errorMessage: '队员姓名项必填'
-					}],
-					holder: '请输入队员姓名',
-					id: Math.floor(Math.random() * Date.now())
-				},
-				{
-					label: '所属院系',
-					value: '',
-					rules: [{
-						'required': true,
-						errorMessage: '队员所属院系项必填'
-					}],
-					holder: '请输入队员所属院系',
-					id: Math.floor(Math.random() * Date.now())
-				},
-				{
-					label: '所属年级',
-					value: '',
-					rules: [{
-						'required': true,
-						errorMessage: '队员所属年级项必填'
-					}],
-					holder: '请输入队员所属年级',
-					id: Math.floor(Math.random() * Date.now())
-				},
-				{
-					label: '联系电话',
-					value: '',
-					rules: [{
-						'required': true,
-						errorMessage: '队员联系电话项必填'
-					}],
-					holder: '请输入队员联系电话',
-					id: Math.floor(Math.random() * Date.now())
-				},
-				{
-					label: '邮箱',
-					value: '',
-					rules: [{
-						'required': true,
-						errorMessage: '队员邮箱项必填'
-					}],
-					holder: '请输入队员邮箱',
-					id: Math.floor(Math.random() * Date.now())
-				},
-				]
+				// addinput : [
+				// {
+				// 	label: '学号',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员学号项必填'
+				// 	}],
+				// 	holder: '请输入队员学号',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '姓名',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': false,
+				// 		errorMessage: '队员姓名项必填'
+				// 	},
+				// 	{
+				// 	validator: (rule, value, callback) => {
+				// 		if (!value) {
+				// 		callback(new Error('队员姓名不能为空'));
+				// 		} else {
+				// 		callback();
+				// 		}
+				// 	},
+				// 	trigger: 'blur'
+				// 	}],
+				// 	holder: '请输入队员姓名',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '所属院系',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员所属院系项必填'
+				// 	}],
+				// 	holder: '请输入队员所属院系',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '所属年级',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员所属年级项必填'
+				// 	}],
+				// 	holder: '请输入队员所属年级',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '联系电话',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员联系电话项必填'
+				// 	}],
+				// 	holder: '请输入队员联系电话',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '邮箱',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员邮箱项必填'
+				// 	}],
+				// 	holder: '请输入队员邮箱',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// ]
 			}
 		},
 		computed: {
-			// 处理表单排列切换
-			alignment() {
-				if (this.current === 0) return 'left'
-				if (this.current === 1) return 'top'
-				return 'left'
-			}
+
 		},
 		// mounted() {
 		// 	this.$refs.inputElement.placeholder = "中山大学";
@@ -662,6 +693,7 @@
 				console.log(e);
 				this.current = e.currentIndex
 			},
+
 			add() {
 				// this.dynamicFormData.domains.push({
 				// 	label: '队员',
@@ -672,19 +704,105 @@
 				// 	}],
 				// 	id: Date.now()
 				// })
-				this.dynamicFormData.domains.push(
-					this.addinput,
+
+				// const addinput = [
+				// {
+				// 	label: '学号',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员学号项必填'
+				// 	}],
+				// 	holder: '请输入队员学号',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '姓名',
+				// 	value: '',
+				// 	rules: [
+				// 	// {
+				// 	// 	'required': false,
+				// 	// 	errorMessage: '队员姓名项必填'
+				// 	// },
+				// 	{
+				// 	validator: (rule, value, callback) => {
+				// 		if (value.trim() === '') {
+				// 		callback(new Error('队员姓名不能为空'));
+				// 		} else {
+				// 		callback();
+				// 		}
+				// 	},
+				// 	trigger: 'blur'
+				// 	}],
+				// 	holder: '请输入队员姓名',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '所属院系',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员所属院系项必填'
+				// 	}],
+				// 	holder: '请输入队员所属院系',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '所属年级',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员所属年级项必填'
+				// 	}],
+				// 	holder: '请输入队员所属年级',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '联系电话',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员联系电话项必填'
+				// 	}],
+				// 	holder: '请输入队员联系电话',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// {
+				// 	label: '邮箱',
+				// 	value: '',
+				// 	rules: [{
+				// 		'required': true,
+				// 		errorMessage: '队员邮箱项必填'
+				// 	}],
+				// 	holder: '请输入队员邮箱',
+				// 	id: Math.floor(Math.random() * Date.now())
+				// },
+				// ]
+
+				const addinput = {
+					netid: '',
+					name: '',
+					major: '',
+					level:'',
+					tel:'',
+				}
+				
+				//不要放到data里是因为需要深度复制很麻烦
+				this.dynamicFormData2.domains.push(
+					addinput
 				)
 			},
 			del(i, id) {
 				// let index = this.dynamicLists.findIndex(v => v.id === id)
 				console.log("del", i)
-				this.dynamicFormData.domains.splice(i, 1)
-				console.log(this.dynamicFormData.domains)
+				this.dynamicFormData2.domains.splice(i, 1)
+				// console.log(this.dynamicFormData.domains)
 			},
 			submit(ref) {
-				console.log(this.baseFormData);
-				this.$refs[ref].validate().then(res => {
+				//校验逻辑
+				const ar = this.$refs[ref]
+				for (let i = 0; i < ar.length; i++) {
+					ar[i].validate().then(res => {
 					console.log('success', res);
 					uni.showToast({
 						title: `校验通过`
@@ -692,6 +810,7 @@
 				}).catch(err => {
 					console.log('err', err);
 				})
+				}
 			},
 		}
 	}

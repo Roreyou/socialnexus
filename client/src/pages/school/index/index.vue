@@ -76,13 +76,13 @@
 		<!-- <u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="findHouseList"></u-loadmore> -->
 		<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
 		<u-no-network></u-no-network>
-		<view class="buttom">
+		<!-- <view class="buttom">
 			<view class="loginType">
 				<view class="wechat item">
 					<view class="icon"><u-icon size="60" name="server-man" color="#999" @click="server"></u-icon></view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -219,6 +219,8 @@
 					this.acList = res.data.data.acti_list;
 					this.acList[0].keywords = "服务,实践"
 					console.log(this.acList)
+					const List = this.acList
+					this.acList = [...List, ...List];
 					this.net_error = false;
 				},
 				fail: res => {
@@ -527,7 +529,9 @@
 // 活动推荐列表
 .board{
 	border-radius: 10px;
-	background-color: #37c4568f
+	background-color: #37c4568f;
+	background-image: linear-gradient(to right top, #41b851, #59c549, #72d23e, #8cdf2e, #a8eb12);
+	background-image: linear-gradient(to right bottom, #6aa6fd, #85aefe, #9ab6fe, #adbeff, #bec7ff);
 }
 
 // 活动推荐标题

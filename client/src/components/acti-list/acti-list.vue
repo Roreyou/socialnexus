@@ -63,8 +63,9 @@
 <style scoped>
 	/* 活动推荐列表 */
 	.cu-item .shadow{
-	margin: 0;
+	/* margin: 0; */
 	margin-top: 10rpx;
+	margin-bottom: 15rpx;
 	}
 
 	.cu-bar .action:first-child{
@@ -86,4 +87,5 @@
     /* border-radius: 10px; */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	}
+
 </style>
