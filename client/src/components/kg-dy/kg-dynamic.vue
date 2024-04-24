@@ -106,6 +106,7 @@
 			};
 		},
 		onReady() {
+			console.log("dyInfo,", this.dyInfo);
 		},
 		methods: {
 			previewImage(url, urls) {

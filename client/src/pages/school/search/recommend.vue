@@ -2,7 +2,7 @@
 <template>
 	<view class="content">
 		<!-- 活动推荐列表 -->
-		<view>
+		<!-- <view>
 			<view class="cu-bar bg-white">
 				<view class="action">
 					<text class="cuIcon-titles text-green"></text>
@@ -31,12 +31,19 @@
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
+        <actilist :acList="acList"></actilist>
+	
 	</view>
 </template>
 
 <script>
-	export default {
+import actilist from '../../../components/acti-list/acti-list.vue';
+	
+export default {
+	components: {
+        actilist
+    },
 		data() {
 			return {
 				// title: '高校 -- 活动推荐'
@@ -77,7 +84,30 @@
 			}
 		},
 		onLoad() {
-
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
+				method: 'GET',
+				data: {
+					province: '1',
+					// token: this.$userinfo.token
+				},
+				success: res => {
+					console.log(res)
+					this.acList = res.data.data.acti_list;
+					this.acList[0].keywords = "服务,实践"
+					console.log(this.acList)
+					const List = this.acList
+					this.acList = [...List, ...List];
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
 		},
 		methods: {
 
@@ -85,20 +115,5 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.cu-item .shadow{
-	margin: 0;
-	margin-top: 10rpx;
-	}
 
-	.cu-bar .action:first-child{
-	margin-left: 24rpx;
-	}
-
-	.wordcont{
-	margin-top: 10rpx;
-	}
-	.wordcont .ackeywords {
-		display: inline-block;
-	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
-	}
 </style>

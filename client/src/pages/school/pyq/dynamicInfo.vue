@@ -74,50 +74,50 @@
 				loading: true,
 				background: '',
 				dyInfo: {
-					id:1,
-					type: 1,
-					avatarUrl: 'https://img0.baidu.com/it/u=1801510667,176844939&fm=26&fmt=auto',
-					userName: '的分布',
-					pushTime: '2021-12-17 12:51:55',
-					content: '山不在高，有仙则名。水不在深，有龙则灵。斯是陋室，惟吾德馨。苔痕上阶绿，草色入帘青。谈笑有鸿儒，往来无白丁。可以调素琴，阅金经。无丝竹之乱耳，无案牍之劳形。南阳诸葛庐，西蜀子云亭。孔子云：何陋之有？',
-					dyImgs: [
-						'https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
-						'https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
-					],
-					tags: [{
-							name: '顺丰客服',
-							type: 'success'
-						},
-						{
-							name: '2222',
-							type: 'info'
-						}, {
-							name: '3333',
-							type: 'info'
-						}, {
-							name: 'ashdfknasdf',
-							type: 'info'
-						},
+					// id:1,
+					// type: 1,
+					// avatarUrl: 'https://img0.baidu.com/it/u=1801510667,176844939&fm=26&fmt=auto',
+					// userName: '的分布',
+					// pushTime: '2021-12-17 12:51:55',
+					// content: '山不在高，有仙则名。水不在深，有龙则灵。斯是陋室，惟吾德馨。苔痕上阶绿，草色入帘青。谈笑有鸿儒，往来无白丁。可以调素琴，阅金经。无丝竹之乱耳，无案牍之劳形。南阳诸葛庐，西蜀子云亭。孔子云：何陋之有？',
+					// dyImgs: [
+					// 	'https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
+					// 	'https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
+					// ],
+					// tags: [{
+					// 		name: '顺丰客服',
+					// 		type: 'success'
+					// 	},
+					// 	{
+					// 		name: '2222',
+					// 		type: 'info'
+					// 	}, {
+					// 		name: '3333',
+					// 		type: 'info'
+					// 	}, {
+					// 		name: 'ashdfknasdf',
+					// 		type: 'info'
+					// 	},
 
-					],
-					fabulous:false,
-					dyLike: 10,
+					// ],
+					// fabulous:false,
+					// dyLike: 10,
 				},
 				comList: [{
-						id:1,
-						avatarUrl: "https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-						nickName: "阿康",
-						comInfo: "评论",
-						comImgs: ["https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7","https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
-						comTime: "2022-03-12 17:20:55",
-						fabulous:false,
-						comLike: 99,
-						replyList: [{
-							id:1,
-							avatarUrlr: "https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-							nickNamer: "阿康",
-							replyInfo: "评论的回复"
-						}]
+						// id:1,
+						// avatarUrl: "https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+						// nickName: "阿康",
+						// comInfo: "评论",
+						// comImgs: ["https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7","https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+						// comTime: "2022-03-12 17:20:55",
+						// fabulous:false,
+						// comLike: 99,
+						// replyList: [{
+						// 	id:1,
+						// 	avatarUrlr: "https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+						// 	nickNamer: "阿康",
+						// 	replyInfo: "评论的回复"
+						// }]
 				}],
 				bgColor: '#ffcc01',
 				baseUrl:'',
@@ -171,7 +171,7 @@
 
 			console.log("onload")
 			uni.request({
-				url: this.$url.BASE_URL + '/schoolteam/pyq/getdetail',
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/getdetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
 				method: 'GET',
@@ -180,9 +180,9 @@
 					// token: this.$userinfo.token
 				},
 				success: res => {
-					console.log(res)
-					this.dyInfo = res.data.data.post_detail;
-					this.dyInfo.fabulous = false;  //
+					console.log("res.data,", res.data)
+					this.dyInfo = res.data.date.post_detail;  //不知道为什么mock的时候是date，明明文档是data，到时候记得改一下
+					this.dyInfo.fabulous = false;  
 					this.comList = res.data.data.comment_list;
 					// this.dyInfo.keywords = "服务,实践"
 					// console.log(this.acList)
