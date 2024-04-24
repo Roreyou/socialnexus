@@ -1,6 +1,5 @@
 <!-- 高校 搜索活动内容 -->
 <template>
-    <!-- 活动推荐列表 -->
     <actilist :acList="acList"></actilist>
 </template>
 

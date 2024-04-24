@@ -22,11 +22,7 @@
 	</scroll-view>
 	</view>
 	<view class="accontent">
-		<QuanBu v-if="TabCur === 0"></QuanBu>
-		<DaiKaiZhan v-if="TabCur === 1"></DaiKaiZhan>
-		<KaiZhanZhong v-if="TabCur === 2"></KaiZhanZhong>
-		<YiJieShu v-if="TabCur === 3"></YiJieShu>
-
+		<MyContent v-if="showContent" :index="TabCur"></MyContent> 
 	</view>
 </view>
 
@@ -34,11 +30,7 @@
  
 <script>
 	import indexTabbar from '../../../components/top-tabbar/top-tabbar.vue';
-
-	import QuanBu from './QuanBu.vue';
-	import KaiZhanZhong from './KaiZhanZhong.vue';
-	import YiJieShu from './YiJieShu.vue';
-	import DaiKaiZhan from './DaiKaiZhan.vue';
+	import MyContent from './MContent.vue';
 
 	// import utabsswiper from '../../uview-ui/components/u-tabs-swiper/u-tabs-swiper.vue';
 
@@ -46,14 +38,12 @@
 		components:{
 			
 			indexTabbar,
-			QuanBu,
-			DaiKaiZhan,
-			KaiZhanZhong,
-			YiJieShu,
+			MyContent,
 			// utabsswiper
 		},
 		data() {
 			return {
+				showContent: true,
 				TabCur: 0,
 				scrollLeft: 0,
 
@@ -91,6 +81,16 @@
 				currentTabComponent: "QuanBu"
 			}
 		},
+
+		watch: {
+			TabCur() {
+				this.showContent = false;
+				this.$nextTick(() => {
+					this.showContent = true;
+				});
+			}
+    	},
+		
 		methods:{
 			TarData(item){
 				//设置id，来显示选中那个标签，显示下划线
@@ -100,13 +100,17 @@
 			},
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
+				console.log("Cur,", this.TabCur);
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 								// 切换组件时页面滚动到顶部
 								wx.pageScrollTo({
   				  scrollTop: 0,
   				  duration: 0
   				});
-			}
+			},
+			key() {
+                return this.TabCur
+            }
 		}
 	}
 </script>
