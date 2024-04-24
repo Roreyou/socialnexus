@@ -119,26 +119,47 @@
 				// 	]
 				// }],
 				dyList:[
-					{
-						"id": "5",
-						"team_id": "77",
-						"title": "容用队运",
-						"content": "irure elit incididunt",
-						"star": 86,
-						"picture": [
-							"http://dummyimage.com/400x400"
-						],
-						"start_date": "2016-01-18",
-						"end_date": "2009-05-31",
-						"province": "澳门特别行政区",
-						"city": "福州市",
-						"address": "湖南省鹰潭市肃北蒙古族自治县",
-						"post_time": "1989-05-10 06:49:23",
-						"like": 80,
-						"team_name": "下点际成七矿"
-					}
+					// {
+					// 	"id": "5",
+					// 	"team_id": "77",
+					// 	"title": "容用队运",
+					// 	"content": "irure elit incididunt",
+					// 	"star": 86,
+					// 	"picture": [
+					// 		"http://dummyimage.com/400x400"
+					// 	],
+					// 	"start_date": "2016-01-18",
+					// 	"end_date": "2009-05-31",
+					// 	"province": "澳门特别行政区",
+					// 	"city": "福州市",
+					// 	"address": "湖南省鹰潭市肃北蒙古族自治县",
+					// 	"post_time": "1989-05-10 06:49:23",
+					// 	"like": 80,
+					// 	"team_name": "下点际成七矿"
+					// }
 				]
 			};
+		},
+		mounted() {
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/latest',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
+				method: 'GET',
+				data: {
+				},
+				success: res => {
+					this.dyList = res.data.data.post_list;
+					// this.acList[0].keywords = "服务,实践"
+					// console.log(this.acList)
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
 		},
 		methods:{
 		}

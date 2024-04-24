@@ -24,7 +24,7 @@
 				</u-read-more>
 				<!-- 图片 -->
 				<view class="dynamic_cont_img">
-					<block v-if="dyInfo.type == 1">
+					<block v-if="dyInfo.picture.length > 0">
 						<!-- 单张 -->
 						<block v-if="dyInfo.picture.length == 1">
 							<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
@@ -77,7 +77,7 @@
 					<image class="like_icon" :src="dyInfo.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
 					 mode="" @click="isInfo?comLike(dyInfo.id):''"></image>
 					<view class="" @click="isInfo?comLike(dyInfo.id):''">
-						{{dyInfo.dyLike}}
+						{{dyInfo.like}}
 					</view>
 				</view>
 			</view>
