@@ -5,15 +5,15 @@
 		<view>
 			<view class="part first">
 				<view class="de_total_title">
-					博物馆研学关注日活动
+					{{ detail.name }}
 				</view>
 				<view class="de_key_value">
 					<view class="de_content">
 						<view class="key">
-							发布组织
+							社区基层名称
 						</view>
 						<view class="value">
-							博物馆研学
+							{{ detail.community_name }}
 						</view>
 					</view>
 					<view class="de_content">
@@ -21,16 +21,23 @@
 							活动编号
 						</view>
 						<view class="value">
-							1555596663
+							{{ acti_id }}
 						</view>
 					</view>
-				</view>
-				<view>
-					<view class="keywords cu-tag bg-red light sm round">
-						文化
+					<view class="de_content">
+						<view class="key">
+							活动类别
+						</view>
+						<view class="value">
+							{{ detail.category_name }}
+						</view>
 					</view>
-					<view class="keywords cu-tag bg-red light sm round">
-						文艺
+
+
+				</view>
+				<view class="wordcont">
+					<view class="ackeywords" v-for="(word,index) in detail.keywords.split(',')" :key="index">
+						<view class="cu-tag bg-red light sm round">{{word}}</view>
 					</view>
 				</view>
 			</view>
@@ -50,7 +57,15 @@
 							活动地点
 						</view>
 						<view class="value">
-							广州市 香洲区
+							{{detail.province}} {{detail.city}}
+						</view>
+					</view>
+					<view class="de_content">
+						<view class="key">
+							详细地址
+						</view>
+						<view class="value">
+							{{detail.address}}
 						</view>
 					</view>
 					<view class="de_content">
@@ -58,18 +73,10 @@
 							联系方式
 						</view>
 						<view class="value">
-							19875196595
+							{{detail.tel}}
 						</view>
 					</view>
 				</view>
-				<!-- <view>
-					<view class="keywords cu-tag bg-red light sm round">
-						文化
-					</view>
-					<view class="keywords cu-tag bg-red light sm round">
-						文艺
-					</view>
-				</view> -->
 			</view>
 		</view>
 		<view class="custom-container">
@@ -87,23 +94,15 @@
 							时间段
 						</view>
 						<view class="value">
-							2024/3/31 10:00-12:00
+							{{detail.start_time}}-{{ detail.end_time }}
 						</view>
 					</view>
 					<view class="de_content">
 						<view class="key">
-							招募人数
+							招募队伍数
 						</view>
 						<view class="value">
-							12
-						</view>
-					</view>
-					<view class="de_content">
-						<view class="key">
-							招募岗位
-						</view>
-						<view class="value">
-							志愿者
+							{{ detail.vacancies }}
 						</view>
 					</view>
 				</view>
@@ -132,7 +131,7 @@
 							报名截止时间：
 						</view>
 						<view class="value">
-							2000000000058
+							{{detail.application_deadline}}
 						</view>
 					</view>
 				</view>
@@ -150,21 +149,12 @@
 				<view class="de_key_value">
 					<view class="de_content">
 						<view class="last-key">
-							活动简介
-						</view>
-						<view class="value">
-							由乐善"耆”乐手工队成员编织各式各样的手工艺品，并在公益市集上等价交换，凑集善款，为社区的特殊群体创造更好的生活环境。
-						</view>
-					</view>
-					<view class="de_content">
-						<view class="last-key">
 							活动内容
 						</view>
 						<view class="value">
-							由乐善"耆”乐手工队成员编织各式各样的手工艺品，并在公益市集上等价交换，凑集善款，为社区的特殊群体创造更好的生活环境。(仅录用有藤编和串珠基础的志愿者)
+							{{detail.remark}}
 						</view>
 					</view>
-					<!-- <view class="de_content">报名截止时间：8450345</view> -->
 				</view>
 			</view>
 		</view>
@@ -179,14 +169,69 @@
 import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
 	export default {
-    components: {
+    	components: {
 			bttab,
 		},
 		data(){
 			return{
-				
+				acti_id:'',
+				detail:{
+					keywords: ""
+				},
 			}
 		},
+		mounted(){
+			// 获取query对象
+			const query = this.$mp.query;
+			// const query = this.$route.query;
+			const id = query.acti_id;
+			this.acti_id = id;
+			console.log(id)
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
+				method: 'GET',
+				data: {
+					acti_id: id,
+					// token: this.$userinfo.token
+				},
+				success: res => {
+					this.detail = res.data.data.detail;
+					this.detail.keywords = "服务,实践"
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
+		},
+		onload(option){
+			console.log("onload")
+			const id = option.id;
+			// uni.request({
+			// 	url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
+			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
+			// 	method: 'GET',
+			// 	data: {
+			// 		acti_id: id,
+			// 		// token: this.$userinfo.token
+			// 	},
+			// 	success: res => {
+			// 		this.detail = res.data.data.detail;
+			// 		this.detail.keywords = "服务,实践"
+			// 		this.net_error = false;
+			// 	},
+			// 	fail: res => {
+			// 		this.net_error = true;
+			// 	},
+			// 	complete: () => {
+			// 	}
+			// })
+		}
 	}
 </script>
  
@@ -269,5 +314,14 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 	.last-key{   
 		display: inline-block;
 		width: 600rpx;
+	}
+
+		/* tag */
+		.wordcont{
+	margin-top: 10rpx;
+	}
+	.wordcont .ackeywords {
+		display: inline-block;
+	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 	}
 </style>

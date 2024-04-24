@@ -1,6 +1,5 @@
 <!-- 高校 活动列表 -->
 <template>
-		<!-- 活动推荐列表 -->
 		<view>
 			<!-- <text class="cuIcon-titles text-green"></text> -->
 			<!-- <view class="cu-bar bg-white">
@@ -10,7 +9,7 @@
 			</view> -->
 			<view>
 				<view class="cu-item" v-for="(item,index) in acList" :key="index">
-					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail">
+					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id)">
 							<view class="cu-item shadow" :class="{ 'indexstyle': isindex }">
 							<!-- 活动状态 -->							
 							<view class="cu-bar bg-white" v-if="ismyac">
@@ -64,10 +63,14 @@
 		},
 		methods: {
 			//前往详情页
-			todetail(){
-				this.$u.route({
-					url: 'pages/school/details/details',
-				  })
+			todetail(id){
+				uni.navigateTo({
+					//注意用这个的话page前面有一个斜杠，不然会说找不到这个组件
+					url: '/pages/school/details/details?acti_id=' + id
+				})
+				// this.$u.route({
+				// 	url: 'pages/school/details/details?acti_id=' + id
+				// })
 			},
 		}
 	}
