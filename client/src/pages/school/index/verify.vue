@@ -11,20 +11,20 @@
 					<!-- <uni-forms-item label="所属高校" required>
 						<uni-easyinput v-model="baseFormData.name" placeholder="中山大学" ref="inputElement" />
 					</uni-forms-item> -->
-					<uni-forms-item label="所属学院" required>
+					<uni-forms-item label="负责人所属学院" :rules="[{ required: true, errorMessage: '所属学院项必填', trigger: 'blur' }]" name="major">
 						<uni-easyinput v-model="baseFormData.major" placeholder="请输入所属学院" />
 					</uni-forms-item>
-					<uni-forms-item label="负责人姓名" required>
+					<uni-forms-item label="负责人姓名" :rules="[{ required: true, errorMessage: '姓名项必填', trigger: 'blur' }]" name="name">
 						<uni-easyinput v-model="baseFormData.name" placeholder="请输入队伍负责人姓名" />
 					</uni-forms-item>
-					<uni-forms-item label="负责人联系电话" required>
+					<uni-forms-item label="负责人联系电话" :rules="[{ required: true, errorMessage: '联系电话项必填', trigger: 'blur' }]" name="tel">
 						<uni-easyinput v-model="baseFormData.tel" placeholder="请输入负责人联系电话" />
 					</uni-forms-item>
 					<!-- <uni-forms-item label="负责人邮箱" required>
 						<uni-easyinput v-model="baseFormData.name" placeholder="请输入负责人邮箱" />
 					</uni-forms-item> -->
-					<uni-forms-item label="负责人工号" required>
-						<uni-easyinput v-model="baseFormData.id" placeholder="请输入负责人工号" />
+					<uni-forms-item label="负责人工号" :rules="[{ required: true, errorMessage: '工号项必填', trigger: 'blur' }]" name="netid">
+						<uni-easyinput v-model="baseFormData.netid" placeholder="请输入负责人工号" />
 					</uni-forms-item>
 					<!-- <uni-forms-item label="性别" required>
 						<uni-data-checkbox v-model="baseFormData.sex" :localdata="sexs" />
@@ -114,24 +114,14 @@
 					</uni-forms-item> -->
 					<!-- <uni-forms-item v-for="(item,index) in dynamicFormData.domains" :key="index"
 						:label="'队员'+' '+index" required :rules="dynamicRules" :name="['domains',index,'value']"> -->
-					<uni-forms ref="dynamicForm" v-for="(item,index) in dynamicFormData.domains" :key="index" :model="dynamicFormData.domains[index]" labelWidth="80px">
-						<uni-forms-item v-for="(item1,index1) in item" v-model="dynamicFormData.domains[index][index1].value" :rules="[{ required: true, errorMessage: '请输入邮箱地址', trigger: 'blur' }]" :key="item1.id"
-						:label="item1.label+' '" :name="['domains',index1,'value']">
-							<view class="form-item">
-								<uni-easyinput v-model="dynamicFormData.domains[index][index1].value" :placeholder="dynamicFormData.domains[index][index1].holder"/>
-							</view>
-							<view>
-								{{ item1.value }}
-							</view>
-						</uni-forms-item>
-						<view class="button-del">
-							<button class="button" size="mini" type="default" @click="del(index, item.id)">删除</button>
-						</view>
-					<!-- </uni-forms-item> -->
-					</uni-forms>
 
 				
 					<uni-forms ref="dynamicForm2" v-for="(item,index) in dynamicFormData2.domains" :key="index" :model="dynamicFormData2.domains[index]" labelWidth="80px">
+						<view class="dynamic">
+							<view>
+								队员 {{ index+1 }}
+							</view>
+						</view>
 						<uni-forms-item :rules="[{ required: true, errorMessage: '队员学号项必填', trigger: 'blur' }]"
 						:label="'学号'+' '" name="netid">
 							<view class="form-item">
@@ -162,6 +152,13 @@
 								<uni-easyinput v-model="dynamicFormData2.domains[index].tel" placeholder="请输入队员联系电话"/>
 							</view>
 						</uni-forms-item>
+						<uni-forms-item v-model="dynamicFormData2.domains[index].email" :rules="[{ required: true, errorMessage: '队员邮箱项必填', trigger: 'blur' }]"
+						:label="'邮箱'+' '" name="email">
+							<view class="form-item">
+								<uni-easyinput v-model="dynamicFormData2.domains[index].email" placeholder="请输入队员邮箱"/>
+							</view>
+						</uni-forms-item>
+
 						<view class="button-del">
 							<button class="button" size="mini" type="default" @click="del(index, item.id)">删除</button>
 						</view>
@@ -185,14 +182,18 @@
 			return {
 				// 基础表单数据
 				baseFormData: {
-					name: '',
-					age: '',
-					introduction: '',
-					sex: 2,
-					hobby: [5],
-					datetimesingle: 1627529992399,
-					city: '',
-					skills: 0
+					// name: '',
+					// age: '',
+					// introduction: '',
+					// sex: 2,
+					// hobby: [5],
+					// datetimesingle: 1627529992399,
+					// city: '',
+					// skills: 0
+					netid:"",
+					name:"",
+					major:"",
+					tel:""
 				},
 				//机场数据
 				'list': [{
@@ -785,8 +786,10 @@
 					major: '',
 					level:'',
 					tel:'',
+					email:'',
+					
 				}
-				
+				addinput['team_id'] = 'teamid'
 				//不要放到data里是因为需要深度复制很麻烦
 				this.dynamicFormData2.domains.push(
 					addinput
@@ -799,17 +802,69 @@
 				// console.log(this.dynamicFormData.domains)
 			},
 			submit(ref) {
-				//校验逻辑
+				let instr_flag = true
+				let dyna_flag = true
+				//校验动态表单逻辑
 				const ar = this.$refs[ref]
 				for (let i = 0; i < ar.length; i++) {
 					ar[i].validate().then(res => {
-					console.log('success', res);
-					uni.showToast({
-						title: `校验通过`
-					})
+					console.log('校验队员-success', res);
+					// uni.showToast({
+					// 	title: `校验通过`
+					// })
+					
+
 				}).catch(err => {
+					dyna_flag = false
 					console.log('err', err);
 				})
+				}
+
+				//校验负责人信息
+				this.$refs['baseForm'].validate().then(res => {
+					console.log('校验负责人-success', res);
+					// uni.showToast({
+					// 	title: `校验通过`
+					// })
+
+				}).catch(err => {
+					instr_flag = false
+					console.log('err', err);
+				})
+
+				//提交表单
+				if(instr_flag && dyna_flag){
+					console.log("来到这里")
+					uni.request({
+					      header: {
+					       	      'Content-Type': 'application/json'  
+					       	   }, 
+					      url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/authentification',
+					       method: 'POST',
+					           data: {
+					               id:'yonghuming',
+								   status:1,
+								   instructor:{
+									id: this.baseFormData.netid,
+									name:this.baseFormData.name,
+									tel:this.baseFormData.tel,
+									major:this.baseFormData.major
+								   },
+								   members:this.dynamicFormData2.domains									
+		
+								 
+					           },
+					       dataType:'json',
+					       success: (res) => {
+					       	 	// var result = JSON.parse(res.data.projectList);
+					       		console.log("post-success")
+					           },
+							fail: res => {
+								console.log("post-fail")
+								this.net_error = true;
+							}, 
+					       }); 
+
 				}
 			},
 		}
@@ -873,5 +928,17 @@
 	}
 	.button-group button {
   		margin-bottom: 15px; 
+	}
+	.dynamic{
+		display: flex; 
+		justify-content: center; 
+		align-items: center; 
+		width: 60px; 
+		height: 1.5rem; 
+		background-color: rgb(13, 82, 105); 
+		border-radius: 10px; 
+		color: white;
+		// margin-bottom: 5px
+		margin: 15rpx auto 15rpx auto
 	}
 </style>
