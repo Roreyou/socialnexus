@@ -4,7 +4,7 @@
 		<!-- <uni-card :is-shadow="false" is-full>
 			<text class="uni-h6">uni-forms 组件</text>
 		</uni-card> -->
-		<uni-section title="队伍负责人信息认证" type="line">
+		<uni-section title="指导老师信息认证" type="line">
 			<view class="example">
 				<!-- 基础用法，不包含校验规则 -->
 				<uni-forms ref="baseForm" :model="baseFormData" labelWidth="80px">
@@ -48,6 +48,28 @@
 						<uni-data-select v-model="baseFormData.skills" :localdata="skillsRange" >
 						</uni-data-select>
 					</uni-forms-item> -->
+				</uni-forms>
+			</view>
+		</uni-section>
+
+		<uni-section title="学生队长信息认证" type="line">
+			<view class="example">
+				<uni-forms ref="baseForm2" :model="baseFormData2" labelWidth="80px">
+					<uni-forms-item label="姓名" :rules="[{ required: true, errorMessage: '姓名项必填', trigger: 'blur' }]" name="name">
+						<uni-easyinput v-model="baseFormData2.name" placeholder="请输入姓名" />
+					</uni-forms-item>
+					<uni-forms-item label="学号" :rules="[{ required: true, errorMessage: '学号项必填', trigger: 'blur' }]" name="netid">
+						<uni-easyinput v-model="baseFormData2.netid" placeholder="请输入学号" />
+					</uni-forms-item>
+					<uni-forms-item label="所属院系" :rules="[{ required: true, errorMessage: '所属院系项必填', trigger: 'blur' }]" name="major">
+						<uni-easyinput v-model="baseFormData2.major" placeholder="请输入院系名称" />
+					</uni-forms-item>
+					<uni-forms-item label="年级" :rules="[{ required: true, errorMessage: '年级项必填', trigger: 'blur' }]" name="level">
+						<uni-easyinput v-model="baseFormData2.level" placeholder="请输入年级" />
+					</uni-forms-item>
+					<uni-forms-item label="邮箱" :rules="[{ required: true, errorMessage: '邮箱项必填', trigger: 'blur' }]" name="email">
+						<uni-easyinput v-model="baseFormData2.email" placeholder="请输入邮箱" />
+					</uni-forms-item>
 				</uni-forms>
 			</view>
 		</uni-section>
@@ -182,19 +204,20 @@
 			return {
 				// 基础表单数据
 				baseFormData: {
-					// name: '',
-					// age: '',
-					// introduction: '',
-					// sex: 2,
-					// hobby: [5],
-					// datetimesingle: 1627529992399,
-					// city: '',
-					// skills: 0
 					netid:"",
 					name:"",
 					major:"",
 					tel:""
 				},
+				baseFormData2: {
+					netid:"",
+					name:"",
+					major:"",
+					level:"",
+					tel:"",
+					email:"",
+					team_id:"team_id"   //之后再改
+				}, //队长信息
 				//机场数据
 				'list': [{
 		'letter': 'A',
@@ -804,68 +827,82 @@
 			submit(ref) {
 				let instr_flag = true
 				let dyna_flag = true
+				let leader_flag = true
 				//校验动态表单逻辑
 				const ar = this.$refs[ref]
-				for (let i = 0; i < ar.length; i++) {
-					ar[i].validate().then(res => {
-					console.log('校验队员-success', res);
-					// uni.showToast({
-					// 	title: `校验通过`
-					// })
-					
-
-				}).catch(err => {
-					dyna_flag = false
-					console.log('err', err);
-				})
+				if(ar){
+					for (let i = 0; i < ar.length; i++) {
+						ar[i].validate().then(res => {
+					}).catch(err => {
+						dyna_flag = false
+						console.log('err', err);
+					})
+					}
 				}
+
 
 				//校验负责人信息
 				this.$refs['baseForm'].validate().then(res => {
-					console.log('校验负责人-success', res);
-					// uni.showToast({
-					// 	title: `校验通过`
-					// })
-
+					// console.log('校验负责人-success', res);
 				}).catch(err => {
 					instr_flag = false
+				})
+
+				//队长信息
+				this.$refs['baseForm2'].validate().then(res => {
+				}).catch(err => {
+					leader_flag = false
 					console.log('err', err);
 				})
 
+				setTimeout(
+					() => {
+				// 在这里放置你想要等待0.5秒后执行的代码
+					if(instr_flag && dyna_flag && leader_flag){
+						uni.showToast({
+							title: `校验通过`
+						})
+						uni.request({
+							header: {
+									'Content-Type': 'application/json'  
+								}, 
+							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/authentification',
+							method: 'POST',
+								data: {
+									id:'yonghuming',
+									status:1,
+									instructor:{
+										id: this.baseFormData.netid,
+										name:this.baseFormData.name,
+										tel:this.baseFormData.tel,
+										major:this.baseFormData.major
+									},
+									leader:{
+										id: this.baseFormData2.netid,
+										name:this.baseFormData2.name,
+										tel:this.baseFormData2.tel,
+										major:this.baseFormData2.major,
+										grade:this.baseFormData2.level,
+										email:this.baseFormData2.email,
+									},
+									members:this.dynamicFormData2.domains									
+			
+									
+								},
+							dataType:'json',
+							success: (res) => {
+									// var result = JSON.parse(res.data.projectList);
+									console.log("post-success")
+								},
+								fail: res => {
+									console.log("post-fail")
+									this.net_error = true;
+								}, 
+							}); 
+						}
+				}, 200);
 				//提交表单
-				if(instr_flag && dyna_flag){
-					console.log("来到这里")
-					uni.request({
-					      header: {
-					       	      'Content-Type': 'application/json'  
-					       	   }, 
-					      url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/authentification',
-					       method: 'POST',
-					           data: {
-					               id:'yonghuming',
-								   status:1,
-								   instructor:{
-									id: this.baseFormData.netid,
-									name:this.baseFormData.name,
-									tel:this.baseFormData.tel,
-									major:this.baseFormData.major
-								   },
-								   members:this.dynamicFormData2.domains									
-		
-								 
-					           },
-					       dataType:'json',
-					       success: (res) => {
-					       	 	// var result = JSON.parse(res.data.projectList);
-					       		console.log("post-success")
-					           },
-							fail: res => {
-								console.log("post-fail")
-								this.net_error = true;
-							}, 
-					       }); 
 
-				}
 			},
 		}
 	}
