@@ -59,6 +59,9 @@
 		name: 'UniGoodsNav',
 		emits:['click','buttonClick'],
 		props: {
+			team_id: String,
+			acti_id: String,
+
 			options: {
 				type: Array,
 				default () {
@@ -176,8 +179,12 @@
 			// }
 			application(){
 			this.$u.route({
-				url: 'pages/school/details/application'
-				})
+				url: 'pages/school/details/application',
+				params: {
+        			team_id: this.team_id,
+        			acti_id: this.acti_id,
+    			}
+			})
 			},
 		},
 		onShareAppMessage: function(res) {

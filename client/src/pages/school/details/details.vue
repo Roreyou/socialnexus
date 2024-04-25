@@ -94,7 +94,8 @@
 							时间段
 						</view>
 						<view class="value">
-							{{detail.start_time}}-{{ detail.end_time }}
+							<text>{{detail.start_time}} 开始</text><br>
+							<text>{{detail.end_time}} 结束</text>
 						</view>
 					</view>
 					<view class="de_content">
@@ -160,7 +161,7 @@
 		</view>
 
 		<view style="position: fixed; bottom: 0; width: 100%;">
-			<bttab></bttab>
+			<bttab :team_id="team_id" :acti_id="acti_id"></bttab>
 		</view>
 	</view> 
 </template>
@@ -174,6 +175,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 		},
 		data(){
 			return{
+				team_id:'1',
 				acti_id:'',
 				detail:{
 					keywords: ""
