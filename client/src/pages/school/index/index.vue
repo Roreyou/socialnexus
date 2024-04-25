@@ -19,7 +19,10 @@
 			<view class="user-section">
 				<image :src="avatar" class="cu-avatar xl round"></image>
 				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
-				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view>
+				<!-- <view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view> -->
+				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;" v-if="userInfo.verification_status == 1 || userInfo.verification_status == 3">认证信息</view>
+				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti;" v-if="userInfo.verification_status == 2">认证已通过</view>
+				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti;" v-if="userInfo.verification_status == 4">认证信息审核中</view>
 			</view>
 		</view>
 		<view> 
@@ -165,7 +168,7 @@
 		},
 
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','userName'])
+			...mapState(['hasLogin', 'forcedLogin','userName', 'userInfo'])
 		},
 
 		// onLoad() {
@@ -203,8 +206,9 @@
 			// 	complete: () => {
 			// 	}
 			// })
-			console.log(typeof this.$url)
-			console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
+			console.log("userInfo.verification_status,", this.userInfo)
+			// console.log(typeof this.$url)
+			// console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',

@@ -1,9 +1,6 @@
 <!-- 高校 认证信息 -->
 <template>
 	<view class="container">
-		<!-- <uni-card :is-shadow="false" is-full>
-			<text class="uni-h6">uni-forms 组件</text>
-		</uni-card> -->
 		<uni-section title="指导老师信息认证" type="line">
 			<view class="example">
 				<!-- 基础用法，不包含校验规则 -->
@@ -857,7 +854,6 @@
 
 				setTimeout(
 					() => {
-				// 在这里放置你想要等待0.5秒后执行的代码
 					if(instr_flag && dyna_flag && leader_flag){
 						uni.showToast({
 							title: `校验通过`

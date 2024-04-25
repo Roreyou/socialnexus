@@ -184,7 +184,10 @@
 				}
 			},
 			toMain(userName) {
-				this.login(userName);
+				// console.log("tomain")
+				let verification_status = 2  //先强制，后面记得删掉
+				// console.log("verification_status",verification_status)
+				this.login({userName, verification_status});
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式
