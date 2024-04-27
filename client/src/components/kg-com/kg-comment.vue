@@ -1,7 +1,7 @@
 <!-- 高校帖子评论 -->
 <template>
 	<view class="warp">
-		<view class="cot" v-for="(item,index) in commentList">
+		<view class="cot" v-for="(item,index) in commentList" :key="index">
 			<!-- <view class="cot_avatar">
 				<u-avatar :src="item.avatarUrl" mode="square" size="80"></u-avatar>
 			</view> -->
@@ -29,17 +29,17 @@
 				<view class="cot_operate_icon">
 					<image src="../../static/icon/pinglun1.png" mode="" @click="replyContent(item.comment_detail.id)" ></image>
 					<view class="" @click="replyContent(item.comment_detail.id)">
-						{{item.reply_list.length}}
+						{{item.comment_detail.reply_list_length}}
 					</view>
 					<image class="like_icon" :src="item.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
-					 mode=""  @click="replyLike(index)"></image>
-					<view class="" @click="replyLike(index)">
+					 mode=""  @click="replyLike(item.comment_detail.id)"></image>
+					<view class="" @click="replyLike(item.comment_detail.id)">
 						{{item.comment_detail.like}}
 					</view>
 				</view>
 			</view>
 
-			<view class="reply" v-for="(rep,index2) in item.reply_list">
+			<view class="reply" v-for="(rep,index2) in item.reply_list" :key="index2">
 				<view class="reply_user">
 					<view class="reply_user_info">
 						<view class="reply_user_info_name">
@@ -66,7 +66,12 @@
 		name: "comment",
 		props: {
 			commentList: {
-				type: Array
+				type: Array,
+				default:[
+					{
+						reply_list: []
+					}
+				]
 			}
 		},
 		data() {
@@ -78,6 +83,10 @@
 		onLoad() {
 			this.background = getApp().globalData.background
 		},
+
+		
+
+
 		methods: {
 			delCom(comId){
 				this.$emit('delCom',comId)

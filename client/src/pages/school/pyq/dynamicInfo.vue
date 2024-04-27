@@ -7,9 +7,9 @@
 		<view class="warp" >
 			<kgDynamics :dyInfo="dyInfo" :isInfo="true"  @comContent="comContent" @comLikes="comLikes" ></kgDynamics>
 			<view class="fenge">
-				<u-section title="评论内容" :arrow="false" :color="bgColor" :sub-title="comList.length + '条评论'"></u-section>
+				<u-section title="评论内容" :arrow="false" :color="bgColor" :sub-title="leng + '条评论'"></u-section>
 			</view>
-			<kgComment :commentList="comList" @delCom="delCom()" @replyContent="replyContent" @replyLike="replyLike" ></kgComment>
+			<kgComment v-if="showCom" :commentList="comList" @delCom="delCom()" @replyContent="replyContent" @replyLike="replyLike" ></kgComment>
 				
 			<u-popup v-model="comShow" mode="bottom" border-radius="14">
 				<view class="bodys">
@@ -65,6 +65,7 @@
 		},
 		data() {
 			return {
+				showCom: true,
 				customStyles: {
 					marginTop: '20px', // 注意驼峰命名，并且值必须用引号包括，因为这是对象
 					backgroundColor: '#ffcc01',
@@ -165,6 +166,12 @@
 				borderColor: '#000000',
 			}
 		},
+		computed: {
+			leng() {
+			// 返回 comList 数组的长度
+			return this.comList.length;
+			},
+		},
 		onLoad(options) {
 			const id = options.id;
 			//发送获取这条帖子详情的请求
@@ -181,7 +188,7 @@
 				},
 				success: res => {
 					console.log("res.data,", res.data)
-					this.dyInfo = res.data.data.post_detail;  //不知道为什么mock的时候是date，明明文档是data，到时候记得改一下
+					this.dyInfo = res.data.data.post_detail;
 					this.dyInfo.fabulous = false;  
 					this.comList = res.data.data.comment_list;
 					// this.dyInfo.keywords = "服务,实践"
@@ -195,16 +202,41 @@
 				}
 			})
 		},
+
+
+		// 监听comlist
+		watch: {
+			// 监听 comList 数组的变化
+			comList: {
+				handler(newValue, oldValue) {
+					// 在数组发生变化时，会自动更新 leng 计算属性
+					// 你可以在这里执行其他操作，如果需要的话
+					this.showCom = false;
+					this.$nextTick(() => {
+						this.showCom = true;
+					});
+				},
+				deep: true, // 深度监听数组变化
+			},
+		},
+
 		methods: {
 			// 评论消息
 			comContent(id){
 				this.comShow = true
 			},
 			// 评论消息
+			//回复评论
 			replyContent(id){  //id是评论id
+				console.log("cont_id: ",id)
 				this.repShow = true
-				//在这里得到回复内容，发请求
-				uni.request({
+				this.repModal.comId = id
+			},
+			saveReplyInfo(){
+				const id = this.repModal.comId
+				console.log("id: ",id)
+					//在这里得到回复内容，发请求
+					uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/reply',
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 					
@@ -214,15 +246,28 @@
 						reply_content: this.repModal.replyInfo
 					},
 					success: res => {
-						this.code = res.data.code;
+						let code = res.data.code;
 						// console.log(this.acList)
 						code = 0  //先强制
 						if(code == 0){
 							uni.showToast({
 								title: `回复成功`
 							})
+							this.repShow = false //关掉回复窗口
+							
+							let new_like_list = res.data.data.reply_list;
+							console.log("new_like_list: ",new_like_list)
+							// 更新这条评论的回复列表
+							for (let i = 0; i < this.comList.length; i++) {
+								if (this.comList[i].comment_detail.id === id) {
+									this.comList[i].reply_list = new_like_list;
+									this.comList[i].comment_detail.reply_list_length = this.comList[i].comment_detail.reply_list_length + 1;
+									console.log("找到匹配对象")
+									break; // 找到匹配对象后跳出循环
+								}
+							}
 						}
-						this.like_list = res.data.data.like_list;
+
 					},
 					fail: res => {
 						this.net_error = true;
@@ -231,7 +276,7 @@
 					}
 				})
 			},
-			
+
 			//喜欢数
 			comLikes(id){
 				if(this.dyInfo.fabulous){

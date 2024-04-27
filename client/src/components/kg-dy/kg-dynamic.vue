@@ -28,7 +28,7 @@
 						<!-- 单张 -->
 						<block v-if="dyInfo.picture.length == 1">
 							<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
-								v-for="(img,index1) in dyInfo.picture" class="img1" mode="aspectFill">
+								v-for="(img,index1) in dyInfo.picture" class="img1" mode="aspectFill" :key="index1">
 							</image>
 						</block>
 						<!-- 2张 -->
@@ -90,7 +90,8 @@
 		name: "dynamics",
 		props: {
 			dyInfo: {
-				type: Object
+				type: Object,
+				default: []
 			},
 			isInfo: {
 				type: Boolean
