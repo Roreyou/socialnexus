@@ -177,7 +177,6 @@
 			const id = options.id;
 			//发送获取这条帖子详情的请求
 
-			console.log("onload")
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/getdetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
@@ -188,7 +187,6 @@
 					// token: this.$userinfo.token
 				},
 				success: res => {
-					console.log("res.data,", res.data)
 					this.dyInfo = res.data.data.post_detail;
 					this.dyInfo.fabulous = false;  
 					this.comList = res.data.data.comment_list;
@@ -207,17 +205,15 @@
 		// 监听comlist
 		watch: {
 			// 监听 comList 数组的变化
-			comList: {
-				handler(newValue, oldValue) {
-					// 在数组发生变化时，会自动更新 leng 计算属性
-					// 你可以在这里执行其他操作，如果需要的话
-					this.showCom = false;
-					this.$nextTick(() => {
-						this.showCom = true;
-					});
-				},
-				deep: true, // 深度监听数组变化
-			},
+			// comList: {
+			// 	handler(newValue, oldValue) {
+			// 		this.showCom = false;
+			// 		this.$nextTick(() => {
+			// 			this.showCom = true;
+			// 		});
+			// 	},
+			// 	deep: true, // 深度监听数组变化
+			// },
 			// dyInfo: {
 			// 	handler(newValue, oldValue) {
 			// 		// 在数组发生变化时，会自动更新 leng 计算属性
@@ -234,12 +230,13 @@
 		methods: {
 			// 评论消息
 			comContent(id){
-				this.comShow = true
+				this.comShow = true;
+				this.comModal.dyId = id;
+				// this.comModal.userId = this.$userinfo.id;
 			},
 			// 评论消息
 			//回复评论
 			replyContent(id){  //id是评论id
-				console.log("cont_id: ",id)
 				this.repShow = true
 				this.repModal.comId = id
 			},
@@ -251,7 +248,7 @@
 					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/reply',
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 					
-					method: 'GET',
+					method: 'POST',
 					data: {
 						comment_id: id,
 						reply_content: this.repModal.replyInfo
@@ -267,16 +264,58 @@
 							this.repShow = false //关掉回复窗口
 							
 							let new_like_list = res.data.data.reply_list;
-							console.log("new_like_list: ",new_like_list)
 							// 更新这条评论的回复列表
 							for (let i = 0; i < this.comList.length; i++) {
 								if (this.comList[i].comment_detail.id === id) {
 									this.comList[i].reply_list = new_like_list;
 									this.comList[i].comment_detail.reply_list_length = this.comList[i].comment_detail.reply_list_length + 1;
-									console.log("找到匹配对象")
 									break; // 找到匹配对象后跳出循环
 								}
 							}
+						}
+
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			},
+			saveComInfo(){
+				const id = this.comModal.dyId
+				// console.log("id: ",id)
+					//在这里得到回复内容，发请求
+					uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/comment',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+					
+					method: 'POST',
+					data: {
+						post_id: id,
+						text: this.comModal.comInfo,
+						team_id: "1"
+					},
+					success: res => {
+						let code = res.data.code;
+						// console.log(this.acList)
+						code = 0  //先强制
+						if(code == 0){
+							uni.showToast({
+								title: `评论成功`
+							})
+							this.comShow = false //关掉回复窗口
+							
+							let newlist = res.data.data.comment_list;
+							// 更新这条帖子的评论列表
+							// for (let i = 0; i < this.comList.length; i++) {
+							// 	if (this.comList[i].comment_detail.id === id) {
+							// 		this.comList[i].reply_list = new_like_list;
+							// 		this.comList[i].comment_detail.reply_list_length = this.comList[i].comment_detail.reply_list_length + 1;
+							// 		break; // 找到匹配对象后跳出循环
+							// 	}
+							// }
+							this.comList = newlist;
 						}
 
 					},
@@ -292,7 +331,7 @@
 			comLikes(id){   //id是帖子id
 				if(true){
 
-					uni.request({
+				uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/like',  //点赞和取消点赞会发请求，后端决定怎么处理
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 					
@@ -347,14 +386,11 @@
 						// console.log(this.acList)
 						code = 0  //先强制
 						if(code == 0){
-							console.log("id: ", id)
-							console.log("this.comList: ",this.comList)
 							let index = 0;
 							let list = this.comList;
 
 							for (let i = 0; i < this.comList.length; i++) {
 								if (this.comList[i].comment_detail.id === id) {
-									console.log("index: ", index)
 									index = i 
 									// console.log("this.comList[index]: ", this.comList[index])
 									break; 
@@ -383,12 +419,57 @@
 				})
 			},
 			// 删除评论
-			delCom(comId){
+			delCom(comId){   
 				//这里需要发送一个删除这条评论的请求
 				//先在前端删掉
-				const filteredList = this.dyInfo.comList.filter(item => item.id !== comId);
-				this.dyInfo.comList = filteredList;
-				this.$u.toast(`删除成功！`);
+
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/delcomment', //删除评论			
+					method: 'POST',
+					data: {
+						comment_id: comId,
+						// team_id: "1"
+						// reply_content: this.repModal.replyInfo
+					},
+					success: res => {
+						let code = res.data.code;
+						// console.log(this.acList)
+						code = 0  //先强制
+						if(code == 0){
+							// let index = 0;
+							// let list = this.comList;
+
+							// for (let i = 0; i < this.comList.length; i++) {
+							// 	if (this.comList[i].comment_detail.id === id) {
+							// 		index = i 
+							// 		// console.log("this.comList[index]: ", this.comList[index])
+							// 		break; 
+							// 	}
+							// }
+
+							// if(this.comList[index].comment_detail.fabulous){
+							// 	this.$u.toast(`成功取消点赞`);
+							// 	this.comList[index].comment_detail.like = this.comList[index].comment_detail.like - 1
+							// }
+							// else{
+							// 	this.$u.toast(`点赞成功`);
+							// 	this.comList[index].comment_detail.like = this.comList[index].comment_detail.like + 1
+							// }
+							// //UI效果
+							// this.comList[index].comment_detail.fabulous = (!this.comList[index].comment_detail.fabulous)
+							this.$u.toast(`删除成功！`);
+							const filteredList = this.comList.filter(item => item.comment_detail.id !== comId);
+							this.comList = filteredList;
+						}
+
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+
 			},
 			previewImage(url, urls) {
 				uni.previewImage({
