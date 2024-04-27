@@ -5,7 +5,7 @@
 		</u-navbar> -->
 		
 		<view class="warp" >
-			<kgDynamics :dyInfo="dyInfo" :isInfo="true"  @comContent="comContent" @comLikes="comLikes" ></kgDynamics>
+			<kgDynamics v-if="dyinfoshow" :dyInfo="dyInfo" :isInfo="true"  @comContent="comContent" @comLikes="comLikes" ></kgDynamics>
 			<view class="fenge">
 				<u-section title="评论内容" :arrow="false" :color="bgColor" :sub-title="leng + '条评论'"></u-section>
 			</view>
@@ -65,6 +65,7 @@
 		},
 		data() {
 			return {
+				dyinfoshow: true,
 				showCom: true,
 				customStyles: {
 					marginTop: '20px', // 注意驼峰命名，并且值必须用引号包括，因为这是对象
@@ -203,7 +204,6 @@
 			})
 		},
 
-
 		// 监听comlist
 		watch: {
 			// 监听 comList 数组的变化
@@ -218,6 +218,17 @@
 				},
 				deep: true, // 深度监听数组变化
 			},
+			// dyInfo: {
+			// 	handler(newValue, oldValue) {
+			// 		// 在数组发生变化时，会自动更新 leng 计算属性
+			// 		// 你可以在这里执行其他操作，如果需要的话
+			// 		this.dyinfoshow = false;
+			// 		this.$nextTick(() => {
+			// 			this.dyinfoshow = true;
+			// 		});
+			// 	},
+			// 	deep: true, // 深度监听数组变化
+			// },
 		},
 
 		methods: {
@@ -234,7 +245,7 @@
 			},
 			saveReplyInfo(){
 				const id = this.repModal.comId
-				console.log("id: ",id)
+				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
 					uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/reply',
@@ -278,29 +289,98 @@
 			},
 
 			//喜欢数
-			comLikes(id){
-				if(this.dyInfo.fabulous){
-					//去掉点赞逻辑
-					this.dyInfo.fabulous = false
-					this.dyInfo.dyLike = this.dyInfo.dyLike - 1
-					this.$u.toast(`成功取消点赞`);
-					return
+			comLikes(id){   //id是帖子id
+				if(true){
+
+					uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/like',  //点赞和取消点赞会发请求，后端决定怎么处理
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+					
+					method: 'POST',
+					data: {
+						post_id: id,
+						team_id: "1"
+						// reply_content: this.repModal.replyInfo
+					},
+					success: res => {
+						let code = res.data.code;
+						// console.log(this.acList)
+						code = 0  //先强制
+						if(code == 0){
+							if(this.dyInfo.fabulous){
+								this.$u.toast(`成功取消点赞`);
+								this.dyInfo.like = this.dyInfo.like - 1
+							}
+							else{
+								this.$u.toast(`点赞成功`);
+								this.dyInfo.like = this.dyInfo.like + 1
+							}
+							//UI效果
+							this.dyInfo.fabulous = (!this.dyInfo.fabulous)
+							
+						}
+
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
 				}
-				this.dyInfo.fabulous = true
-				this.dyInfo.dyLike = this.dyInfo.dyLike + 1
-				this.$u.toast(`点赞成功~`);
+				// this.dyInfo.fabulous = true
+				// this.dyInfo.dyLike = this.dyInfo.dyLike + 1
+				// this.$u.toast(`点赞成功~`);
 			},
-			replyLike(index){
-				if(this.dyInfo.comList[index].fabulous){
-					this.dyInfo.comList[index].fabulous = false
-					this.dyInfo.comList[index].comLike = this.dyInfo.comList[index].comLike - 1
-					// this.$set(this.dyInfo.comList[index], 'dyLike', this.dyInfo.comList[index].dyLike - 1);
-					this.$u.toast(`成功取消点赞`);
-					return
-				}
-				this.dyInfo.comList[index].fabulous = true
-				this.dyInfo.comList[index].comLike = this.dyInfo.comList[index].comLike + 1
-				this.$u.toast(`点赞成功~`);
+			replyLike(id){   //评论的点赞（但不是评论的回复的点赞, 回复的点赞还要另外加函数）
+
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/likecom', //点赞和取消点赞 评论				
+					method: 'POST',
+					data: {
+						comment_id: id,
+						team_id: "1"
+						// reply_content: this.repModal.replyInfo
+					},
+					success: res => {
+						let code = res.data.code;
+						// console.log(this.acList)
+						code = 0  //先强制
+						if(code == 0){
+							console.log("id: ", id)
+							console.log("this.comList: ",this.comList)
+							let index = 0;
+							let list = this.comList;
+
+							for (let i = 0; i < this.comList.length; i++) {
+								if (this.comList[i].comment_detail.id === id) {
+									console.log("index: ", index)
+									index = i 
+									// console.log("this.comList[index]: ", this.comList[index])
+									break; 
+								}
+							}
+
+							if(this.comList[index].comment_detail.fabulous){
+								this.$u.toast(`成功取消点赞`);
+								this.comList[index].comment_detail.like = this.comList[index].comment_detail.like - 1
+							}
+							else{
+								this.$u.toast(`点赞成功`);
+								this.comList[index].comment_detail.like = this.comList[index].comment_detail.like + 1
+							}
+							//UI效果
+							this.comList[index].comment_detail.fabulous = (!this.comList[index].comment_detail.fabulous)
+							
+						}
+
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
 			},
 			// 删除评论
 			delCom(comId){

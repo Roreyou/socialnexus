@@ -1,4 +1,4 @@
-<!-- 高校帖子评论 -->
+<!-- 高校帖子评论列表 -->
 <template>
 	<view class="warp">
 		<view class="cot" v-for="(item,index) in commentList" :key="index">
@@ -31,7 +31,7 @@
 					<view class="" @click="replyContent(item.comment_detail.id)">
 						{{item.comment_detail.reply_list_length}}
 					</view>
-					<image class="like_icon" :src="item.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
+					<image class="like_icon" :src="item.comment_detail.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
 					 mode=""  @click="replyLike(item.comment_detail.id)"></image>
 					<view class="" @click="replyLike(item.comment_detail.id)">
 						{{item.comment_detail.like}}
