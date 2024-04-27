@@ -22,6 +22,29 @@
 		<view class="custom-container">
     		<hr class="horizontal-line">
   		</view>
+
+		<!-- 指导老师信息 -->
+		<view>
+			<view class="part second">
+				<view class="de_total_title sub_title">
+					指导老师基本信息
+				</view>
+				<view class="de_key_value" v-for="(item,index) in instructorList" :key="index">
+					<view class="de_content">
+						<view class="key">
+							{{ item.key }}
+						</view>
+						<view class="value">
+							{{ item.value }}
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<view class="custom-container">
+    		<hr class="horizontal-line">
+  		</view>
 		<!-- 队员信息 -->
 		<view>
 			<view class="part second">
@@ -63,6 +86,18 @@
 										<view class="desc">
 											<view class="text-content"> 学号: {{item.id}}</view>									
 										</view>
+										<view class="desc">
+											<view class="text-content"> 院系: {{item.major}}</view>									
+										</view>
+										<view class="desc">
+											<view class="text-content"> 年级: {{item.grade}}</view>									
+										</view>
+										<view class="desc">
+											<view class="text-content"> 联系电话: {{item.grade}}</view>									
+										</view>
+										<view class="desc">
+											<view class="text-content"> 邮箱: {{item.grade}}</view>									
+										</view>
 									</view>
 								</view>
 						</view>
@@ -90,19 +125,23 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				baselist:[
 					{
 						key:'队伍名称',
-						value:'某一个高校队伍'
+						value:''
 					},
 					{
 						key:'负责人姓名',
-						value:'人'
+						value:''
 					},
 					{
-						key:'负责人联系电话',
-						value:'123456789'
+						key:'队长姓名',
+						value:''
+					},
+					{
+						key:'相关院系',
+						value:''
 					},
 					{
 						key:'队员人数',
-						value:'20'
+						value:''
 					},
 				],
 				memberList:[
@@ -114,9 +153,66 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						name: "第二个队员",
 						id: "21311988"
 					},
+				],
+				instructorList:[
+					{
+						key:'指导老师姓名',
+						value:''
+					},
+					{
+						key:'指导老师工号',
+						value:''
+					},
+					{
+						key:'联系电话',
+						value:''
+					},
+					{
+						key:'所属院系',
+						value:''
+					},
 				]
 			}
 		},
+		mounted() {
+			uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getteamInfo',
+					
+					method: 'GET',
+					data: {
+						team_id: '1',
+						// token: this.$userinfo.token
+						// activity_status: this.index
+					},
+					success: res => {
+						//队伍信息
+						const basedata = res.data.data.team_info;
+						this.baselist[0].value = basedata.team_name;
+						this.baselist[1].value = basedata.insturctor_name;
+						this.baselist[2].value = basedata.leader_name;
+						this.baselist[3].value = basedata.relevant_faculties;						
+						this.baselist[4].value = basedata.mem_num;
+						
+						//队员信息
+						this.memberList = res.data.data.member_info;
+
+						//老师信息
+						const instrdata = res.data.data.instructor_info;
+						this.instructorList[0].value = instrdata.name;
+						this.instructorList[1].value = instrdata.id;
+						this.instructorList[2].value = instrdata.tel;
+						this.instructorList[3].value = instrdata.major;						
+
+
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+    	},
 	}
 </script>
  
@@ -202,6 +298,11 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 	}
 
 	/* 队员列表 */
+	.content {
+	  display: flex;
+	  flex-direction: column;
+	}
+
 	.cu-item .shadow{
 	margin: 0;
 	margin-top: 10rpx;

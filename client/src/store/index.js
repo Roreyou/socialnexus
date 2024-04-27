@@ -13,14 +13,16 @@ const store = new Vuex.Store({
 		userName: "",
 		userInfo: {
 			verification_status: 0,
+			token: ""
 		}
 	},
 	mutations: {
-		login(state, {userName, verification_status}) {
+		login(state, {userName, verification_status, token}) {
 			// console.log(userName, verification_status)
 			state.userName = userName || '新用户';
 			state.hasLogin = true;
 			state.userInfo.verification_status = verification_status;
+			state.userInfo.token = token;
 		},
 		logout(state) {
 			state.userName = "";

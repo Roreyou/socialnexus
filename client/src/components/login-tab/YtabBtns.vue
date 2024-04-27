@@ -18,7 +18,7 @@
 <template>
 	<view>
 		<view class="list" :style="{border:`1rpx solid ${borderColor}`}">
-			<view class="item" @tap="tap_item(ind,item)" v-for="(item,ind) in data" :style="{color:index ==ind?background:color,background:ind == index?color:background,borderLeft:ind != 0?'1rpx solid '+borderColor:''}">
+			<view class="item" @tap="tap_item(ind,item)" v-for="(item,ind) in data" :style="{color:index ==ind?background:color,background:ind == index?color:background,borderLeft:ind != 0?'1rpx solid '+borderColor:''}" :key="ind">
 				{{item[listKey]}}
 			</view>
 		</view>

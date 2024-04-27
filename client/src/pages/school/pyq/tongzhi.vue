@@ -48,7 +48,7 @@
 			</view>
 		</view> -->
 
-		<view class="cu-item ">
+		<!-- <view class="cu-item ">
 			<view class="cu-avatar radius lg" style="background-image:url(https://n.sinaimg.cn/sinacn21/200/w500h500/20180710/24f8-hfefkqp7840363.jpg);"></view>
 			<view class="content">
 				<view class="text-pink"><view class="text-cut">人工智能学院</view></view>
@@ -58,31 +58,32 @@
 				<view class="text-grey text-xs">22:20</view>
 				<view class="cu-tag round bg-red sm">1</view>
 			</view>
-		</view>
-
-		<view class="cu-item">
-			<view class="cu-avatar radius lg" style="background-image:url(https://ts1.cn.mm.bing.net/th/id/R-C.b3fc225f8d8274008f6e26ac7446cd99?rik=pvTqzLJCPQzY4A&riu=http%3a%2f%2fpic24.photophoto.cn%2f20120701%2f0005018385696950_b.jpg&ehk=vnpcrOQ7aNi3mpjFrBJtM1CecIwXAYZbAvGrn5C3wBM%3d&risl=&pid=ImgRaw&r=0);"></view>
-			<view class="content">
-				<view><view class="text-cut">软件工程学院</view>
-					<!-- <view class="cu-tag round bg-orange sm">断开连接...</view> -->
-				</view>
-				<view class="text-gray text-sm flex"> <view class="text-cut">点赞了你的帖子</view></view>
-			</view>
-			<view class="action">
-				<view class="text-grey text-xs">22:20</view>
-				<view class="cu-tag round bg-grey sm">1</view>
-			</view>
-		</view>
-
-		<view class="cu-item ">
+		</view> -->
+		<!-- 评论 -->
+		<view class="cu-item" v-for="(item,index) in comment_list" :key="index">
 			<view class="cu-avatar radius lg" style="background-image:url(https://c-ssl.dtstatic.com/uploads/blog/202207/28/20220728161450_66b3d.thumb.1000_0.jpg);"></view>
 			<view class="content">
-				<view class="text-pink"><view class="text-cut">测绘科学与技术学院</view></view>
-				<view class="text-gray text-sm flex"> <view class="text-cut">这是另一条评论</view></view>
+				<view class="text-pink"><view class="text-cut">{{item.team_name}}</view></view>
+				<view class="text-gray text-sm flex"> <view class="text-cut">{{item.content}}</view></view>
 			</view>
 			<view class="action">
-				<view class="text-grey text-xs">22:20</view>
+				<view class="text-grey text-xs">{{item.time}}</view>
 				<view class="cu-tag round bg-red sm">1</view>
+			</view>
+		</view>
+
+		<!-- 点赞 -->
+		<view class="cu-item" v-for="(item,index) in like_list" :key="index">
+			<view class="cu-avatar radius lg" style="background-image:url(https://ts1.cn.mm.bing.net/th/id/R-C.b3fc225f8d8274008f6e26ac7446cd99?rik=pvTqzLJCPQzY4A&riu=http%3a%2f%2fpic24.photophoto.cn%2f20120701%2f0005018385696950_b.jpg&ehk=vnpcrOQ7aNi3mpjFrBJtM1CecIwXAYZbAvGrn5C3wBM%3d&risl=&pid=ImgRaw&r=0);"></view>
+			<view class="content">
+				<view><view class="text-cut">{{item.team_name}}</view>
+					<!-- <view class="cu-tag round bg-orange sm">断开连接...</view> -->
+				</view>
+				<view class="text-gray text-sm flex"> <view class="text-cut"> 点赞了你的帖子</view></view>
+			</view>
+			<view class="action">
+				<view class="text-grey text-xs">{{item.time}}</view>
+				<view class="cu-tag round bg-grey sm">1</view>
 			</view>
 		</view>
 
@@ -113,12 +114,36 @@
 	export default {
 		data() {
 			return {
-				title: '高校 -- 评论点赞通知'
+				comment_list: [],
+				like_list: [],
 			}
 		},
 		onLoad() {
-
+			console.log('onLoad')
 		},
+		mounted() {
+        uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/getnotice',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
+				method: 'GET',
+				data: {
+					team_id: '1',
+				},
+				success: res => {
+					this.comment_list = res.data.data.comment_list;
+					// console.log(this.acList)
+					this.like_list = res.data.data.like_list;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
+    },
+
+
 		methods: {
 
 		}

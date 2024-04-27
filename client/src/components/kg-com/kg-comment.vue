@@ -1,5 +1,4 @@
 <!-- 高校帖子评论 -->
-
 <template>
 	<view class="warp">
 		<view class="cot" v-for="(item,index) in commentList">
@@ -40,11 +39,9 @@
 				</view>
 			</view>
 
-			<!-- 回复 -->
 			<view class="reply" v-for="(rep,index2) in item.reply_list">
 				<view class="reply_user">
 					<view class="reply_user_info">
-						// <u-avatar :src="rep.avatarUrlr" mode="square" size="50"></u-avatar>
 						<view class="reply_user_info_name">
 							{{rep.reply_name}}
 						</view>
@@ -66,7 +63,7 @@
 
 <script>
 	export default {
-		name: "commont",
+		name: "comment",
 		props: {
 			commentList: {
 				type: Array
@@ -87,6 +84,7 @@
 			},
 			replyContent(comId){
 				this.$emit('replyContent',comId)
+
 			},
 			replyLike(index){
 				this.$emit('replyLike',index)

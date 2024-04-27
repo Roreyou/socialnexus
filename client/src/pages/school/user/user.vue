@@ -13,7 +13,7 @@
 			<view class="custom-container">
     			<!-- <hr class="horizontal-line"> -->
 				<view class="title" style="text-align: left;">
-					<uni-icons type="email" color="gray" size="20" style="vertical-align: middle;"></uni-icons>
+					<!-- <uni-icons type="email" color="gray" size="20" style="vertical-align: middle;"></uni-icons> -->
 					<text style="margin-left: 20rpx;">评价</text>
 				</view>
   			</view>
@@ -29,7 +29,7 @@
 			<view class="custom-container">
     			<!-- <hr class="horizontal-line"> -->
 				<view class="title" style="text-align: left;">
-					<uni-icons type="map-pin-ellipse" color="gray" size="20" style="vertical-align: middle;"></uni-icons>
+					<!-- <uni-icons type="map-pin-ellipse" color="gray" size="20" style="vertical-align: middle;"></uni-icons> -->
 					<text style="margin-left: 20rpx;">队伍信息管理</text>
 				</view>
   			</view>

@@ -181,7 +181,7 @@
 				},
 				success: res => {
 					console.log("res.data,", res.data)
-					this.dyInfo = res.data.date.post_detail;  //不知道为什么mock的时候是date，明明文档是data，到时候记得改一下
+					this.dyInfo = res.data.data.post_detail;  //不知道为什么mock的时候是date，明明文档是data，到时候记得改一下
 					this.dyInfo.fabulous = false;  
 					this.comList = res.data.data.comment_list;
 					// this.dyInfo.keywords = "服务,实践"
@@ -201,8 +201,35 @@
 				this.comShow = true
 			},
 			// 评论消息
-			replyContent(id){
+			replyContent(id){  //id是评论id
 				this.repShow = true
+				//在这里得到回复内容，发请求
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/reply',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+					
+					method: 'GET',
+					data: {
+						comment_id: id,
+						reply_content: this.repModal.replyInfo
+					},
+					success: res => {
+						this.code = res.data.code;
+						// console.log(this.acList)
+						code = 0  //先强制
+						if(code == 0){
+							uni.showToast({
+								title: `回复成功`
+							})
+						}
+						this.like_list = res.data.data.like_list;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
 			},
 			
 			//喜欢数
