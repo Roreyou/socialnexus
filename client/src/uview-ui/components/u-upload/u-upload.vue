@@ -416,7 +416,9 @@ export default {
 			this.uploading = true;
 			// 创建上传对象
 			let lifeData = uni.getStorageSync('lifeData');
-			let token = lifeData.vuex_token
+			// 先强制跳过检查token试一下
+			// let token = lifeData.vuex_token
+			let token = "1111"
 			const task = uni.uploadFile({
 				url: this.action,
 				filePath: this.lists[index].url,
@@ -428,15 +430,28 @@ export default {
 				},
 				success: res => {
 					// 判断是否json字符串，将其转为json格式
+
+					//4.28改：这里的res.data对应过来应该是data.data   下面这句是原本的
 					let data = this.toJson && this.$u.test.jsonString(res.data) ? JSON.parse(res.data) : res.data;
+					
+					//下面这句是尝试改成我们的接口的形式
+					// let temp = res.data
+					// let data = this.toJson && this.$u.test.jsonString(temp.data) ? JSON.parse(temp.data) : temp.data;
 					if (![200, 201, 204].includes(res.statusCode)) {
 						this.uploadError(index, data);
 					} else {
 						// 上传成功
-						this.lists[index].response = data;
+						//下面这句是原本的
+						// this.lists[index].response = data;
+
+						//下面这句是尝试改成我们的接口的形式
+						this.lists[index].response = data.data
 						this.lists[index].progress = 100;
 						this.lists[index].error = false;
-						this.$emit('on-success', data, index, this.lists, this.index);
+						//下面这句是原本的
+						console.log("emit")
+						this.$emit('on-success', data.data, index, this.lists, this.index);
+						// this.$emit('on-success', res.data.data, index, this.lists, this.index);
 					}
 				},
 				fail: e => {
@@ -470,7 +485,9 @@ export default {
 					if(res.confirm) {
 						// 没有token 则跳转到登录
 						return uni.reLaunch({
-							url:'../login/login'
+							// url:'../login/login'
+							//这里有一个检查token强制跳转登录页面的逻辑，别的地方也都可以用
+							url:'../../../pages/login/login'
 						})
 					}
 				}  

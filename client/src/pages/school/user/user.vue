@@ -98,7 +98,8 @@
 			...mapMutations(['logout']),
 			bindLogin() {
 				uni.navigateTo({
-					url: '../../login/login',
+					// url: '../../login/login',
+					url:'../../../pages/login/login'
 				});
 			},
 			bindLogout() {

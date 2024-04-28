@@ -72,7 +72,7 @@ class Request {
 									if(res.confirm) {
 										// 没有token 则跳转到登录
 										return uni.reLaunch({
-											url:'../login/login'
+											url:'../../../pages/login/login'
 										})
 										resolve()  
 									} else {  

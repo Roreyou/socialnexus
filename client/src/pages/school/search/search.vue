@@ -2,41 +2,38 @@
 <template>
 	<view>
 		<view class="top_fix">
-			<!-- 标题栏和搜索框 -->
-			<view>
-				<view class="title">
-					活动广场
+		<!-- 标题栏和搜索框 -->
+		<view>
+			<view class="title">
+				活动广场
+			</view>
+			<view class="cu-bar search bg-white search">
+				<view class="search-form round">
+					<text class="cuIcon-search"></text>
+					<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text"placeholder="搜索活动"
+						confirm-type="search"></input>
 				</view>
-				<view class="cu-bar search bg-white search">
-					<view class="search-form round">
-						<text class="cuIcon-search"></text>
-						<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索活动"
-							confirm-type="search"></input>
-					</view>
-					<view class="action">
-						<button class="cu-btn bg-green shadow-blur round">搜索</button>
-					</view>
+				<view class="action">
+					<button class="cu-btn bg-green shadow-blur round">搜索</button>
 				</view>
 			</view>
-			<index-tabbar class="index-tabbar" :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ></index-tabbar>
-		
+		</view>
+		<!-- <index-tabbar class="index-tabbar" :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ><index-tabbar> -->
+		<view>
+			<actipickers></actipickers>
+		</view>		
 		</view>
 		<view class="accontent">
 			<!-- id="currentTabComponent"表示是那三种筛选类型中的哪一种 -->
 			<scontent :acList="acList" :id="currentTabComponent"></scontent>
 		</view>
 	</view>
-	
-	</template>
+</template>
 	 
 	<script>
 		import indexTabbar from '../../../components/search-tabbar/search-tabbar.vue';
 		import scontent from './searchcontent.vue'
-	
-		import QuanBu from './QuanBu.vue';
-		import KaiZhanZhong from './KaiZhanZhong.vue';
-		import YiJieShu from './YiJieShu.vue';
-		import DaiKaiZhan from './DaiKaiZhan.vue';
+		import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
 	
 		// import utabsswiper from '../../uview-ui/components/u-tabs-swiper/u-tabs-swiper.vue';
 	
@@ -45,10 +42,7 @@
 				
 				indexTabbar,
 				scontent,
-				QuanBu,
-				DaiKaiZhan,
-				KaiZhanZhong,
-				YiJieShu,
+				actipickers
 				// utabsswiper
 			},
 			data() {

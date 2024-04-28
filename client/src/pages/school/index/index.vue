@@ -3,12 +3,12 @@
 	<view class="u-p-l-10 u-p-r-10">
 		<u-navbar :is-back="false">
 			<view style="display: flex;justify-content: center;align-items: center;">
-				<view class="u-p-30"  @click="location">
+				<!-- <view class="u-p-30"  @click="location">
 					杭州
 					<u-icon name="arrow-down-fill" class="u-p-l-20" color="#515356"></u-icon>
 				</view>
 				<u-search placeholder="搜索实践活动" v-model="keyword" input-align="center"  :show-action="false" :clearabled="true"
-:disabled="true" style="width: 565rpx;" @click="search"></u-search>
+:disabled="true" style="width: 565rpx;" @click="search"></u-search> -->
 			</view>
 		</u-navbar>
 		<!-- 轮播图 -->
@@ -74,7 +74,7 @@
 			<actilist :acList="acList" :isindex="true"></actilist>
 		</view>
 		<view class="re-but">
-				<button @click="torec">点击加载更多推荐的活动</button>
+				<button class="more-btn" @click="torec">点击加载更多推荐的活动</button>
 		</view>
 		<!-- <u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="findHouseList"></u-loadmore> -->
 		<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
@@ -547,5 +547,8 @@
 	font-weight: 600;
 	font-family: 'pangmen';
 	font-style: italic;
+}
+.more-btn{
+	font-size: small;
 }
 </style>

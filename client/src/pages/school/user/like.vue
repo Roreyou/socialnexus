@@ -99,9 +99,31 @@
     			    success: (res) => {
     			      if (res.confirm) {
     			        // 用户点击了确认按钮
-						const filteredList = this.acList.filter(item => item.id !== likeid);
-						this.acList = filteredList;
-						this.$u.toast(`取消收藏成功！`);
+
+						uni.request({
+							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
+					
+							method: 'PUT',
+							data: {
+								team_id: '1',  //
+								acti_id: likeid,
+								favor: 1
+							},
+							success: res => {
+								if(res.data.code==200){
+									const filteredList = this.acList.filter(item => item.id !== likeid);
+									this.acList = filteredList;
+									this.$u.toast(`取消收藏成功！`);
+								}else{
+									this.$u.toast(`请重试`);
+								}
+							},
+							fail: res => {
+								this.net_error = true;
+							},
+							complete: () => {
+							}
+						})
     			      }
     			    }
     			});

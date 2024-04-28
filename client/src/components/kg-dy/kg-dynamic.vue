@@ -24,29 +24,29 @@
 				</u-read-more>
 				<!-- 图片 -->
 				<view class="dynamic_cont_img">
-					<block v-if="dyInfo.picture.length > 0">
+					<block v-if="leng > 0">
 						<!-- 单张 -->
-						<block v-if="dyInfo.picture.length == 1">
+						<block v-if="leng == 1">
 							<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
 								v-for="(img,index1) in dyInfo.picture" class="img1" mode="aspectFill" :key="index1">
 							</image>
 						</block>
 						<!-- 2张 -->
-						<block v-if="dyInfo.picture.length == 2">
+						<block v-if="leng == 2">
 							<view class="img2">
 								<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
 									v-for="(img,index2) in dyInfo.picture" :key="index2" mode="aspectFill"></image>
 							</view>
 						</block>
 						<!-- 4张 -->
-						<block v-if="dyInfo.picture.length == 4 ">
+						<block v-if="leng == 4 ">
 							<view class="img4">
 								<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
 									v-for="(img,index3) in dyInfo.picture" :key="index3" mode="aspectFill"></image>
 							</view>
 						</block>
 						<!-- 3/4张以上不包含4张 -->
-						<block v-if="dyInfo.picture.length > 4 || dyInfo.picture.length == 3">
+						<block v-if="leng > 4 || leng == 3">
 							<view class="img3">
 								<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
 									v-for="(img,index4) in dyInfo.picture" :key="index4" mode="aspectFill"></image>
@@ -97,6 +97,15 @@
 				type: Boolean
 			},
 		},
+		computed: {
+			leng() {
+				if (!this.dyInfo || !this.dyInfo.picture) {
+					return 0;
+				}
+				return this.dyInfo.picture.length;
+			}
+		},
+
 		data() {
 			return {
 				shadowStyle: {
@@ -107,7 +116,7 @@
 			};
 		},
 		onReady() {
-			console.log("dyInfo,", this.dyInfo);
+			// console.log("dyInfo,", this.dyInfo);
 		},
 		methods: {
 			previewImage(url, urls) {

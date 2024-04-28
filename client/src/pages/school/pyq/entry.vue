@@ -1,11 +1,11 @@
-<!-- 高校 朋友圈 -->
+<!-- 高校 朋友圈 包含发布页面 -->
 <template>
 	<view class="content">
 		<!-- <image class="logo" src="/static/logo.png"></image>
 		<view>
 			<text class="title">{{title}}</text>
 		</view> -->
-		<home v-if="currentTabComponent === 'home'"></home>
+		<home v-if="(currentTabComponent === 'home')&& posted"></home>
 		<!-- <fabu v-if="currentTabComponent === 'fabu'"></fabu> -->
 		<u-popup v-model="ispost" mode="bottom" border-radius="14">
 				<view class="bodys">
@@ -18,7 +18,7 @@
 					<view class="cardZw">
 						上传照片
 					</view>
-					<u-upload :custom-btn="true" max-count="4" ref="uUpload"  :action="action" :file-list="comModal.comImgs" :auto-upload="true">
+					<u-upload @on-success="handleSuccess" :custom-btn="true" max-count="4" ref="uUpload" :action="action" :file-list="comModal.comImgs" :auto-upload="false">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<image src="../../../static/icon/upload.png"></image>
 						</view>
@@ -26,7 +26,7 @@
 					
 					<view class="bodys_btn">
 						<u-button :custom-style="customStyles" :ripple="true" class="pl_bt" @click="saveComInfo()"
-							ripple-bg-color="#ff9b01">评论</u-button>
+							ripple-bg-color="#ff9b01">发布</u-button>
 				</view>
 			</view>
 		</u-popup>
@@ -55,6 +55,7 @@
 		
 		data() {
 			return {
+				posted: true, //用来刷新主页页面
 				customStyles: {
 					marginTop: '20px', // 注意驼峰命名，并且值必须用引号包括，因为这是对象
 					backgroundColor: '#39b54a',
@@ -87,8 +88,15 @@
 					userId:null,
 					dyId:null,
 					comInfo:'',
-					comImgs:[],
+					comImgs:[],  //预览的链接
+					submitImgs:[]  //要提交第二个请求的链接
 				},
+
+				//上传路径？
+				// action: 'http://127.0.0.1:4523/m1/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
+				action: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
+				//应该是后端返回的图片路径列表？
+				filesArr: []
 			}
 			
 		},
@@ -103,8 +111,75 @@
 			post(item){
 				this.ispost = !this.ispost;
 				console.log(this.ispost);
-			}
+			},
 			
+			//上传图片
+			// onChooseComplete(lists, name) {
+			// 	const app = this;
+			// 	const uploadUrl = '';
+			// 	uni.uploadFile({
+			// 		// 这里是你上传图片的地址
+			// 		// url: 'https://xxx.xx.xx.xx/admin-api/infra/file/upload',
+			// 		url: uploadUrl,
+			// 		filePath: lists[0].url,
+			// 		name: 'file',
+			// 		header: {
+			// 			// "Authorization": `Bearer ${store.getters.token}`
+			// 			"Authorization": ''
+			// 		},
+			// 			//	这个res是后端返回给你上传成功的数据里边一般会有上传之后图片的在线路径
+			// 		success: (res) => {
+			// 			// app.deviceInfo.photoUrl = JSON.parse(res.data).data;
+			// 			// console.log(JSON.parse(res.data).data)
+			// 		},
+			// 	})
+			// },
+
+			//发布帖子
+			//先上传图片，拿到路径再发送发表请求
+			saveComInfo(){
+				this.$refs.uUpload.upload();
+			},
+			postAll(){
+				uni.request({
+							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost',
+					
+							method: 'POST',
+							data: {
+								team_id: '1',  
+								content: this.comModal.comInfo,
+								picture: this.comModal.submitImgs,
+							},
+							success: res => {
+								if(res.data.code==200){
+									this.$u.toast(`发帖成功`);
+									this.ispost = false;
+									//刷新首页（把新的这篇刷出来）
+									this.posted = false;
+									this.$nextTick(() => {
+										this.posted = true;
+									});
+								}else{
+									this.$u.toast(`请重试`);
+								}
+							},
+							fail: res => {
+								this.net_error = true;
+							},
+							complete: () => {
+							}
+						})
+			},
+			handleSuccess(data, index, lists, index2){
+				// console.log("lists: ",lists);
+				this.comModal.submitImgs = lists.map(item => item.response);
+				// console.log("index, lists: ",index, lists)
+				if (index==lists.length-1){   //是最后一张
+					//发帖请求
+					this.postAll();
+				}
+			},
+
 		}
 	}
 </script>
