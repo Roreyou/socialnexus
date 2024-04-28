@@ -30,8 +30,10 @@
 				</view>
 			</view>
 			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right ">
-				<view v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
-				 class="flex uni-tab__cart-button-right" @click="application()"><text :style="{color:item.color}" class="uni-tab__cart-button-right-text">{{ item.text }}</text></view>
+				<view v-if="!ismyacti" v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
+				 class="flex uni-tab__cart-button-right" @click="application()"><text :style="{color:item.color}" class="uni-tab__cart-button-right-text">报名活动</text></view>
+				 <view v-if="ismyacti" v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
+				 class="flex uni-tab__cart-button-right" @click="cancelacti()"><text :style="{color:item.color}" class="uni-tab__cart-button-right-text">取消报名</text></view>
 			</view>
 		</view>
 	</view>
@@ -59,6 +61,12 @@
 		name: 'UniGoodsNav',
 		emits:['click','buttonClick'],
 		props: {
+			// ismyacti: {
+			// 	type: Boolean,
+			// 	default: false
+			// },  
+			//是不是我的活动，是的话按钮就是“取消报名”
+
 			team_id: String,
 			acti_id: String,
 
@@ -88,10 +96,12 @@
 						// 	color: '#fff'
 						// },
 						{
-							text: t("uni-goods-nav.buttonGroup.buyNow"),
+							// text: t("uni-goods-nav.buttonGroup.buyNow"),
+							text: '报名活动',
 							backgroundColor: 'linear-gradient(90deg, #FE6035, #EF1224)',
 							color: '#fff'
 						}
+
 					]
 				}
 			},
@@ -106,6 +116,7 @@
 		},
 		data() {
 			return {
+				ismyacti: false,
 				isActive: false,
 				shareIcon: require('../../static/icon/fenxiangmian.png'),
 			}
@@ -186,6 +197,29 @@
     			}
 			})
 			},
+			cancelacti(){  //取消报名
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',				
+				method: 'DELETE',
+				data: {
+					team_id: this.team_id,
+					activ_id: this.acti_id,
+				},
+				success: res => {
+					if(res.data.code==200){
+						this.$u.toast(`成功取消报名`);
+						this.ismyacti = false;
+					}else{
+						this.$u.toast(`取消报名失败，请重试`);
+					}
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+		})
+			}
 		},
 		onShareAppMessage: function(res) {
 			console.log("分享")
@@ -198,6 +232,32 @@
 				path: ""
 			}
 		},
+		mounted(){
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getisregister',				
+				method: 'GET',
+				data: {
+					team_id: this.team_id,
+					acti_id: this.acti_id,
+				},
+				success: res => {
+					if(res.data.code==200){
+						if(res.data.data.flag=="1"){
+							this.ismyacti = true; //已经是我报过的活动了
+						}else{
+							this.ismyacti = false;
+						}
+					}else{
+						this.$u.toast(`请重试`);
+					}
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+		})
+		}
 }
 </script>
 

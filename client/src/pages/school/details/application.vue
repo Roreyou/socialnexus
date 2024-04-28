@@ -119,6 +119,8 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 		team_detail:{},
 		acti_detail:{},
 		net_error: false,
+		activity_id: '0',
+		team_id: '0',
     	}
 	},
 
@@ -129,7 +131,8 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			// const query = this.$route.query;
 			const team_id = query.team_id;
 			const acti_id = query.acti_id;
-			// this.acti_id = id;
+			this.team_id = team_id;
+			this.activity_id = acti_id;
 			// console.log(id)
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/register_details',
@@ -138,7 +141,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				method: 'GET',
 				data: {
 					team_id: team_id,
-					acti_id: acti_id,
+					acti_id: this.activity_id,
 					// token: this.$userinfo.token
 				},
 				success: res => {
@@ -156,16 +159,55 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 	},
 
     methods: {
-      submit(){
+      submit(){  //提交报名或者取消报名活动
+
         if(!this.isActive){
-          this.$u.toast(`成功报名活动!`);
-          this.buttonText = "取消报名";
-          this.isActive = !this.isActive
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/register_event',				
+				method: 'POST',
+				data: {
+					team_id: this.team_id,
+					activity_id: this.activity_id,
+				},
+				success: res => {
+					if(res.data.code==200){
+						this.$u.toast(`成功报名活动!`);
+						this.buttonText = "取消报名";
+          				this.isActive = !this.isActive
+					}else{
+						this.$u.toast(`报名失败，请重试`);
+					}
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+		})
         }
         else{
-          this.$u.toast(`成功取消报名`);
-          this.buttonText = "确认报名"
-          this.isActive = !this.isActive
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',				
+				method: 'DELETE',
+				data: {
+					team_id: this.team_id,
+					activ_id: this.activity_id,
+				},
+				success: res => {
+					if(res.data.code==200){
+						this.$u.toast(`成功取消报名`);
+						this.buttonText = "报名活动";
+          				this.isActive = !this.isActive
+					}else{
+						this.$u.toast(`取消报名失败，请重试`);
+					}
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+		})
         }
       }
 

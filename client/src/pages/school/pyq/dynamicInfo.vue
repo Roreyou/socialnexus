@@ -76,50 +76,8 @@
 				loading: true,
 				background: '',
 				dyInfo: {
-					// id:1,
-					// type: 1,
-					// avatarUrl: 'https://img0.baidu.com/it/u=1801510667,176844939&fm=26&fmt=auto',
-					// userName: '的分布',
-					// pushTime: '2021-12-17 12:51:55',
-					// content: '山不在高，有仙则名。水不在深，有龙则灵。斯是陋室，惟吾德馨。苔痕上阶绿，草色入帘青。谈笑有鸿儒，往来无白丁。可以调素琴，阅金经。无丝竹之乱耳，无案牍之劳形。南阳诸葛庐，西蜀子云亭。孔子云：何陋之有？',
-					// dyImgs: [
-					// 	'https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
-					// 	'https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
-					// ],
-					// tags: [{
-					// 		name: '顺丰客服',
-					// 		type: 'success'
-					// 	},
-					// 	{
-					// 		name: '2222',
-					// 		type: 'info'
-					// 	}, {
-					// 		name: '3333',
-					// 		type: 'info'
-					// 	}, {
-					// 		name: 'ashdfknasdf',
-					// 		type: 'info'
-					// 	},
-
-					// ],
-					// fabulous:false,
-					// dyLike: 10,
 				},
 				comList: [{
-						// id:1,
-						// avatarUrl: "https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-						// nickName: "阿康",
-						// comInfo: "评论",
-						// comImgs: ["https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7","https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
-						// comTime: "2022-03-12 17:20:55",
-						// fabulous:false,
-						// comLike: 99,
-						// replyList: [{
-						// 	id:1,
-						// 	avatarUrlr: "https://tse3-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?w=246&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-						// 	nickNamer: "阿康",
-						// 	replyInfo: "评论的回复"
-						// }]
 				}],
 				bgColor: '#ffcc01',
 				baseUrl:'',
@@ -307,14 +265,6 @@
 							this.comShow = false //关掉回复窗口
 							
 							let newlist = res.data.data.comment_list;
-							// 更新这条帖子的评论列表
-							// for (let i = 0; i < this.comList.length; i++) {
-							// 	if (this.comList[i].comment_detail.id === id) {
-							// 		this.comList[i].reply_list = new_like_list;
-							// 		this.comList[i].comment_detail.reply_list_length = this.comList[i].comment_detail.reply_list_length + 1;
-							// 		break; // 找到匹配对象后跳出循环
-							// 	}
-							// }
 							this.comList = newlist;
 						}
 
@@ -367,9 +317,6 @@
 					}
 				})
 				}
-				// this.dyInfo.fabulous = true
-				// this.dyInfo.dyLike = this.dyInfo.dyLike + 1
-				// this.$u.toast(`点赞成功~`);
 			},
 			replyLike(id){   //评论的点赞（但不是评论的回复的点赞, 回复的点赞还要另外加函数）
 
@@ -420,9 +367,6 @@
 			},
 			// 删除评论
 			delCom(comId){   
-				//这里需要发送一个删除这条评论的请求
-				//先在前端删掉
-
 				uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/delcomment', //删除评论			
 					method: 'POST',
@@ -436,27 +380,6 @@
 						// console.log(this.acList)
 						code = 0  //先强制
 						if(code == 0){
-							// let index = 0;
-							// let list = this.comList;
-
-							// for (let i = 0; i < this.comList.length; i++) {
-							// 	if (this.comList[i].comment_detail.id === id) {
-							// 		index = i 
-							// 		// console.log("this.comList[index]: ", this.comList[index])
-							// 		break; 
-							// 	}
-							// }
-
-							// if(this.comList[index].comment_detail.fabulous){
-							// 	this.$u.toast(`成功取消点赞`);
-							// 	this.comList[index].comment_detail.like = this.comList[index].comment_detail.like - 1
-							// }
-							// else{
-							// 	this.$u.toast(`点赞成功`);
-							// 	this.comList[index].comment_detail.like = this.comList[index].comment_detail.like + 1
-							// }
-							// //UI效果
-							// this.comList[index].comment_detail.fabulous = (!this.comList[index].comment_detail.fabulous)
 							this.$u.toast(`删除成功！`);
 							const filteredList = this.comList.filter(item => item.comment_detail.id !== comId);
 							this.comList = filteredList;
