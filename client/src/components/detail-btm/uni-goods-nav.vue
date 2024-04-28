@@ -6,14 +6,6 @@
 			<view class="flex uni-tab__cart-sub-left">
 				<view v-for="(item,index) in options" :key="index" class="flex uni-tab__cart-button-left uni-tab__shop-cart" @click="onClick(index,item)">
 						<view class="uni-tab__icon">
-							<!-- <uni-button type="primary" v-if="index == 0" :icon="item.icon_noac" size="20" color="#646566" open-type="share" @click="onClick(index,item)"></uni-button> -->
-							
-							<!-- <button v-if="index == 0" type="default" open-type="share" size="20" class="tran-but" >
-								<image :src="shareIcon" mode="aspectFit" style="width:20px; height: 20px;"></image>
-							</button> -->
-							<!-- <button v-if="index == 0" type="default" open-type="share" size="20" class="cu-btn tran-but" >
-								<image :src="shareIcon" mode="aspectFit" style="width:18px; height: 18px; background-color: white; margin-bottom: -4px;"></image>
-							</button> -->
 							<uni-icons v-if="index == 0" :type="item.icon_noac"></uni-icons>
 							<uni-icons v-if="index == 1" :type="isActive ? item.icon : item.icon_noac" size="20" color="#646566"></uni-icons>
 						<!-- <uni-icons  v-if="isActive1" :type="item.icon" size="20" color="#646566"></uni-icons>
@@ -140,13 +132,43 @@
 				}
 				//收藏
 				if(index == 1){
-					if (this.isActive) {
-						this.isActive = false
-						this.$u.toast(`成功取消收藏`);
-					} else {
-						this.isActive = true
-						this.$u.toast(`收藏成功！`);
-					}
+					let favor = this.isActive ? 1 : 0;  //1就是要取消收藏，0就是要收藏
+					// if (this.isActive) {
+					// 	this.isActive = false
+					// 	this.$u.toast(`成功取消收藏`);
+
+					// } else {
+					// 	this.isActive = true
+					// 	this.$u.toast(`收藏成功！`);
+					// }
+					uni.request({
+						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
+				
+						method: 'PUT',
+						data: {
+							team_id: this.team_id,
+							acti_id: this.acti_id,
+							favor: favor
+						},
+						success: res => {
+							if(res.data.code==200){
+								if(favor==1){
+									this.$u.toast(`成功取消收藏`);
+									this.isActive = false
+								}else{
+									this.$u.toast(`收藏成功！`);
+									this.isActive = true
+								}
+							}
+						},
+						fail: res => {
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+					
+
 				}
 				// console.log(item.isActive)
 				this.$emit('click', {
