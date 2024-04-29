@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view @click="showpop">所在地址：{{citytext}}</view>
+    <!-- <view @click="showpop">所在地址：{{citytext}}</view>
       <view class="">
         <uni-popup id="addressPopup" ref="addressPopup" :type="'bottom'" @change="change">
           <picker-view  :value="region" @change="bindChange" @pickstart="onPickstart" @pickend="onPickend">
@@ -27,7 +27,7 @@
               确定</view>
           </view>
         </uni-popup>
-      </view>
+      </view> -->
   </view>
 </template>
 <script>
