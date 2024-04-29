@@ -47,7 +47,6 @@
 		components:{
 			
 			indexTabbar,
-			MyContent,
 			All,
 			Unreviewed,
 			Reviewed,
