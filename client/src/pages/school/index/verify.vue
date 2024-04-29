@@ -196,6 +196,9 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -213,7 +216,7 @@
 					level:"",
 					tel:"",
 					email:"",
-					team_id:"team_id"   //之后再改
+					team_id:""   //之后再改
 				}, //队长信息
 				//机场数据
 				'list': [{
@@ -709,6 +712,9 @@
 			// 设置自定义表单校验规则，必须在节点渲染完毕后执行
 			// this.$refs.customForm.setRules(this.customRules)
 		},
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
 		methods: {
 			onClickItem(e) {
 				console.log(e);
@@ -809,7 +815,7 @@
 					email:'',
 					
 				}
-				addinput['team_id'] = 'teamid'
+				addinput['team_id'] = this.user_id,
 				//不要放到data里是因为需要深度复制很麻烦
 				this.dynamicFormData2.domains.push(
 					addinput

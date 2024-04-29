@@ -6,6 +6,9 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 import actilist from '../../../components/acti-list/acti-list.vue';
 
 export default {
@@ -21,6 +24,9 @@ export default {
             acList: [],
         }
     },
+    computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
     mounted() {
         uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getmyactiv',
@@ -28,7 +34,7 @@ export default {
 				
 				method: 'GET',
 				data: {
-					team_id: '1',
+					team_id: this.user_id,
 					// token: this.$userinfo.token
                     activity_status: this.index
 				},

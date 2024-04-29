@@ -161,12 +161,15 @@
 		</view>
 
 		<view style="position: fixed; bottom: 0; width: 100%;">
-			<bttab :team_id="team_id" :acti_id="acti_id"></bttab>
+			<bttab :team_id="user_id" :acti_id="acti_id"></bttab>
 		</view>
 	</view> 
 </template>
  
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
 	export default {
@@ -175,12 +178,14 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 		},
 		data(){
 			return{
-				team_id:'1',
 				acti_id:'',
 				detail:{
 					keywords: ""
 				},
 			}
+		},
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
 		},
 		mounted(){
 			// 获取query对象
@@ -188,7 +193,6 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			// const query = this.$route.query;
 			const id = query.acti_id;
 			this.acti_id = id;
-			console.log(id)
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',

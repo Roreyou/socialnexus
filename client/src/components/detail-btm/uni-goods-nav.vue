@@ -33,6 +33,9 @@
 
 <script>
 	import {
+		mapState,
+	} from 'vuex'
+	import {
 	initVueI18n
 	} from '@dcloudio/uni-i18n'
 	import messages from './i18n/index.js'
@@ -113,6 +116,11 @@
 				shareIcon: require('../../static/icon/fenxiangmian.png'),
 			}
 		},
+
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
+
 		methods: {
 			onClick(index, item) {
 				//分享
@@ -146,7 +154,7 @@
 				
 						method: 'PUT',
 						data: {
-							team_id: this.team_id,
+							team_id: this.user_id,
 							acti_id: this.acti_id,
 							favor: favor
 						},
@@ -214,7 +222,7 @@
 			this.$u.route({
 				url: 'pages/school/details/application',
 				params: {
-        			team_id: this.team_id,
+        			team_id: this.user_id,
         			acti_id: this.acti_id,
     			}
 			})

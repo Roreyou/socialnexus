@@ -111,12 +111,18 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 	export default {
 		data() {
 			return {
 				comment_list: [],
 				like_list: [],
 			}
+		},
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
 		},
 		onLoad() {
 			console.log('onLoad')
@@ -128,7 +134,7 @@
 				
 				method: 'GET',
 				data: {
-					team_id: '1',
+					team_id: this.user_id,
 				},
 				success: res => {
 					this.comment_list = res.data.data.comment_list;

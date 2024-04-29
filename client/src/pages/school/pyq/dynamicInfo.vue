@@ -126,9 +126,9 @@
 			}
 		},
 		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id']),
 			leng() {
-			// 返回 comList 数组的长度
-			return this.comList.length;
+				return this.comList.length;
 			},
 		},
 		onLoad(options) {
@@ -252,7 +252,7 @@
 					data: {
 						post_id: id,
 						text: this.comModal.comInfo,
-						team_id: "1"
+						team_id: this.user_id,
 					},
 					success: res => {
 						let code = res.data.code;
@@ -288,7 +288,7 @@
 					method: 'POST',
 					data: {
 						post_id: id,
-						team_id: "1"
+						team_id: this.user_id
 						// reply_content: this.repModal.replyInfo
 					},
 					success: res => {
@@ -325,7 +325,7 @@
 					method: 'POST',
 					data: {
 						comment_id: id,
-						team_id: "1"
+						team_id: this.user_id,
 						// reply_content: this.repModal.replyInfo
 					},
 					success: res => {
