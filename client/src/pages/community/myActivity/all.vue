@@ -9,7 +9,7 @@
 			<text class="title">{{title}}</text>
 		</view> -->
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
-			<view class="cu-card article" :class="isCard?'no-card':''">
+			<view class="cu-card article" :class="isCard?'no-card':''" @click = "todetail(item.id,item.state)">
 					<view class="cu-item shadow">
 						<view class="cu-bar bg-white">
 							<view class="action">
@@ -75,6 +75,14 @@
 						place: "深圳",
 						job: "志愿者",
 						keywords: "支教,教育"
+					},
+					{	
+						state: "待开展",
+						title: "4月15日实践活动",
+						time: "2021-04-15",
+						place: "成都",
+						job: "志愿者",
+						keywords: "服务,实践"
 					}
 				]
 			}
@@ -83,7 +91,16 @@
 
 		},
 		methods: {
-
+			todetail(activityId, modeString) {
+				const mode = modeString == '待开展'?'recruiting':'recruited';
+				this.$u.route({
+					url: '/pages/community/activityDetail',
+					params: {
+						activityId: activityId,
+						mode: mode
+					}
+				})
+			},
 		}
 	}
 </script>
