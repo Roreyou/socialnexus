@@ -38,7 +38,9 @@ export default {
         uni.request({
 				url: com_url,
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
+                header:{
+					Authorization:uni.getStorageSync("token")
+				},	
 				method: 'GET',
 				data: {
 					team_id: this.user_id,

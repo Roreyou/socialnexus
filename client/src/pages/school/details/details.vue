@@ -196,7 +196,9 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},					
 				method: 'GET',
 				data: {
 					acti_id: id,

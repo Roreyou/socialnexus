@@ -138,7 +138,9 @@
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/getdetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
+				header:{
+							Authorization:uni.getStorageSync("token")
+						},
 				method: 'GET',
 				data: {
 					post_id: id,
@@ -205,7 +207,9 @@
 					uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/reply',
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-					
+					header:{
+							Authorization:uni.getStorageSync("token")
+						},
 					method: 'POST',
 					data: {
 						comment_id: id,
@@ -247,7 +251,9 @@
 					uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/comment',
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-					
+					header:{
+					Authorization:uni.getStorageSync("token")
+				},	
 					method: 'POST',
 					data: {
 						post_id: id,
@@ -284,7 +290,9 @@
 				uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/like',  //点赞和取消点赞会发请求，后端决定怎么处理
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-					
+					header:{
+					Authorization:uni.getStorageSync("token")
+				},	
 					method: 'POST',
 					data: {
 						post_id: id,
@@ -321,7 +329,10 @@
 			replyLike(id){   //评论的点赞（但不是评论的回复的点赞, 回复的点赞还要另外加函数）
 
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/likecom', //点赞和取消点赞 评论				
+					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/likecom', //点赞和取消点赞 评论
+					header:{
+					Authorization:uni.getStorageSync("token")
+				},					
 					method: 'POST',
 					data: {
 						comment_id: id,
@@ -368,7 +379,10 @@
 			// 删除评论
 			delCom(comId){   
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/delcomment', //删除评论			
+					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/delcomment', //删除评论
+					header:{
+					Authorization:uni.getStorageSync("token")
+				},				
 					method: 'POST',
 					data: {
 						comment_id: comId,

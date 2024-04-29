@@ -210,7 +210,9 @@
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
+				// header:{
+				// 	Authorization:uni.getStorageSync("token")
+				// },	 //感觉这个功能可以不检查权限？				
 				method: 'GET',
 				data: {
 					province: '1',

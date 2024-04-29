@@ -137,7 +137,9 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/register_details',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},					
 				method: 'GET',
 				data: {
 					team_id: team_id,
@@ -163,7 +165,10 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
         if(!this.isActive){
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/register_event',				
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/register_event',	
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},								
 				method: 'POST',
 				data: {
 					team_id: this.team_id,
@@ -187,7 +192,10 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
         }
         else{
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',				
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',	
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},								
 				method: 'DELETE',
 				data: {
 					team_id: this.team_id,

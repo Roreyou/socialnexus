@@ -151,7 +151,9 @@
 					// }
 					uni.request({
 						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
-				
+						header:{
+							Authorization:uni.getStorageSync("token")
+						},
 						method: 'PUT',
 						data: {
 							team_id: this.user_id,
@@ -229,7 +231,11 @@
 			},
 			cancelacti(){  //取消报名
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',				
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',
+				header:
+				{
+					Authorization:uni.getStorageSync("token")
+				},				
 				method: 'DELETE',
 				data: {
 					team_id: this.team_id,
@@ -264,7 +270,10 @@
 		},
 		mounted(){
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getisregister',				
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getisregister',
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},				
 				method: 'GET',
 				data: {
 					team_id: this.team_id,

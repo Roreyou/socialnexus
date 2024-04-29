@@ -167,8 +167,7 @@
 
 				//发请求
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154463358',
-			
+					url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154463358',			
 					method: 'POST',
 					data: data,
 					success: res => {

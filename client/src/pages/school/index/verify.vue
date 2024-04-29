@@ -866,7 +866,8 @@
 						})
 						uni.request({
 							header: {
-									'Content-Type': 'application/json'  
+									'Content-Type': 'application/json', 
+									Authorization:uni.getStorageSync("token")
 								}, 
 							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/authentification',
 							method: 'POST',

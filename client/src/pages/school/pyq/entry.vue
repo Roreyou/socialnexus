@@ -151,7 +151,9 @@
 				console.log("this.user_id,", this.user_id)
 				uni.request({
 							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost',
-					
+							header:{
+					Authorization:uni.getStorageSync("token")
+				},	
 							method: 'POST',
 							data: {
 								team_id: this.user_id,  
