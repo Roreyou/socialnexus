@@ -502,7 +502,7 @@
 	}
 
 	.margin-left-sm{
-		margin-left: 87rpx;
+		margin-left: auto;
 	}
 
 	.cu-btn{
@@ -547,6 +547,7 @@
 	font-weight: 600;
 	font-family: 'pangmen';
 	font-style: italic;
+	font-size: 34rpx;
 }
 .more-btn{
 	font-size: small;

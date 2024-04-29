@@ -149,11 +149,6 @@
 					});
 					return;
 				}*/
-				/**
-				 * 下面简单模拟下服务端的处理
-				 * 检测用户账号密码是否在已注册的用户列表中
-				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
-				 */
 
 				const identity = "school"
 				const data = {
@@ -161,9 +156,6 @@
 					id: this.account,  //team_id
 					pwd: this.password
 				};
-				// const validUser = service.getUsers().some(function(user) {
-				// 	return data.account === user.account && data.password === user.password;
-				// });
 
 				//发请求
 				uni.request({
@@ -196,12 +188,6 @@
 					}
 				})
 					
-				// if (validUser) {
-          		// 	console.log(this.account)
-				// 	this.toMain(this.account);
-				// } else {
-
-				// }
 			},
 			getUserInfo({
 				detail

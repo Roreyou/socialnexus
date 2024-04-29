@@ -15,7 +15,7 @@
 				<view class="bodys">
 					<u-form :model="comModal" :rules="rules" ref="comForm" :errorType="errorType">
 						<u-form-item :border-bottom="false"  prop="comInfo">
-							<u-input v-model="comModal.comInfo" type="textarea" placeholder="请输入评论内容~" :border="border"
+							<u-input v-model="comModal.comInfo" type="textarea" placeholder="请输入评论内容" :border="border"
 								:border-color="borderColor" :height="height" :auto-height="autoHeight" />
 						</u-form-item>
 					</u-form>
@@ -56,6 +56,9 @@
 </template>
 
 <script>
+	import {
+		mapState
+	} from 'vuex'
 	import kgComment from "../../../components/kg-com/kg-comment.vue"
 	import kgDynamics from "../../../components/kg-dy/kg-dynamic.vue"
 	export default {

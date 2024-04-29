@@ -2,9 +2,10 @@
 <template>
 	<view class="warp">
 		<view class="cot" v-for="(item,index) in commentList" :key="index">
-			<!-- <view class="cot_avatar">
-				<u-avatar :src="item.avatarUrl" mode="square" size="80"></u-avatar>
-			</view> -->
+			<view class="cot_avatar">
+				<!-- <u-avatar :src="item.avatarUrl" mode="square" size="80"></u-avatar> -->
+				<u-avatar :src="avatarUrl" mode="square" size="80"></u-avatar>
+			</view>
 			<view class="cot_flirt">
 				<view class="cot_flirt_name">
 					{{item.comment_detail.my_name}}
@@ -42,6 +43,7 @@
 			<view class="reply" v-for="(rep,index2) in item.reply_list" :key="index2">
 				<view class="reply_user">
 					<view class="reply_user_info">
+						<u-avatar :src="replyavatarUrl" mode="square" size="80"></u-avatar>
 						<view class="reply_user_info_name">
 							{{rep.reply_name}}
 						</view>
@@ -76,8 +78,10 @@
 		},
 		data() {
 			return {
+				avatarUrl: 'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
 				background: '',
 				baseUrl:'',
+				replyavatarUrl: 'https://b0.bdstatic.com/f7de28343a3c2ccfb865e2f4f9d0c5fe.jpg@h_1280'
 			};
 		},
 		onLoad() {
