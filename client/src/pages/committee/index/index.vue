@@ -1,4 +1,4 @@
-<!-- 校团委首页 -->
+<!-- 校团委 首页 -->
 <template>
   <view class="u-p-l-10 u-p-r-10">
 
@@ -65,13 +65,15 @@
     <u-gap height="10"></u-gap>
 		
 		<!-- 活动推荐列表 -->
-		<!-- <view class="board">
+		<view class="board">
 			<view class="cu-bar" style="background-color: transparent">
 				<view class="action">
-					<text class="text-xl text-bold" style="color: #ffffff; font-size: 52rpx; font-weight: 600; font-family: 'pangmen'; font-style: italic; background-color: transparent">数据墙</text>
+					<text class="text-xl text-bold" style="color: #000000; font-size: 52rpx; font-weight: 600; font-family: 'pangmen'; font-style: normal; background-color: transparent">数据墙</text>
 				</view>
 			</view>
-		</view> -->
+			<!-- 一个柱状图 -->
+			<!-- <view class="echart" id="mychart" :style="myChartStyle">柱状图</view> -->
+		</view>
 
     <!-- 当用户滚动页面时，提供一个快速返回页面顶部的按钮。 -->
     <!-- 当页面滚动到或超过指定的 top 值时，返回顶部按钮将显示出来。 -->
@@ -94,6 +96,7 @@
 		mapMutations
 	} from 'vuex'
 	import actilist from '../../../components/acti-list/acti-list.vue';
+	import * as echarts from "echarts";
 
 	export default {
 		components: {
@@ -108,16 +111,19 @@
 				pageNum: 1,
 				pageSize: 20,
 				scrollTop: 0,
-        indicatorDots: true, // 轮播图的指示点是否显示
-        autoplay: true, // 轮播图自动播放
-        interval: 2000, // 自动播放时间间隔
-        duration: 500, // 滑动时长
+				// 轮播图相关
+        		indicatorDots: true, // 轮播图的指示点是否显示
+        		autoplay: true, // 轮播图自动播放
+        		interval: 2000, // 自动播放时间间隔
+        		duration: 500, // 滑动时长
 				houseList: [],
+				// 轮播图图片
 				swiperList: [
-          { id: 1, imageSrc: 'https://img.zcool.cn/community/012a2f5f9cce0f11013fdcc7329e32.jpg@1280w_1l_2o_100sh.jpg' },
-          { id: 2, imageSrc: 'https://p4.img.cctvpic.com/photoworkspace/contentimg/2021/11/08/2021110810083211648.jpg' },
-          { id: 3, imageSrc: 'https://picnew7.photophoto.cn/20130724/hongsegemingtupian-18805580_1.jpg' }          
-        ],
+        		  { id: 1, imageSrc: 'https://img.zcool.cn/community/012a2f5f9cce0f11013fdcc7329e32.jpg@1280w_1l_2o_100sh.jpg' },
+        		  { id: 2, imageSrc: 'https://p4.img.cctvpic.com/photoworkspace/contentimg/2021/11/08/2021110810083211648.jpg' },
+        		  { id: 3, imageSrc: 'https://picnew7.photophoto.cn/20130724/hongsegemingtupian-18805580_1.jpg' }          
+        		],
+				// 通知
 				noticeList: [
 					'强国有我，青春有为',
 					'行万里路，知中国情',
@@ -129,6 +135,7 @@
 				loadStatus: 'loadmore',
 				flowList: [],
 				uvCode: uni.getStorageSync('uvCode'),
+				// 活动列表
 				acList:[
 					{	
 						state: "已结束",
@@ -162,9 +169,17 @@
 						job: "志愿者",
 						keywords: "支教,教育"
 					}
-				]
+				],
+				// 数据墙部分-柱状图
+				// xData: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], //横坐标
+      			// yData: [23, 24, 18, 25, 27, 28, 25], //人数数据
+      			// taskDate: [10, 11, 9, 17, 14, 13, 14],
+      			// myChartStyle: { float: "left", width: "100%", height: "400px" } //图表样式
 			}
 		},
+		// mounted() {
+    	// 	this.initEcharts();
+  		// },
 
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin'])
@@ -246,6 +261,49 @@
 		// 	uni.stopPullDownRefresh();
 		// },
 		methods: {
+			// 初始化柱状图
+			// initEcharts() {
+      		// 	// 多列柱状图
+      		// 	const mulColumnZZTData = {
+      		// 	  xAxis: {
+      		// 	    data: this.xData
+      		// 	  },
+      		// 	  // 图例
+      		// 	  legend: {
+      		// 	    data: ["人数", "任务数"],
+      		// 	    top: "0%"
+      		// 	  },
+      		// 	  yAxis: {},
+      		// 	  series: [
+      		// 	    {
+      		// 	      type: "bar", //形状为柱状图
+      		// 	      data: this.yData,
+      		// 	      name: "人数", // legend属性
+      		// 	      label: {
+      		// 	        // 柱状图上方文本标签，默认展示数值信息
+      		// 	        show: true,
+      		// 	        position: "top"
+      		// 	      }
+      		// 	    },
+      		// 	    {
+      		// 	      type: "bar", //形状为柱状图
+      		// 	      data: this.taskDate,
+      		// 	      name: "任务数", // legend属性
+      		// 	      label: {
+      		// 	        // 柱状图上方文本标签，默认展示数值信息
+      		// 	        show: true,
+      		// 	        position: "top"
+      		// 	      }
+      		// 	    }
+      		// 	  ]
+      		// 	};
+			// 	const myChart = echarts.init(document.getElementById("mychart"));
+    		//   	myChart.setOption(mulColumnZZTData);
+    		//   	//随着屏幕大小调节图表
+    		//   	window.addEventListener("resize", () => {
+    		//   	  myChart.resize();
+    		//   	});
+    		// },
 			handleAuthentication(){
 				this.$u.route({
 					url: 'pages/school/index/verify',
@@ -345,7 +403,7 @@
 			clickNav(type){
 				if(type === "1"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/school/search/myactivity');
+					this.$u.route('/pages/committee/searchSchool/searchSchool');
 				}
 				if(type === "2"){
 					// 判断Token是否有效   这个逻辑最后再来加
@@ -359,11 +417,7 @@
 					// }else{
 					// 	this.$u.route('/pages/detail/preHouse');
 					// }
-					this.$u.route('/pages/school/pyq/entry');
-				}
-				if(type === "3"){
-					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/school/search/recommend');
+					this.$u.route('/pages/committee/searchActivity/searchActivity');
 				}
 			},
 			code(){
@@ -391,7 +445,7 @@
 				this.$u.route({
 					url: 'pages/school/details/details',
 				  })
-			},
+			}
 		}
 	}
 </script>

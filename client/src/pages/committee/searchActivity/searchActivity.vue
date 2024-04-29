@@ -39,7 +39,6 @@
 
 <script>
 	import indexTabbar from '../../../components/top-tabbar/top-tabbar.vue';
-	import MyContent from './MContent.vue';
 	import All from './all.vue';
     import Unreviewed from './unreviewed.vue';
     import Reviewed from './reviewed.vue';
