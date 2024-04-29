@@ -168,8 +168,9 @@
 							if(identity == "school"){  //登录的是高校队伍，响应里有审核状态
 								const verification_status = res.data.data.verification_status;
 								const team_name =  res.data.data.team_name;
-								console.log("data.id:", data.id)
-								this.toMain(data.id, verification_status, team_name);	
+								const avatar = res.data.data.avatar;
+								// console.log("data.id:", data.id)
+								this.toMain(data.id, verification_status, team_name, avatar);	
 							}
 							// 保存 token
 							uni.setStorageSync('token', res.data.data.token);
@@ -201,17 +202,16 @@
 					});
 				}
 			},
-			toMain(team_id, verification_status, team_name) {
-				// console.log("tomain")
+			toMain(team_id, verification_status, team_name, avatar) {
+				// console.log("tomain-avatar", avatar)
 				verification_status = 1  //测试期间先强制
 				const user_id = team_id;
 				const user_name = team_name;
-				this.login({user_id, verification_status, user_name});
+				this.login({user_id, verification_status, user_name, avatar});
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式
 				 */
-
 
 				if (this.forcedLogin) {
 					uni.reLaunch({
