@@ -11,7 +11,10 @@
 			</view>
 			<view class="input-row">
 				<text class="title">确认密码：</text>
-				<m-input type="password"  v-model="newpassword2" placeholder="请输入确认密码"></m-input>
+				<m-input type="password"  v-model="newpassword2" placeholder="请输入确认密码" :class="{ 'error': error_flag }"></m-input>
+			</view>
+			<view v-if="error_flag" class="error-message">
+				密码不一致！
 			</view>
 		</view>
 		<view class="btn-row">
@@ -29,13 +32,54 @@
 		},
 		data() {
 			return {
+				error_flag:false,
 				curpassword: '',
 				newpassword1: '',
 				newpassword2: ''
 			}
 		},
+		watch: {
+			newpassword2(newValue, oldValue) {
+				this.error_flag = false;
+			}
+		},
 		methods: {
+			clearInputs() {
+			this.curpassword = '';
+			this.newpassword1 = '';
+			this.newpassword2 = '';
+			this.error_flag = false; // 清空输入框的同时将错误标志重置为false
+			},
 			doChange() {
+				if(this.newpassword1 != this.newpassword2){
+					this.error_flag = true;
+					return
+				}
+				uni.request({
+						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/modifypwd',
+						header:{
+							Authorization:uni.getStorageSync("token")
+						},
+						method: 'POST',
+						data: {
+							team_id: this.user_id,
+							old_pwd:  this.curpassword,
+							new_pwd:  this.newpassword1,
+						},
+						success: res => {
+							if(res.data.code==200){
+									this.$u.toast(`成功修改密码`);
+									this.clearInputs()
+							}else{
+								this.$u.toast(`原密码错误`);
+							}
+						},
+						fail: res => {
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
 			},
 		},
 	}
@@ -106,7 +150,7 @@
 	}
 
 	.input-row .title {
-		width: 90px;
+		width: 115px;
 		padding-left: 15px;
 	}
 
@@ -150,5 +194,18 @@
 		top: 0;
 		left: 0;
 		width: 100%;
+	}
+
+	/* 错误提示 */
+	.error {
+	border: 1px solid red; /* 设置红色边框 */
+	}
+
+	.error-message {
+	color: red; /* 设置红色文字 */
+	margin-top: 5px; /* 设置上边距 */
+	margin-left: 270rpx;
+    font-size: 30rpx;
+    margin-top: 15rpx;
 	}
 </style>
