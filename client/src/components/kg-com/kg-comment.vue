@@ -4,7 +4,7 @@
 		<view class="cot" v-for="(item,index) in commentList" :key="index">
 			<view class="cot_avatar">
 				<!-- <u-avatar :src="item.avatarUrl" mode="square" size="80"></u-avatar> -->
-				<u-avatar :src="avatarUrl" mode="square" size="80"></u-avatar>
+				<u-avatar :src="item.comment_detail.team_avatar" mode="square" size="80"></u-avatar>
 			</view>
 			<view class="cot_flirt">
 				<view class="cot_flirt_name">
@@ -43,7 +43,7 @@
 			<view class="reply" v-for="(rep,index2) in item.reply_list" :key="index2">
 				<view class="reply_user">
 					<view class="reply_user_info">
-						<u-avatar :src="replyavatarUrl" mode="square" size="80"></u-avatar>
+						<u-avatar :src="rep.team_avatar" mode="square" size="80"></u-avatar>
 						<view class="reply_user_info_name">
 							{{rep.reply_name}}
 						</view>

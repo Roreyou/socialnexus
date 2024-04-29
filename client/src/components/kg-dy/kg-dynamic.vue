@@ -6,7 +6,7 @@
 			<view class="dynamic_header">
 				<view class="dynamic_header_user">
 					<view class="dynamic_header_user_avatar">
-						<u-avatar :src="dyInfo.picture" size="60"></u-avatar>
+						<u-avatar :src="dyInfo.team_avatar" size="60"></u-avatar>
 					</view>
 					<view class="dynamic_header_user_info">
 						<view class="dynamic_header_user_info_name">{{dyInfo.team_name}}</view>
