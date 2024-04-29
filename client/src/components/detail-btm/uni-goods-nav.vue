@@ -33,6 +33,9 @@
 
 <script>
 	import {
+		mapState,
+	} from 'vuex'
+	import {
 	initVueI18n
 	} from '@dcloudio/uni-i18n'
 	import messages from './i18n/index.js'
@@ -113,6 +116,11 @@
 				shareIcon: require('../../static/icon/fenxiangmian.png'),
 			}
 		},
+
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
+
 		methods: {
 			onClick(index, item) {
 				//分享
@@ -143,10 +151,12 @@
 					// }
 					uni.request({
 						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
-				
+						header:{
+							Authorization:uni.getStorageSync("token")
+						},
 						method: 'PUT',
 						data: {
-							team_id: this.team_id,
+							team_id: this.user_id,
 							acti_id: this.acti_id,
 							favor: favor
 						},
@@ -214,14 +224,18 @@
 			this.$u.route({
 				url: 'pages/school/details/application',
 				params: {
-        			team_id: this.team_id,
+        			team_id: this.user_id,
         			acti_id: this.acti_id,
     			}
 			})
 			},
 			cancelacti(){  //取消报名
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',				
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',
+				header:
+				{
+					Authorization:uni.getStorageSync("token")
+				},				
 				method: 'DELETE',
 				data: {
 					team_id: this.team_id,
@@ -256,7 +270,10 @@
 		},
 		mounted(){
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getisregister',				
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getisregister',
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},				
 				method: 'GET',
 				data: {
 					team_id: this.team_id,

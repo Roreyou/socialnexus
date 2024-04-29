@@ -30,6 +30,9 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -64,14 +67,19 @@
 				]
 			}
 		},
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
 		onLoad() {
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getteamfavor',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},	
 				method: 'GET',
 				data: {
-					team_id: '1',
+					team_id: this.user_id,
 					// token: this.$userinfo.token
 				},
 				success: res => {
@@ -102,10 +110,12 @@
 
 						uni.request({
 							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
-					
+							header:{
+								Authorization:uni.getStorageSync("token")
+							},	
 							method: 'PUT',
 							data: {
-								team_id: '1',  //
+								team_id: this.user_id,
 								acti_id: likeid,
 								favor: 1
 							},

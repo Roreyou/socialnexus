@@ -154,22 +154,54 @@
 				 * 检测用户账号密码是否在已注册的用户列表中
 				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
 				 */
+
+				const identity = "school"
 				const data = {
-					account: this.account,
-					password: this.password
+					identity: identity,
+					id: this.account,  //team_id
+					pwd: this.password
 				};
-				const validUser = service.getUsers().some(function(user) {
-					return data.account === user.account && data.password === user.password;
-				});
-				if (validUser) {
-          			console.log(this.account)
-					this.toMain(this.account);
-				} else {
-					uni.showToast({
-						icon: 'none',
-						title: '用户账号或密码不正确',
-					});
-				}
+				// const validUser = service.getUsers().some(function(user) {
+				// 	return data.account === user.account && data.password === user.password;
+				// });
+
+				//发请求
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154463358',			
+					method: 'POST',
+					data: data,
+					success: res => {
+						if(res.data.code == 200){
+	
+							if(identity == "school"){  //登录的是高校队伍，响应里有审核状态
+								const verification_status = res.data.data.verification_status;
+								const team_name =  res.data.data.team_name;
+								console.log("data.id:", data.id)
+								this.toMain(data.id, verification_status, team_name);	
+							}
+							// 保存 token
+							uni.setStorageSync('token', res.data.data.token);
+						}else{
+							uni.showToast({
+								icon: 'none',
+								title: '用户账号或密码不正确',
+							});
+						}
+					},
+					fail: res => {
+
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+					
+				// if (validUser) {
+          		// 	console.log(this.account)
+				// 	this.toMain(this.account);
+				// } else {
+
+				// }
 			},
 			getUserInfo({
 				detail
@@ -183,15 +215,18 @@
 					});
 				}
 			},
-			toMain(userName) {
+			toMain(team_id, verification_status, team_name) {
 				// console.log("tomain")
-				let verification_status = 1  //先强制，后面记得删掉
-				// console.log("verification_status",verification_status)
-				this.login({userName, verification_status});
+				verification_status = 1  //测试期间先强制
+				const user_id = team_id;
+				const user_name = team_name;
+				this.login({user_id, verification_status, user_name});
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式
 				 */
+
+
 				if (this.forcedLogin) {
 					uni.reLaunch({
 						url: '../school/index/index',   /*进入高校首页*/

@@ -40,6 +40,9 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 	import bttab from '../../../components/pyq-home/bt-tab.vue';
 	import home from './home.vue';
 	// import fabu from './fabu.vue';
@@ -52,7 +55,7 @@
 			// fabu,
 			tongzhi
 		},
-		
+
 		data() {
 			return {
 				posted: true, //用来刷新主页页面
@@ -101,6 +104,10 @@
 			
 		},
 
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
+
 		methods:{
 			TarData(item){
 				//设置id，来显示选中那个标签，显示下划线
@@ -141,12 +148,15 @@
 				this.$refs.uUpload.upload();
 			},
 			postAll(){
+				console.log("this.user_id,", this.user_id)
 				uni.request({
 							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost',
-					
+							header:{
+					Authorization:uni.getStorageSync("token")
+				},	
 							method: 'POST',
 							data: {
-								team_id: '1',  
+								team_id: this.user_id,  
 								content: this.comModal.comInfo,
 								picture: this.comModal.submitImgs,
 							},

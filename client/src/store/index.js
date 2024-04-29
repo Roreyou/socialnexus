@@ -10,21 +10,22 @@ const store = new Vuex.Store({
 		 */
 		forcedLogin: true,
 		hasLogin: false,
+		user_id: "",
 		userName: "",
 		userInfo: {
 			verification_status: 0,
-			token: ""
 		}
 	},
 	mutations: {
-		login(state, {userName, verification_status, token}) {
+		login(state, {user_id, verification_status, user_name}) {
 			// console.log(userName, verification_status)
-			state.userName = userName || '新用户';
+			state.user_id = user_id      // user_id根据情况可能是社区的id，高校的id...
+			state.userName = user_name || '新用户';
 			state.hasLogin = true;
 			state.userInfo.verification_status = verification_status;
-			state.userInfo.token = token;
 		},
 		logout(state) {
+			state.user_id = "";
 			state.userName = "";
 			state.userInfo = {};
 			state.hasLogin = false;

@@ -6,6 +6,9 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 import commentlist from '../../../components/comment-list/comment-list.vue';
 export default {
     components: {
@@ -23,6 +26,9 @@ export default {
             com_list: []
         }
     },
+    computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
     mounted() {
         // console.log("list_type",this.list_type)
         let com_url = this.$url.BASE_URL + '/4142061-0-default/schoolteam/team2activ_finished'
@@ -32,10 +38,12 @@ export default {
         uni.request({
 				url: com_url,
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
+                header:{
+					Authorization:uni.getStorageSync("token")
+				},	
 				method: 'GET',
 				data: {
-					team_id: '1',
+					team_id: this.user_id,
 					// token: this.$userinfo.token
                     // activity_status: this.index
 				},

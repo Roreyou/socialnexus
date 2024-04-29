@@ -114,6 +114,9 @@
 </template>
  
 <script>
+import {
+		mapState,
+	} from 'vuex'
 import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
 	export default {
@@ -174,13 +177,18 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				]
 			}
 		},
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
 		mounted() {
 			uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getteamInfo',
-					
+					header:{
+							Authorization:uni.getStorageSync("token")
+						},
 					method: 'GET',
 					data: {
-						team_id: '1',
+						team_id: this.user_id,
 						// token: this.$userinfo.token
 						// activity_status: this.index
 					},
