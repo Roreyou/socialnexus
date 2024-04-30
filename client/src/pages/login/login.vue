@@ -121,6 +121,9 @@
 			}
 		},
 		computed: mapState(['forcedLogin']),
+		onLoad: function(options) {
+			wx.hideHomeButton();
+		},
 		methods: {
 			...mapMutations(['login']),
 			

@@ -206,7 +206,7 @@
 			// 	complete: () => {
 			// 	}
 			// })
-			console.log("userInfo.verification_status,", this.userInfo)
+			// console.log("userInfo.verification_status,", this.userInfo)
 			// console.log(typeof this.$url)
 			// console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
 			uni.request({

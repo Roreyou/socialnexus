@@ -7,7 +7,7 @@
 						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
 							<view class="desc">
-								<view class="text-content"> 日期: {{item.start_time}}-{{item.end_time}}</view>
+								<view class="text-content"> 时间: {{item.start_time}}-{{item.end_time}}</view>
 								<view class="text-content"> 地点: {{item.address}}</view>
 								<view class="text-content"> 活动类别: {{item.category_name}}</view>
 								<view class="wordcont">	
