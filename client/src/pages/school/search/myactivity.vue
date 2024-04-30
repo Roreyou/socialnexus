@@ -6,11 +6,11 @@
 		<view class="cu-bar search bg-white">
 			<view class="search-form round">
 				<text class="cuIcon-search"></text>
-				<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索活动"
+				<input v-model="searchcontent" :adjust-position="false" type="text" placeholder="搜索活动"
 					confirm-type="search">
 			</view>
 			<view class="action">
-				<button class="cu-btn bg-green shadow-blur round">搜索</button>
+				<button @click="search" class="cu-btn bg-green shadow-blur round">搜索</button>
 			</view>
 		</view>
 		<scroll-view scroll-x class="bg-white nav">
@@ -22,7 +22,7 @@
 	</scroll-view>
 	</view>
 	<view class="accontent">
-		<MyContent v-if="showContent" :index="TabCur"></MyContent> 
+		<MyContent v-if="showContent" :index="TabCur" :searchlist="searchlist"></MyContent> 
 	</view>
 </view>
 
@@ -78,7 +78,9 @@
 						id: "YiJieShu"
 					}
 				],
-				currentTabComponent: "QuanBu"
+				currentTabComponent: "QuanBu",
+				searchcontent: '',//搜索内容
+				searchlist: [],
 			}
 		},
 
@@ -86,9 +88,18 @@
 			TabCur() {
 				this.showContent = false;
 				this.$nextTick(() => {
+					this.searchcontent = ''
+					this.searchlist = []
+					this.showContent = true;
+					
+				});
+			},
+			searchlist() {
+				this.showContent = false;
+				this.$nextTick(() => {
 					this.showContent = true;
 				});
-			}
+			},
     	},
 		
 		methods:{
@@ -110,7 +121,35 @@
 			},
 			key() {
                 return this.TabCur
-            }
+            },
+			search(){
+				uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/searchmyactiv',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                header:{
+					Authorization:uni.getStorageSync("token")
+				},	
+				method: 'GET',
+				data: {
+					team_id: this.user_id,
+					// token: this.$userinfo.token
+                    // activity_status: this.index
+					activity_name: this.searchcontent
+				},
+				success: res => {
+					this.searchlist = res.data.data.activ_list;
+					console.log("searchlist:",this.searchlist)
+					this.TabCur = 0
+					// console.log(this.acList)
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
+			}
 		}
 	}
 </script>
@@ -125,6 +164,6 @@
   z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
 }
 .accontent{
-	margin-top: 77px;	
+	margin-top: 85px;	
 }
 </style>

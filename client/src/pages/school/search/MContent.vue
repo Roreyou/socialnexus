@@ -14,7 +14,11 @@ import actilist from '../../../components/acti-list/acti-list.vue';
 export default {
     props: {
         // acList: Array,
-        index: Number  //用index来加载数据
+        index: Number,  //用index来加载数据
+		searchlist: {
+			type: Array,
+			default:[]
+		}
     },
     components: {
         actilist
@@ -28,6 +32,11 @@ export default {
 			...mapState(['hasLogin', 'forcedLogin','user_id'])
 		},
     mounted() {
+		console.log("list:",this.searchlist)
+		if(this.searchlist.length > 0){
+			this.acList = this.searchlist;
+			return;
+		}
         uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getmyactiv',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
