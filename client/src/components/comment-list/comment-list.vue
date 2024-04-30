@@ -10,7 +10,7 @@
         <view>
             <view class="cu-item" v-for="(item,index) in list" :key="index">
                 <view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id)">
-                        <view class="cu-item shadow" :class="{ 'indexstyle': isindex }">
+                        <view class="cu-item shadow" :class="{ 'commentcard': !isindex }">
 
                             <view class="title" v-if="list_type=='0'">
                                 <view class="com_time" :class="{ 'text-cut': ismyac}">{{item.com_time}}</view>
@@ -144,5 +144,11 @@ font-size: larger;
 .button-container {
   text-align: right;
   margin: 0rpx 25rpx 0 480rpx;
+}
+
+/* 卡片样式 */
+.commentcard{
+    border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 </style>

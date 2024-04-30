@@ -975,9 +975,8 @@
 		align-items: center; 
 		width: 60px; 
 		height: 1.5rem; 
-		background-color: rgb(13, 82, 105); 
 		border-radius: 10px; 
-		color: white;
+		color: grey;
 		// margin-bottom: 5px
 		margin: 15rpx auto 15rpx auto
 	}

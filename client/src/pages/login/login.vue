@@ -26,6 +26,8 @@
 			<navigator url="../reg/reg">注册账号</navigator>
 			<text>|</text>
 			<navigator url="../pwd/pwd">忘记密码</navigator>
+			<text>|</text>
+			<navigator url="../school/index/index">游客模式</navigator>
 		</view>
 	</view>
 </template>
@@ -170,7 +172,8 @@
 								const team_name =  res.data.data.team_name;
 								const avatar = res.data.data.avatar;
 								// console.log("data.id:", data.id)
-								this.toMain(data.id, verification_status, team_name, avatar);	
+								const isleader = res.data.data.isleader;
+								this.toMain(data.id, verification_status, team_name, avatar, isleader);	
 							}
 							// 保存 token
 							uni.setStorageSync('token', res.data.data.token);
@@ -202,12 +205,12 @@
 					});
 				}
 			},
-			toMain(team_id, verification_status, team_name, avatar) {
+			toMain(team_id, verification_status, team_name, avatar, isleader) {
 				// console.log("tomain-avatar", avatar)
 				verification_status = 1  //测试期间先强制
 				const user_id = team_id;
 				const user_name = team_name;
-				this.login({user_id, verification_status, user_name, avatar});
+				this.login({user_id, verification_status, user_name, avatar, isleader});
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式

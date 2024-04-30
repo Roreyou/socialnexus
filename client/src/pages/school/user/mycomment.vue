@@ -56,4 +56,7 @@
 </script>
  
 <style>
+.content{
+	margin-top: 25rpx;
+}
 </style>

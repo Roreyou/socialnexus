@@ -19,7 +19,7 @@
 									</view>
 								</view>
 
-								<view class="title"><view  :class="{ 'text-cut': ismyac}">{{item.name}}</view></view>
+								<view class="title"><view :class="{ 'title-font': !ismyac, 'text-cut': ismyac}">{{item.name}}</view></view>
 								<view class="content">
 									<view class="desc">
 										<view class="text-content"> 日期: {{item.start_time}}</view>
@@ -55,7 +55,6 @@
   		},
 		data() {
 			return {
-				title: '高校 -- 活动列表'
 			}
 		},
 		onLoad() {
@@ -93,7 +92,8 @@
 	.text-cut{
 	margin-top: -15rpx;
 	line-height: 60rpx;
-}
+	font-size: 30rpx;
+	}
 
 	.text-content{
 	height: auto;
@@ -108,9 +108,12 @@
 	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 	}
 
-
-
 	/* 首页推荐列表样式 */
+	/* 标题 */
+	.title-font{
+		font-size: 35rpx;
+	} 
+
 	.indexstyle{
 	margin: 0 20rpx;
     /* border-radius: 10px; */

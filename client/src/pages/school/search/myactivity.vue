@@ -29,6 +29,10 @@
 </template>
  
 <script>
+	import {
+		mapState,
+	} from 'vuex'
+
 	import indexTabbar from '../../../components/top-tabbar/top-tabbar.vue';
 	import MyContent from './MContent.vue';
 
@@ -83,7 +87,9 @@
 				searchlist: [],
 			}
 		},
-
+		computed: {
+			...mapState(['user_id'])
+		},
 		watch: {
 			TabCur() {
 				this.showContent = false;
