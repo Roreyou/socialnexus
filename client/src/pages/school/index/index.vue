@@ -349,10 +349,32 @@
 			clickNav(type){
 				if(type === "1"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/school/search/myactivity');
+					if(!this.userInfo.isUser){  //普通队员的话只需要提示，游客需要提示和询问是否登录
+						uni.showModal({
+						title: '',
+						content: '请登录后查看。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							console.log('用户点击了确定');
+							uni.reLaunch({
+								url: '../../login/login',   /*进入高校首页*/
+							});
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							console.log('用户点击了取消');
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					}else{
+						this.$u.route('/pages/school/search/myactivity');
+					}
 				}
 				if(type === "2"){
-					// 判断Token是否有效   这个逻辑最后再来加
+					// 判断Token是否有效   这个逻辑最后再来加  在这里主页加一下就好了
 					// let lifeData = uni.getStorageSync('lifeData');
 					// let token = lifeData.vuex_token
 					// if(!token){

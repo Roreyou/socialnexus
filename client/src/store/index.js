@@ -14,14 +14,14 @@ const store = new Vuex.Store({
 		userName: "游客",
 		userInfo: {
 			isUser: false,  //是否是正式用户(高校队伍)
-			avatar: '',
-			verification_status: 0,
+			avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
+			verification_status: 5,
 			isleader: false, // 是否是队长（也就是有全部权限
 		}
 	},
 	mutations: {
 		login(state, {user_id, verification_status, user_name, avatar, isleader}) {
-			state.isUser = true;
+			state.userInfo.isUser = true;
 			// console.log("login-avatar", avatar)
 			state.user_id = user_id      // user_id根据情况可能是社区的id，高校的id...
 			state.userName = user_name || '新用户';
@@ -33,8 +33,13 @@ const store = new Vuex.Store({
 		},
 		logout(state) {
 			state.user_id = "";
-			state.userName = "";
-			state.userInfo = {};
+			state.userName = "游客";
+			state.userInfo = {
+				isUser: false,
+				avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
+				verification_status: 5,
+				isleader: false
+			};
 			state.hasLogin = false;
 		}
 	}

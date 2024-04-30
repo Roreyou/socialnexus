@@ -27,7 +27,7 @@
 			<text>|</text>
 			<navigator url="../pwd/pwd">忘记密码</navigator>
 			<text>|</text>
-			<navigator url="../school/index/index">游客模式</navigator>
+			<button @click="gotoIndex">游客模式</button>
 		</view>
 	</view>
 </template>
@@ -124,6 +124,12 @@
 		methods: {
 			...mapMutations(['login']),
 			
+			gotoIndex(){
+				uni.reLaunch({
+						url: '../school/index/index',   /*进入高校首页*/
+					});
+			},
+
 			initPosition() {
 				/**
 				 * 使用 absolute 定位，并且设置 bottom 值进行定位。软键盘弹出时，底部会因为窗口变化而被顶上来。

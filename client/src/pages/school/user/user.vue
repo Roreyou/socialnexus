@@ -117,28 +117,12 @@
 				this.index = e.detail.value
 			},
 		},
-		// mounted(){
-		// 	uni.request({
-		// 		url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getmyinfo',
-		// 		header:{
-		// 			Authorization:uni.getStorageSync("token")
-		// 		},
-		// 		method: 'GET',
-		// 		data: {
-		// 			team_id: this.user_id,
-		// 		},
-		// 		success: res => {
-		// 			if(res.data.code==200){
-		// 				this.avatar = res.data.data.myavatar;
-		// 			}
-		// 		},
-		// 		fail: res => {
-		// 			this.net_error = true;
-		// 		},
-		// 		complete: () => {
-		// 		}
-		// 	})
-		// }
+		mounted(){
+			if(!this.userInfo.isUser){
+				this.$u.toast(`请先登录！`);
+				this.bindLogin()
+			}
+		}
 	}
 </script>
 
