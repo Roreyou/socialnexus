@@ -57,147 +57,144 @@
 				detail:{},
 			}
 		},
+		onLoad(options) {
+			const activityId = options.acti_id;
+			this.acti_id = activityId;
+		},
 		created() {
-			//先解析参数
-			const query = this.$mp.query;
-			console.log("query", query)
-			// const query = this.$route.query;
-			// const activityId = query.acti_id;
-			// this.acti_id = activityId;
+			const activityId = this.acti_id;	
 			// 模拟异步请求获得到的数据 （模拟后端返回数据？
-			setTimeout(() => {
-				this.wechatCodeConfig.scene = '456787';
-				this.drawData = [{
-						type: 'image',
-						config: {
-							url: 'https://img.tukuppt.com/ad_preview/00/03/67/5c98ae4fe6577.jpg!/fw/780',  //背景图
-							x: 0,
-							y: 0,
-							//w: 275,
-							w: 320,
-							h: 510
-						},
-					},
+			// setTimeout(() => {
+			// 	this.wechatCodeConfig.scene = '456787';
+			// 	this.drawData = [{
+			// 			type: 'image',
+			// 			config: {
+			// 				url: 'https://img.tukuppt.com/ad_preview/00/03/67/5c98ae4fe6577.jpg!/fw/780',  //背景图
+			// 				x: 0,
+			// 				y: 0,
+			// 				//w: 275,
+			// 				w: 320,
+			// 				h: 510
+			// 			},
+			// 		},
 					
-					{
-						type: 'image',
-						config: {
-							url: 'https://img95.699pic.com/photo/50157/9961.jpg_wh860.jpg',  //社区图
-							// x: 97.5,
-							x:20,
-							y:20,
-							w: 280,
-							h: 250
-						},
-					},
-					{
-						type: 'image',
-						config: {
-							url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/WXACode.fa3d686a.png',  //二维码图
-							// x: 97.5,
-							x:120,
-							y: 410,
-							w: 80,
-							h: 80
-						},
-					},
-					{
-						type: 'text',
-						config: {
-							text: '古镇消防大队4月冈东村消防安全宣传活动',
-							// x: 140,
-							x: 160,
-							// y: 60,
-							y:300,
-							color: '#000000',
-							// font: 'normal bold 16px 仿宋',
-							font: 'bold 16px 黑体',
-							textAlign: 'center'
-						}
-					},
-					{
-						type: 'text',
-						config: {
-							text: '开始时间:2024年04月30日 15:00',
-							// x: 140,
-							x: 160,
-							// y: 60,
-							y:330,
-							color: '#a3a9a4',
-							font: 'normal bold 16px 仿宋',//后面每行的Y加20
-							textAlign: 'center'
-						}
-					},
-					{
-						type: 'text',
-						config: {
-							text: '结束时间:2024年04月30日 19:30',
-							// x: 140,
-							x: 160,
-							// y: 60,
-							y:350,
-							color: '#a3a9a4',
-							font: 'normal bold 16px 仿宋',
-							textAlign: 'center'
-						}
-					},
-					{
-						type: 'text',
-						config: {
-							text: '活动地点:广东省 中山市 古镇镇 明珠家园',
-							// x: 140,
-							x: 160,
-							// y: 60,
-							y:370,
-							color: '#a3a9a4',
-							font: 'normal bold 16px 仿宋',
-							textAlign: 'center'
-						}
-					},
-					{
-						type: 'text',
-						config: {
-							text: '发布组织:中山市古镇消防志愿服务队',
-							// x: 140,
-							x: 160,
-							// y: 60,
-							y:390,
-							color: '#a3a9a4',
-							font: 'normal bold 16px 仿宋',
-							textAlign: 'center'
-						}
-					},
-				];
-				// this.createdPoster()
-			}, 1000)
-			
-			console.log("发请求")
+			// 		{
+			// 			type: 'image',
+			// 			config: {
+			// 				url: 'https://img95.699pic.com/photo/50157/9961.jpg_wh860.jpg',  //社区图
+			// 				// x: 97.5,
+			// 				x:20,
+			// 				y:20,
+			// 				w: 280,
+			// 				h: 250
+			// 			},
+			// 		},
+			// 		{
+			// 			type: 'image',
+			// 			config: {
+			// 				url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/WXACode.fa3d686a.png',  //二维码图
+			// 				// x: 97.5,
+			// 				x:120,
+			// 				y: 410,
+			// 				w: 80,
+			// 				h: 80
+			// 			},
+			// 		},
+			// 		{
+			// 			type: 'text',
+			// 			config: {
+			// 				text: '古镇消防大队4月冈东村消防安全宣传活动',
+			// 				// x: 140,
+			// 				x: 160,
+			// 				// y: 60,
+			// 				y:300,
+			// 				color: '#000000',
+			// 				// font: 'normal bold 16px 仿宋',
+			// 				font: 'bold 16px 黑体',
+			// 				textAlign: 'center'
+			// 			}
+			// 		},
+			// 		{
+			// 			type: 'text',
+			// 			config: {
+			// 				text: '开始时间:2024年04月30日 15:00',
+			// 				// x: 140,
+			// 				x: 160,
+			// 				// y: 60,
+			// 				y:330,
+			// 				color: '#a3a9a4',
+			// 				font: 'normal bold 16px 仿宋',//后面每行的Y加20
+			// 				textAlign: 'center'
+			// 			}
+			// 		},
+			// 		{
+			// 			type: 'text',
+			// 			config: {
+			// 				text: '结束时间:2024年04月30日 19:30',
+			// 				// x: 140,
+			// 				x: 160,
+			// 				// y: 60,
+			// 				y:350,
+			// 				color: '#a3a9a4',
+			// 				font: 'normal bold 16px 仿宋',
+			// 				textAlign: 'center'
+			// 			}
+			// 		},
+			// 		{
+			// 			type: 'text',
+			// 			config: {
+			// 				text: '活动地点:广东省 中山市 古镇镇 明珠家园',
+			// 				// x: 140,
+			// 				x: 160,
+			// 				// y: 60,
+			// 				y:370,
+			// 				color: '#a3a9a4',
+			// 				font: 'normal bold 16px 仿宋',
+			// 				textAlign: 'center'
+			// 			}
+			// 		},
+			// 		{
+			// 			type: 'text',
+			// 			config: {
+			// 				text: '发布组织:中山市古镇消防志愿服务队',
+			// 				// x: 140,
+			// 				x: 160,
+			// 				// y: 60,
+			// 				y:390,
+			// 				color: '#a3a9a4',
+			// 				font: 'normal bold 16px 仿宋',
+			// 				textAlign: 'center'
+			// 			}
+			// 		},
+			// 	];
+			// }, 1000)
+
 			//发请求
-			// uni.request({
-			// 	url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/posterinfo',
-			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-			// 	header:{
-			// 		Authorization:uni.getStorageSync("token")
-			// 	},					
-			// 	method: 'GET',
-			// 	data: {
-			// 		acti_id: activityId,
-			// 	},
-			// 	success: res => {
-			// 		this.detail = res.data.data;
-			// 		this.net_error = false;
-			// 		this.setData()
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 		uni.showToast({
-			// 			icon: 'none',
-			// 			title: '网络较差，请重试'
-			// 		});
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/posterinfo',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},					
+				method: 'GET',
+				data: {
+					acti_id: activityId,
+				},
+				success: res => {
+					this.detail = res.data.data;
+					this.net_error = false;
+					this.setData()
+				},
+				fail: res => {
+					this.net_error = true;
+					uni.showToast({
+						icon: 'none',
+						title: '网络较差，请重试'
+					});
+				},
+				complete: () => {
+				}
+			})
 		},
 		methods: {
 			// 保存到相册
