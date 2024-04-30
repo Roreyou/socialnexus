@@ -1,21 +1,6 @@
 <!-- 校团委 首页 -->
 <template>
-  <view class="u-p-l-10 u-p-r-10">
-
-    <!-- 页面顶部导航栏 -->
-		<!-- <u-navbar :is-back="false">
-			<view style="display: flex;justify-content: center;align-items: center;">
-				<view class="u-p-30"  @click="location">
-					杭州
-					<u-icon name="arrow-down-fill" class="u-p-l-20" color="#515356"></u-icon>
-				</view>
-				<u-search placeholder="搜索实践活动" v-model="keyword" input-align="center"  :show-action="false" :clearabled="true"
-:disabled="true" style="width: 565rpx;" @click="search">
-        </u-search>
-			</view>
-		</u-navbar> -->
-
-    
+  <view class="u-p-l-10 u-p-r-10">    
     <!-- 最顶部信息 -->
 		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
 			<view class="user-section">
@@ -26,10 +11,11 @@
 		</view>
 
 		<view> 
-			<view class="rowClass">
+			
+		<view class="rowClass">
         <!-- 点击去高校队伍/社区需求 -->
 				<u-row>
-					<u-col span="4" text-align="center" v-for="(item,index) in navList" :key="index">
+					<u-col span="6" text-align="center" v-for="(item,index) in navList" :key="index">
 						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass">
 							<image :src="item.src" style="width: 90rpx;height: 90rpx;" mode="widthFix"></image>
 							<view class="tabName">{{item.name}}</view>

@@ -65,7 +65,7 @@
 			</view>
 			<view>
 				<view class="cu-item" v-for="(item,index) in acList" :key="index">
-					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail">
+					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id, 'recruiting')" >
 							<view class="cu-item shadow">
 								<view class="title"><view class="text-cut">{{item.title}}</view></view>
 								<view class="content">
@@ -291,11 +291,14 @@
 					url: 'pages/search/recommend',
 				  })
 			},
-			//前往详情页
-			todetail(){
+			todetail(activityId, mode) {
 				this.$u.route({
-					url: 'pages/details/details',
-				  })
+					url: '/pages/community/activityDetail',
+					params: {
+						activityId: activityId,
+						mode: mode
+					}
+				})
 			},
 		}
 	}

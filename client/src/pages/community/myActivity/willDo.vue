@@ -2,7 +2,7 @@
 <template>
 	<view class="content">
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
-			<view class="cu-card article" :class="isCard?'no-card':''">
+			<view class="cu-card article" :class="isCard?'no-card':''" @click = "todetail(item.id, 'recruiting')">
 					<view class="cu-item shadow">
 						<view class="cu-bar bg-white">
 							<view class="action">
@@ -37,7 +37,14 @@
 		data() {
 			return {
 				acList:[
-
+					{	
+						state: "待开展",
+						title: "4月15日实践活动",
+						time: "2021-04-15",
+						place: "成都",
+						job: "志愿者",
+						keywords: "服务,实践"
+					}
 				]
 			}
 		},
@@ -45,7 +52,15 @@
 
 		},
 		methods: {
-
+			todetail(activityId, mode) {
+				this.$u.route({
+					url: '/pages/community/activityDetail',
+					params: {
+						activityId: activityId,
+						mode: mode
+					}
+				})
+			},
 		}
 	}
 </script>

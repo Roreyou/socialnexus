@@ -9,7 +9,7 @@
 			<text class="title">{{title}}</text>
 		</view> -->
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
-			<view class="cu-card article" :class="isCard?'no-card':''">
+			<view class="cu-card article" :class="isCard?'no-card':''" @click = "toAdmit(item.activityId, item.teamId)">
 					<view class="cu-item shadow">
 						<view class="cu-bar bg-white">
 							<view class="action">
@@ -55,7 +55,15 @@
 
 		},
 		methods: {
-
+			toAdmit(activityId, teamId) {
+				this.$u.route({
+					url: '/pages/community/myTeam/admit',
+					params: {
+						activityId: activityId,
+						teamId: teamId
+					}
+				})
+			},
 		}
 	}
 </script>

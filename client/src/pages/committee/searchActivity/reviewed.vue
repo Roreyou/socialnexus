@@ -2,7 +2,7 @@
  * @Author: happy 2630391116@qq.com
  * @Date: 2024-04-29 14:38:05
  * @LastEditors: happy 2630391116@qq.com
- * @LastEditTime: 2024-04-29 15:36:39
+ * @LastEditTime: 2024-04-29 17:31:02
  * @FilePath: \socialnexus\client\src\pages\committee\searchActivity\reviewed.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -19,8 +19,10 @@
 								<text class="text-xl text-bold">{{item.state}}</text>
 							</view>
 							
-							<span class="status-label passed" v-if="true">已通过</span>
-    						<span class="status-label rejected" v-else>已驳回</span>
+							<view class="action right-buttons" v-if="item.state === '已审核'" >
+								<span class="status-label passed" v-if="true">已通过</span>
+    							<span class="status-label rejected" v-else>已驳回</span>
+							</view>
 							
 						</view>
 						<view class="title"><view class="text-cut">{{item.title}}</view></view>
