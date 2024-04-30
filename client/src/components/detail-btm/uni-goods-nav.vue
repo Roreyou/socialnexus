@@ -6,7 +6,7 @@
 			<view class="flex uni-tab__cart-sub-left">
 				<view v-for="(item,index) in options" :key="index" class="flex uni-tab__cart-button-left uni-tab__shop-cart" @click="onClick(index,item)">
 						<view class="uni-tab__icon">
-							<uni-icons v-if="index == 0" :type="item.icon_noac"></uni-icons>
+							<uni-icons v-if="index == 0" :type="item.icon_noac"></uni-icons> 
 							<uni-icons v-if="index == 1" :type="isActive ? item.icon : item.icon_noac" size="20" color="#646566"></uni-icons>
 						<!-- <uni-icons  v-if="isActive1" :type="item.icon" size="20" color="#646566"></uni-icons>
 						<uni-icons  v-if="!isActive1" :type="item.icon_noac" size="20" color="#646566"></uni-icons> -->
@@ -72,12 +72,12 @@
 						{
 						icon_noac: 'paperplane',
 						icon: 'paperplane-filled',
-						text: t("uni-goods-nav.options.shop"),
+						text: t("生成海报"),
 					}, 
 					{
 						icon_noac: 'star',
 						icon: 'star-filled',
-						text: t("uni-goods-nav.options.cart")
+						text: t("收藏活动")
 					}]
 				}
 			},
@@ -124,31 +124,23 @@
 		methods: {
 			onClick(index, item) {
 				//分享
-				if(index == 0){  
-					// uni.share({
-					// provider: 'weixin', // 分享的目标平台，比如微信
-					// type: 5, // 分享的类型，5为小程序
-					// imageUrl: 'https://example.com/share.png', // 分享的图片链接
-					// title: '分享标题',
-					// success: function (res) {
-					// 	console.log('分享成功');
-					// },
-					// fail: function (err) {
-					// 	console.log('分享失败: ' + JSON.stringify(err));
-					// }
-					// });				
+				if(index == 0){  //生成海报
+					// this.$u.route({
+					// 	url: 'pages/school/poster/poster',
+					// 	params: {
+					// 		acti_id: this.acti_id,
+					// 	}
+					// })
+					console.log("acti_id:",this.acti_id)
+					const id = this.acti_id
+					this.$u.route({
+            			url: 'pages/school/poster/poster?acti_id=' + id
+           			 })
+
 				}
 				//收藏
 				if(index == 1){
 					let favor = this.isActive ? 1 : 0;  //1就是要取消收藏，0就是要收藏
-					// if (this.isActive) {
-					// 	this.isActive = false
-					// 	this.$u.toast(`成功取消收藏`);
-
-					// } else {
-					// 	this.isActive = true
-					// 	this.$u.toast(`收藏成功！`);
-					// }
 					uni.request({
 						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
 						header:{
@@ -195,31 +187,6 @@
 					content: item
 				})
 			},
-			//分享
-			// onShareAppMessage(res) {
-			// 		console.log('列表信息',res);
-			// 	// console.log('列表信息',res.target.dataset.eventParams.ele.title);
-			// 	if (res.from === 'button') { // 来自页面内分享按钮
-			// 		console.log(res.target)
-			// 	}
-			// 	return {
-			// 		title: res.target.dataset.eventParams.ele.title, //分享的名称
-			// 		path: 'pages/interpretAndDownload/interpretAndDownload?title=模版下载',
-			// 		mpId: appid //此处配置微信小程序的AppId
-			// 	}
-			// },
-
-			// onShareAppMessage(res) {
-			// // 判断分享是否来自页面内分享按钮
-			// console.log("分享")
-			// 	// if (res.from === 'button') {
-			// 	// 	console.log(res.target)
-			// 	// }
-			// 	// return {
-			// 	// title: '不凡',
-			// 	// path: path
-			// 	// }
-			// }
 			application(){
 			this.$u.route({
 				url: 'pages/school/details/application',
@@ -258,7 +225,7 @@
 			}
 		},
 		onShareAppMessage: function(res) {
-			console.log("分享")
+			// console.log("分享")
 
 			if (res.from === 'button') {// 判断分享是否来自页面内分享按钮
          		console.log(res.target)

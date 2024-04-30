@@ -213,11 +213,21 @@
 				 * 返回首页也使用reLaunch方式
 				 */
 
+
+				//开发用的
 				if (this.forcedLogin) {
-					uni.reLaunch({
+					if(this.account == '1'){
+						uni.reLaunch({
 						url: '../school/index/index',   /*进入高校首页*/
 					});
-				} else {
+					} else if(this.account == '2'){
+					uni.reLaunch({
+						url: '../committee/index/index',   /*进入团委首页*/
+					});
+				}
+
+				}
+				else {
 					uni.navigateBack();
 				}
 

@@ -10,6 +10,12 @@
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	{
+		"path": "pages/login/login",
+		"style": {
+			"navigationBarTitleText": "登录"
+		}
+	},
 		{
 			"path": "pages/community/index",
 			"style": {
@@ -25,12 +31,7 @@
 				}
 			}
 		},
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "登录"
-			}
-		},
+
 		{
 			"path": "pages/reg/reg",
 			"style": {
@@ -271,7 +272,27 @@
 			"style": {
 				"navigationBarTitleText": "评价队伍"
 			}
-		}
+		},
+		//海报
+		{
+            "path" : "pages/school/poster/poster",
+            "style" : {
+				"navigationBarTitleText": "生成海报"
+			}
+        }
+        ,{
+            "path" : "pages/school/draw/draw",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/school/posterMultiple/posterMultiple",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

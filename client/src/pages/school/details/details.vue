@@ -6,6 +6,11 @@
 			<view class="part first">
 				<view class="de_total_title">
 					{{ detail.name }}
+					<view class="wordcont">
+						<view class="ackeywords" v-for="(word,index) in detail.keywords.split(',')" :key="index">
+							<view class="cu-tag bg-red light sm round">{{word}}</view>
+						</view>
+					</view>
 				</view>
 				<view class="de_key_value">
 					<view class="de_content">
@@ -35,11 +40,11 @@
 
 
 				</view>
-				<view class="wordcont">
+				<!-- <view class="wordcont">
 					<view class="ackeywords" v-for="(word,index) in detail.keywords.split(',')" :key="index">
 						<view class="cu-tag bg-red light sm round">{{word}}</view>
 					</view>
-				</view>
+				</view> -->
 			</view>
 		</view>
 		<view class="custom-container">
@@ -72,7 +77,7 @@
 						<view class="key">
 							联系方式
 						</view>
-						<view class="value">
+						<view class="value phone" @click="phoneOn">
 							{{detail.tel}}
 						</view>
 					</view>
@@ -163,6 +168,11 @@
 		<view style="position: fixed; bottom: 0; width: 100%;">
 			<bttab :team_id="user_id" :acti_id="acti_id"></bttab>
 		</view>
+
+		<!-- 以下是尝试把海报迁移到这个页面 -->
+		<view>
+			
+		</view>
 	</view> 
 </template>
  
@@ -239,7 +249,20 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			// 	complete: () => {
 			// 	}
 			// })
-		}
+		},
+		methods:{
+			phoneOn() {
+				wx.makePhoneCall({
+					phoneNumber: this.detail.tel, //此号码仅用于测试
+					success: function () {
+						console.log("拨打电话成功！")
+					},
+					fail: function () {
+						console.log("拨打电话失败！")
+					}
+				})
+			}
+    	}
 	}
 </script>
  
@@ -331,5 +354,9 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 	.wordcont .ackeywords {
 		display: inline-block;
 	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
+	}
+
+	.phone{
+		color: red
 	}
 </style>
