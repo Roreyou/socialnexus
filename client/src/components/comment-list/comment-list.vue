@@ -29,7 +29,7 @@
                                     </view>
                                 </view>
                                 <view class="button-container" v-if="list_type=='1'">
-                                    <button class="custom-button">去评价</button>
+                                    <button class="custom-button" @click="handleClick(item.acti_id)">去评价</button>
                                 </view>
                             </view>
                         </view>
@@ -73,6 +73,12 @@ export default {
             // 	url: 'pages/school/details/details?acti_id=' + id
             // })
         },
+        handleClick(acti_id) {
+            this.$emit('gotocomment', acti_id)
+        },
+        updateList(newList) {
+        this.list = newList;
+        }
     }
 }
 </script>

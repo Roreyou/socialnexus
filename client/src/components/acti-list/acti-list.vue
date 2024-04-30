@@ -1,6 +1,6 @@
 <!-- 高校 活动列表 -->
 <template>
-		<view>
+		<view :class="{'others-all': !isindex}">
 			<!-- <text class="cuIcon-titles text-green"></text> -->
 			<!-- <view class="cu-bar bg-white">
 				<view class="action">					
@@ -10,14 +10,14 @@
 			<view>
 				<view class="cu-item" v-for="(item,index) in acList" :key="index">
 					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id)">
-							<view class="cu-item shadow" :class="{ 'indexstyle': isindex }">
-							<!-- 活动状态 -->							
-							<view class="cu-bar bg-white" v-if="ismyac">
-								<view class="action">
-									<text class="cuIcon-titles text-green"></text>
-									<text class="text-xl text-bold">{{item.my_state}}</text>
+							<view class="cu-item shadow" :class="{'indexstyle': isindex, 'others': !isindex}">
+								<!-- 活动状态 -->							
+								<view class="cu-bar bg-white" v-if="ismyac">
+									<view class="action">
+										<text class="cuIcon-titles text-green"></text>
+										<text class="text-xl text-bold">{{item.my_state}}</text>
+									</view>
 								</view>
-							</view>
 
 								<view class="title"><view  :class="{ 'text-cut': ismyac}">{{item.name}}</view></view>
 								<view class="content">
@@ -76,6 +76,9 @@
 	}
 </script>
 <style scoped>
+	.others-all{
+		margin-top: 10rpx;
+	}
 	/* 活动推荐列表 */
 	.cu-item .shadow{
 	/* margin: 0; */
@@ -114,4 +117,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	}
 	
+	/* 首页之外的卡片样式 */
+	.others{
+		background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+	}
 </style>

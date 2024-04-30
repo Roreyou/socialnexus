@@ -72,12 +72,12 @@
 						{
 						icon_noac: 'paperplane',
 						icon: 'paperplane-filled',
-						text: t("生成海报"),
+						text: "生成海报"
 					}, 
 					{
 						icon_noac: 'star',
 						icon: 'star-filled',
-						text: t("收藏活动")
+						text:"收藏活动"
 					}]
 				}
 			},
@@ -123,20 +123,12 @@
 
 		methods: {
 			onClick(index, item) {
-				//分享
-				if(index == 0){  //生成海报
-					// this.$u.route({
-					// 	url: 'pages/school/poster/poster',
-					// 	params: {
-					// 		acti_id: this.acti_id,
-					// 	}
-					// })
-					console.log("acti_id:",this.acti_id)
+				//生成海报
+				if(index == 0){
 					const id = this.acti_id
 					this.$u.route({
             			url: 'pages/school/poster/poster?acti_id=' + id
            			 })
-
 				}
 				//收藏
 				if(index == 1){
