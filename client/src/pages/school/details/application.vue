@@ -167,10 +167,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
     methods: {
       submit(){  //提交报名或者取消报名活动
-		if(!this.userInfo.isUser){
-			this.$u.toast(`请登录后再报名活动！`);
-			return;
-		}
+		// console.log("submit-userInfo:",this.userInfo);	
 		if(!this.userInfo.isleader){
 			this.$u.toast(`只有队长能报名/取消报名活动！`);
 			return;

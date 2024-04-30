@@ -118,7 +118,7 @@
 		},
 
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id'])
+			...mapState(['hasLogin', 'forcedLogin','user_id','userInfo'])
 		},
 
 		methods: {
@@ -132,6 +132,33 @@
 				}
 				//收藏
 				if(index == 1){
+					if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后查看。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							console.log('用户点击了确定');
+							_this.$u.route({
+								url: 'pages/login/login',
+								params: {
+									team_id: this.user_id,
+									acti_id: this.acti_id,
+								}
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							console.log('用户点击了取消');
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+				}else{
+
 					let favor = this.isActive ? 1 : 0;  //1就是要取消收藏，0就是要收藏
 					uni.request({
 						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
@@ -161,7 +188,7 @@
 						complete: () => {
 						}
 					})
-					
+				}	
 
 				}
 				// console.log(item.isActive)
@@ -180,13 +207,40 @@
 				})
 			},
 			application(){
-			this.$u.route({
-				url: 'pages/school/details/application',
-				params: {
-        			team_id: this.user_id,
-        			acti_id: this.acti_id,
-    			}
-			})
+			if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后查看。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							console.log('用户点击了确定');
+							_this.$u.route({
+								url: 'pages/login/login',
+								params: {
+									team_id: this.user_id,
+									acti_id: this.acti_id,
+								}
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							console.log('用户点击了取消');
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+			}else{
+				this.$u.route({
+					url: 'pages/school/details/application',
+					params: {
+						team_id: this.user_id,
+						acti_id: this.acti_id,
+					}
+				})
+			}
 			},
 			cancelacti(){  //取消报名
 			uni.request({

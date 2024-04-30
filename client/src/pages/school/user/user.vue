@@ -119,8 +119,27 @@
 		},
 		mounted(){
 			if(!this.userInfo.isUser){
-				this.$u.toast(`请先登录！`);
-				this.bindLogin()
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后查看。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							// console.log('用户点击了确定');
+							_this.$u.route({
+								url: 'pages/login/login',
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							// console.log('用户点击了取消');
+							wx.switchTab({
+								url: '/pages/tabbar-page/tabbar-page'
+							})
+						}
+						}
+					});
 			}
 		}
 	}
