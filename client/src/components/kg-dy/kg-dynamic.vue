@@ -135,7 +135,6 @@
 				this.$emit('comContent',id)
 			},
 			comLike(id){
-				console.log(id);
 				this.$emit('comLikes',id)
 			},
 		}

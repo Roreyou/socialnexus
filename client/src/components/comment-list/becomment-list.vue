@@ -81,6 +81,8 @@ export default {
 /* margin: 0; */
 margin-top: 10rpx;
 margin-bottom: 15rpx;
+border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
 .cu-bar .action:first-child{

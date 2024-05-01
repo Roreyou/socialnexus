@@ -117,7 +117,6 @@
 			},
 			post(item){
 				this.ispost = !this.ispost;
-				console.log(this.ispost);
 			},
 			
 			//上传图片
@@ -148,7 +147,6 @@
 				this.$refs.uUpload.upload();
 			},
 			postAll(){
-				console.log("this.user_id,", this.user_id)
 				uni.request({
 							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost',
 							header:{

@@ -117,7 +117,6 @@
 			},
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
-				console.log("Cur,", this.TabCur);
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 								// 切换组件时页面滚动到顶部
 								wx.pageScrollTo({
@@ -144,7 +143,6 @@
 				},
 				success: res => {
 					this.searchlist = res.data.data.activ_list;
-					console.log("searchlist:",this.searchlist)
 					this.TabCur = 0
 					// console.log(this.acList)
 					this.net_error = false;

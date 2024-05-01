@@ -823,7 +823,6 @@
 			},
 			del(i, id) {
 				// let index = this.dynamicLists.findIndex(v => v.id === id)
-				console.log("del", i)
 				this.dynamicFormData2.domains.splice(i, 1)
 				// console.log(this.dynamicFormData.domains)
 			},

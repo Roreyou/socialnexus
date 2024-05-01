@@ -149,7 +149,6 @@
 			
 			// 加载静态资源，创建或更新组件内所下载本地图片集合
 			async loadingResources(drawData) {
-				console.log("loadingResources")
 				this.readyed = false;
 				if (!drawData.length || drawData.length <= 0) return;
 				// 加载静态图片，将所以图片的网络地址替换成本地缓存地址

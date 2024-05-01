@@ -219,12 +219,8 @@
 					// token: this.$userinfo.token
 				},
 				success: res => {
-					console.log(res)
 					this.acList = res.data.data.acti_list;
 					this.acList[0].keywords = "服务,实践"
-					console.log(this.acList)
-					const List = this.acList
-					this.acList = [...List, ...List];
 					this.net_error = false;
 				},
 				fail: res => {

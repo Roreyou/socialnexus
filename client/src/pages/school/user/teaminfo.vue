@@ -131,7 +131,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						value:''
 					},
 					{
-						key:'负责人姓名',
+						key:'指导老师姓名',
 						value:''
 					},
 					{
@@ -196,7 +196,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						//队伍信息
 						const basedata = res.data.data.team_info;
 						this.baselist[0].value = basedata.team_name;
-						this.baselist[1].value = basedata.insturctor_name;
+						this.baselist[1].value = basedata.instructor_name;
 						this.baselist[2].value = basedata.leader_name;
 						this.baselist[3].value = basedata.relevant_faculties;						
 						this.baselist[4].value = basedata.mem_num;

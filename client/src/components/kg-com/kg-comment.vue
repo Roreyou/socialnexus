@@ -49,9 +49,10 @@
 						</view>
 					</view>
 					<view class="reply_user_like">
-						<image class="reply_user_shanchu" src="../../static/icon/like_fil.png"></image> 
+					 <image class="reply_user_shanchu" :src="getChildSrc(item, rep)" @click="replyLike2(index, index2)"></image>
 						{{ rep.like }}
 					</view>
+					
 
 				</view>
 				<view class="reply_content">
@@ -70,9 +71,6 @@
 			commentList: {
 				type: Array,
 				default:[
-					{
-						reply_list: []
-					}
 				]
 			}
 		},
@@ -84,14 +82,31 @@
 				replyavatarUrl: 'https://b0.bdstatic.com/f7de28343a3c2ccfb865e2f4f9d0c5fe.jpg@h_1280'
 			};
 		},
+		watch: {
+		},
 		onLoad() {
 			this.background = getApp().globalData.background
+
 		},
-
-		
-
-
+		mounted(){
+			// console.log("commentList:", this.commentList)
+			    // Add watchers for childList items
+				this.commentList.forEach(parentItem => {
+				parentItem.reply_list.forEach(childItem => {
+					this.$watch(
+					() => childItem.fabulous,
+					(newVal, oldVal) => {
+						// Handle property change
+						// console.log('childItem.fabulous changed:', newVal);
+					}
+					);
+				});
+				});
+		},
 		methods: {
+			getChildSrc(parentItem, childItem) {
+				return childItem.fabulous ? '../../static/icon/like_fil.png' : '../../static/icon/like_ufil.png';
+			},
 			delCom(comId){
 				this.$emit('delCom',comId)
 			},
@@ -108,6 +123,9 @@
 					urls: urls // 需要预览的图片http链接列表
 				});
 			},
+			replyLike2(index, index2){
+				this.$emit('replyLike2',index, index2)
+			}
 		}
 	};
 </script>
@@ -187,8 +205,8 @@
 			}
 
 			&_shanchu {
-				width: 30px;
-				height: 30px;
+				width: 20px;
+				height: 20px;
 			}
 
 			&_like {

@@ -83,10 +83,8 @@
 					// token: this.$userinfo.token
 				},
 				success: res => {
-					console.log("getteamfavor", res)
 					this.acList = res.data.data.acti_list;
 					this.acList[0].keywords = "服务,实践"
-					console.log(this.acList)
 					this.net_error = false;
 				},
 				fail: res => {
