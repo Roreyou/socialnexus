@@ -10,7 +10,7 @@
 				<view class="cot_flirt_name">
 					{{item.comment_detail.my_name}}
 				</view>
-				<image @click="delCom(item.comment_detail.id)" class="cot_flirt_shanchu" src="../../static/icon/shanchu.png"></image>
+				<image v-if="item.comment_detail.del_flag" @click="delCom(item.comment_detail.id)" class="cot_flirt_shanchu" src="../../static/icon/shanchu.png"></image>
 			</view>
 			<view class="cot_content">
 				{{item.comment_detail.content}}
