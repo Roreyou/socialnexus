@@ -137,7 +137,6 @@
 		onLoad(options) {
 			const id = options.id;
 			//发送获取这条帖子详情的请求
-
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/getdetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
@@ -165,29 +164,7 @@
 			})
 		},
 
-		// 监听comlist
 		watch: {
-			// 监听 comList 数组的变化
-			// comList: {
-			// 	handler(newValue, oldValue) {
-			// 		this.showCom = false;
-			// 		this.$nextTick(() => {
-			// 			this.showCom = true;
-			// 		});
-			// 	},
-			// 	deep: true, // 深度监听数组变化
-			// },
-			// dyInfo: {
-			// 	handler(newValue, oldValue) {
-			// 		// 在数组发生变化时，会自动更新 leng 计算属性
-			// 		// 你可以在这里执行其他操作，如果需要的话
-			// 		this.dyinfoshow = false;
-			// 		this.$nextTick(() => {
-			// 			this.dyinfoshow = true;
-			// 		});
-			// 	},
-			// 	deep: true, // 深度监听数组变化
-			// },
 		},
 
 		methods: {

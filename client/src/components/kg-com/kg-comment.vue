@@ -91,17 +91,21 @@
 		mounted(){
 			// console.log("commentList:", this.commentList)
 			    // Add watchers for childList items
-				this.commentList.forEach(parentItem => {
-				parentItem.reply_list.forEach(childItem => {
-					this.$watch(
-					() => childItem.fabulous,
-					(newVal, oldVal) => {
-						// Handle property change
-						// console.log('childItem.fabulous changed:', newVal);
-					}
-					);
-				});
-				});
+				if (this.commentList && this.commentList.length) {
+					this.commentList.forEach(parentItem => {
+						if (parentItem.reply_list && parentItem.reply_list.length) {
+						parentItem.reply_list.forEach(childItem => {
+							this.$watch(
+							() => childItem.fabulous,
+							(newVal, oldVal) => {
+								// 处理属性变化
+								// console.log('childItem.fabulous changed:', newVal);
+							}
+							);
+						});
+						}
+					});
+				}
 		},
 		methods: {
 			getChildSrc(parentItem, childItem) {

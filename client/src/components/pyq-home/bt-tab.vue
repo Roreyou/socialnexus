@@ -24,7 +24,7 @@
                 data-cur="message" @click="NavChange" @tap="tarTap(tabBars[2])">
                 <view class="cuIcon-message" @click="badgeChange2">
                     <!-- 数字角标 -->
-                    <view v-if="badge2" class="cu-tag badge">99</view>
+                    <view v-if="badge2" class="cu-tag badge">{{notice_num}}</view>
                 </view>
                 通知
             </view>
@@ -37,7 +37,8 @@
 	export default {
         props:{
 			tabBars: Array,
-			tabIndex: String
+			tabIndex: String,
+            notice_num: String
 		},
 		data() {
 		    return {
