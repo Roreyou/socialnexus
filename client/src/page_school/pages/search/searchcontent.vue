@@ -10,20 +10,43 @@ export default {
     name:'scontent',
     props: {
         searchlist: Array,
+        searchcontent: {
+            type: String,
+            default: ''
+        }
     },
     components: {
         actilist
     },
     data() {
         return {
-            title: '高校 -- 搜索活动内容',
         }
     },
-    onLoad() {
-
-    },
     methods: {
-        
+        search(){
+			uni.request({
+			url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/search',
+			header:{
+				Authorization:uni.getStorageSync("token")
+			},	
+			method: 'GET',
+			data: {
+				text: this.searchcontent
+			},
+			success: res => {
+				this.searchlist = res.data.data.activ_list;
+				// console.log("searchlist:",this.searchlist)
+				this.TabCur = 0
+				// console.log(this.acList)
+				this.net_error = false;
+			},
+			fail: res => {
+				this.net_error = true;
+			},
+			complete: () => {
+			}
+		})
+		}
     }
 }
 </script>
