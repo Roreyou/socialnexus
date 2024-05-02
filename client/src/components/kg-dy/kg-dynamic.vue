@@ -64,17 +64,17 @@
 
 			<view class="operate">
 				<view class="operate_icon">
-					<image src="../../static/icon/address.png" mode=""></image>
+					<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/address.png" mode=""></image>
 					<view class="operate_text">
 						{{ dyInfo.province }}
 					</view>
 				</view>
 				<view class="operate_icon">
-					<image src="../../static/icon/pinglun1.png" mode="" @click="isInfo?comContent(dyInfo.id):''"></image>
+					<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/pinglun1.png" mode="" @click="isInfo?comContent(dyInfo.id):''"></image>
 					<view class="" @click="isInfo?comContent(dyInfo.id):''">
 						{{dyInfo.com_num}}
 					</view>
-					<image class="like_icon" :src="dyInfo.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
+					<image class="like_icon" :src="dyInfo.fabulous?'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_fil.png':'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_ufil.png'"
 					 mode="" @click="isInfo?comLike(dyInfo.id):''"></image>
 					<view class="" @click="isInfo?comLike(dyInfo.id):''">
 						{{dyInfo.like}}
@@ -135,7 +135,6 @@
 				this.$emit('comContent',id)
 			},
 			comLike(id){
-				console.log(id);
 				this.$emit('comLikes',id)
 			},
 		}

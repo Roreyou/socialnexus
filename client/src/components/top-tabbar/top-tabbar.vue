@@ -49,6 +49,7 @@
 		height: 100%;
 	}
 	.uni-tab-item{
+		/* background-color: white; */
 		width: 100%;
 		white-space: nowrap;
 		line-height: 100rpx;
@@ -69,7 +70,7 @@
 	.tabActive{
 		color: #000;
 		font-size: 40rpx;
-		background-color: white;
+		/* background-color: white; */
 	}
 	.tabActive .tab-item-title-line{
 		display: block;

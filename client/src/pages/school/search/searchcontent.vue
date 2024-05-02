@@ -1,6 +1,6 @@
 <!-- 高校 搜索活动内容 -->
 <template>
-    <actilist :acList="acList"></actilist>
+    <actilist :acList="searchlist"></actilist>
 </template>
 
 <script>
@@ -8,8 +8,7 @@ import actilist from '../../../components/acti-list/acti-list.vue';
 
 export default {
     props: {
-        acList: Array,
-        id: String
+        searchlist: Array,
     },
     components: {
         actilist

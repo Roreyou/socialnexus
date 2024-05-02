@@ -106,6 +106,9 @@
 </template>
  
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
 	export default {
@@ -123,7 +126,9 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 		team_id: '0',
     	}
 	},
-
+	computed: {
+			...mapState(['userInfo'])
+		},
 	mounted(){
 		console.log("报名详情页面");
 			// 获取query对象
@@ -162,7 +167,11 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
     methods: {
       submit(){  //提交报名或者取消报名活动
-
+		// console.log("submit-userInfo:",this.userInfo);	
+		if(!this.userInfo.isleader){
+			this.$u.toast(`只有队长能报名/取消报名活动！`);
+			return;
+		}
         if(!this.isActive){
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/register_event',	

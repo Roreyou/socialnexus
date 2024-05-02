@@ -213,8 +213,6 @@
 			// 	complete: () => {
 			// 	}
 			// })
-			console.log(typeof this.$url)
-			console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
@@ -227,7 +225,6 @@
 					// token: this.$userinfo.token
 				},
 				success: res => {
-					console.log(res)
 					this.acList = res.data.data.acti_list;
 					this.acList[0].keywords = "服务,实践"
 					console.log(this.acList)

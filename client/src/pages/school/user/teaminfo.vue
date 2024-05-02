@@ -93,10 +93,10 @@
 											<view class="text-content"> 年级: {{item.grade}}</view>									
 										</view>
 										<view class="desc">
-											<view class="text-content"> 联系电话: {{item.grade}}</view>									
+											<view class="text-content"> 联系电话: {{item.tel}}</view>									
 										</view>
 										<view class="desc">
-											<view class="text-content"> 邮箱: {{item.grade}}</view>									
+											<view class="text-content"> 邮箱: {{item.email}}</view>									
 										</view>
 									</view>
 								</view>
@@ -131,7 +131,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						value:''
 					},
 					{
-						key:'负责人姓名',
+						key:'指导老师姓名',
 						value:''
 					},
 					{
@@ -196,7 +196,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						//队伍信息
 						const basedata = res.data.data.team_info;
 						this.baselist[0].value = basedata.team_name;
-						this.baselist[1].value = basedata.insturctor_name;
+						this.baselist[1].value = basedata.instructor_name;
 						this.baselist[2].value = basedata.leader_name;
 						this.baselist[3].value = basedata.relevant_faculties;						
 						this.baselist[4].value = basedata.mem_num;
@@ -221,6 +221,19 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 					}
 				})
     	},
+		methods:{
+			phoneOn() {
+				wx.makePhoneCall({
+					phoneNumber: this.detail.tel, //此号码仅用于测试
+					success: function () {
+						console.log("拨打电话成功！")
+					},
+					fail: function () {
+						console.log("拨打电话失败！")
+					}
+				})
+			}
+		}
 	}
 </script>
  

@@ -9,7 +9,7 @@
 			<view class="fenge">
 				<u-section title="评论内容" :arrow="false" :color="bgColor" :sub-title="leng + '条评论'"></u-section>
 			</view>
-			<kgComment v-if="showCom" :commentList="comList" @delCom="delCom()" @replyContent="replyContent" @replyLike="replyLike" ></kgComment>
+			<kgComment v-if="showCom" :commentList="comList" @delCom="delCom()" @replyContent="replyContent" @replyLike="replyLike" @replyLike2="replyLike2" ></kgComment>
 				
 			<u-popup v-model="comShow" mode="bottom" border-radius="14">
 				<view class="bodys">
@@ -24,7 +24,7 @@
 					</view>
 					<u-upload :custom-btn="true" max-count="4" ref="uUpload"  :action="action" :file-list="comModal.comImgs" :auto-upload="true">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
-							<image src="../../../static/icon/upload.png"></image>
+							<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/upload.png"></image>
 						</view>
 					</u-upload>
 					
@@ -137,7 +137,6 @@
 		onLoad(options) {
 			const id = options.id;
 			//发送获取这条帖子详情的请求
-
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/getdetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
@@ -165,29 +164,7 @@
 			})
 		},
 
-		// 监听comlist
 		watch: {
-			// 监听 comList 数组的变化
-			// comList: {
-			// 	handler(newValue, oldValue) {
-			// 		this.showCom = false;
-			// 		this.$nextTick(() => {
-			// 			this.showCom = true;
-			// 		});
-			// 	},
-			// 	deep: true, // 深度监听数组变化
-			// },
-			// dyInfo: {
-			// 	handler(newValue, oldValue) {
-			// 		// 在数组发生变化时，会自动更新 leng 计算属性
-			// 		// 你可以在这里执行其他操作，如果需要的话
-			// 		this.dyinfoshow = false;
-			// 		this.$nextTick(() => {
-			// 			this.dyinfoshow = true;
-			// 		});
-			// 	},
-			// 	deep: true, // 深度监听数组变化
-			// },
 		},
 
 		methods: {
@@ -379,6 +356,57 @@
 					}
 				})
 			},
+
+			//回复的点赞和取消点赞
+			replyLike2(com_index, index2){
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/likereply', //点赞和取消点赞 评论
+				header:{
+				Authorization:uni.getStorageSync("token")
+			},					
+				method: 'POST',
+				data: {
+					reply_id: this.comList[com_index].reply_list[index2].id,
+					team_id: this.user_id,
+					// reply_content: this.repModal.replyInfo
+				},
+				success: res => {
+					let code = res.data.code;
+					if(code == 200){
+						// let index = 0;
+						// let list = this.comList;
+
+						// for (let i = 0; i < this.comList[com_index].reply_list.length; i++) {
+						// 	console.log("this.comList[com_index]:",com_index, this.comList[com_index])
+						// 	if (this.comList[com_index].reply_list[i].id === id) {
+						// 		index = i 
+						// 		// console.log("this.comList[index]: ", this.comList[index])
+						// 		break; 
+						// 	}
+						// }
+						// console.log("this.comList[com_index].reply_list[index].fabulous:", this.comList[com_index].reply_list[index].fabulous)
+						if(this.comList[com_index].reply_list[index2].fabulous){
+							this.$u.toast(`成功取消点赞`);
+							this.comList[com_index].reply_list[index2].like = this.comList[com_index].reply_list[index2].like - 1
+						}
+						else{
+							this.$u.toast(`点赞成功`);
+							this.comList[com_index].reply_list[index2].like = this.comList[com_index].reply_list[index2].like + 1
+						}
+						//UI效果
+						this.comList[com_index].reply_list[index2].fabulous = (!this.comList[com_index].reply_list[index2].fabulous)			
+						}
+
+						},
+						fail: res => {
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+					},
+
+
 			// 删除评论
 			delCom(comId){   
 				uni.request({

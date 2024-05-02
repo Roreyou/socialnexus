@@ -31,6 +31,8 @@
 			<navigator url="../reg/reg">注册账号</navigator>
 			<text>|</text>
 			<navigator url="../pwd/pwd">忘记密码</navigator>
+			<text>|</text>
+			<button @click="gotoIndex">游客模式</button>
 		</view>
 	</view>
 </template>
@@ -124,9 +126,18 @@
 			}
 		},
 		computed: mapState(['forcedLogin']),
+		onLoad: function(options) {
+			wx.hideHomeButton();
+		},
 		methods: {
 			...mapMutations(['login']),
 			
+			gotoIndex(){
+				uni.reLaunch({
+						url: '../school/index/index',   /*进入高校首页*/
+					});
+			},
+
 			initPosition() {
 				/**
 				 * 使用 absolute 定位，并且设置 bottom 值进行定位。软键盘弹出时，底部会因为窗口变化而被顶上来。
@@ -173,8 +184,10 @@
 							if(identity == "school"){  //登录的是高校队伍，响应里有审核状态
 								const verification_status = res.data.data.verification_status;
 								const team_name =  res.data.data.team_name;
-								console.log("data.id:", data.id)
-								this.toMain(data.id, verification_status, team_name);	
+								const avatar = res.data.data.avatar;
+								// console.log("data.id:", data.id)
+								const isleader = res.data.data.isleader;
+								this.toMain(data.id, verification_status, team_name, avatar, isleader);	
 							}
 							// 保存 token
 							uni.setStorageSync('token', res.data.data.token);
@@ -206,23 +219,32 @@
 					});
 				}
 			},
-			toMain(team_id, verification_status, team_name) {
-				// console.log("tomain")
+			toMain(team_id, verification_status, team_name, avatar, isleader) {
+				// console.log("tomain-avatar", avatar)
 				verification_status = 1  //测试期间先强制
 				const user_id = team_id;
 				const user_name = team_name;
-				this.login({user_id, verification_status, user_name});
+				this.login({user_id, verification_status, user_name, avatar, isleader});
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式
 				 */
 
 
+				//开发用的
 				if (this.forcedLogin) {
-					uni.reLaunch({
+					if(this.account == '1'){
+						uni.reLaunch({
 						url: '../school/index/index',   /*进入高校首页*/
 					});
-				} else {
+					} else if(this.account == '2'){
+					uni.reLaunch({
+						url: '../committee/index/index',   /*进入团委首页*/
+					});
+				}
+
+				}
+				else {
 					uni.navigateBack();
 				}
 

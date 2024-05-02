@@ -2,7 +2,7 @@
 <template>
 	<view class="content">
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
-			<view class="cu-card article" :class="isCard?'no-card':''">
+			<view class="cu-card article" :class="isCard?'no-card':''" @click = "todetail(item.id, 'recruited')">
 					<view class="cu-item shadow">
 						<view class="cu-bar bg-white">
 							<view class="action">
@@ -68,7 +68,15 @@
 
 		},
 		methods: {
-
+			todetail(activityId, mode) {
+				this.$u.route({
+					url: '/pages/community/activityDetail',
+					params: {
+						activityId: activityId,
+						mode: mode
+					}
+				})
+			},
 		}
 	}
 </script>

@@ -17,7 +17,7 @@
 		</view>	 -->  
 		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
 			<view class="user-section">
-				<image :src="avatar" class="cu-avatar xl round"></image>
+				<image :src="userInfo.avatar" class="cu-avatar xl round"></image>
 				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
 				<!-- <view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view> -->
 				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;" v-if="userInfo.verification_status == 1 || userInfo.verification_status == 3">认证信息</view>
@@ -122,9 +122,9 @@
 					'行万里路，知中国情',
 				],
 				navList:[
-				   {name:"我的活动",src:"/static/img/index/cover/index_cover1.png",type:"1"},
-				   {name:"朋友圈",src:"/static/img/index/cover/index_cover2.png",type:"2"},
-				   {name:"活动推荐",src:"/static/img/index/cover/index_cover3.png",type:"3"},
+				   {name:"我的活动",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover1.png",type:"1"},
+				   {name:"朋友圈",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover2.png",type:"2"},
+				   {name:"活动推荐",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover3.png",type:"3"},
 				//    {name:"发布房源",src:"/static/img/index/cover/index_cover4.png",type:"2"}
 				],
 				loadStatus: 'loadmore',
@@ -206,7 +206,7 @@
 			// 	complete: () => {
 			// 	}
 			// })
-			console.log("userInfo.verification_status,", this.userInfo)
+			// console.log("userInfo.verification_status,", this.userInfo)
 			// console.log(typeof this.$url)
 			// console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
 			uni.request({
@@ -219,12 +219,8 @@
 					// token: this.$userinfo.token
 				},
 				success: res => {
-					console.log(res)
 					this.acList = res.data.data.acti_list;
 					this.acList[0].keywords = "服务,实践"
-					console.log(this.acList)
-					const List = this.acList
-					this.acList = [...List, ...List];
 					this.net_error = false;
 				},
 				fail: res => {
@@ -349,10 +345,32 @@
 			clickNav(type){
 				if(type === "1"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/school/search/myactivity');
+					if(!this.userInfo.isUser){  //普通队员的话只需要提示，游客需要提示和询问是否登录
+						uni.showModal({
+						title: '',
+						content: '请登录后查看。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							console.log('用户点击了确定');
+							uni.reLaunch({
+								url: '../../login/login',   /*进入高校首页*/
+							});
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							console.log('用户点击了取消');
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					}else{
+						this.$u.route('/pages/school/search/myactivity');
+					}
 				}
 				if(type === "2"){
-					// 判断Token是否有效   这个逻辑最后再来加
+					// 判断Token是否有效   这个逻辑最后再来加  在这里主页加一下就好了
 					// let lifeData = uni.getStorageSync('lifeData');
 					// let token = lifeData.vuex_token
 					// if(!token){

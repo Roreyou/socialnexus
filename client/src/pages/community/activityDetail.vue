@@ -1,4 +1,4 @@
-<!--高校 - 活动详情 -->
+<!--社区 - 活动详情 -->
 <template>
 	<view class="container">
 		<!-- 第一块 -->
@@ -6,11 +6,6 @@
 			<view class="part first">
 				<view class="de_total_title">
 					{{ detail.name }}
-					<view class="wordcont">
-						<view class="ackeywords" v-for="(word,index) in detail.keywords.split(',')" :key="index">
-							<view class="cu-tag bg-red light sm round">{{word}}</view>
-						</view>
-					</view>
 				</view>
 				<view class="de_key_value">
 					<view class="de_content">
@@ -40,11 +35,11 @@
 
 
 				</view>
-				<!-- <view class="wordcont">
+				<view class="wordcont">
 					<view class="ackeywords" v-for="(word,index) in detail.keywords.split(',')" :key="index">
 						<view class="cu-tag bg-red light sm round">{{word}}</view>
 					</view>
-				</view> -->
+				</view>
 			</view>
 		</view>
 		<view class="custom-container">
@@ -77,8 +72,17 @@
 						<view class="key">
 							联系方式
 						</view>
-						<view class="value phone" @click="phoneOn">
+						<view class="value">
 							{{detail.tel}}
+						</view>
+					</view>
+          <view class="de_content">
+						<view class="key">
+							活动时间
+						</view>
+						<view class="value">
+							<text>{{detail.startTime}} 开始</text><br>
+							<text>{{detail.endTime}} 结束</text>
 						</view>
 					</view>
 				</view>
@@ -87,8 +91,9 @@
 		<view class="custom-container">
     		<hr class="horizontal-line">
   		</view>
-		<!-- 第三块 -->
-		<view>
+
+		<view v-if="mode == 'recruiting'">
+      <view>
 			<view class="part second">
 				<view class="de_total_title sub_title">
 					志愿者招募详情
@@ -117,7 +122,7 @@
 		<view class="custom-container">
     		<hr class="horizontal-line">
   		</view>
-		<!-- 第四块 -->
+
 		<view>
 			<view class="part">
 				<view class="de_total_title sub_title">
@@ -146,6 +151,30 @@
 		<view class="custom-container">
     		<hr class="horizontal-line">
   		</view>
+    </view>
+
+    <view v-if="mode == 'recruited'">
+      <view>
+			<view class="part second">
+				<view class="de_total_title sub_title">
+					高校队伍
+				</view>
+				<view class="de_key_value">
+					<view class="de_content">
+						<view class="key">
+							队伍名称
+						</view>
+						<view class="value">
+							<text>{{detail.teamName}}</text><br>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="custom-container">
+    		<hr class="horizontal-line">
+  		</view>
+    </view>
 
 		  <view>
 			<view class="part">
@@ -164,15 +193,6 @@
 				</view>
 			</view>
 		</view>
-
-		<view style="position: fixed; bottom: 0; width: 100%;">
-			<bttab :team_id="user_id" :acti_id="acti_id"></bttab>
-		</view>
-
-		<!-- 以下是尝试把海报迁移到这个页面 -->
-		<view>
-			
-		</view>
 	</view> 
 </template>
  
@@ -180,7 +200,7 @@
 	import {
 		mapState,
 	} from 'vuex'
-import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
+import bttab from '../../components/detail-btm/uni-goods-nav.vue';
 
 	export default {
     	components: {
@@ -188,7 +208,8 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 		},
 		data(){
 			return{
-				acti_id:'',
+				activityId:'',
+        mode:'',
 				detail:{
 					keywords: ""
 				},
@@ -201,17 +222,19 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			// 获取query对象
 			const query = this.$mp.query;
 			// const query = this.$route.query;
-			const id = query.acti_id;
-			this.acti_id = id;
+			const activityId = query.activityId;
+			this.activityId = activityId;
+      const mode = query.mode;
+      this.mode = mode;
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/4142061-0-default/community/getActivityDetail',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/getActivityDetail',
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},					
 				method: 'GET',
 				data: {
-					acti_id: id,
+					activityId: activityId,
 					// token: this.$userinfo.token
 				},
 				success: res => {
@@ -249,20 +272,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			// 	complete: () => {
 			// 	}
 			// })
-		},
-		methods:{
-			phoneOn() {
-				wx.makePhoneCall({
-					phoneNumber: this.detail.tel, //此号码仅用于测试
-					success: function () {
-						console.log("拨打电话成功！")
-					},
-					fail: function () {
-						console.log("拨打电话失败！")
-					}
-				})
-			}
-    	}
+		}
 	}
 </script>
  
@@ -354,9 +364,5 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 	.wordcont .ackeywords {
 		display: inline-block;
 	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
-	}
-
-	.phone{
-		color: red
 	}
 </style>

@@ -7,7 +7,7 @@
 						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
 							<view class="desc">
-								<view class="text-content"> 日期: {{item.start_time}}-{{item.end_time}}</view>
+								<view class="text-content"> 时间: {{item.start_time}}-{{item.end_time}}</view>
 								<view class="text-content"> 地点: {{item.address}}</view>
 								<view class="text-content"> 活动类别: {{item.category_name}}</view>
 								<view class="wordcont">	
@@ -83,10 +83,8 @@
 					// token: this.$userinfo.token
 				},
 				success: res => {
-					console.log("getteamfavor", res)
 					this.acList = res.data.data.acti_list;
 					this.acList[0].keywords = "服务,实践"
-					console.log(this.acList)
 					this.net_error = false;
 				},
 				fail: res => {

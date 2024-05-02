@@ -823,7 +823,6 @@
 			},
 			del(i, id) {
 				// let index = this.dynamicLists.findIndex(v => v.id === id)
-				console.log("del", i)
 				this.dynamicFormData2.domains.splice(i, 1)
 				// console.log(this.dynamicFormData.domains)
 			},
@@ -915,7 +914,7 @@
 		/*每个页面公共css */
 	@import '@/uni_modules/uni-scss/index.scss';
 	/* #ifndef APP-NVUE */
-	@import '@/static/customicons.css';
+	@import '@/common/customicons.css';
 	// 设置整个项目的背景色
 	page {
 		background-color: #f5f5f5;
@@ -975,9 +974,8 @@
 		align-items: center; 
 		width: 60px; 
 		height: 1.5rem; 
-		background-color: rgb(13, 82, 105); 
 		border-radius: 10px; 
-		color: white;
+		color: grey;
 		// margin-bottom: 5px
 		margin: 15rpx auto 15rpx auto
 	}

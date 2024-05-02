@@ -20,7 +20,7 @@
 					</view>
 					<u-upload @on-success="handleSuccess" :custom-btn="true" max-count="4" ref="uUpload" :action="action" :file-list="comModal.comImgs" :auto-upload="false">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
-							<image src="../../../static/icon/upload.png"></image>
+							<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/upload.png"></image>
 						</view>
 					</u-upload>
 					
@@ -34,7 +34,7 @@
 
 		<!-- 底部导航栏 -->
 		<view class="uni-padding-wrap uni-common-mt">
-			<bttab :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" @post="post(0)"></bttab>
+			<bttab :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" @post="post(0)" :notice_num="notice_num"></bttab>
 		</view>
 	</view>
 </template>
@@ -99,7 +99,8 @@
 				// action: 'http://127.0.0.1:4523/m1/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
 				action: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
 				//应该是后端返回的图片路径列表？
-				filesArr: []
+				filesArr: [],
+				notice_num: '' //通知数量
 			}
 			
 		},
@@ -117,38 +118,13 @@
 			},
 			post(item){
 				this.ispost = !this.ispost;
-				console.log(this.ispost);
 			},
-			
-			//上传图片
-			// onChooseComplete(lists, name) {
-			// 	const app = this;
-			// 	const uploadUrl = '';
-			// 	uni.uploadFile({
-			// 		// 这里是你上传图片的地址
-			// 		// url: 'https://xxx.xx.xx.xx/admin-api/infra/file/upload',
-			// 		url: uploadUrl,
-			// 		filePath: lists[0].url,
-			// 		name: 'file',
-			// 		header: {
-			// 			// "Authorization": `Bearer ${store.getters.token}`
-			// 			"Authorization": ''
-			// 		},
-			// 			//	这个res是后端返回给你上传成功的数据里边一般会有上传之后图片的在线路径
-			// 		success: (res) => {
-			// 			// app.deviceInfo.photoUrl = JSON.parse(res.data).data;
-			// 			// console.log(JSON.parse(res.data).data)
-			// 		},
-			// 	})
-			// },
-
 			//发布帖子
 			//先上传图片，拿到路径再发送发表请求
 			saveComInfo(){
 				this.$refs.uUpload.upload();
 			},
 			postAll(){
-				console.log("this.user_id,", this.user_id)
 				uni.request({
 							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost',
 							header:{
@@ -190,6 +166,27 @@
 				}
 			},
 
+		},
+
+		mounted(){
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/noticenum',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',	
+			
+				method: 'GET',
+				data: {
+					team_id: this.user_id
+				},
+				success: res => {
+					this.notice_num = res.data.data.notice_num;
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
 		}
 	}
 </script>

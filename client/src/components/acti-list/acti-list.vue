@@ -1,6 +1,6 @@
 <!-- 高校 活动列表 -->
 <template>
-		<view>
+		<view :class="{'others-all': !isindex}">
 			<!-- <text class="cuIcon-titles text-green"></text> -->
 			<!-- <view class="cu-bar bg-white">
 				<view class="action">					
@@ -10,16 +10,16 @@
 			<view>
 				<view class="cu-item" v-for="(item,index) in acList" :key="index">
 					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id)">
-							<view class="cu-item shadow" :class="{ 'indexstyle': isindex }">
-							<!-- 活动状态 -->							
-							<view class="cu-bar bg-white" v-if="ismyac">
-								<view class="action">
-									<text class="cuIcon-titles text-green"></text>
-									<text class="text-xl text-bold">{{item.my_state}}</text>
+							<view class="cu-item shadow" :class="{'indexstyle': isindex, 'others': !isindex}">
+								<!-- 活动状态 -->							
+								<view class="cu-bar bg-white" v-if="ismyac">
+									<view class="action">
+										<text class="cuIcon-titles text-green"></text>
+										<text class="text-xl text-bold">{{item.my_state}}</text>
+									</view>
 								</view>
-							</view>
 
-								<view class="title"><view  :class="{ 'text-cut': ismyac}">{{item.name}}</view></view>
+								<view class="title"><view :class="{ 'title-font': !ismyac, 'text-cut': ismyac}">{{item.name}}</view></view>
 								<view class="content">
 									<view class="desc">
 										<view class="text-content"> 日期: {{item.start_time}}</view>
@@ -55,7 +55,6 @@
   		},
 		data() {
 			return {
-				title: '高校 -- 活动列表'
 			}
 		},
 		onLoad() {
@@ -76,6 +75,9 @@
 	}
 </script>
 <style scoped>
+	.others-all{
+		margin-top: 10rpx;
+	}
 	/* 活动推荐列表 */
 	.cu-item .shadow{
 	/* margin: 0; */
@@ -90,7 +92,8 @@
 	.text-cut{
 	margin-top: -15rpx;
 	line-height: 60rpx;
-}
+	font-size: 30rpx;
+	}
 
 	.text-content{
 	height: auto;
@@ -105,13 +108,22 @@
 	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 	}
 
-
-
 	/* 首页推荐列表样式 */
+	/* 标题 */
+	.title-font{
+		font-size: 35rpx;
+	} 
+
 	.indexstyle{
 	margin: 0 20rpx;
     /* border-radius: 10px; */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	}
 	
+	/* 首页之外的卡片样式 */
+	.others{
+		background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+	}
 </style>

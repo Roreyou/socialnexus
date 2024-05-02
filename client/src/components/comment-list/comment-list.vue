@@ -10,7 +10,7 @@
         <view>
             <view class="cu-item" v-for="(item,index) in list" :key="index">
                 <view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id)">
-                        <view class="cu-item shadow" :class="{ 'indexstyle': isindex }">
+                        <view class="cu-item shadow" :class="{ 'commentcard': !isindex }">
 
                             <view class="title" v-if="list_type=='0'">
                                 <view class="com_time" :class="{ 'text-cut': ismyac}">{{item.com_time}}</view>
@@ -29,7 +29,7 @@
                                     </view>
                                 </view>
                                 <view class="button-container" v-if="list_type=='1'">
-                                    <button class="custom-button">去评价</button>
+                                    <button class="custom-button" @click="handleClick(item.acti_id)">去评价</button>
                                 </view>
                             </view>
                         </view>
@@ -73,6 +73,12 @@ export default {
             // 	url: 'pages/school/details/details?acti_id=' + id
             // })
         },
+        handleClick(acti_id) {
+            this.$emit('gotocomment', acti_id)
+        },
+        updateList(newList) {
+        this.list = newList;
+        }
     }
 }
 </script>
@@ -138,5 +144,11 @@ font-size: larger;
 .button-container {
   text-align: right;
   margin: 0rpx 25rpx 0 480rpx;
+}
+
+/* 卡片样式 */
+.commentcard{
+    border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 </style>
