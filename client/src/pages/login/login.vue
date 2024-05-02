@@ -14,11 +14,16 @@
 				<text class="title">账号：</text>
 				<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入账号"></m-input>
 			</view>
+			<view class="input-row border" v-if="index==1">
+				<text class="title">个人ID：</text>
+				<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入个人ID"></m-input>
+			</view>
 			<view class="input-row">
 				<text class="title">密码：</text>
 				<m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
 			</view>
 		</view>
+
 		<view class="btn-row">
 			<button class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
 		</view>
