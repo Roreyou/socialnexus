@@ -57,7 +57,7 @@
 		methods: {
 			toAdmit(activityId, teamId) {
 				this.$u.route({
-					url: '/pages/community/myTeam/admit',
+					url: 'page_community/page/myTeam/admit',
 					params: {
 						activityId: activityId,
 						teamId: teamId
