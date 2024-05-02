@@ -57,8 +57,8 @@
 			return {
 			}
 		},
-		onLoad() {
-
+		mounted() {
+			// console.log("acti--list:", this.acList)
 		},
 		methods: {
 			//前往详情页

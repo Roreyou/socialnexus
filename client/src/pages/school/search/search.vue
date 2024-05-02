@@ -25,7 +25,7 @@
 		</view>
 		<view class="accontent">
 			<!-- id="currentTabComponent"表示是那三种筛选类型中的哪一种 -->
-			<scontent :acList="acList" :searchlist="searchlist"></scontent>
+			<scontent :acList="acList" :searchlist="searchlist" :searchcontent="newontent"></scontent>
 		</view>
 	</view>
 </template>
@@ -99,6 +99,7 @@ import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
 				],
 				searchcontent: '',//搜索内容
 				searchlist: [],
+				newontent: ''
 				}
 			},
 			mounted(){
@@ -136,33 +137,35 @@ import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
 					});
 				},
 				search(){
-					uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/search',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-					header:{
-						Authorization:uni.getStorageSync("token")
-					},	
-					method: 'GET',
-					data: {
-						// team_id: this.user_id,
-						// token: this.$userinfo.token
-						// activity_status: this.index
-						text: this.searchcontent
-					},
-					success: res => {
-						this.searchlist = res.data.data.activ_list;
-						// console.log("searchlist:",this.searchlist)
-						this.TabCur = 0
-						// console.log(this.acList)
-						this.net_error = false;
-					},
-					fail: res => {
-						this.net_error = true;
-					},
-					complete: () => {
-					}
-				})
-				}
+				// 	uni.request({
+				// 	url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/search',
+				// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				// 	header:{
+				// 		Authorization:uni.getStorageSync("token")
+				// 	},	
+				// 	method: 'GET',
+				// 	data: {
+				// 		// team_id: this.user_id,
+				// 		// token: this.$userinfo.token
+				// 		// activity_status: this.index
+				// 		text: this.searchcontent
+				// 	},
+				// 	success: res => {
+				// 		this.searchlist = res.data.data.activ_list;
+				// 		// console.log("searchlist:",this.searchlist)
+				// 		this.TabCur = 0
+				// 		// console.log(this.acList)
+				// 		this.net_error = false;
+				// 	},
+				// 	fail: res => {
+				// 		this.net_error = true;
+				// 	},
+				// 	complete: () => {
+				// 	}
+				// })
+					this.newontent = this.searchcontent;
+					this.TabCur = 0
+			}
 			}
 		}
 	</script>

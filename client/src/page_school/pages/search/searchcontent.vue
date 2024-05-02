@@ -1,6 +1,6 @@
 <!-- 高校 搜索活动内容 -->
 <template>
-    <actilist :acList="searchlist"></actilist>
+    <actilist v-if="isshow" :acList="modifiedSearchList"></actilist>
 </template>
 
 <script>
@@ -13,17 +13,37 @@ export default {
         searchcontent: {
             type: String,
             default: ''
-        }
+        }  //改成在这里用搜索内容请求
     },
     components: {
         actilist
     },
     data() {
         return {
+            modifiedSearchList: this.searchlist.slice(),
+            content: this.searchcontent,
+            isshow: true
+        }
+    },
+    watch: {
+        searchcontent(newValue, oldValue) {
+        // console.log('searchcontent 的值已更改：', newValue);
+            if(newValue !== ''){
+                this.search(newValue)
+            }
+        },
+        modifiedSearchList(newValue, oldValue){
+            this.isshow = false
+            this.$nextTick(() => {
+                this.isshow = true
+            });
         }
     },
     methods: {
-        search(){
+        search(content){
+            if(content === ''){
+                return
+            }
 			uni.request({
 			url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/search',
 			header:{
@@ -31,12 +51,13 @@ export default {
 			},	
 			method: 'GET',
 			data: {
-				text: this.searchcontent
+				// text: this.searchcontent
+                text: content
 			},
 			success: res => {
-				this.searchlist = res.data.data.activ_list;
-				// console.log("searchlist:",this.searchlist)
-				this.TabCur = 0
+				this.modifiedSearchList = res.data.data.activ_list;
+				// console.log("searchlist:",this.modifiedSearchList)
+				// this.TabCur = 0
 				// console.log(this.acList)
 				this.net_error = false;
 			},

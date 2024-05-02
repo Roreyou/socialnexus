@@ -2,31 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ece0163d-7673-47bc-ae9d-ded1a93501aa" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/client/src/page_community/page/myTeam/all.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/static/Next.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/page_school/pages/search/searchcontent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_school/pages/search/searchcontent.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/pages.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/activityDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/activityDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/addActivity.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/addActivity.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/communityInfo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/communityInfo.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myActivity/all.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myActivity/all.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myActivity/doing.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myActivity/doing.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myActivity/done.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myActivity/done.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myActivity/myActivity.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myActivity/myActivity.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myActivity/willDo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myActivity/willDo.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myTeam/admit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myTeam/admit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myTeam/all.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myTeam/evaluate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myTeam/evaluate.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myTeam/evaluated.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myTeam/evaluated.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myTeam/myTeam.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myTeam/myTeam.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myTeam/toAdmit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myTeam/toAdmit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/community/myTeam/toEvaluate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/page_community/page/myTeam/toEvaluate.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/login/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/login/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/reg/reg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/reg/reg.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/school/search/search.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/school/search/search.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
