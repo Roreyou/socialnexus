@@ -46,33 +46,40 @@
           <image class="swiper-item" :src="item.imageSrc"></image>
         </swiper-item>
 			</swiper>
-		</view>
+	</view>
 
     <u-gap height="10"></u-gap>
 		
-		<!-- 活动推荐列表 -->
-		<view class="board">
-			<view class="cu-bar" style="background-color: transparent">
-				<view class="action">
-					<text class="text-xl text-bold" style="color: #000000; font-size: 52rpx; font-weight: 600; font-family: 'pangmen'; font-style: normal; background-color: transparent">数据墙</text>
+	<!-- 数据墙-->
+	<view style="background-color: rgb(234, 231, 231);">
+		<!-- 标题 -->
+		<view class="cu-bar" style="background-color: transparent">
+			<view class="action">
+				<text class="text-xl text-bold" style="color: #000000; font-size: 40rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent">数据墙</text>
+			</view>
+		</view>
+
+		<!-- 内容 -->
+		<view >
+			<view class="board" :class="isCard?'no-card':''">
+				<view class="wallContent">
+					<text class="text-xl text-bold" style="margin-top: 40px; color: rgb(195, 193, 197); font-size: 20rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 现有组织 </text>
+				</view>
+				<view class="wallContent">
+					<text class="text-xl text-bold" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 2345个 </text>
 				</view>
 			</view>
-			<!-- 一个柱状图 -->
-			<!-- <view class="echart" id="mychart" :style="myChartStyle">柱状图</view> -->
 		</view>
+
+		// <view class="echart" id="mychart" :style="myChartStyle">柱状图</view>
+	</view>
+
+	
 
     <!-- 当用户滚动页面时，提供一个快速返回页面顶部的按钮。 -->
     <!-- 当页面滚动到或超过指定的 top 值时，返回顶部按钮将显示出来。 -->
-		<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
+	<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
 
-		<!-- <u-no-network></u-no-network> -->
-		<!-- <view class="buttom">
-			<view class="loginType">
-				<view class="wechat item">
-					<view class="icon"><u-icon size="60" name="server-man" color="#999" @click="server"></u-icon></view>
-				</view>
-			</view>
-		</view> -->
 	</view>
 </template>
 
@@ -568,10 +575,12 @@
 	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 	}
 
-// 活动推荐列表
 .board{
 	border-radius: 10px;
-	background-color: #37c4568f
+	background-color: rgb(255, 251, 251);
+	// background-image: linear-gradient(to right top, #41b851, #59c549, #72d23e, #8cdf2e, #a8eb12);
+	// background-image: linear-gradient(to right bottom, #6aa6fd, #85aefe, #9ab6fe, #adbeff, #bec7ff);
+	height: 80px;
 }
 
 // 活动推荐标题
@@ -583,6 +592,7 @@
 	font-weight: 600;
 	font-family: 'pangmen';
 	font-style: italic;
+	margin-top: 30px;
 }
 // 轮播图样式
 .uni-margin-wrap {
@@ -597,5 +607,14 @@
 	height: 400rpx;
 	line-height: 300rpx;
 	text-align: center;
+}
+// 白色边框
+.border-box {
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+  height: 80px;
+}
+.wallContent{
+	margin-left: 48rpx;
 }
 </style>
