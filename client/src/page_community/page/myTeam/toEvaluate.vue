@@ -64,7 +64,7 @@
 		methods: {
 			toEvaluate(activityId, teamId) {
 				this.$u.route({
-					url: '/pages/community/myTeam/evaluate',
+					url: 'page_community/page/myTeam/evaluate',
 					params: {
 						activityId: activityId,
 						teamId: teamId

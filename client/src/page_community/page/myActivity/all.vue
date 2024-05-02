@@ -94,7 +94,7 @@
 			todetail(activityId, modeString) {
 				const mode = modeString == '待开展'?'recruiting':'recruited';
 				this.$u.route({
-					url: '/pages/community/activityDetail',
+					url: 'page_community/page/activityDetail',
 					params: {
 						activityId: activityId,
 						mode: mode

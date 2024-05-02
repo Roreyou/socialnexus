@@ -218,12 +218,12 @@
 		methods: {
 			handleAuthentication(){
 				this.$u.route({
-					url: 'pages/community/communityInfo',
+					url: 'page_community/page/communityInfo',
 				  })
 			},
 			location(){
 				  this.$u.route({
-					url: 'pages/location/location',
+					url: 'page_community/page/location',
 				  })
 			},
 			checkUpdate(){
@@ -237,11 +237,11 @@
 				})
 			},
 			clickSearch() {
-			    this.$u.route('/pages/search/search');
+			    this.$u.route('page_community/page/search');
 			},
 			clickImage(houseId) {
 				this.$u.route({
-					url: '/pages/detail/detail',
+					url: 'page_community/page/detail',
 					params: {
 						houseId: houseId
 					}
@@ -250,7 +250,7 @@
 			clickNav(type){
 				if(type === "1"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/community/addActivity');
+					this.$u.route('page_community/page/addActivity');
 				}
 				if(type === "2"){
 					// 判断Token是否有效   这个逻辑最后再来加
@@ -264,11 +264,11 @@
 					// }else{
 					// 	this.$u.route('/pages/detail/preHouse');
 					// }
-					this.$u.route('/pages/community/myActivity/myActivity');
+					this.$u.route('page_community/page/myActivity/myActivity');
 				}
 				if(type === "3"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/community/myTeam/myTeam');
+					this.$u.route('page_community/page/myTeam/myTeam');
 				}
 			},
 			code(){
@@ -288,12 +288,12 @@
 			//点击加载更多活动
 			torec(){
 				this.$u.route({
-					url: 'pages/search/recommend',
+					url: 'page_community/page/search/recommend',
 				  })
 			},
 			todetail(activityId, mode) {
 				this.$u.route({
-					url: '/pages/community/activityDetail',
+					url: 'page_community/page/activityDetail',
 					params: {
 						activityId: activityId,
 						mode: mode

@@ -1,4 +1,4 @@
-<!-- 高校 已结束 -->
+<!-- 高校 开展中 -->
 <template>
 	<view class="content">
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
@@ -37,13 +37,29 @@
 		data() {
 			return {
 				acList:[
-					{	
-						state: "已结束",
-						title: "5月15日实践活动",
-						time: "2020-05-15",
-						place: "北京",
+					{
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
 						job: "志愿者",
-						keywords: "服务,实践"
+						keywords: "支教,教育"
+					},
+					{
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
+					},
+					{
+						state: "开展中",
+						title: "5月5日实践活动",
+						time: "2020-05-5",
+						place: "深圳",
+						job: "志愿者",
+						keywords: "支教,教育"
 					}
 				]
 			}
@@ -54,7 +70,7 @@
 		methods: {
 			todetail(activityId, mode) {
 				this.$u.route({
-					url: '/pages/community/activityDetail',
+					url: 'page_community/page/activityDetail',
 					params: {
 						activityId: activityId,
 						mode: mode
