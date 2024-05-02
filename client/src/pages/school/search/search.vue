@@ -25,13 +25,13 @@
 		</view>
 		<view class="accontent">
 			<!-- id="currentTabComponent"表示是那三种筛选类型中的哪一种 -->
-			<scontent :acList="acList" :id="currentTabComponent" :searchlist="searchlist"></scontent>
+			<scontent :acList="acList" :searchlist="searchlist"></scontent>
 		</view>
 	</view>
 </template>
 	 
 <script>
-import indexTabbar from '../../../components/search-tabbar/search-tabbar.vue';
+// import indexTabbar from '../../../components/search-tabbar/search-tabbar.vue';
 import scontent from './searchcontent.vue'
 import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
 	
@@ -39,7 +39,7 @@ import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
 	
 		export default {
 			components:{
-				indexTabbar,
+				// indexTabbar,
 				scontent,
 				actipickers
 				// utabsswiper
