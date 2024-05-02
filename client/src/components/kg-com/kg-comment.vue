@@ -28,11 +28,11 @@
 					{{item.comment_detail.time}}
 				</view>
 				<view class="cot_operate_icon">
-					<image src="../../static/icon/pinglun1.png" mode="" @click="replyContent(item.comment_detail.id)" ></image>
+					<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/pinglun1.png" mode="" @click="replyContent(item.comment_detail.id)" ></image>
 					<view class="" @click="replyContent(item.comment_detail.id)">
 						{{item.comment_detail.reply_list_length}}
 					</view>
-					<image class="like_icon" :src="item.comment_detail.fabulous?'../../static/icon/like_fil.png':'../../static/icon/like_ufil.png'"
+					<image class="like_icon" :src="item.comment_detail.fabulous?'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_fil.png':'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_ufil.png'"
 					 mode=""  @click="replyLike(item.comment_detail.id)"></image>
 					<view class="" @click="replyLike(item.comment_detail.id)">
 						{{item.comment_detail.like}}
@@ -109,7 +109,7 @@
 		},
 		methods: {
 			getChildSrc(parentItem, childItem) {
-				return childItem.fabulous ? '../../static/icon/like_fil.png' : '../../static/icon/like_ufil.png';
+				return childItem.fabulous ? 'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_fil.png' : 'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_ufil.png';
 			},
 			delCom(comId){
 				this.$emit('delCom',comId)

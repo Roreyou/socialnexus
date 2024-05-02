@@ -112,7 +112,7 @@
 						this.comment_list = this.comment_list.filter(item => item.post_id !== id);
 						this.like_list = this.like_list.filter(item => item.post_id !== id);
 						uni.navigateTo({
-							url: "/pages/school/pyq/dynamicInfo?id=" + id
+							url: "/page_school/pages/pyq/dynamicInfo?id=" + id
 						})
 					}
 				},

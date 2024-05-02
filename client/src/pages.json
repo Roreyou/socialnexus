@@ -38,12 +38,6 @@
 				"navigationBarTitleText": "注册"
 			}
 		},
-		{
-			"path": "pages/school/pwd/pwd",
-			"style": {
-				"navigationBarTitleText": "忘记密码"
-			}
-		},
 		// school index
 		{
 			"path": "pages/school/index/index",
@@ -69,85 +63,11 @@
 		{
 			"path": "pages/school/search/search",
 			"style": {
-				"navigationBarTitleText": "找活动"
-			}
-		},
-		{
-			"path": "pages/school/search/myactivity",
-			"style": {
-				"navigationBarTitleText": "我的活动"
-			}
-		},
-		{
-			"path": "pages/school/search/recommend",
-			"style": {
-				"navigationBarTitleText": "活动推荐"
-			}
-		},
-		{
-			"path": "pages/school/pyq/dynamicInfo",
-			"style": {
-				"navigationBarTitleText": "详情"
-			}
-		},
-		{
-			"path": "pages/school/pyq/home",
-			"style": {
-				"navigationBarTitleText": "朋友圈"
-			}
-		},
-		{
-			"path": "pages/school/user/password",
-			"style": {
-				"navigationBarTitleText": "修改密码"
-			}
-		},
-		{
-			"path": "pages/school/user/becomment",
-			"style": {
-				"navigationBarTitleText": "收到评价"
-			}
-		},
-		{
-			"path": "pages/school/user/mycomment",
-			"style": {
-				"navigationBarTitleText": "我的评价"
-			}
-		},
-		{
-			"path": "pages/school/user/like",
-			"style": {
-				"navigationBarTitleText": "活动收藏"
-			}
-		},
-		{
-			"path": "pages/school/user/teaminfo",
-			"style": {
-				"navigationBarTitleText": "队伍资料"
-			}
-		},
-		{
-			"path": "pages/school/index/verify",
-			"style": {
-				"navigationBarTitleText": "认证信息"
-			}
-		},
-		{
-			"path": "pages/school/pyq/entry",
-			"style": {
-				"navigationBarTitleText": "朋友圈"
-			}
-		},
-		{
-			"path": "pages/school/details/details",
-			"style": {
-				"navigationBarTitleText": "活动详情"
-			}
-		},
-		{
-			"path": "pages/school/details/application",
-			"style": {
-				"navigationBarTitleText": "活动报名"
+				"navigationBarTitleText": "找活动",
+				"componentPlaceholder":{
+					//占位组件
+					"scontent": "view"
+				}
 			}
 		},
 		{
@@ -239,26 +159,9 @@
 			"style": {
 				"navigationBarTitleText": "评价队伍"
 			}
-		},
-		{
-            "path" : "pages/school/poster/poster",
-            "style" : {
-				"navigationBarTitleText": "生成海报"
-			}
-        }
-        ,{
-            "path" : "pages/school/draw/draw",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/school/posterMultiple/posterMultiple",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
+		}
+
+
 	],
 	"subPackages": [
 		{
@@ -280,6 +183,107 @@
 					"path": "page/searchSchool/searchSchool",
 					"style": {
 						"navigationBarTitleText": "高校队伍"
+					}
+				}
+			]
+		},
+		{
+			"root": "page_school",
+			"pages": [
+				{
+					"path" : "pages/poster/poster",
+					"style" : {
+						"navigationBarTitleText": "生成海报"
+					}
+				},
+				{
+					"path" : "pages/draw/draw",
+					"style" : {}
+				},
+				{
+					"path" : "pages/posterMultiple/posterMultiple",
+					"style" :                                                                                    
+					{
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}					
+				},
+				{
+					"path": "pages/search/myactivity",
+					"style": {
+						"navigationBarTitleText": "我的活动"
+					}
+				},
+				{
+					"path": "pages/search/recommend",
+					"style": {
+						"navigationBarTitleText": "活动推荐"
+					}
+				},
+				{
+					"path": "pages/pyq/dynamicInfo",
+					"style": {
+						"navigationBarTitleText": "详情"
+					}
+				},
+				{
+					"path": "pages/pyq/home",
+					"style": {
+						"navigationBarTitleText": "朋友圈"
+					}
+				},
+				{
+					"path": "pages/user/password",
+					"style": {
+						"navigationBarTitleText": "修改密码"
+					}
+				},
+				{
+					"path": "pages/user/becomment",
+					"style": {
+						"navigationBarTitleText": "收到评价"
+					}
+				},
+				{
+					"path": "pages/user/mycomment",
+					"style": {
+						"navigationBarTitleText": "我的评价"
+					}
+				},
+				{
+					"path": "pages/user/like",
+					"style": {
+						"navigationBarTitleText": "活动收藏"
+					}
+				},
+				{
+					"path": "pages/index/verify",
+					"style": {
+						"navigationBarTitleText": "认证信息"
+					}
+				},
+				{
+					"path": "pages/user/teaminfo",
+					"style": {
+						"navigationBarTitleText": "队伍资料"
+					}
+				},
+				{
+					"path": "pages/pyq/entry",
+					"style": {
+						"navigationBarTitleText": "朋友圈"
+					}
+				},
+				{
+					"path": "pages/details/details",
+					"style": {
+						"navigationBarTitleText": "活动详情"
+					}
+				},
+				{
+					"path": "pages/details/application",
+					"style": {
+						"navigationBarTitleText": "活动报名"
 					}
 				}
 			]

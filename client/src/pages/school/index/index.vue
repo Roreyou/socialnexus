@@ -1,4 +1,5 @@
 <!-- 高校首页 -->
+<!-- 因为是tab页所以必须放在主包 -->
 <template>
 	<view class="u-p-l-10 u-p-r-10">
 		<u-navbar :is-back="false">
@@ -247,8 +248,11 @@
 		// },
 		methods: {
 			handleAuthentication(){
-				this.$u.route({
-					url: 'pages/school/index/verify',
+				// this.$u.route({
+				// 	url: 'pages/school/index/verify',
+				//   })
+				  uni.navigateTo({
+					url: '/page_school/pages/index/verify',
 				  })
 			},
 			location(){
@@ -366,7 +370,10 @@
 						}
 					});
 					}else{
-						this.$u.route('/pages/school/search/myactivity');
+						// this.$u.route('/pages/school/search/myactivity');
+						uni.navigateTo({
+							url:'../../../page_school/pages/search/myactivity'
+						});
 					}
 				}
 				if(type === "2"){
@@ -381,11 +388,17 @@
 					// }else{
 					// 	this.$u.route('/pages/detail/preHouse');
 					// }
-					this.$u.route('/pages/school/pyq/entry');
+					// this.$u.route('/pages/school/pyq/entry');
+					uni.navigateTo({
+						url:'../../../page_school/pages/pyq/entry'
+					});
 				}
 				if(type === "3"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/school/search/recommend');
+					// this.$u.route('/pages/school/search/recommend');
+					uni.navigateTo({
+						url:'../../../page_school/pages/search/recommend'
+					});
 				}
 			},
 			code(){
@@ -404,15 +417,21 @@
 			},
 			//点击加载更多活动
 			torec(){
-				this.$u.route({
-					url: 'pages/school/search/recommend',
-				  })
+				// this.$u.route({
+				// 	url: 'pages/school/search/recommend',
+				//   })
+				  uni.navigateTo({
+					url:'../../../page_school/pages/search/recommend'
+				});
 			},
 			//前往详情页
 			todetail(){
-				this.$u.route({
-					url: 'pages/school/details/details',
-				  })
+				// this.$u.route({
+				// 	url: 'pages/school/details/details',
+				//   })
+				  uni.navigateTo({
+						url:'../../../page_school/pages/details/details'
+					});  
 			},
 		}
 	}

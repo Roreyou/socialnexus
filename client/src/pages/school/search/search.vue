@@ -32,7 +32,7 @@
 	 
 <script>
 // import indexTabbar from '../../../components/search-tabbar/search-tabbar.vue';
-import scontent from './searchcontent.vue'
+import scontent from '../../../page_school/pages/search/searchcontent.vue'
 import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
 	
 		// import utabsswiper from '../../uview-ui/components/u-tabs-swiper/u-tabs-swiper.vue';

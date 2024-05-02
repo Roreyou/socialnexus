@@ -128,9 +128,13 @@
 				//生成海报
 				if(index == 0){
 					const id = this.acti_id
-					this.$u.route({
-            			url: 'pages/school/poster/poster?acti_id=' + id
-           			 })
+					// this.$u.route({
+            		// 	url: 'pages/school/poster/poster?acti_id=' + id
+           			// })
+					
+					uni.navigateTo({
+						url:'/page_school/pages/poster/poster?acti_id=' + id
+					});
 				}
 				//收藏
 				if(index == 1){
@@ -233,13 +237,16 @@
 						}
 					});
 			}else{
-				this.$u.route({
-					url: 'pages/school/details/application',
-					params: {
-						team_id: this.user_id,
-						acti_id: this.acti_id,
-					}
-				})
+				// this.$u.route({
+				// 	url: 'pages/school/details/application',
+				// 	params: {
+				// 		team_id: this.user_id,
+				// 		acti_id: this.acti_id,
+				// 	}
+				// })
+				uni.navigateTo({
+					url:'/page_school/pages/details/application?team_id=' + this.user_id + '&acti_id=' + this.acti_id
+				});
 			}
 			},
 			cancelacti(){  //取消报名
@@ -309,15 +316,6 @@
 				complete: () => {
 				}
 		})
-		const img = new Image();
-		img.onload = () => {
-		this.shareIcon = img.src;
-		};
-		img.onerror = () => {
-		console.error('Failed to load shareIcon from URL:', imgUrl);
-		};
-		const imgUrl = 'http://scu5azomr.hn-bkt.clouddn.com/static/icon/fenxiangmian.png';
-		img.src = imgUrl;
 		}
 }
 </script>

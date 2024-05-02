@@ -7,6 +7,7 @@
 import actilist from '../../../components/acti-list/acti-list.vue';
 
 export default {
+    name:'scontent',
     props: {
         searchlist: Array,
     },

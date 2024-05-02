@@ -126,9 +126,8 @@
 				});
 			},
 			goInfo(id) {
-				id = '0'  //mock
 				uni.navigateTo({
-					url: "/pages/school/pyq/dynamicInfo?id=" + id
+					url: "/page_school/pages/pyq/dynamicInfo?id=" + id
 				})
 			},
 			comContent(id){
