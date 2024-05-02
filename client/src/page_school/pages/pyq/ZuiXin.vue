@@ -15,7 +15,7 @@
 
 </template>
 <script>
-	import kgDynamics from "../../../components/kg-dy/kg-dynamic.vue"
+	import kgDynamics from "../../../page_school/components/kg-dy/kg-dynamic.vue"
 	
 	export default {
 		components: {

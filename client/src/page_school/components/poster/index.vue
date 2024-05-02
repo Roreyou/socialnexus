@@ -27,10 +27,10 @@
 		createPoster,
 		canvasToTempFilePath,
 		saveImageToPhotosAlbum
-	} from '@/utils/poster.js';
+	} from '@/page_school/utils/poster.js';
 	import {
 		getWechatCode
-	} from "@/utils/appletCode.js";
+	} from "@/page_school/utils/appletCode.js";
 	export default {
 		props: {
 			// 展示图片的宽 单位 rpx

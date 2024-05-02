@@ -43,7 +43,7 @@
 	import {
 		mapState,
 	} from 'vuex'
-	import bttab from '../../../components/pyq-home/bt-tab.vue';
+	import bttab from '../../../page_school/components/pyq-home/bt-tab.vue';
 	import home from './home.vue';
 	// import fabu from './fabu.vue';
 	import tongzhi from './tongzhi.vue';

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-	import poster from "@/components/poster/index.vue";
+	import poster from "@/page_school/components/poster/index.vue";
 	export default {
 		props:{
 			// dyinfo:{

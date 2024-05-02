@@ -5,7 +5,7 @@
 </template>
 
 <script>
-	import { createPoster,loadImage } from "@/utils/poster.js";
+	import { createPoster,loadImage } from "@/page_school/utils/poster.js";
 	export default {
 		data() {
 			return {

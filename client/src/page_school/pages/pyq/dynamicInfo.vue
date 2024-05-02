@@ -59,8 +59,8 @@
 	import {
 		mapState
 	} from 'vuex'
-	import kgComment from "../../../components/kg-com/kg-comment.vue"
-	import kgDynamics from "../../../components/kg-dy/kg-dynamic.vue"
+	import kgComment from "../../../page_school/components/kg-com/kg-comment.vue"
+	import kgDynamics from "../../../page_school/components/kg-dy/kg-dynamic.vue"
 	export default {
 		components: {
 			kgComment,

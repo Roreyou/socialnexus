@@ -1,4 +1,4 @@
-import {base64src} from "@/utils/base64src.js";
+import {base64src} from "@/page_school/utils/base64src.js";
 /**
  * 微信获取小程序二维码
  * @param {String} url 微信服务器地址

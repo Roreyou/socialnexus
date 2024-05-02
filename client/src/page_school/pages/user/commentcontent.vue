@@ -32,7 +32,7 @@
 	import {
 		mapState,
 	} from 'vuex'
-import commentlist from '../../../components/comment-list/comment-list.vue';
+import commentlist from '../../../page_school/components/comment-list/comment-list.vue';
 export default {
     components: {
         commentlist
