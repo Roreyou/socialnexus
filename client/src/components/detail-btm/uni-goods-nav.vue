@@ -113,7 +113,9 @@
 			return {
 				ismyacti: false,
 				isActive: false,
-				shareIcon: require('../../static/icon/fenxiangmian.png'),
+				// shareIcon: require('../../static/icon/fenxiangmian.png'),
+				shareIcon: '',
+
 			}
 		},
 
@@ -307,6 +309,15 @@
 				complete: () => {
 				}
 		})
+		const img = new Image();
+		img.onload = () => {
+		this.shareIcon = img.src;
+		};
+		img.onerror = () => {
+		console.error('Failed to load shareIcon from URL:', imgUrl);
+		};
+		const imgUrl = 'http://scu5azomr.hn-bkt.clouddn.com/static/icon/fenxiangmian.png';
+		img.src = imgUrl;
 		}
 }
 </script>

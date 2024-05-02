@@ -133,9 +133,9 @@
 					},
                 ],
 				navList:[
-				   {name:"新增活动",src:"/static/img/index/cover/index_cover1.png",type:"1"},
-				   {name:"我的活动",src:"/static/img/index/cover/index_cover2.png",type:"2"},
-				   {name:"队伍信息",src:"/static/img/index/cover/index_cover3.png",type:"3"},
+				   {name:"新增活动",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover1.png",type:"1"},
+				   {name:"我的活动",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover2.png",type:"2"},
+				   {name:"队伍信息",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover3.png",type:"3"},
 				//    {name:"发布房源",src:"/static/img/index/cover/index_cover4.png",type:"2"}
 				],
 				loadStatus: 'loadmore',
