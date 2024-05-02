@@ -54,7 +54,7 @@
 		methods: {
 			todetail(activityId, mode) {
 				this.$u.route({
-					url: '/pages/community/activityDetail',
+					url: 'page_community/page/activityDetail',
 					params: {
 						activityId: activityId,
 						mode: mode
