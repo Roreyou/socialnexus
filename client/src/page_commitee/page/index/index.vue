@@ -388,7 +388,10 @@
 			clickNav(type){
 				if(type === "1"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/committee/searchSchool/searchSchool');
+					// this.$u.route('/pages/committee/searchSchool/searchSchool');
+						uni.navigateTo({
+							url:'../searchSchool/searchSchool'
+						});
 				}
 				if(type === "2"){
 					// 判断Token是否有效   这个逻辑最后再来加
@@ -402,7 +405,10 @@
 					// }else{
 					// 	this.$u.route('/pages/detail/preHouse');
 					// }
-					this.$u.route('/pages/committee/searchActivity/searchActivity');
+					// this.$u.route('/pages/committee/searchActivity/searchActivity');
+					uni.navigateTo({
+						url:'../searchActivity/searchActivity'
+					});
 				}
 			},
 			code(){

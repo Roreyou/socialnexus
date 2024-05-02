@@ -16,6 +16,9 @@
 		"modules": { /* 模块配置 */
 
 		},
+		"optimization": {
+			"subPackages": true
+		  },
 		"distribute": { /* 应用发布信息 */
 			"android": { /* android打包配置 */
 				"permissions": ["<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
@@ -48,7 +51,8 @@
 			"sdkConfigs": { /* SDK配置 */
 
 			}
-		}
+		},
+		"runmode" : "liberate" // 开启分包优化后，必须配置资源释放模式
 	},
 	"quickapp": { /* 快应用特有相关 */
 

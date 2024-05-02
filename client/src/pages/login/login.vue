@@ -234,7 +234,7 @@
 					});
 					} else if(this.account == '2'){
 					uni.reLaunch({
-						url: '../committee/index/index',   /*进入团委首页*/
+						url: '../../page_commitee/page/index/index',   /*进入团委首页*/
 					});
 				}
 
