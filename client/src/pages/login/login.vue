@@ -370,7 +370,7 @@
 }
 
 .selected {
-  border-color: #39B54A;
+  border:2px solid#39B54A;
 }
 
 .avatar {
