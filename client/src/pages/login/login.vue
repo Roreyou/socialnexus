@@ -394,7 +394,7 @@
   height: 30px;
 }
 .next{
-  background-image: url(../../static/Next.png);
+  background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/Next.png);
 //   background-image: url('https://w7.pngwing.com/pngs/444/482/png-transparent-computer-icons-next-button-miscellaneous-angle-number.png');
   background-size: cover;
   background-color: transparent;
