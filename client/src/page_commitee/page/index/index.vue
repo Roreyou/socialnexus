@@ -63,15 +63,27 @@
 		<view >
 			<view class="board" :class="isCard?'no-card':''">
 				<view class="wallContent">
-					<text class="text-xl text-bold" style="margin-top: 40px; color: rgb(195, 193, 197); font-size: 20rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 现有组织 </text>
+					<text class="text-xl text-bold" style="margin-top: 40px; color: rgb(195, 193, 197); font-size: 20rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 现有队伍 </text>
+					<text class="text-xl text-bold wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 234个 </text>
 				</view>
 				<view class="wallContent">
-					<text class="text-xl text-bold" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 2345个 </text>
+					<text class="text-xl text-bold" style="margin-top: 40px; color: rgb(195, 193, 197); font-size: 20rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 现有活动 </text>
+					<text class="text-xl text-bold wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 2824个 </text>
+				</view>
+				<view class="wallContent">
+					<text class="text-xl text-bold" style="margin-top: 40px; color: rgb(195, 193, 197); font-size: 20rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 现有成员 </text>
+					<text class="text-xl text-bold wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 28240名 </text>
 				</view>
 			</view>
+
+			<view class="temp" :class="isCard?'no-card':''">
+				<!-- <view>
+    				<canvas style="height: 30vh;width: 100vw;" id="myEcharts"></canvas>
+  				</view> -->
+			</view>
+
 		</view>
 
-		// <view class="echart" id="mychart" :style="myChartStyle">柱状图</view>
 	</view>
 
 	
@@ -89,12 +101,12 @@
 		mapMutations
 	} from 'vuex'
 	import actilist from '../../../components/acti-list/acti-list.vue';
-	import * as echarts from "echarts";
+	// import * as echarts from "echarts";
 
 	export default {
 		components: {
 			actilist,
-
+			// echarts
 		},
 
 		data() {
@@ -128,51 +140,43 @@
 				loadStatus: 'loadmore',
 				flowList: [],
 				uvCode: uni.getStorageSync('uvCode'),
-				// 活动列表
-				acList:[
-					{	
-						state: "已结束",
-						title: "5月15日实践活动",
-						time: "2020-05-15",
-						place: "北京",
-						job: "志愿者",
-						keywords: "服务,实践"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					}
-				],
+
 				// 数据墙部分-柱状图
-				// xData: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], //横坐标
-      			// yData: [23, 24, 18, 25, 27, 28, 25], //人数数据
-      			// taskDate: [10, 11, 9, 17, 14, 13, 14],
-      			// myChartStyle: { float: "left", width: "100%", height: "400px" } //图表样式
+				xData: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], //横坐标
+      			yData: [23, 24, 18, 25, 27, 28, 25], //人数数据
+      			taskDate: [10, 11, 9, 17, 14, 13, 14],
+      			myChartStyle: { float: "left", width: "100%", height: "400px" }, //图表样式
+
+				// 这里初始化一个null，待会儿用来充当echarts实例
+				myChart: null,
 			}
 		},
 		// mounted() {
     	// 	this.initEcharts();
   		// },
+		// mounted() {
+		// 	this.myChart = echarts.init(document.getElementById('myEcharts'));
+		// 	let option = {
+		// 		xAxis: {
+		// 			type: 'category',
+		// 			data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+		// 		},
+		// 		yAxis: {
+		// 			type: 'value'
+		// 		},
+		// 		series: [
+		// 			{
+		// 				data: [150, 230, 224, 218, 135, 147, 260],
+		// 				type: 'line'
+		// 			}
+		// 		]
+		//     };
+		// 	this.myChart.setOption(option);
+			 
+		//     window.addEventListener('resize', () => {
+		// 	    this.myChart.resize()
+		//     });
+    	// },
 
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin'])
@@ -580,10 +584,13 @@
 
 .board{
 	border-radius: 10px;
-	background-color: rgb(255, 251, 251);
-	// background-image: linear-gradient(to right top, #41b851, #59c549, #72d23e, #8cdf2e, #a8eb12);
+	background-color: #ffffff;
+	// background-image: url('../../static/graph.png');
 	// background-image: linear-gradient(to right bottom, #6aa6fd, #85aefe, #9ab6fe, #adbeff, #bec7ff);
-	height: 80px;
+	height: 120px;
+	margin-right: 5px;
+    margin-right: 5px;
+
 }
 
 // 活动推荐标题
@@ -619,5 +626,18 @@
 }
 .wallContent{
 	margin-left: 48rpx;
+}
+.wallData{
+	margin-top: 20rpx;
+	margin-left: 50rpx;
+}
+.temp{
+	border-radius: 10px;
+	background-color: #ffffff;
+	background-image: url('../../static/graph.png');
+	height: 120px;
+	margin-right: 5px;
+    margin-right: 5px;
+	background-size: 300px 110px;
 }
 </style>
