@@ -132,39 +132,9 @@
 				flowList: [],
 				uvCode: uni.getStorageSync('uvCode'),
 				acList:[
-					{	
-						state: "已结束",
-						title: "5月15日实践活动",
-						time: "2020-05-15",
-						place: "北京",
-						job: "志愿者",
-						keywords: "服务,实践"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					}
-				]
+				],
+				page: 0,
+				loadmore: true   //true是还没拿完 如果服务器空了就是false
 			}
 		},
 
@@ -210,26 +180,32 @@
 			// console.log("userInfo.verification_status,", this.userInfo)
 			// console.log(typeof this.$url)
 			// console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
-			uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+			// uni.request({
+			// 	url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
-				method: 'GET',
-				data: {
-					province: '1',
-					// token: this.$userinfo.token
-				},
-				success: res => {
-					this.acList = res.data.data.acti_list;
-					this.acList[0].keywords = "服务,实践"
-					this.net_error = false;
-				},
-				fail: res => {
-					this.net_error = true;
-				},
-				complete: () => {
-				}
-			})
+			// 	method: 'GET',
+			// 	data: {
+			// 		province: '1',
+			// 		// token: this.$userinfo.token
+			// 	},
+			// 	success: res => {
+			// 		this.acList = res.data.data.acti_list;
+			// 		this.acList[0].keywords = "服务,实践"
+			// 		this.net_error = false;
+			// 	},
+			// 	fail: res => {
+			// 		this.net_error = true;
+			// 	},
+			// 	complete: () => {
+			// 	}
+			// })
+			
+			const data = {
+				province: '1',
+				page: 0
+			}
+			this.loadActilist(data)
 		},
 		onPageScroll(e) {
 		    this.scrollTop = e.scrollTop;
@@ -238,7 +214,22 @@
 		//     this.loadStatus = 'loading';
 		//     // 获取数据
 		// 	this.findHouseList()
-		// },
+		// },	 
+		onReachBottom() {
+			uni.$emit('onReachBottom');
+			console.log('index -- onReachBottom')
+			++ this.page
+			if(this.loadmore){
+				const data = {
+					province: '1',
+					page: this.page
+				}
+				this.loadActilist(data)
+			}else{
+				//到底了
+				this.$u.toast(`已经到底啦`);
+			}
+		},
 		// 下拉刷新
 		// onPullDownRefresh() {
 		// 	// 获取数据
@@ -247,6 +238,32 @@
 		// 	uni.stopPullDownRefresh();
 		// },
 		methods: {
+			loadActilist(data){  //加载活动列表
+				uni.request({
+				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
+				method: 'GET',
+				data: data,
+				success: res => {
+					// this.acList = res.data.data.acti_list;
+					if(res.data.data.acti_list.length){
+						this.acList = this.acList.concat(res.data.data.acti_list)
+						this.acList[0].keywords = "服务,实践"
+						// this.loadmore = false
+					}else{  //空了
+						this.loadmore = false 
+					}
+
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
+			},
 			handleAuthentication(){
 				// this.$u.route({
 				// 	url: 'pages/school/index/verify',

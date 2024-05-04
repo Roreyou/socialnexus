@@ -99,31 +99,37 @@ import actipickers from '../../../page_school/components/acti-pickers/acti-picke
 				],
 				searchcontent: '',//搜索内容
 				searchlist: [],
-				newontent: ''
+				newontent: '',
+				page: 0
 				}
 			},
 			mounted(){
-				//刚打开时出现的是推荐的活动
-				uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				method: 'GET',
-				data: {
-					province: '1',
-					// token: this.$userinfo.token
-				},
-				success: res => {
-					this.searchlist = res.data.data.acti_list;
-					this.net_error = false;
-				},
-				fail: res => {
-					this.net_error = true;
-				},
-				complete: () => {
+				const data = {
+					provice: "",
+					page: 0
 				}
-			})
+				//刚打开时出现的是推荐的活动
+				this.getRelist(data)
 			},
 			methods:{
+				getRelist(data){
+					uni.request({
+						url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+						// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+						method: 'GET',
+						data: data,
+						success: res => {
+							// this.searchlist = res.data.data.acti_list;
+							this.searchlist = this.searchlist.concat(res.data.data.acti_list)
+							this.net_error = false;
+						},
+						fail: res => {
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+				},
 				TarData(item){
 					//设置id，来显示选中那个标签，显示下划线
 					this.tabIndex = item.id;
@@ -166,7 +172,17 @@ import actipickers from '../../../page_school/components/acti-pickers/acti-picke
 					this.newontent = this.searchcontent;
 					this.TabCur = 0
 			}
-			}
+			},
+			onReachBottom() {
+				uni.$emit('search--onReachBottom');
+				// console.log('search -- onReachBottom')
+				// ++ this.page
+				// const data = {
+				// 	province: '1',
+				// 	page: this.page
+				// }
+				// this.getRelist(data)
+			},
 		}
 	</script>
 	 

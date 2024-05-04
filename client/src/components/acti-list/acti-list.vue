@@ -8,7 +8,7 @@
 				</view>
 			</view> -->
 			<view>
-				<view class="cu-item" v-for="(item,index) in acList" :key="index">
+				<view class="cu-item" v-for="(item,index) in newAcList" :key="index">
 					<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id)">
 							<view class="cu-item shadow" :class="{'indexstyle': isindex, 'others': !isindex}">
 								<!-- 活动状态 -->							
@@ -27,7 +27,7 @@
 										<view class="text-content"> 详细地址: {{item.address}}</view>
 										
 										<view class="wordcont">	
-											<view class="ackeywords" v-for="(word,index) in item.keywords.split(',')" :key="index">
+											<view class="ackeywords" v-for="(word,index) in item.keywords" :key="index">
 												<view class="cu-tag bg-red light sm round">{{word}}</view>
 											</view>
 										</view>
@@ -53,12 +53,34 @@
 				default:false  //是不是我的活动列表
 			}
   		},
+		 watch: {
+			acList(newVal, oldVal){
+				const newadd = newVal.map(item => {
+					let keywords = [];
+					if (typeof item.keywords === 'string') {
+						keywords = item.keywords.split(',');
+					}
+					return { ...item, keywords };
+				});
+				this.newAcList = this.newAcList.concat(newadd)
+			}
+		},
+
 		data() {
 			return {
+				newAcList: []
 			}
 		},
 		mounted() {
-			// console.log("acti--list:", this.acList)
+			// item.keywords.split(',')// console.log("acti--list:", this.acList)
+			this.newAcList = this.acList.map(item => {
+				let keywords = [];
+				if (typeof item.keywords === 'string') {
+					keywords = item.keywords.split(',');
+				}
+				return { ...item, keywords };
+			});
+
 		},
 		methods: {
 			//前往详情页

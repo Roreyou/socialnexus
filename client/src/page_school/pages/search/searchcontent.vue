@@ -20,16 +20,29 @@ export default {
     },
     data() {
         return {
-            modifiedSearchList: this.searchlist.slice(),
+            // modifiedSearchList: this.searchlist.slice(),
+            modifiedSearchList: [],
             content: this.searchcontent,
-            isshow: true
+            isshow: true,
+            page: 0,
+            loadmore: true
         }
     },
     watch: {
+        searchlist(newValue, oldValue){
+            console.log('searchlist 的值已更改：', newValue);
+        },
         searchcontent(newValue, oldValue) {
-        // console.log('searchcontent 的值已更改：', newValue);
+        console.log('searchcontent 的值已更改：', newValue);
+        this.loadmore = true 
             if(newValue !== ''){
-                this.search(newValue)
+                this.search(newValue)  //加载搜索列表（第一批
+            }else{
+                const data = {
+                    provice: '',
+                    page:0
+                }
+                this.getRelist(data)
             }
         },
         modifiedSearchList(newValue, oldValue){
@@ -39,9 +52,77 @@ export default {
             });
         }
     },
+    mounted(){
+        if(this.searchcontent === ''){
+            const data = {
+                provice: '',
+                page:0
+            }
+            this.getRelist(data)
+        }
+
+        //绑定触底监听
+        var that=this;
+        uni.$on('search--onReachBottom', function(data) {
+            console.log('收到__search--onReachBottom');
+            if(!that.loadmore){
+                uni.showToast({
+                    title: '没有更多了',
+                    icon: 'none',
+                    duration: 2000
+                })
+                return
+            }
+            that.getmore();
+        });
+    },
+    // onReachBottom() {
+	// 	uni.$emit('search -- onReachBottom');
+	// 	console.log('search -- onReachBottom')
+
+	// },
+
     methods: {
+        getmore(){
+            ++ this.page
+            const data = {
+                text: this.content,
+                page: this.page
+            }
+            if(this.content === ''){
+                this.getRelist(data)
+            }
+            else{
+                this.search(data)
+            }
+        },
+        getRelist(data){
+            uni.request({
+						url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+						// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+						method: 'GET',
+						data: data,
+						success: res => {
+							// this.searchlist = res.data.data.acti_list;
+                            if(res.data.data.acti_list){
+                                this.modifiedSearchList = this.modifiedSearchList.concat(res.data.data.acti_list)
+                                this.loadmore = false
+                            }else{  //空了
+                                this.loadmore = false 
+                            }
+
+							this.net_error = false;
+						},
+						fail: res => {
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+        },
         search(content){
             if(content === ''){
+                //没有搜索内容时下拉列表
                 return
             }
 			uni.request({
