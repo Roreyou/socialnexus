@@ -27,6 +27,23 @@
       ReMen,
       TongQvYv
 		},
+
+	mounted(){
+		uni.$off('pyqonReachBottom');
+		uni.$on('pyqonReachBottom', function(data) {
+			if(this.currentTabComponent === 'ZuiXin'){
+				uni.$emit('pyqZuiXin');
+				return;
+			}else if(this.currentTabComponent === 'ReMen'){
+				uni.$emit('pyqReMen');
+				return;
+			}else{
+				uni.$emit('pyqTongQvYv');
+				return;
+			}
+        });
+	},
+
 		data() {
 			return {
 				title: 'Hello',
@@ -55,10 +72,6 @@
 				],
 				currentTabComponent: "ZuiXin"
 			}
-		},
-		onReachBottom() {
-			uni.$emit('pyq--onReachBottom');
-			console.log('触底了');
 		},
 	
 		methods:{

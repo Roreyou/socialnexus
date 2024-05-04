@@ -109,6 +109,11 @@
 			...mapState(['hasLogin', 'forcedLogin','user_id'])
 		},
 
+		onReachBottom() {
+			uni.$emit('pyqonReachBottom');
+			console.log('触底了');
+		},
+
 		methods:{
 			TarData(item){
 				//设置id，来显示选中那个标签，显示下划线

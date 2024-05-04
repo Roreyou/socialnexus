@@ -62,7 +62,8 @@
 					}
 					return { ...item, keywords };
 				});
-				this.newAcList = this.newAcList.concat(newadd)
+				// this.newAcList = this.newAcList.concat(newadd)
+				this.newAcList = newadd
 			}
 		},
 

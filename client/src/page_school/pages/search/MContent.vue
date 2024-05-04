@@ -189,7 +189,8 @@ export default {
 				data: data,
 				success: res => {
 					if(res.data.code == 200){
-						this.acList = res.data.data.myactiv_list;
+						// this.acList = res.data.data.myactiv_list;
+						this.acList = this.acList.concat(res.data.data.myactiv_list)
 						this.acList[0].keywords = "服务,实践"
 						// console.log(this.acList)
 						this.net_error = false;

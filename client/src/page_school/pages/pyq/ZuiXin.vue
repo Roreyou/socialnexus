@@ -25,17 +25,37 @@
 			return {			
 				dyList:[
 
-				]
+				],
+				page: 0
 			};
 		},
 		mounted() {
-			uni.request({
+			uni.$off('pyqZunXin');
+			uni.$on('pyqZunXin', function(data) {
+				this.getMore()
+        });
+			const data = {
+				page: 0
+			}
+			this.getHot(data)
+
+
+		},
+		methods:{
+			getMore(){
+				page ++;
+				const data = {
+					page: this.page,
+				}
+				this.getHot(data)
+			},
+			getHot(data){
+				uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/latest',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
 				method: 'GET',
-				data: {
-				},
+				data: data,
 				success: res => {
 					this.dyList = res.data.data.post_list;
 					// this.acList[0].keywords = "服务,实践"
@@ -48,8 +68,7 @@
 				complete: () => {
 				}
 			})
-		},
-		methods:{
+			}
 		}
 	};
 </script>
