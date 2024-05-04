@@ -138,11 +138,11 @@
 				}
 				//收藏
 				if(index == 1){
-					if(!this.userInfo.isUser){
+				if(!this.userInfo.isUser){
 				const _this = this;
 				uni.showModal({
 						title: '',
-						content: '请登录后查看。是否前去登录？',
+						content: '请登录后报名活动。是否前去登录？',
 						success: function(res) {
 						if (res.confirm) {
 							// 用户点击了确定
@@ -237,16 +237,10 @@
 						}
 					});
 			}else{
-				// this.$u.route({
-				// 	url: 'pages/school/details/application',
-				// 	params: {
-				// 		team_id: this.user_id,
-				// 		acti_id: this.acti_id,
-				// 	}
-				// })
 				uni.navigateTo({
 					url:'/page_school/pages/details/application?team_id=' + this.user_id + '&acti_id=' + this.acti_id
 				});
+				
 			}
 			},
 			cancelacti(){  //取消报名

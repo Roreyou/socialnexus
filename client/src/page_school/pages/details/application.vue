@@ -130,7 +130,6 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			...mapState(['userInfo'])
 		},
 	mounted(){
-		console.log("报名详情页面");
 			// 获取query对象
 			const query = this.$mp.query;
 			// const query = this.$route.query;
@@ -147,7 +146,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				},					
 				method: 'GET',
 				data: {
-					team_id: team_id,
+					team_id: this.team_id,
 					acti_id: this.activity_id,
 					// token: this.$userinfo.token
 				},
@@ -162,12 +161,59 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				},
 				complete: () => {
 				}
-			})
+			}),
+			uni.request({
+				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getisregister',
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},				
+				method: 'GET',
+				data: {
+					team_id: this.team_id,
+					acti_id: this.activity_id,
+				},
+				success: res => {
+					if(res.data.code==200){
+						if(res.data.data.flag=="1"){
+							this.isActive = true; //已经是我报过的活动了
+						}else{
+							this.isActive = false;
+						}
+					}else{
+						this.$u.toast(`请重试`);
+					}
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+		})
 	},
 
     methods: {
       submit(){  //提交报名或者取消报名活动
 		// console.log("submit-userInfo:",this.userInfo);	
+		if(!this.userInfo.isUser){  //普通队员的话只需要提示，游客需要提示和询问是否登录
+				uni.showModal({
+				title: '',
+				content: '请登录后报名活动。是否前去登录？',
+				success: function(res) {
+				if (res.confirm) {
+					// 用户点击了确定
+					console.log('用户点击了确定');
+					uni.reLaunch({
+						url: '../../login/login', 
+					});
+					// 在这里可以编写用户点击确定后的逻辑
+				} else if (res.cancel) {
+					// 用户点击了取消
+					// console.log('用户点击了取消');
+					return;
+				}
+				}
+			});
+		}
 		if(!this.userInfo.isleader){
 			this.$u.toast(`只有队长能报名/取消报名活动！`);
 			return;
