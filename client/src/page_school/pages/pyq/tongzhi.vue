@@ -85,9 +85,29 @@
 					team_id: this.user_id,
 				},
 				success: res => {
-					this.comment_list = res.data.data.comment_list;
-					// console.log(this.acList)
-					this.like_list = res.data.data.like_list;
+					if(res.data.code == 200){
+						this.comment_list = res.data.data.comment_list;
+						// console.log(this.acList)
+						this.like_list = res.data.data.like_list;
+					}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
+
 				},
 				fail: res => {
 					this.net_error = true;

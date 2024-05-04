@@ -151,9 +151,27 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 					// token: this.$userinfo.token
 				},
 				success: res => {
-					this.team_detail = res.data.data.team_detail;
-					this.acti_detail = res.data.data.acti_detail;
-					// this.detail.keywords = "服务,实践"
+					if(res.data.code == 200){
+						this.team_detail = res.data.data.team_detail;
+						this.acti_detail = res.data.data.acti_detail;
+					}else if(res.data.code == 401){
+						console.log("token过期");
+						uni.showModal({
+						title: '',
+						content: '登录已过期。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '../../../pages/login/login',
+							})
+						} else if (res.cancel) {
+							// uni.navigateBack()
+							return;							
+						}
+						}
+					});
+					}
 					this.net_error = false;
 				},
 				fail: res => {
@@ -179,7 +197,25 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						}else{
 							this.isActive = false;
 						}
-					}else{
+					}else if(res.data.code == 401){
+						console.log("token过期");
+						uni.showModal({
+						title: '',
+						content: '登录已过期。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '../../../pages/login/login',
+							})
+						} else if (res.cancel) {
+							// uni.navigateBack()
+							return;							
+						}
+						}
+					});
+					}
+					else{
 						this.$u.toast(`请重试`);
 					}
 				},
@@ -234,7 +270,25 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						this.$u.toast(`成功报名活动!`);
 						this.buttonText = "取消报名";
           				this.isActive = !this.isActive
-					}else{
+					}else if(res.data.code == 401){
+						console.log("token过期");
+						uni.showModal({
+						title: '',
+						content: '登录已过期。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '../../../pages/login/login',
+							})
+						} else if (res.cancel) {
+							// uni.navigateBack()
+							return;							
+						}
+						}
+					});
+					}
+					else{
 						this.$u.toast(`报名失败，请重试`);
 					}
 				},
@@ -261,7 +315,25 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						this.$u.toast(`成功取消报名`);
 						this.buttonText = "报名活动";
           				this.isActive = !this.isActive
-					}else{
+					}else if(res.data.code == 401){
+						console.log("token过期");
+						uni.showModal({
+						title: '',
+						content: '登录已过期。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '../../../pages/login/login',
+							})
+						} else if (res.cancel) {
+							// uni.navigateBack()
+							return;							
+						}
+						}
+					});
+					}
+					else{
 						this.$u.toast(`取消报名失败，请重试`);
 					}
 				},

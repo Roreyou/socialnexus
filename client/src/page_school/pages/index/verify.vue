@@ -713,7 +713,7 @@
 			// this.$refs.customForm.setRules(this.customRules)
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id'])
+			...mapState(['hasLogin', 'forcedLogin','user_id','userInfo'])
 		},
 		methods: {
 			onClickItem(e) {
@@ -860,9 +860,10 @@
 				setTimeout(
 					() => {
 					if(instr_flag && dyna_flag && leader_flag){
-						uni.showToast({
-							title: `校验通过`
-						})
+						// uni.showToast({
+						// 	title: `校验通过`
+						// })
+						console.log('校验通过')
 						uni.request({
 							header: {
 									'Content-Type': 'application/json', 
@@ -871,8 +872,8 @@
 							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/authentification',
 							method: 'POST',
 								data: {
-									id:'yonghuming',
-									status:1,
+									id:this.user_id,
+									status:this.userInfo.verification_status,
 									instructor:{
 										id: this.baseFormData.netid,
 										name:this.baseFormData.name,
@@ -894,7 +895,26 @@
 							dataType:'json',
 							success: (res) => {
 									// var result = JSON.parse(res.data.projectList);
-									console.log("post-success")
+									if(res.data.code == 200){
+
+									}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
 								},
 								fail: res => {
 									console.log("post-fail")

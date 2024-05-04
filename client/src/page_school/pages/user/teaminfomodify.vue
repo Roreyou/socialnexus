@@ -240,19 +240,38 @@
 						// activity_status: this.index
 					},
 					success: res => {
-						//队伍信息
-						this.team_info = res.data.data.team_info;			
-						this.teamData = res.data.data.team_info;		
-						//队员信息
-						this.member_info = res.data.data.member_info;						
-                        this.dynamicFormData2.domains = this.member_info;
-						//老师信息
-						this.instructor_info = res.data.data.instructor_info;		
-						this.instrData = res.data.data.instructor_info;		
-                        //队长
-                        this.leader_info = res.data.data.leader_info;
-						this.leaderData = res.data.data.leader_info;
-						this.net_error = false;
+						if(res.data.code == 200){
+							//队伍信息
+							this.team_info = res.data.data.team_info;			
+							this.teamData = res.data.data.team_info;		
+							//队员信息
+							this.member_info = res.data.data.member_info;						
+							this.dynamicFormData2.domains = this.member_info;
+							//老师信息
+							this.instructor_info = res.data.data.instructor_info;		
+							this.instrData = res.data.data.instructor_info;		
+							//队长
+							this.leader_info = res.data.data.leader_info;
+							this.leaderData = res.data.data.leader_info;
+							this.net_error = false;
+						}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
 					},
 					fail: res => {
 						this.net_error = true;
@@ -356,6 +375,23 @@
 										uni.showToast({
 											title: `成功提交申请！`
 										})
+									}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '修改失败，登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											uni.navigateBack()
+											return;							
+										}
+										}
+									});
 									}
 									setTimeout(() => {
 										uni.navigateBack();

@@ -70,7 +70,25 @@
 							if(res.data.code==200){
 									this.$u.toast(`成功修改密码`);
 									this.clearInputs()
-							}else{
+							}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
+							else{
 								this.$u.toast(`原密码错误`);
 							}
 						},

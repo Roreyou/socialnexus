@@ -198,8 +198,7 @@
 					success: res => {
 						let code = res.data.code;
 						// console.log(this.acList)
-						code = 0  //先强制
-						if(code == 0){
+						if(code == 200){
 							uni.showToast({
 								title: `回复成功`
 							})
@@ -214,7 +213,24 @@
 									break; // 找到匹配对象后跳出循环
 								}
 							}
-						}
+						}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											// uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
 
 					},
 					fail: res => {
@@ -243,8 +259,7 @@
 					success: res => {
 						let code = res.data.code;
 						// console.log(this.acList)
-						code = 0  //先强制
-						if(code == 0){
+						if(code == 200){
 							uni.showToast({
 								title: `评论成功`
 							})
@@ -252,7 +267,24 @@
 							
 							let newlist = res.data.data.comment_list;
 							this.comList = newlist;
-						}
+						}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											// uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
 
 					},
 					fail: res => {
@@ -282,8 +314,7 @@
 					success: res => {
 						let code = res.data.code;
 						// console.log(this.acList)
-						code = 0  //先强制
-						if(code == 0){
+						if(code == 200){
 							if(this.dyInfo.fabulous){
 								this.$u.toast(`成功取消点赞`);
 								this.dyInfo.like = this.dyInfo.like - 1
@@ -295,7 +326,24 @@
 							//UI效果
 							this.dyInfo.fabulous = (!this.dyInfo.fabulous)
 							
-						}
+						}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											// uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
 
 					},
 					fail: res => {
@@ -322,8 +370,7 @@
 					success: res => {
 						let code = res.data.code;
 						// console.log(this.acList)
-						code = 0  //先强制
-						if(code == 0){
+						if(code == 200){
 							let index = 0;
 							let list = this.comList;
 
@@ -346,7 +393,24 @@
 							//UI效果
 							this.comList[index].comment_detail.fabulous = (!this.comList[index].comment_detail.fabulous)
 							
-						}
+						}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											// uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
 
 					},
 					fail: res => {
@@ -395,7 +459,24 @@
 						}
 						//UI效果
 						this.comList[com_index].reply_list[index2].fabulous = (!this.comList[com_index].reply_list[index2].fabulous)			
-						}
+						}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											// uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
 
 						},
 						fail: res => {

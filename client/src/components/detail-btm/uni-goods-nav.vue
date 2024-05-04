@@ -146,12 +146,8 @@
 						success: function(res) {
 						if (res.confirm) {
 							// 用户点击了确定
-							_this.$u.route({
-								url: 'pages/login/login',
-								params: {
-									team_id: this.user_id,
-									acti_id: this.acti_id,
-								}
+							uni.reLaunch({
+								url: '/pages/login/login'
 							})
 							// 在这里可以编写用户点击确定后的逻辑
 						} else if (res.cancel) {
@@ -162,7 +158,6 @@
 						}
 					});
 				}else{
-
 					let favor = this.isActive ? 1 : 0;  //1就是要取消收藏，0就是要收藏
 					uni.request({
 						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
@@ -184,6 +179,23 @@
 									this.$u.toast(`收藏成功！`);
 									this.isActive = true
 								}
+							}else if(res.data.code == 401){
+								console.log("token过期");
+								uni.showModal({
+								title: '',
+								content: '登录已过期。是否前去登录？',
+								success: function(res) {
+								if (res.confirm) {
+									// 用户点击了确定
+									uni.reLaunch({
+										url: '/pages/login/login',
+									})
+								} else if (res.cancel) {
+									// uni.navigateBack()
+									return;							
+								}
+								}
+							});
 							}
 						},
 						fail: res => {
@@ -259,6 +271,22 @@
 					if(res.data.code==200){
 						this.$u.toast(`成功取消报名`);
 						this.ismyacti = false;
+					}else if(res.data.code == 401){
+						console.log("token过期");
+						uni.showModal({
+						title: '',
+						content: '登录已过期。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							uni.reLaunch({
+								url: '/pages/login/login',
+							})
+						} else if (res.cancel) {
+							uni.navigateBack()
+							return;							
+						}
+						}
+					});
 					}else{
 						this.$u.toast(`取消报名失败，请重试`);
 					}
@@ -300,7 +328,25 @@
 						}else{
 							this.ismyacti = false;
 						}
-					}else{
+					}else if(res.data.code == 401){
+						console.log("token过期");
+						uni.showModal({
+						title: '',
+						content: '登录已过期。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login',
+							})
+						} else if (res.cancel) {
+							// uni.navigateBack()
+							return;							
+						}
+						}
+					});
+					}
+					else{
 						this.$u.toast(`请重试`);
 					}
 				},

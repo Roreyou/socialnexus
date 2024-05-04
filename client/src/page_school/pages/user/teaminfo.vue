@@ -171,24 +171,41 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 					},
 					success: res => {
 						//队伍信息
-						const basedata = res.data.data.team_info;
-						this.baselist[0].value = basedata.team_name;
-						this.baselist[1].value = basedata.instructor_name;
-						this.baselist[2].value = basedata.leader_name;
-						this.baselist[3].value = basedata.relevant_faculties;						
-						this.baselist[4].value = basedata.mem_num;
-						
-						//队员信息
-						this.memberList = res.data.data.member_info;
+						if(res.data.code == 200){
+							const basedata = res.data.data.team_info;
+							this.baselist[0].value = basedata.team_name;
+							this.baselist[1].value = basedata.instructor_name;
+							this.baselist[2].value = basedata.leader_name;
+							this.baselist[3].value = basedata.relevant_faculties;						
+							this.baselist[4].value = basedata.mem_num;
+							
+							//队员信息
+							this.memberList = res.data.data.member_info;
 
-						//老师信息
-						const instrdata = res.data.data.instructor_info;
-						this.instructorList[0].value = instrdata.name;
-						this.instructorList[1].value = instrdata.id;
-						this.instructorList[2].value = instrdata.tel;
-						this.instructorList[3].value = instrdata.major;						
-
-
+							//老师信息
+							const instrdata = res.data.data.instructor_info;
+							this.instructorList[0].value = instrdata.name;
+							this.instructorList[1].value = instrdata.id;
+							this.instructorList[2].value = instrdata.tel;
+							this.instructorList[3].value = instrdata.major;						
+						}else if(res.data.code == 401){
+							console.log("token过期");
+							uni.showModal({
+							title: '',
+							content: '登录已过期。是否前去登录？',
+							success: function(res) {
+							if (res.confirm) {
+								// 用户点击了确定
+								uni.reLaunch({
+									url: '../../../pages/login/login',
+								})
+							} else if (res.cancel) {
+								uni.navigateBack()
+								return;							
+							}
+							}
+						});
+						}
 						this.net_error = false;
 					},
 					fail: res => {

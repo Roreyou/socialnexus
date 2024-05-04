@@ -181,9 +181,31 @@
 					acti_id: activityId,
 				},
 				success: res => {
-					this.detail = res.data.data;
+					if(res.data.code == 200){
+						this.detail = res.data.data;	
+						this.setData()	
+					}else if(res.data.code == 401){
+						console.log("token过期");
+						uni.showModal({
+						title: '',
+						content: '登录已过期。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '../../../pages/login/login',
+							})
+						} else if (res.cancel) {
+							// uni.navigateBack()
+							return;							
+						}
+						}
+					});
+					}
+								
+									
 					this.net_error = false;
-					this.setData()
+
 				},
 				fail: res => {
 					this.net_error = true;

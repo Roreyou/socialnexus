@@ -83,9 +83,29 @@
 					// token: this.$userinfo.token
 				},
 				success: res => {
-					this.acList = res.data.data.acti_list;
+					if(res.data.code==200){
+						this.acList = res.data.data.acti_list;
 					this.acList[0].keywords = "服务,实践"
 					this.net_error = false;
+					}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
+
 				},
 				fail: res => {
 					this.net_error = true;
@@ -122,7 +142,25 @@
 									const filteredList = this.acList.filter(item => item.id !== likeid);
 									this.acList = filteredList;
 									this.$u.toast(`取消收藏成功！`);
-								}else{
+								}else if(res.data.code == 401){
+										console.log("token过期");
+										uni.showModal({
+										title: '',
+										content: '登录已过期。是否前去登录？',
+										success: function(res) {
+										if (res.confirm) {
+											// 用户点击了确定
+											uni.reLaunch({
+												url: '../../../pages/login/login',
+											})
+										} else if (res.cancel) {
+											// uni.navigateBack()
+											return;							
+										}
+										}
+									});
+									}
+								else{
 									this.$u.toast(`请重试`);
 								}
 							},
