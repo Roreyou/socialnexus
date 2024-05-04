@@ -8,7 +8,7 @@
 					队伍基本信息
 				</view>
 				<view class="modify">
-					<view class="cu-btn bg-blue margin-left-sm" @click="modifyInfo" style="font-family: pmkaiti;" v-if="userInfo.verification_status || userInfo.verification_status">修改资料</view>
+					<view class="cu-btn bg-blue margin-left-sm" @click="modifyInfo" style="font-family: pmkaiti;" v-if="userInfo.verification_status==2">修改资料</view>
 				</view>
 				<view class="de_key_value" v-for="(item,index) in baselist" :key="index">
 					<view class="de_content">

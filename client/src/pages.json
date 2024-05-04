@@ -289,6 +289,12 @@
 					"style": {
 						"navigationBarTitleText": "活动报名"
 					}
+				},
+				{
+					"path": "pages/user/teaminfomodify",
+					"style": {
+						"navigationBarTitleText": "修改队伍信息"
+					}
 				}
 			]
 		}
