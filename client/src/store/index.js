@@ -15,7 +15,7 @@ const store = new Vuex.Store({
 		userInfo: {
 			isUser: false,  //是否是正式用户(高校队伍)
 			avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
-			verification_status: 5,
+			verification_status: 5,  //游客视角的status
 			isleader: false, // 是否是队长（也就是有全部权限
 		}
 	},

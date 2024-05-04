@@ -3,9 +3,12 @@
 	<view class="container">
 		<!-- 队伍信息 -->
 		<view>
-			<view class="part second">
+			<view class="part first">
 				<view class="de_total_title sub_title">
 					队伍基本信息
+				</view>
+				<view class="modify">
+					<view class="cu-btn bg-blue margin-left-sm" @click="modifyInfo" style="font-family: pmkaiti;" v-if="userInfo.verification_status || userInfo.verification_status">修改资料</view>
 				</view>
 				<view class="de_key_value" v-for="(item,index) in baselist" :key="index">
 					<view class="de_content">
@@ -51,32 +54,6 @@
 				<view class="de_total_title sub_title">
 					队员信息
 				</view>
-				<!-- <view class="de_key_value">
-					<view class="de_content">
-						<view class="key">
-							时间段
-						</view>
-						<view class="value">
-							2024/3/31 10:00-12:00
-						</view>
-					</view>
-					<view class="de_content">
-						<view class="key">
-							招募人数
-						</view>
-						<view class="value">
-							12
-						</view>
-					</view>
-					<view class="de_content">
-						<view class="key">
-							招募岗位
-						</view>
-						<view class="value">
-							志愿者
-						</view>
-					</view>
-				</view> -->
 				<view>
 					<view class="cu-item" v-for="(item,index) in memberList" :key="index">
 						<view class="cu-card article" :class="isCard?'':'no-card'">
@@ -178,7 +155,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id'])
+			...mapState(['hasLogin', 'forcedLogin','user_id', 'userInfo'])
 		},
 		mounted() {
 			uni.request({
@@ -232,6 +209,11 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						console.log("拨打电话失败！")
 					}
 				})
+			},
+			modifyInfo(){
+				uni.navigateTo({
+					url: '/page_school/pages/user/teaminfomodify'
+				})	
 			}
 		}
 	}
@@ -251,6 +233,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
 	.part{
 		padding-left: 25rpx;
+		padding-right: 25rpx;
 	}
 
 	.de_total_title {
@@ -264,6 +247,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 	.sub_title{
 		font-size: 36rpx;
 		font-weight: 600;
+		display: inline-block;
 	}
 
 	.de_key_value{
@@ -324,9 +308,12 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 	  flex-direction: column;
 	}
 
-	.cu-item .shadow{
+	.cu-item{
 	margin: 0;
 	margin-top: 10rpx;
+	background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 	}
 
 	.cu-bar .action:first-child{
@@ -340,6 +327,20 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 	.wordcont .ackeywords {
 		display: inline-block;
 	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
+	}
+
+	/*修改入口*/
+	.margin-left-sm{
+		margin-left: auto;
+	}
+	.cu-btn{
+		border-radius: 10px;
+    	background-color: rgb(43 41 41 / 30%);
+    	backdrop-filter: blur(10px);
+	}
+	.modify{
+		display: inline-block;
+		margin-left: 300rpx;
 	}
 </style>
 \
