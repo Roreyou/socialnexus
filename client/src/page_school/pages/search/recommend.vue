@@ -2,36 +2,6 @@
 <template>
 	<view class="content">
 		<!-- 活动推荐列表 -->
-		<!-- <view>
-			<view class="cu-bar bg-white">
-				<view class="action">
-					<text class="cuIcon-titles text-green"></text>
-					<text class="text-xl text-bold">活动推荐</text>
-				</view>
-			</view>
-			<view>
-				<view class="cu-item" v-for="(item,index) in acList" :key="index">
-					<view class="cu-card article" :class="isCard?'no-card':''">
-							<view class="cu-item shadow">
-								<view class="title"><view class="text-cut">{{item.title}}</view></view>
-								<view class="content">
-									<view class="desc">
-										<view class="text-content"> 日期: {{item.time}}</view>
-										<view class="text-content"> 地点: {{item.place}}</view>
-										<view class="text-content"> 岗位: {{item.job}}</view>
-										
-										<view class="wordcont">	
-											<view class="ackeywords" v-for="(word,index) in item.keywords.split(',')" :key="index">
-												<view class="cu-tag bg-red light sm round">{{word}}</view>
-											</view>
-										</view>
-									</view>
-								</view>
-							</view>
-					</view>
-				</view>
-			</view>
-		</view> -->
         <actilist :acList="acList"></actilist>
 	
 	</view>
@@ -47,57 +17,56 @@ export default {
 		data() {
 			return {
 				// title: '高校 -- 活动推荐'
-				acList:[
-					{	
-						state: "已结束",
-						title: "5月15日实践活动",
-						time: "2020-05-15",
-						place: "北京",
-						job: "志愿者",
-						keywords: "服务,实践"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					}
-				]
+				acList:[],
+				page: 0,
+				loadmore: true,
+				net_error: false
 			}
 		},
 		onLoad() {
-			uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
-				method: 'GET',
-				data: {
+			const data ={
+				province: '1',
+				page: this.page
+			}
+			this.getRecommend(data);
+		},
+		onReachBottom() {
+			// uni.$emit('onReachBottom');
+			if(this.loadmore){
+				this.getmore()
+			}else{
+				//到底了
+				this.$u.toast(`已经到底啦`);
+			}
+		},
+		methods: {
+			getmore(){
+				this.page ++
+				const data = {
 					province: '1',
-					// token: this.$userinfo.token
-				},
+					page: this.page
+				}
+				this.getRecommend(data);
+			},
+			getRecommend(data){
+				uni.request({
+				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+				method: 'GET',
+				// data: {
+				// 	province: '1',
+				// },
+				data: data,
 				success: res => {
-					this.acList = res.data.data.acti_list;
-					this.acList[0].keywords = "服务,实践"
-					const List = this.acList
-					this.acList = [...List, ...List];
+					// this.acList = res.data.data.acti_list;
+					if(res.data.data.acti_list.length){
+						this.acList = this.acList.concat(res.data.data.acti_list);
+						// this.acList[0].keywords = "服务,实践"
+						this.acList = [...this.acList, ...this.acList];
+						// this.loadmore = false
+					}else{  //空了
+						this.loadmore = false 
+					}
+
 					this.net_error = false;
 				},
 				fail: res => {
@@ -106,9 +75,7 @@ export default {
 				complete: () => {
 				}
 			})
-		},
-		methods: {
-
+			}
 		}
 	}
 </script>

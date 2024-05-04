@@ -217,7 +217,7 @@
 		// },	 
 		onReachBottom() {
 			uni.$emit('onReachBottom');
-			console.log('index -- onReachBottom')
+			// console.log('index -- onReachBottom')
 			++ this.page
 			if(this.loadmore){
 				const data = {
