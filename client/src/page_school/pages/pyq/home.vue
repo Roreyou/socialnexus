@@ -1,15 +1,14 @@
-<!-- 朋友圈页面 -- 顶部导航栏 -->
-
+<!-- 朋友圈页面 -->
 <template>
 	<view>
 		<index-tabbar class="index-tabbar" :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ></index-tabbar>
-	<view class="content">
-      <ZuiXin v-if="currentTabComponent === 'ZuiXin'"></ZuiXin>
+		<view class="content">
+		<ZuiXin v-if="currentTabComponent === 'ZuiXin'"></ZuiXin>
 
-      <ReMen v-if="currentTabComponent === 'ReMen'"></ReMen>
+		<ReMen v-if="currentTabComponent === 'ReMen'"></ReMen>
 
-      <TongQvYv v-if="currentTabComponent === 'TongQvYv'"></TongQvYv>
-	</view>	
+		<TongQvYv v-if="currentTabComponent === 'TongQvYv'"></TongQvYv>
+		</view>	
 	</view>
 </template>
  
@@ -57,6 +56,11 @@
 				currentTabComponent: "ZuiXin"
 			}
 		},
+		onReachBottom() {
+			uni.$emit('pyq--onReachBottom');
+			console.log('触底了');
+		},
+	
 		methods:{
 			TarData(item){
 				//设置id，来显示选中那个标签，显示下划线

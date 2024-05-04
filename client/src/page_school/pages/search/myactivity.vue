@@ -91,14 +91,27 @@
 			...mapState(['user_id'])
 		},
 		watch: {
-			TabCur() {
-				this.showContent = false;
-				this.$nextTick(() => {
-					this.searchcontent = ''
-					this.searchlist = []
-					this.showContent = true;
-					
-				});
+			TabCur(newval, oldval) {
+				// this.showContent = false;
+				// this.$nextTick(() => {
+				// 	if(newval == 0 && this.searchlist.length>0){
+				// 		this.showContent = true;
+				// 		return;
+				// 	}//按下搜索按钮的情况
+				// 	this.searchcontent = ''
+				// 	this.searchlist = []
+				// 	this.showContent = true;					
+				// });
+				
+				if(newval == 0 && this.searchlist.length>0){
+					this.showContent = false;
+					this.$nextTick(() => {
+						this.showContent = true;					
+					});
+					return;
+				}
+				this.searchcontent = ''
+				this.searchlist = []
 			},
 			searchlist() {
 				this.showContent = false;
@@ -108,11 +121,41 @@
 			},
     	},
 		onReachBottom() {
-			uni.$emit('myactivity--onReachBottom');
-			console.log('触底了');
+			if(this.TabCur == 0){
+				setTimeout(() => {
+					uni.$emit('myactivity0');
+
+					// 在这里添加你想要延时执行的代码
+				}, 2000);
+				console.log('myactivity0');
+
+			}else if(this.TabCur == 1){
+				setTimeout(() => {
+					uni.$emit('myactivity1');
+
+					// 在这里添加你想要延时执行的代码
+				}, 2000);
+				console.log('myactivity1');
+
+			}else if(this.TabCur == 2){
+				setTimeout(() => {
+					uni.$emit('myactivity2');
+
+					// 在这里添加你想要延时执行的代码
+				}, 2000);
+				console.log('myactivity2');
+
+			}else{
+				setTimeout(() => {
+					uni.$emit('myactivity3');					
+					// 在这里添加你想要延时执行的代码
+				}, 2000);
+				console.log('myactivity3');
+
+			}
+
 		},
 		methods:{
-
 			TarData(item){
 				//设置id，来显示选中那个标签，显示下划线
 				this.tabIndex = item.id;
@@ -122,8 +165,8 @@
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-								// 切换组件时页面滚动到顶部
-								wx.pageScrollTo({
+				// 切换组件时页面滚动到顶部
+				wx.pageScrollTo({
   				  scrollTop: 0,
   				  duration: 0
   				});

@@ -27,7 +27,8 @@ export default {
         return {
             acList: [],
 			page: 0,
-			loadmore: true
+			loadmore: true,
+			ind: 0
         }
     },
     computed: {
@@ -35,7 +36,9 @@ export default {
 		},
     mounted() {
 		console.log("list:",this.searchlist)
+
 		if(this.searchlist.length > 0){
+			console.log("searchlist.length > 0")
 			this.acList = this.searchlist;
 			this.loadmore = false; //搜索我的活动不准备设置懒加载，所以直接设为false拦截
 			return;
@@ -49,9 +52,75 @@ export default {
 		} 
 		this.loadMyacti(iniData)
 		//触底监听
-        var that=this;
-        uni.$on('myactivity--onReachBottom', function(data) {
-			// console.log('收到__search--onReachBottom');
+        let that=this;
+		let throttleTimer = null;
+
+		uni.$off('myactivity0');
+        uni.$on('myactivity0', function(data) {
+			if(that.index != 0){
+				return;
+			}
+			console.log('收到myactivity0');
+            if(!that.loadmore){
+                uni.showToast({
+                    title: '没有更多了',
+                    icon: 'none',
+                    duration: 2000
+                })
+                return
+            }
+            if(that.index == 0){that.getmore();}
+        });
+
+		uni.$off('myactivity1');
+		uni.$on('myactivity1', function(data) {
+			if(that.index != 1){
+				return;
+			}
+			console.log('收到myactivity1');
+            if(!that.loadmore){
+                uni.showToast({
+                    title: '没有更多了',
+                    icon: 'none',
+                    duration: 2000
+                })
+                return
+            }
+            if(that.index == 1){that.getmore();}
+        });
+		
+		uni.$off('myactivity2');
+		uni.$on('myactivity2', this.handleMyactivity2);
+		// uni.$on('myactivity2', function(data) {
+		// 	if(that.index != 2){
+		// 		return;
+		// 	}
+		// 	console.log('收到myactivity2');
+        //     if(!that.loadmore){
+        //         uni.showToast({
+        //             title: '没有更多了',
+        //             icon: 'none',
+        //             duration: 2000
+        //         })
+        //         return
+        //     }
+        //     // if(that.index == 2){that.getmore();}
+		// 	if (that.index == 2) {
+		// 		if (!throttleTimer) {
+		// 		that.getmore();				
+		// 		throttleTimer = setTimeout(() => {
+		// 			// that.getmore();
+		// 			throttleTimer = null;
+		// 		}, 1000);
+		// 		}
+		// 	}
+        // });
+		uni.$off('myactivity3');
+		uni.$on('myactivity3', function(data) {
+			if(that.index != 3){
+				return;
+			}
+			console.log('收到myactivity3');
             if(!that.loadmore){
                 uni.showToast({
                     title: '没有更多了',
@@ -64,7 +133,36 @@ export default {
         });
 		},
     methods: {
+		handleMyactivity2(){
+			let that = this;
+			that.ind ++
+			console.log("that.ind:", that.ind)
+			if(that.index != 2){
+				return;
+			}
+			console.log('收到myactivity2');
+            if(!that.loadmore){
+                uni.showToast({
+                    title: '没有更多了',
+                    icon: 'none',
+                    duration: 2000
+                })
+                return
+            }
+            // if(that.index == 2){that.getmore();}
+			if (that.index == 2) {
+				// if (!throttleTimer) {
+				// that.getmore();				
+				// throttleTimer = setTimeout(() => {
+				// 	// that.getmore();
+				// 	throttleTimer = null;
+				// }, 1000);
+				// }
+				that.getmore();	
+			}
+        },
         getmore(){
+			console.log("getmor--activity_status:",this.index)
 			++ this.page
 			const data = {
 				team_id: this.user_id,
@@ -75,6 +173,12 @@ export default {
 			this.loadMyacti(data)
 		},
 		loadMyacti(data){
+			// if(this.searchlist.length > 0){ //搜索活动但不加载tab=0（在mounted里拦截不了不知道为什么）
+			// 	console.log("data.activity_status:", data.activity_status)
+			// 	console.log("试图拦截")
+			// 	return;
+			// }
+			console.log("searchlist:", this.searchlist)
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getmyactiv',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
