@@ -26,6 +26,8 @@ export default {
     data() {
         return {
             acList: [],
+			page: 0,
+			loadmore: true
         }
     },
     computed: {
@@ -35,20 +37,52 @@ export default {
 		console.log("list:",this.searchlist)
 		if(this.searchlist.length > 0){
 			this.acList = this.searchlist;
+			this.loadmore = false; //搜索我的活动不准备设置懒加载，所以直接设为false拦截
 			return;
 		}
-        uni.request({
+			
+		const iniData = {
+			team_id: this.user_id,
+			// token: this.$userinfo.token
+            activity_status: this.index,
+			page: 0
+		} 
+		this.loadMyacti(iniData)
+		//触底监听
+        var that=this;
+        uni.$on('myactivity--onReachBottom', function(data) {
+			// console.log('收到__search--onReachBottom');
+            if(!that.loadmore){
+                uni.showToast({
+                    title: '没有更多了',
+                    icon: 'none',
+                    duration: 2000
+                })
+                return
+            }
+            that.getmore();
+        });
+		},
+    methods: {
+        getmore(){
+			++ this.page
+			const data = {
+				team_id: this.user_id,
+				// token: this.$userinfo.token
+                activity_status: this.index,
+				page: this.page
+			}
+			this.loadMyacti(data)
+		},
+		loadMyacti(data){
+			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getmyactiv',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
                 header:{
 					Authorization:uni.getStorageSync("token")
 				},	
 				method: 'GET',
-				data: {
-					team_id: this.user_id,
-					// token: this.$userinfo.token
-                    activity_status: this.index
-				},
+				data: data,
 				success: res => {
 					if(res.data.code == 200){
 						this.acList = res.data.data.myactiv_list;
@@ -81,9 +115,7 @@ export default {
 				complete: () => {
 				}
 			})
-    },
-    methods: {
-        
+		}
     }
 }
 </script>

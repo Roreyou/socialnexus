@@ -107,8 +107,12 @@
 				});
 			},
     	},
-		
+		onReachBottom() {
+			uni.$emit('myactivity--onReachBottom');
+			console.log('触底了');
+		},
 		methods:{
+
 			TarData(item){
 				//设置id，来显示选中那个标签，显示下划线
 				this.tabIndex = item.id;
