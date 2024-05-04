@@ -26,24 +26,34 @@
 				dyList:[
 
 				],
-				page: 0
+				page: 0,
+				loadmore: true,
 			};
 		},
 		mounted() {
+			let that = this;
+			uni.$on('pyqZuiXin', function(data) {
+				console.log('收到pyqZuiXin');
+				if(!that.loadmore){
+					uni.showToast({
+						title: '没有更多了',
+						icon: 'none',
+						duration: 2000
+					})
+					return
+            	}
+				that.getMore()
+        	});
 			uni.$off('pyqZunXin');
-			uni.$on('pyqZunXin', function(data) {
-				this.getMore()
-        });
 			const data = {
 				page: 0
 			}
 			this.getHot(data)
-
-
 		},
 		methods:{
 			getMore(){
-				page ++;
+				console.log("getmore")
+				this.page ++;
 				const data = {
 					page: this.page,
 				}
@@ -57,7 +67,12 @@
 				method: 'GET',
 				data: data,
 				success: res => {
-					this.dyList = res.data.data.post_list;
+					// this.dyList = res.data.data.post_list;
+					if(!res.data.data.post_list.length){
+						this.loadmore = false;
+						return
+					}
+					this.dyList = this.dyList.concat(res.data.data.post_list)
 					// this.acList[0].keywords = "服务,实践"
 					// console.log(this.acList)
 					this.net_error = false;

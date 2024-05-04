@@ -189,6 +189,7 @@
 					activity_name: this.searchcontent
 				},
 				success: res => {
+					//不想用懒加载所以不用检查长度
 					this.searchlist = res.data.data.activ_list;
 					this.TabCur = 0
 					// console.log(this.acList)

@@ -3,11 +3,10 @@
 	<view>
 		<index-tabbar class="index-tabbar" :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ></index-tabbar>
 		<view class="content">
-		<ZuiXin v-if="currentTabComponent === 'ZuiXin'"></ZuiXin>
 
-		<ReMen v-if="currentTabComponent === 'ReMen'"></ReMen>
-
-		<TongQvYv v-if="currentTabComponent === 'TongQvYv'"></TongQvYv>
+		<ReMen v-if="currentTabComponent === 'ReMen'"></ReMen>	
+		<ZuiXin v-else-if="currentTabComponent === 'ZuiXin'"></ZuiXin>
+		<TongQvYv v-else-if="currentTabComponent === 'TongQvYv'"></TongQvYv>
 		</view>	
 	</view>
 </template>
@@ -24,17 +23,18 @@
 			indexTabbar,
 			ZuiXin,
 			// GuanZhu
-      ReMen,
-      TongQvYv
+			ReMen,
+			TongQvYv
 		},
 
 	mounted(){
 		uni.$off('pyqonReachBottom');
+		let that = this;
 		uni.$on('pyqonReachBottom', function(data) {
-			if(this.currentTabComponent === 'ZuiXin'){
+			if(that.currentTabComponent === 'ZuiXin'){
 				uni.$emit('pyqZuiXin');
 				return;
-			}else if(this.currentTabComponent === 'ReMen'){
+			}else if(that.currentTabComponent === 'ReMen'){
 				uni.$emit('pyqReMen');
 				return;
 			}else{
