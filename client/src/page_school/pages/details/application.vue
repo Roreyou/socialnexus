@@ -254,6 +254,10 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			this.$u.toast(`只有队长能报名/取消报名活动！`);
 			return;
 		}
+		if(this.userInfo.verification_status != 2){  
+			this.$u.toast(`请先完成队伍信息认证！`);
+			return;
+		}
         if(!this.isActive){
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/register_event',	
