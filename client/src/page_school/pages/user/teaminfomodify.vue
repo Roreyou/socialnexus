@@ -107,7 +107,7 @@
 						</uni-forms-item>
 
 						<view class="button-del">
-							<button class="button" size="mini" type="default" @click="del(index, item.id)">删除</button>
+							<button class="button" size="mini" type="default" @click="del(index, item.id)">删除该队员</button>
 						</view>
 					<!-- </uni-forms-item> -->
 					</uni-forms>
@@ -116,7 +116,7 @@
 				<view class="button-group">
 					<button type="primary" size="mini" @click="add">新增队员</button>
 					<!-- <button type="primary" size="mini" @click="submit('dynamicForm')">提交</button> -->
-					<button type="primary" size="mini" @click="submit('dynamicForm2')">提交</button>
+					<button type="primary" size="mini" @click="submit('dynamicForm2')">提交修改申请</button>
 				</view>
 			</view>
 		</uni-section>

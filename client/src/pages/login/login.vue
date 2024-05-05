@@ -274,7 +274,6 @@
 			},
 			toMain(team_id, verification_status, team_name, avatar, isleader) {
 				// console.log("tomain-avatar", avatar)
-				verification_status = 1  //测试期间先强制
 				const user_id = team_id;
 				const user_name = team_name;
 				this.login({user_id, verification_status, user_name, avatar, isleader});
