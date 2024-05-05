@@ -40,4 +40,7 @@
 </script>
  
 <style>
+.content{
+	margin-top: 6rpx;
+}
 </style>

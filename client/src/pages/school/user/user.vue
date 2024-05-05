@@ -38,13 +38,13 @@
 				</view>
 			</view>
 			<!-- 队伍信息管理 -->
-				<view class="custom-container">
+				<!-- <view class="custom-container"> -->
 					<!-- <hr class="horizontal-line"> -->
-					<view class="title" style="text-align: center;">
+					<!-- <view class="title" style="text-align: center;"> -->
 						<!-- <uni-icons type="map-pin-ellipse" color="gray" size="20" style="vertical-align: middle;"></uni-icons> -->
 						<!-- <text style="margin-left: 20rpx;">队伍信息管理</text> -->
-					</view>
-				</view>
+					<!-- </view> -->
+				<!-- </view> -->
 				<view class="cu-item arrow" v-for="(item,index) in list2" :key="index">
 					<navigator class="content" hover-class="none" :url="item.url">
 						<!-- <text :class="item.icon"></text> -->
@@ -211,7 +211,7 @@
   align-items: center; /* 垂直居中 */
   background-color: #eaecef;
 	border-radius: 10px;
-	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);	
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);	
 }
 .navigator-wrapper .wrapper-content {
   position: absolute;

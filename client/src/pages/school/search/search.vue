@@ -19,9 +19,9 @@
 			</view>
 		</view>
 		<!-- <index-tabbar class="index-tabbar" :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ><index-tabbar> -->
-		<view>
+		<!-- <view>
 			<actipickers></actipickers>
-		</view>		
+		</view>		 -->
 		</view>
 		<view class="accontent">
 			<!-- id="currentTabComponent"表示是那三种筛选类型中的哪一种 -->
@@ -196,7 +196,7 @@ import actipickers from '../../../page_school/components/acti-pickers/acti-picke
 	  z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
 	}
 	.accontent{
-		margin-top: 90px;	
+		margin-top: 210rpx;	
 	}
 
 	.title{

@@ -85,9 +85,9 @@
 					</view>
 				</view>
 			</view>
-			<view class="re-but">
+			<!-- <view class="re-but">
 				<button @click="torec">点击加载更多推荐的活动</button>
-			</view>
+			</view> -->
 		</view>
 		
 		
