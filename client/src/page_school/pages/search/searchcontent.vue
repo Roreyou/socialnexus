@@ -9,6 +9,10 @@ import actilist from '../../../components/acti-list/acti-list.vue';
 export default {
     name:'scontent',
     props: {
+        isrecommend:{
+            type: Boolean,
+            default: false
+        },  //是不是推荐的活动
         searchlist: Array,
         searchcontent: {
             type: String,
@@ -22,10 +26,17 @@ export default {
         return {
             // modifiedSearchList: this.searchlist.slice(),
             modifiedSearchList: [],
-            content: this.searchcontent,
+            // content: this.searchcontent,
             isshow: true,
             page: 0,
-            loadmore: true
+            loadmore: true,
+            new_search: false 
+            //标志是不是一次新搜索的开始
+        }
+    },
+    computed:{
+        content() {
+            return this.searchcontent 
         }
     },
     watch: {
@@ -33,10 +44,16 @@ export default {
             console.log('searchlist 的值已更改：', newValue);
         },
         searchcontent(newValue, oldValue) {
+            this.modifiedSearchList = []  //清空
+            this.page = 0 
         console.log('searchcontent 的值已更改：', newValue);
         this.loadmore = true 
             if(newValue !== ''){
-                this.search(newValue)  //加载搜索列表（第一批
+                const data = {
+                    text: newValue,
+                    page:0
+                }
+                this.search(data)  //加载搜索列表（第一批
             }else{
                 const data = {
                     provice: '',
@@ -46,14 +63,14 @@ export default {
             }
         },
         modifiedSearchList(newValue, oldValue){
-            this.isshow = false
-            this.$nextTick(() => {
-                this.isshow = true
-            });
+            // this.isshow = false
+            // this.$nextTick(() => {
+            //     this.isshow = true
+            // });
         }
     },
     mounted(){
-        if(this.searchcontent === ''){
+        if(this.content === ''){
             const data = {
                 provice: '',
                 page:0
@@ -104,9 +121,10 @@ export default {
 						data: data,
 						success: res => {
 							// this.searchlist = res.data.data.acti_list;
-                            if(res.data.data.acti_list){
+                            if(res.data.data.acti_list.length){
                                 this.modifiedSearchList = this.modifiedSearchList.concat(res.data.data.acti_list)
-                                this.loadmore = false
+                                console.log("res.data.data.acti_list.id:",res.data.data.acti_list[0].id)
+                                this.loadmore = true
                             }else{  //空了
                                 this.loadmore = false 
                             }
@@ -120,8 +138,9 @@ export default {
 						}
 					})
         },
-        search(content){
-            if(content === ''){
+        search(data){
+            // console.log('content:', content)
+            if(this.content === ''){
                 //没有搜索内容时下拉列表
                 return
             }
@@ -131,12 +150,15 @@ export default {
 				Authorization:uni.getStorageSync("token")
 			},	
 			method: 'GET',
-			data: {
-				// text: this.searchcontent
-                text: content
-			},
+			data: data,
 			success: res => {
-				this.modifiedSearchList = res.data.data.activ_list;
+                if(res.data.data.activ_list.length){
+                    this.modifiedSearchList = this.modifiedSearchList.concat(res.data.data.activ_list)
+                    this.loadmore = true
+                }else{  //空了
+                    this.loadmore = false 
+                }
+				// this.modifiedSearchList = res.data.data.activ_list;
 				// console.log("searchlist:",this.modifiedSearchList)
 				// this.TabCur = 0
 				// console.log(this.acList)

@@ -166,7 +166,7 @@
 		</view>
 
 		<view style="position: fixed; bottom: 0; width: 100%;">
-			<bttab :team_id="user_id" :acti_id="acti_id"></bttab>
+			<bttab v-if="hasactiid" :team_id="user_id" :acti_id="acti_id"></bttab>
 		</view>
 
 		<!-- 以下是尝试把海报迁移到这个页面 -->
@@ -192,6 +192,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				detail:{
 					keywords: ""
 				},
+				hasactiid:false
 			}
 		},
 		computed: {
@@ -202,7 +203,10 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			const query = this.$mp.query;
 			// const query = this.$route.query;
 			const id = query.acti_id;
+			// console.log("id:",id)
 			this.acti_id = id;
+			this.hasactiid = true;
+			// 获取活动详情
 			uni.request({
 				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',

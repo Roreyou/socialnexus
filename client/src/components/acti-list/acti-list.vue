@@ -86,6 +86,7 @@
 		methods: {
 			//前往详情页
 			todetail(id){
+				console.log("id:", id)
 				// uni.navigateTo({
 				// 	//注意用这个的话page前面有一个斜杠，不然会说找不到这个组件
 				// 	url: '../../page_school/pages/details/details?acti_id=' + id
