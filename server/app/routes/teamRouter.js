@@ -18,6 +18,7 @@ router.get('/team2activ', TeamController.getMyComments);
 router.get('/commu2team', TeamController.getCommunityComments);
 router.get('/getteamInfo', TeamController.getTeamInfo);
 router.get('/getteamfavor', TeamController.getTeamFavorites);
+router.get('/getactidetail',ActivityController.getactiDetail);
 router.get('/pyq/getdetail', PostController.getPostDetails);
 router.get('/pyq/hit', PostController.getHit);
 router.get('/pyq/samearea', PostController.getSameAreaPosts);

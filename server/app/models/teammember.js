@@ -6,6 +6,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
+    team_id: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      primaryKey: true
+    },
     name: {
       type: DataTypes.STRING(45),
       allowNull: true
@@ -26,8 +31,8 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(20),
       allowNull: true
     },
-    team_id: {
-      type: DataTypes.STRING(20),
+    pwd: {
+      type: DataTypes.STRING(45),
       allowNull: true
     }
   }, {
@@ -41,6 +46,7 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+          { name: "team_id" },
         ]
       },
     ]

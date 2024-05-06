@@ -144,6 +144,11 @@ class ActivityController {
       res.status(500).json(Result.fail('Internal Server Error'));
     }
   }
+
+  // 获取某一活动详情
+  static async getactidetail(req, res){
+    
+  }
 }
 
 module.exports = ActivityController;

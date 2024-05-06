@@ -26,10 +26,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    comment_status: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
     leader_id: {
       type: DataTypes.STRING(20),
       allowNull: true
@@ -42,8 +38,16 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: true
     },
+    comment_status: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     verification_status: {
       type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    avatar: {
+      type: DataTypes.STRING(45),
       allowNull: true
     }
   }, {
