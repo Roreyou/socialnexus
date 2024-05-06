@@ -257,7 +257,6 @@ class ActivityService {
   // 搜索已报名活动列表的服务方法
   static async searchMyActiv(team_id, activity_name) {
     try {
-      // 在这里编写搜索已报名活动列表的逻辑
       // 在活动表中根据团队 ID 查找所有相关的活动 ID
       const activityIds = await db.teamactivity.findAll({
           where: {
@@ -288,8 +287,17 @@ class ActivityService {
       });
       if (!activList) {
         return null; // 返回null表示活动不存在
+      }else{
+        const handledActivityList = await this.getIdMap(activList)
+        handledActivityList.forEach(async activity => {
+            // 获取活动状态
+            const status = await this.getActivityStatusMap(activity.activity_status);
+            // 添加 my_state 字段
+            activity.my_state = status;
+          });
+        return handledActivityList;
       }
-      return activList;
+ 
     } catch (error) {
         throw error;
     }

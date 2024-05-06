@@ -264,16 +264,22 @@ class teamController {
   static async searchMyActiv(req, res) {
       try {
           const { team_id, activity_name } = req.query;
-          
-          // 调用服务方法搜索已报名活动列表
-          const activList = await activityService.searchMyActiv(team_id, activity_name);
+           // 查看队伍是否存在
+          const flag = await teamService.FindTeam(team_id);
+          if(flag){
+            // 调用服务方法搜索已报名活动列表
+            const activList = await activityService.searchMyActiv(team_id, activity_name);
 
-          // 返回成功响应
-          res.json({code: 200, msg: 'Success', data: {myactiv_list: activList}});
+            // 返回成功响应
+            res.json(ResultCode.success(activList)); 
+          }else{
+            res.json(ResultCode.fail("Can not find the team!"));
+          }
+
       } catch (error) {
           // 返回错误响应
           console.error('Error searching my activities:', error);
-          res.status(500).json({code: 500, msg: 'Failed to search my activities', data: null });
+          res.json(ResultCode.fail("Error searching my activities"));
       }
   }
 

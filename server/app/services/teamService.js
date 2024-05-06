@@ -364,7 +364,7 @@ class teamService {
       const teamInfo = await db.team.findOne({ where: { id: teamId } });
 
       if (!teamInfo) {
-        return { code: '404', msg: 'Team not found', data: null };
+        return { code: '500', msg: 'Team not found', data: null };
       }
 
       // 获取指导老师信息
