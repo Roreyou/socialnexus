@@ -1,6 +1,6 @@
 //controllers/teasmController.js
-const ResultCode = require('../common/BaseResultCode');
-const Result = require('../common/Result');
+const BaseResultCode = require('../common/BaseResultCode');
+const ResultCode = require('../common/Result');
 const teamService = require('../services/teamService');
 const activityService = require('../services/activityService');
 
@@ -227,28 +227,36 @@ class teamController {
       const recommendations = await teamService.getRecommend(city, province);
 
       // 返回成功响应
-      res.json({code: 200, msg: 'Success', data: {acti_list: recommendations}});
+      console.log("debug:",ResultCode.SUCCESS.code);
+      res.json({code: ResultCode.SUCCESS.code, msg: 'Success to get recommendations', data: {acti_list: recommendations}});
     } catch (error) {
         // 返回错误响应
         console.error('Error getting recommendations:', error);
-        res.status(500).json({code: 500, msg: 'Failed to get recommendations', data: null});
+        res.json({code: ResultCode.FAILED.code, msg: 'Failed to get recommendations', data: null});
     }
   }
 
   // 获取已报名活动的控制器方法
   static async getMyActiv(req, res) {
     try {
-        const { team_id, activity_status } = req.query;
+        const { team_id, activity_status, page } = req.query;
         
-        // 调用服务方法获取已报名活动列表
-        const myActivList = await activityService.getMyActiv(team_id, activity_status);
+        // 查看队伍是否存在
+        const flag = await teamService.FindTeam(team_id);
+        console.log("flag:",flag);
+        if(flag){
+          // 调用服务方法获取已报名活动列表
+          const myActivList = await activityService.getMyActiv(team_id, activity_status, page);
+          // 返回成功响应
+          res.json(ResultCode.success(myActivList));
+        }
+        else{
+          res.json(ResultCode.fail("Can not find the team!"));
+        }
 
-        // 返回成功响应
-        res.json({code: 200, msg: 'Success', data: {myactiv_list: myActivList}});
     } catch (error) {
         // 返回错误响应
-        console.error('Error getting my activities:', error);
-        res.status(500).json({code: 500, msg: 'Failed to get my activities', data: null });
+        res.json(ResultCode.fail(myActivList));
     }
 }
 

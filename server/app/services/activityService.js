@@ -138,8 +138,86 @@ class ActivityService {
     return activities;
   }
 
+  //
+  // 定义一个函数来处理活动状态
+  static async getActivityStatusMap(status) {
+    //status为number类型
+    switch(status) {
+        case 1:
+            return "待开展";
+        case 2:
+            return "开展中";
+        case 3:
+            return "已结束";
+        default:
+            return "未知状态";
+    }
+  }
+  //获取id->名称的映射
+  static async getIdMap(events){
+
+    // 对每个活动进行处理
+    const results = await Promise.all(events.map(async activity => {
+      // 获取活动对应的分类名称
+      const category = await db.activity_type.findOne({
+        where: {
+          id: activity.category_id
+        },
+        attributes:['type_name'] 
+      });
+
+      // 获取活动对应的关键词名称
+      const keywords = await db.keywords.findAll({
+        where: {
+          id: { [Op.in]: activity.keywords_id.split(',') } // 根据逗号分隔的关键词 id 查询
+        },
+        attributes:['key_name']
+      });
+      console.log("debug:",keywords);
+
+      // 获取活动对应的社区名字
+      const community = await db.community.findOne({
+        where: {
+          id: activity.community_id
+        },
+        attributes: ['name']
+      });
+
+      const { category_id, keywords_id, community_id,remark, ...rest } = activity.toJSON();
+      // 构造处理后的活动信息
+      return {
+        ...rest,
+        category: category ? category.type_name : null,
+        keywords: keywords.map(keyword => keyword.key_name).join(','),
+        community: community ? community.name : null
+      };
+    }));
+    return results;
+  }
+
+  static async getPageData(pageNumber, list) {
+    console.log("list:",list)
+    const pageSize = 2; // 假设每页有 10 条数据
+
+    if (pageNumber == 0) {
+        // 如果页数等于 0，则表示第一部分，返回第一部分的数据
+        console.log("list2:",list.slice(0, pageSize))
+        return list.slice(0, pageSize);
+    } else if(pageNumber > 0) {
+        const startIndex = pageNumber * pageSize;
+        const endIndex = startIndex + pageSize;
+        if (startIndex >= list.length) {
+            // 如果起始索引超出了数据范围，则返回空的 acti_list
+            return [];
+        } else {
+            // 返回指定页数的数据
+            return list.slice(startIndex, endIndex);
+        }
+    }
+  }
+
   // 获取已报名活动列表的服务方法
-  static async getMyActiv(team_id, activity_status) {
+  static async getMyActiv(team_id, activity_status, page) {
     try {
       // 在活动表中根据团队 ID 查找所有相关的活动 ID
       const activityIds = await db.teamactivity.findAll({
@@ -147,7 +225,7 @@ class ActivityService {
             team_id: team_id
           }
       });
-
+      
       // 将查询到的活动 ID 转换为数组
       const activityIdsArray = activityIds.map(activity => activity.activity_id);
 
@@ -159,7 +237,18 @@ class ActivityService {
               activity_status: activity_status
           }
       });
-      return myActivList;
+  
+      const handledActivityList = await this.getIdMap(myActivList)
+      handledActivityList.forEach(async activity => {
+          // 获取活动状态
+          const status = await this.getActivityStatusMap(activity.activity_status);
+          // 添加 my_state 字段
+          activity.my_state = status;
+        });
+      const pageActivityList = this.getPageData(page, handledActivityList);
+      return pageActivityList;
+
+
     } catch (error) {
         throw error;
     }
