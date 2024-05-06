@@ -1,4 +1,5 @@
 <!-- 高校首页 -->
+<!-- 因为是tab页所以必须放在主包 -->
 <template>
 	<view class="u-p-l-10 u-p-r-10">
 		<u-navbar :is-back="false">
@@ -20,9 +21,9 @@
 				<image :src="userInfo.avatar" class="cu-avatar xl round"></image>
 				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
 				<!-- <view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view> -->
-				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;" v-if="userInfo.verification_status == 1 || userInfo.verification_status == 3">认证信息</view>
-				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti;" v-if="userInfo.verification_status == 2">认证已通过</view>
-				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti;" v-if="userInfo.verification_status == 4">认证信息审核中</view>
+				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="(userInfo.verification_status == 1 || userInfo.verification_status == 3)&&(userInfo.isleader)">认证信息</view>
+				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="userInfo.verification_status == 2">已通过</view>
+				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="userInfo.verification_status == 4">审核中</view>
 			</view>
 		</view>
 		<view> 
@@ -73,9 +74,9 @@
 			</view>
 			<actilist :acList="acList" :isindex="true"></actilist>
 		</view>
-		<view class="re-but">
+		<!-- <view class="re-but">
 				<button class="more-btn" @click="torec">点击加载更多推荐的活动</button>
-		</view>
+		</view> -->
 		<!-- <u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="findHouseList"></u-loadmore> -->
 		<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
 		<u-no-network></u-no-network>
@@ -131,39 +132,9 @@
 				flowList: [],
 				uvCode: uni.getStorageSync('uvCode'),
 				acList:[
-					{	
-						state: "已结束",
-						title: "5月15日实践活动",
-						time: "2020-05-15",
-						place: "北京",
-						job: "志愿者",
-						keywords: "服务,实践"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					}
-				]
+				],
+				page: 0,
+				loadmore: true   //true是还没拿完 如果服务器空了就是false
 			}
 		},
 
@@ -209,26 +180,32 @@
 			// console.log("userInfo.verification_status,", this.userInfo)
 			// console.log(typeof this.$url)
 			// console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
-			uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+			// uni.request({
+			// 	url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
-				method: 'GET',
-				data: {
-					province: '1',
-					// token: this.$userinfo.token
-				},
-				success: res => {
-					this.acList = res.data.data.acti_list;
-					this.acList[0].keywords = "服务,实践"
-					this.net_error = false;
-				},
-				fail: res => {
-					this.net_error = true;
-				},
-				complete: () => {
-				}
-			})
+			// 	method: 'GET',
+			// 	data: {
+			// 		province: '1',
+			// 		// token: this.$userinfo.token
+			// 	},
+			// 	success: res => {
+			// 		this.acList = res.data.data.acti_list;
+			// 		this.acList[0].keywords = "服务,实践"
+			// 		this.net_error = false;
+			// 	},
+			// 	fail: res => {
+			// 		this.net_error = true;
+			// 	},
+			// 	complete: () => {
+			// 	}
+			// })
+			
+			const data = {
+				province: '1',
+				page: 0
+			}
+			this.loadActilist(data)
 		},
 		onPageScroll(e) {
 		    this.scrollTop = e.scrollTop;
@@ -237,7 +214,22 @@
 		//     this.loadStatus = 'loading';
 		//     // 获取数据
 		// 	this.findHouseList()
-		// },
+		// },	 
+		onReachBottom() {
+			uni.$emit('onReachBottom');
+			// console.log('index -- onReachBottom')
+			++ this.page
+			if(this.loadmore){
+				const data = {
+					province: '1',
+					page: this.page
+				}
+				this.loadActilist(data)
+			}else{
+				//到底了
+				this.$u.toast(`已经到底啦`);
+			}
+		},
 		// 下拉刷新
 		// onPullDownRefresh() {
 		// 	// 获取数据
@@ -246,9 +238,38 @@
 		// 	uni.stopPullDownRefresh();
 		// },
 		methods: {
+			loadActilist(data){  //加载活动列表
+				uni.request({
+				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
+				method: 'GET',
+				data: data,
+				success: res => {
+					// this.acList = res.data.data.acti_list;
+					if(res.data.data.acti_list.length){
+						this.acList = this.acList.concat(res.data.data.acti_list)
+						this.acList[0].keywords = "服务,实践"
+						// this.loadmore = false
+					}else{  //空了
+						this.loadmore = false 
+					}
+
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
+			},
 			handleAuthentication(){
-				this.$u.route({
-					url: 'pages/school/index/verify',
+				// this.$u.route({
+				// 	url: 'pages/school/index/verify',
+				//   })
+				  uni.navigateTo({
+					url: '/page_school/pages/index/verify',
 				  })
 			},
 			location(){
@@ -366,7 +387,10 @@
 						}
 					});
 					}else{
-						this.$u.route('/pages/school/search/myactivity');
+						// this.$u.route('/pages/school/search/myactivity');
+						uni.navigateTo({
+							url:'../../../page_school/pages/search/myactivity'
+						});
 					}
 				}
 				if(type === "2"){
@@ -381,11 +405,17 @@
 					// }else{
 					// 	this.$u.route('/pages/detail/preHouse');
 					// }
-					this.$u.route('/pages/school/pyq/entry');
+					// this.$u.route('/pages/school/pyq/entry');
+					uni.navigateTo({
+						url:'../../../page_school/pages/pyq/entry'
+					});
 				}
 				if(type === "3"){
 					// this.$u.route('/pages/search/searchList');
-					this.$u.route('/pages/school/search/recommend');
+					// this.$u.route('/pages/school/search/recommend');
+					uni.navigateTo({
+						url:'../../../page_school/pages/search/recommend'
+					});
 				}
 			},
 			code(){
@@ -404,15 +434,21 @@
 			},
 			//点击加载更多活动
 			torec(){
-				this.$u.route({
-					url: 'pages/school/search/recommend',
-				  })
+				// this.$u.route({
+				// 	url: 'pages/school/search/recommend',
+				//   })
+				  uni.navigateTo({
+					url:'../../../page_school/pages/search/recommend'
+				});
 			},
 			//前往详情页
 			todetail(){
-				this.$u.route({
-					url: 'pages/school/details/details',
-				  })
+				// this.$u.route({
+				// 	url: 'pages/school/details/details',
+				//   })
+				  uni.navigateTo({
+						url:'../../../page_school/pages/details/details'
+					});  
 			},
 		}
 	}

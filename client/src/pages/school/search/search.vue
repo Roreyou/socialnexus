@@ -19,21 +19,21 @@
 			</view>
 		</view>
 		<!-- <index-tabbar class="index-tabbar" :tabBars="tabBars" @TarTap="TarData" :tabIndex="tabIndex" ><index-tabbar> -->
-		<view>
+		<!-- <view>
 			<actipickers></actipickers>
-		</view>		
+		</view>		 -->
 		</view>
 		<view class="accontent">
 			<!-- id="currentTabComponent"表示是那三种筛选类型中的哪一种 -->
-			<scontent :acList="acList" :searchlist="searchlist"></scontent>
+			<scontent :acList="acList" :searchlist="searchlist" :searchcontent="newontent"></scontent>
 		</view>
 	</view>
 </template>
 	 
 <script>
 // import indexTabbar from '../../../components/search-tabbar/search-tabbar.vue';
-import scontent from './searchcontent.vue'
-import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
+import scontent from '../../../page_school/pages/search/searchcontent.vue'
+import actipickers from '../../../page_school/components/acti-pickers/acti-pickers.vue'
 	
 		// import utabsswiper from '../../uview-ui/components/u-tabs-swiper/u-tabs-swiper.vue';
 	
@@ -99,30 +99,37 @@ import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
 				],
 				searchcontent: '',//搜索内容
 				searchlist: [],
+				newontent: '',
+				page: 0
 				}
 			},
 			mounted(){
-				//刚打开时出现的是推荐的活动
-				uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				method: 'GET',
-				data: {
-					province: '1',
-					// token: this.$userinfo.token
-				},
-				success: res => {
-					this.searchlist = res.data.data.acti_list;
-					this.net_error = false;
-				},
-				fail: res => {
-					this.net_error = true;
-				},
-				complete: () => {
+				const data = {
+					provice: "",
+					page: 0
 				}
-			})
+				//刚打开时出现的是推荐的活动
+				this.getRelist(data)
 			},
 			methods:{
+				getRelist(data){
+					uni.request({
+						url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+						// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+						method: 'GET',
+						data: data,
+						success: res => {
+							// this.searchlist = res.data.data.acti_list;
+							this.searchlist = this.searchlist.concat(res.data.data.acti_list)
+							this.net_error = false;
+						},
+						fail: res => {
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+				},
 				TarData(item){
 					//设置id，来显示选中那个标签，显示下划线
 					this.tabIndex = item.id;
@@ -136,34 +143,46 @@ import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
 					});
 				},
 				search(){
-					uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/search',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-					header:{
-						Authorization:uni.getStorageSync("token")
-					},	
-					method: 'GET',
-					data: {
-						// team_id: this.user_id,
-						// token: this.$userinfo.token
-						// activity_status: this.index
-						text: this.searchcontent
-					},
-					success: res => {
-						this.searchlist = res.data.data.activ_list;
-						// console.log("searchlist:",this.searchlist)
-						this.TabCur = 0
-						// console.log(this.acList)
-						this.net_error = false;
-					},
-					fail: res => {
-						this.net_error = true;
-					},
-					complete: () => {
-					}
-				})
-				}
+				// 	uni.request({
+				// 	url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/search',
+				// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				// 	header:{
+				// 		Authorization:uni.getStorageSync("token")
+				// 	},	
+				// 	method: 'GET',
+				// 	data: {
+				// 		// team_id: this.user_id,
+				// 		// token: this.$userinfo.token
+				// 		// activity_status: this.index
+				// 		text: this.searchcontent
+				// 	},
+				// 	success: res => {
+				// 		this.searchlist = res.data.data.activ_list;
+				// 		// console.log("searchlist:",this.searchlist)
+				// 		this.TabCur = 0
+				// 		// console.log(this.acList)
+				// 		this.net_error = false;
+				// 	},
+				// 	fail: res => {
+				// 		this.net_error = true;
+				// 	},
+				// 	complete: () => {
+				// 	}
+				// })
+					this.newontent = this.searchcontent;
+					this.TabCur = 0
 			}
+			},
+			onReachBottom() {
+				uni.$emit('search--onReachBottom');
+				// console.log('search -- onReachBottom')
+				// ++ this.page
+				// const data = {
+				// 	province: '1',
+				// 	page: this.page
+				// }
+				// this.getRelist(data)
+			},
 		}
 	</script>
 	 
@@ -177,7 +196,7 @@ import actipickers from '../../../components/acti-pickers/acti-pickers.vue'
 	  z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
 	}
 	.accontent{
-		margin-top: 90px;	
+		margin-top: 210rpx;	
 	}
 
 	.title{
