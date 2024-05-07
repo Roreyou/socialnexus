@@ -37,6 +37,9 @@
 						"color": "#2979ff", //小圈圈的颜色
 						"style": "circle" //小圈圈的样式
 					}
+				},
+				"componentPlaceholder":{
+					"picker": "view"
 				}
 			}
 		},
@@ -52,7 +55,10 @@
 				"navigationBarTitleText": "找活动",
 				"componentPlaceholder":{
 					//占位组件
-					"scontent": "view"
+					"scontent": "view",
+					"actipickers": "view",
+					"invite": "view",
+					"picker": "view"
 				}
 			}
 		}

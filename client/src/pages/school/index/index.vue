@@ -12,6 +12,9 @@
 :disabled="true" style="width: 565rpx;" @click="search"></u-search> -->
 			</view>
 		</u-navbar>
+		<view>
+			<picker></picker>
+		</view>
 		<!-- 轮播图 -->
 		<!-- <view>
 			<u-swiper :list="swiperList" height="400"></u-swiper>
@@ -22,7 +25,7 @@
 				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
 				<!-- <view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view> -->
 				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="(userInfo.verification_status == 1 || userInfo.verification_status == 3)&&(userInfo.isleader)">认证信息</view>
-				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="userInfo.verification_status == 2">已通过</view>
+				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="userInfo.verification_status == 2">已认证</view>
 				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="userInfo.verification_status == 4">审核中</view>
 			</view>
 		</view>
@@ -91,6 +94,7 @@
 </template>
 
 <script>
+import picker from '../../../page_school/components/picker/picker.vue'
 	import {
 		mapState,
 		mapMutations
@@ -100,7 +104,7 @@
 	export default {
 		components: {
 			actilist,
-
+			picker
 		},
 
 		data() {

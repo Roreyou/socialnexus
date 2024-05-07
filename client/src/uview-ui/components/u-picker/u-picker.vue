@@ -279,6 +279,7 @@ export default {
 	},
 	mounted() {
 		this.init();
+		console.log("mount:");
 	},
 	computed: {
 		propsChange() {
@@ -638,7 +639,8 @@ export default {
 	width: 100%;
 	height: 500rpx;
 	overflow: hidden;
-	background-color: #fff;
+	//background-color: #fff;
+	background-color: #c02424;
 }
 
 .u-column-item {
