@@ -102,6 +102,8 @@ class postController{
             return res.json(Result.fail(error.message));
         }
     }
+
+    //点赞/取消点赞帖子
     static async likePost(req, res){
         const { post_id, team_id } = req.body;
         try {
@@ -110,6 +112,30 @@ class postController{
             return res.json(Result.success(updatedPost));
         } catch (error) {
             console.error('Error liking post:', error);
+            return res.json(Result.fail(error.message));
+        }
+    }
+
+    //点赞/取消点赞评论
+    static async likeCom(req, res){
+        const { comment_id, team_id } = req.body;
+        try {
+            const updatedCom = await postService.likeCom(comment_id, team_id);
+            return res.json(Result.success(updatedCom));
+        } catch (error) {
+            console.error('Error liking post:', error);
+            return res.json(Result.fail(error.message));
+        }
+    }
+
+    //点赞/取消点赞回复
+    static async likeReply(req, res){
+        const { reply_id, team_id } = req.body;
+        try {
+            const result = await postService.likeReply(reply_id, team_id);
+            return res.json(Result.success(result));
+        } catch (error) {
+            console.error('Error liking reply:', error);
             return res.json(Result.fail(error.message));
         }
     }

@@ -1,5 +1,6 @@
 // services/postService.js
 
+const { where } = require('sequelize');
 const activity = require('../models/activity');
 const db = require('../models/index');
 const ActivityService = require('./activityService');
@@ -140,7 +141,7 @@ class postService{
         }
     }
 
-    // 给帖子点赞
+    // 给帖子点赞/取消点赞
     static async likePost(post_id, team_id){
         try { 
 
@@ -186,6 +187,125 @@ class postService{
             }
         } catch (error) {
             throw new Error('Error liking post');
+        }
+    }
+
+    // 给评论点赞/取消点赞
+    static async likeCom(comment_id, team_id){
+        try { 
+
+            // 查看是否点赞过
+            const existingLike = await db.likecomment.findOne({
+                where: {
+                    comment_id: comment_id,
+                    team_id: team_id
+                }
+            });
+
+            // 检查点赞状态
+            if (existingLike) {
+                // 如果已经点赞，则取消点赞，删除点赞记录，减少点赞数
+                await existingLike.destroy();
+                
+                // 更新评论点赞数
+                const comment = await db.comment.findOne({
+                    where:{
+                        id: comment_id,
+                        team_id: team_id
+                    }
+                });
+
+                if (!comment) {
+                    throw new Error('Comment not found');
+                }
+                comment.like -= 1;
+                await comment.save();
+
+                return "unlike successfully!";
+            } else {
+                // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
+                const newLike = await db.likecomment.create({
+                    comment_id: comment_id,
+                    team_id: team_id,
+                    ifread: 1
+                });
+                
+                // 更新评论点赞数
+                const likeCom = await db.comment.findOne({
+                    where:{
+                        id: comment_id,
+                        team_id: team_id
+                    }
+                });
+
+                if (!likeCom) {
+                    throw new Error('Comment not found');
+                }
+                likeCom.like += 1;
+                await likeCom.save();
+
+                return "like successfully!";
+            }
+        } catch (error) {
+            throw new Error('Error liking post');
+        }
+    }
+
+    //给回复点赞/取消点赞
+    static async likeReply(reply_id, team_id){
+        try {
+            // 检查是否存在点赞记录
+            const existingLike = await db.likereply.findOne({
+                where: {
+                    reply_id: reply_id,
+                    team_id: team_id
+                }
+            });
+    
+            // 检查点赞状态
+            if (existingLike) {
+                // 如果已经点赞，则取消点赞，删除点赞记录，减少点赞数
+                await existingLike.destroy();
+                
+                // 更新回复点赞数
+                const reply = await db.reply.findOne({
+                    where:{
+                        id: reply_id
+                    }
+                });
+    
+                if (!reply) {
+                    throw new Error('Reply not found');
+                }
+                reply.like -= 1;
+                await reply.save();
+    
+                return "unlike successfully!";
+            } else {
+                // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
+                const newLike = await db.likereply.create({
+                    reply_id: reply_id,
+                    team_id: team_id,
+                    ifread: 1
+                });
+                
+                // 更新回复点赞数
+                const reply = await db.reply.findOne({
+                    where:{
+                        id: reply_id
+                    }
+                });
+    
+                if (!reply) {
+                    throw new Error('Reply not found');
+                }
+                reply.like += 1;
+                await reply.save();
+    
+                return "like successfully!";
+            }
+        } catch (error) {
+            throw new Error('Error liking reply');
         }
     }
 
