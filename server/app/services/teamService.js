@@ -346,6 +346,27 @@ class teamService {
     }
   }
 
+  // 根据给定的单个队伍id找到队伍名
+  static async getTeamMapName(id){
+    try {
+      const team = await db.team.findOne({
+          where: {
+              id: id
+          },
+          attributes:['team_name'] 
+      });
+      if (team) {
+          return team;
+      } else {
+          throw new Error('Team not found');
+      }
+    } catch (error) {
+        console.error('Error getting team map name:', error);
+        return "Default Team Name"; // 或者执行其他适当的错误处理逻辑
+    }
+  }
+
+
   static async FindTeam(teamId){
     // 获取队伍信息
     const teamInfo = await db.team.findOne({ where: { id: teamId } });

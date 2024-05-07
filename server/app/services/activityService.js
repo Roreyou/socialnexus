@@ -153,9 +153,9 @@ class ActivityService {
             return "未知状态";
     }
   }
-  //获取id->名称的映射
-  static async getIdMap(events){
 
+  //获取ids->名称的映射
+  static async getIdMap(events){
     // 对每个活动进行处理
     const results = await Promise.all(events.map(async activity => {
       // 获取活动对应的分类名称
@@ -183,7 +183,7 @@ class ActivityService {
         attributes: ['name']
       });
 
-      const { category_id, keywords_id, community_id,remark, ...rest } = activity.toJSON();
+      const { category_id, keywords_id, community_id,...rest } = activity.toJSON();
       // 构造处理后的活动信息
       return {
         ...rest,
@@ -229,7 +229,6 @@ class ActivityService {
       // 将查询到的活动 ID 转换为数组
       const activityIdsArray = activityIds.map(activity => activity.activity_id);
 
-      console.log("debug: ", activity_status);
       // 在团队活动表中根据活动 ID 和活动开展状态返回对应记录
       const myActivList = await db.activity.findAll({
           where: {
@@ -317,6 +316,42 @@ class ActivityService {
     } catch (error) {
         throw error;
     }
+  }
+
+  //根据ID找活动
+  static async FindActivity(activ_id){
+    const ActInfo = await db.activity.findOne({ where: { id: activ_id } });
+    if (!ActInfo) {
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  // 获取活动详情的方法
+  static async getactidetail(id){
+    const activity = await db.activity.findByPk(id);
+    const community_id = activity.community_id;
+    const activityArray = [activity];
+    const handledActicityArray = await this.getIdMap(activityArray);
+    const handledActicity = handledActicityArray[0];
+    //查找该活动对应的社区的联系电话
+    const community = await db.community.findOne({
+        where: {
+            id: community_id
+        }
+    });
+    
+    if (community) {
+        // 将 tel 添加到 handledActicity 对象中
+        handledActicity.tel = community.tel;
+    }else {
+        // 没有找到对应的 community 记录
+        console.log("Community not found");
+        handledActicity.tel = "-1";
+    }
+    return {detail:handledActicity};
   }
 
 }
