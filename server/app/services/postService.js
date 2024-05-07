@@ -22,10 +22,17 @@ class postService{
     static async getPostDetails(postId){
         try {
             const post = await db.post.findByPk(postId);
-            const postteam = await db.team.findByPk(post.team_id);
             post.picture = post.picture.split(','); // 将逗号分隔的图片链接字符串转换为数组
-            const result = this.getPostsHandled([post]);
-            
+            const result = await this.getPostsHandled([post]);
+            //查看有无点赞
+            const flag = await db.likepost.findOne({
+                where: {
+                    teamId: result.team_id,
+                    postId: result.id
+                }
+            });
+            result.fabulous = flag;
+            return result;            
         } catch (error) {
             console.log(error);
             throw new Error('Error fetching post details');
