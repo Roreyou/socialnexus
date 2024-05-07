@@ -295,7 +295,7 @@
 					});
 				}else if(this.account == '3'){
 					uni.reLaunch({
-						url: '../../page_community/page/index/index',   /*进入社区首页*/
+						url: '../../page_community/page/index',   /*进入社区首页*/
 					});
 				}
 

@@ -1,8 +1,9 @@
 <template>
   <view>
-    <!-- <view @click="showpop">所在地址：{{citytext}}</view>
+    <view @click="showpop">所在地址：{{citytext}}</view>
       <view class="">
         <uni-popup id="addressPopup" ref="addressPopup" :type="'bottom'" @change="change">
+			<view class="test-popup">你好,底部弹出</view>	
           <picker-view  :value="region" @change="bindChange" @pickstart="onPickstart" @pickend="onPickend">
             <picker-view-column class="picker-view2">
               <view class="f-center" v-for="(item,index) in citylist" :key="index">{{item.label}}
@@ -27,11 +28,17 @@
               确定</view>
           </view>
         </uni-popup>
-      </view> -->
+      </view>
   </view>
 </template>
 <script>
+// import { ref } from 'vue';
+// const addressPopup = ref(null);
+import uniPopup from '@/uni_modules/uni-popup/uni-popup'
 export default {
+	components: {
+	uniPopup
+	},
   data() {
 	return {
 		region: [0, 0, 0], //地址每列的index
@@ -40,11 +47,47 @@ export default {
 		citytext: '',//地址文字
 	}},
 
+	onReady() {
+		console.log("onReady")
+	},
+	mounted(){
+	},
 	methods: {
+		observeAddressPopup() {
+			const observer = uni.createIntersectionObserver(this)
+			observer.observe('#addressPopup', (res) => {
+			if (res.intersectionRatio > 0) {
+				this.showpop()
+				observer.disconnect()
+      		}
+    		})
+  		},
+
 		//弹出地址选择器
-showpop(){
-	this.$refs.addressPopup.open();
-},
+		showpop(){
+			// this.$nextTick(() => {
+			// 	console.log("this.$refs:", this.$refs)
+			// 	this.$refs.addressPopup.open();
+			// });
+			// addressPopup.value.open()
+			// this.$nextTick(() => {
+			// const addressPopup = uni.createSelectorQuery().in(this).select('#addressPopup')
+			// addressPopup.exec((res) => {
+			// 	const popup = res[0].node
+			// 	popup.open()
+			// })
+			// })
+
+			// const query = wx.createSelectorQuery().in(this)
+			// query.select('#addressPopup').boundingClientRect().exec((res) => {
+			// 	console.log("res[0]:", res[0].node)
+			// 	const addressPopupInstance = res[0].node
+			// 	addressPopupInstance.open()
+			// })
+			// this.$refs.popup[0].open()
+			// this.$refs.addressPopup.open('top')
+			this.$refs.addressPopup.open()
+		},
 //滚动时禁用确定按钮
 onPickstart() {
 	//开始滚动
@@ -71,6 +114,9 @@ onSubmit: function() {
 		.children[this.region[2]].label
 	this.$refs.addressPopup.close(); //关闭地址弹出层
 },
+change: function(e) {
+
+}
   },
 }
 </script>
@@ -124,5 +170,12 @@ onSubmit: function() {
 		width: 100%;
 		height: 600upx;
 	}
+
+	
+    .test-popup{
+        background: rgb(197, 106, 106);
+        border-radius: 20px;
+        height: 200px;
+    }
 
 </style>

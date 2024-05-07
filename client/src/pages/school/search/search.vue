@@ -22,11 +22,16 @@
 		<!-- <view>
 			<actipickers></actipickers>
 		</view>		 -->
+		<!-- <view>
+			<invite></invite>
+		</view> -->
+		<view>
+			<picker></picker>
 		</view>
-		<view class="accontent">
-			<!-- id="currentTabComponent"表示是那三种筛选类型中的哪一种 -->
+		</view>
+		<!-- <view class="accontent">
 			<scontent :acList="acList" :searchlist="searchlist" :searchcontent="newontent"></scontent>
-		</view>
+		</view> -->
 	</view>
 </template>
 	 
@@ -34,6 +39,8 @@
 // import indexTabbar from '../../../components/search-tabbar/search-tabbar.vue';
 import scontent from '../../../page_school/pages/search/searchcontent.vue'
 import actipickers from '../../../page_school/components/acti-pickers/acti-pickers.vue'
+import invite from '../../../page_school/components/invite/invite.vue'
+import picker from '../../../page_school/components/picker/picker.vue'
 	
 		// import utabsswiper from '../../uview-ui/components/u-tabs-swiper/u-tabs-swiper.vue';
 	
@@ -41,7 +48,9 @@ import actipickers from '../../../page_school/components/acti-pickers/acti-picke
 			components:{
 				// indexTabbar,
 				scontent,
-				actipickers
+				actipickers,
+				invite,
+				picker
 				// utabsswiper
 			},
 			data() {

@@ -12,6 +12,9 @@
 :disabled="true" style="width: 565rpx;" @click="search"></u-search> -->
 			</view>
 		</u-navbar>
+		<view>
+			<picker></picker>
+		</view>
 		<!-- 轮播图 -->
 		<!-- <view>
 			<u-swiper :list="swiperList" height="400"></u-swiper>
@@ -91,6 +94,7 @@
 </template>
 
 <script>
+import picker from '../../../page_school/components/picker/picker.vue'
 	import {
 		mapState,
 		mapMutations
@@ -100,7 +104,7 @@
 	export default {
 		components: {
 			actilist,
-
+			picker
 		},
 
 		data() {
