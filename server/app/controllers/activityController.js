@@ -1,5 +1,6 @@
 const Result = require('../common/Result');
 const activityService = require('../services/activityService');
+const teamService = require('../services/teamService');
 
 class ActivityController {
   static async getAllActivities(req, res) {
@@ -146,8 +147,23 @@ class ActivityController {
   }
 
   // 获取某一活动详情
-  static async getactidetail(req, res){
-    
+  static async getactiDetail(req, res){
+    // console.log('req.query:',req.query);
+    const { acti_id:id } = req.query;
+    console.log(id);
+    try {
+      const flag = await activityService.FindActivity(id);
+      if(flag){
+        const activity = await activityService.getactidetail(id);
+        return res.json(Result.success(activity));
+      }
+      else{
+        return res.json(Result.fail('Can not find activity!'));
+      }
+      
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
   }
 }
 

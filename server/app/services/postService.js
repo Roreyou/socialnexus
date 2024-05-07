@@ -1,6 +1,9 @@
 // services/postService.js
 
+const activity = require('../models/activity');
 const db = require('../models/index');
+const ActivityService = require('./activityService');
+const teamService = require('./teamService');
 
 class postService{
     static async createPost(postData){
@@ -19,19 +22,55 @@ class postService{
     static async getPostDetails(postId){
         try {
             const post = await db.post.findByPk(postId);
-            const postteam = await db.team.findByPk(post.team_id);
             post.picture = post.picture.split(','); // 将逗号分隔的图片链接字符串转换为数组
-            return {
-                ...post.dataValues,
-                team_name: postteam ? postteam.team_name : 'Unknown Team'
-            };
+            const result = await this.getPostsHandled([post]);
+            //查看有无点赞
+            const flag = await db.likepost.findOne({
+                where: {
+                    teamId: result.team_id,
+                    postId: result.id
+                }
+            });
+            result.fabulous = flag;
+            return result;            
         } catch (error) {
             console.log(error);
             throw new Error('Error fetching post details');
         }
     }
+
+    //处理帖子中队伍名映射、获取评论条数、获取队伍头像的统一接口
+    static async getPostsHandled(posts){
+        const results = await Promise.all(posts.map(async post => {               
+            const team_name = await teamService.getTeamMapName(post.team_id);
+
+            // 统计评论数量
+            const commentCount = await db.comment.count({
+                where: {
+                    post_id: post.id
+                }
+            });
+
+            //获取队伍头像
+            const team_avatar = await db.team.findOne({
+                where: {
+                  id: post.team_id
+                },
+                attributes:['avatar'] 
+              });
+            return {
+                ...post.dataValues,
+                team_name: team_name.team_name ? team_name.team_name : null,
+                com_num: commentCount,
+                team_avatar: team_avatar.avatar ? team_avatar.avatar : null
+              };
+        }));    
+        return results;
+    }
+
     // 获取同区域帖子
-    static async getSameAreaPosts(province, city) {
+    static async getSameAreaPosts(province, city, page) {
+        
         try {
             // 调用数据库查询方法获取同区域帖子
             const posts = await db.post.findAll({
@@ -40,7 +79,11 @@ class postService{
                     city: city
                 }
             });
-            return posts;
+            //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
+            const results = await this.getPostsHandled(posts);  
+            // 分页
+            const pageResults = ActivityService.getPageData(page, results);
+            return pageResults;
         } catch (error) {
             console.log(error);
             throw new Error('Error fetching same area posts');
@@ -48,21 +91,26 @@ class postService{
     }
 
     // 获取热门帖子
-    static async getHotPosts() {
+    static async getHotPosts(page) {
         try {
             // 调用数据库查询方法获取热门帖子
             const posts = await db.post.findAll({
                 order: [['like', 'DESC']],
                 limit: 100
             });
-            return posts;
+
+            //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
+            const results = await this.getPostsHandled(posts);
+            // 分页
+            const pageResults = await ActivityService.getPageData(page, results);
+            return pageResults;
         } catch (error) {
             throw new Error('Error fetching hot posts');
         }
     }
 
     // 获取最新帖子
-    static async getLatestPosts() {
+    static async getLatestPosts(page) {
         try {
             // 调用数据库查询方法获取最新帖子
             // 按照发布时间降序排列，取前10条数据
@@ -70,12 +118,17 @@ class postService{
                 order: [['post_time', 'DESC']],
                 limit: 100
             });
-            return posts;
+            //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
+            const results = await this.getPostsHandled(posts);
+            //分页
+            const pageResults = await ActivityService.getPageData(page, results);
+            return pageResults;
         } catch (error) {
             throw new Error('Error fetching latest posts');
         }
     }
 
+    // 给帖子点赞
     static async likePost(postId){
         try {
             const post = await db.post.findByPk(postId);

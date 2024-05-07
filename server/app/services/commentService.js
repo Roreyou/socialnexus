@@ -3,20 +3,15 @@
 const db = require('../models/index');
 const replyService = require('../services/replyService');
 const { Op } = require('sequelize');
+const teamService = require('./teamService');
 
 class commentService{
     static async getCommentsForPost(post_id) {
         try {
             // 获取新的评论详情以及相关的回复详情
             const new_comments = await db.comment.findAll({ where: { post_id: post_id } });
-            console.log("debug 02",new_comments);
+
             const CommentList = await Promise.all(new_comments.map(async (comment) => {
-                const Commentteam = await db.team.findByPk(comment.team_id);
-                const commentDetail = {
-                    ...comment.dataValues,
-                    my_name: Commentteam ? Commentteam.team_name : 'Unknown Team'
-                };
-    
                 // 对每条评论查询对应的回复列表                
                 const replies = await replyService.getReplyForComment(comment.id);
                 const replyDetailList = await Promise.all(replies.map(async (reply) => {
@@ -24,9 +19,18 @@ class commentService{
                     const replyTeam = await db.team.findByPk(reply.reply_id);
                     return {
                         ...reply.dataValues,
-                        reply_name: replyTeam ? replyTeam.team_name : 'Unknown Team'
+                        reply_name: replyTeam ? replyTeam.team_name : null
                     };
                 }));
+                
+                const Commentteam = await db.team.findByPk(comment.team_id);
+                
+                const commentDetail = {
+                    ...comment.dataValues,
+                    my_name: Commentteam ? Commentteam.team_name : null,
+                    reply_list_length: replyDetailList.length // 添加回复列表长度字段
+                };
+                
                 return { comment_detail: commentDetail, reply_list: replyDetailList };
             }));
 
@@ -47,8 +51,7 @@ class commentService{
                 time: new Date(),
                 like: 0
             });
-            console.log("debug 01",debug);
-            
+
             // 获取新的评论详情以及相关的回复详情
             const newCommentList = this.getCommentsForPost(post_id);
 
