@@ -24,8 +24,12 @@
 			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right ">
 				<view v-if="!ismyacti" v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
 				 class="flex uni-tab__cart-button-right" @click="application()"><text :style="{color:item.color}" class="uni-tab__cart-button-right-text">报名活动</text></view>
-				 <view v-if="ismyacti" v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
+				 <view v-if="ismyacti && acti_status == 1" v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
 				 class="flex uni-tab__cart-button-right" @click="cancelacti()"><text :style="{color:item.color}" class="uni-tab__cart-button-right-text">取消报名</text></view>
+				 <view v-if="ismyacti && acti_status == 2" v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
+				 class="flex uni-tab__cart-button-right disable_but"><text :style="{color:white}" class="uni-tab__cart-button-right-text">活动开展中</text></view>
+				 <view v-if="ismyacti && acti_status == 3" v-for="(item,index) in buttonGroup" :key="index" :style="{background:item.backgroundColor,color:item.color}"
+				 class="flex uni-tab__cart-button-right disable_but"><text :style="{color:white}" class="uni-tab__cart-button-right-text">活动已结束</text></view>
 			</view>
 		</view>
 	</view>
@@ -115,7 +119,7 @@
 				isActive: false,
 				// shareIcon: require('../../static/icon/fenxiangmian.png'),
 				shareIcon: '',
-
+				acti_status: 1
 			}
 		},
 
@@ -325,6 +329,7 @@
 					if(res.data.code==200){
 						if(res.data.data.flag=="1"){
 							this.ismyacti = true; //已经是我报过的活动了
+							this.acti_status = res.data.data.acti_status
 						}else{
 							this.ismyacti = false;
 						}
@@ -515,5 +520,10 @@
 	.cu-btn::after{
 		background:#fff;
 		border:none;
+	}
+
+	//不能点击的按钮
+	.disable_but{
+		background-color: #646566;
 	}
 </style>
