@@ -7,7 +7,9 @@ var _datawall_act = require("./datawall_act");
 var _datawall_com = require("./datawall_com");
 var _favorate = require("./favorate");
 var _key_words = require("./key_words");
+var _likecomment = require("./likecomment");
 var _likepost = require("./likepost");
+var _likereply = require("./likereply");
 var _post = require("./post");
 var _reply = require("./reply");
 var _school = require("./school");
@@ -25,7 +27,9 @@ function initModels(sequelize) {
   var datawall_com = _datawall_com(sequelize, DataTypes);
   var favorate = _favorate(sequelize, DataTypes);
   var key_words = _key_words(sequelize, DataTypes);
+  var likecomment = _likecomment(sequelize, DataTypes);
   var likepost = _likepost(sequelize, DataTypes);
+  var likereply = _likereply(sequelize, DataTypes);
   var post = _post(sequelize, DataTypes);
   var reply = _reply(sequelize, DataTypes);
   var school = _school(sequelize, DataTypes);
@@ -44,7 +48,9 @@ function initModels(sequelize) {
     datawall_com,
     favorate,
     key_words,
+    likecomment,
     likepost,
+    likereply,
     post,
     reply,
     school,

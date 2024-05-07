@@ -36,12 +36,12 @@ class postController{
 
             // 调用服务层方法获取帖子详情和评论列表
             const post = await postService.getPostDetails(post_id);
-            const comments = await commentService.getCommentsForPost(post_id);
+            const comments = await commentService.getDetailedCommentsForPost(post_id,team_id);
 
             // 构造响应对象
             const result =  {
                 post_detail: post,
-                ...comments
+                comment_list:comments.comment_list
             };
             // 返回响应给客户端
             return res.json(Result.success(result));
@@ -103,8 +103,9 @@ class postController{
         }
     }
     static async likePost(req, res){
-        const { post_id, team_id } = req.query;
+        const { post_id, team_id } = req.body;
         try {
+            console.log("debug post_id:",post_id);
             const updatedPost = await postService.likePost(post_id, team_id);
             return res.json(Result.success(updatedPost));
         } catch (error) {

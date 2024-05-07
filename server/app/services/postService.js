@@ -23,16 +23,28 @@ class postService{
         try {
             const post = await db.post.findByPk(postId);
             post.picture = post.picture.split(','); // 将逗号分隔的图片链接字符串转换为数组
-            const result = await this.getPostsHandled([post]);
+            const tmp = await this.getPostsHandled([post]);
+
             //查看有无点赞
             const flag = await db.likepost.findOne({
                 where: {
-                    teamId: result.team_id,
-                    postId: result.id
+                    team_id: post.team_id,
+                    post_id: postId
                 }
             });
-            result.fabulous = flag;
-            return result;            
+            const result = tmp[0];
+            if(!flag){
+                return {
+                    ...result,
+                    fabulous : false
+                }
+            }
+            else {
+                return {
+                    ...result,
+                    fabulous : true
+                }
+            }             
         } catch (error) {
             console.log(error);
             throw new Error('Error fetching post details');
@@ -129,17 +141,49 @@ class postService{
     }
 
     // 给帖子点赞
-    static async likePost(postId){
-        try {
-            const post = await db.post.findByPk(postId);
-            if (!post) {
-                throw new Error('Post not found');
-            }    
-            // 更新点赞数
-            post.like += 1;
-            await post.save();
-    
-            return post;
+    static async likePost(post_id, team_id){
+        try { 
+
+            // 查看是否点赞过
+            const existingLike = await db.likepost.findOne({
+                where: {
+                    post_id: post_id,
+                    team_id: team_id
+                }
+            });
+
+            // 检查点赞状态
+            if (existingLike) {
+                // 如果已经点赞，则取消点赞，删除点赞记录，减少点赞数
+                await existingLike.destroy();
+                
+                // 更新帖子点赞数
+                const post = await db.post.findByPk(post_id);
+                if (!post) {
+                    throw new Error('Post not found');
+                }
+                post.like -= 1;
+                await post.save();
+
+                return "unlike successfully!";
+            } else {
+                // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
+                const newLike = await db.likepost.create({
+                    post_id: post_id,
+                    team_id: team_id,
+                    ifread: 1
+                });
+                
+                // 更新帖子点赞数
+                const post = await db.post.findByPk(post_id);
+                if (!post) {
+                    throw new Error('Post not found');
+                }
+                post.like += 1;
+                await post.save();
+
+                return "like successfully!";
+            }
         } catch (error) {
             throw new Error('Error liking post');
         }

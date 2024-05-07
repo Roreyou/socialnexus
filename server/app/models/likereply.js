@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('likepost', {
-    post_id: {
+  return sequelize.define('likereply', {
+    reply_id: {
       type: DataTypes.STRING(45),
       allowNull: false,
       primaryKey: true
@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'likepost',
+    tableName: 'likereply',
     timestamps: false,
     indexes: [
       {
@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "post_id" },
+          { name: "reply_id" },
           { name: "team_id" },
         ]
       },

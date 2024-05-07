@@ -41,6 +41,77 @@ class commentService{
         }
     }
 
+    static async getCommentHandled(commentLists, team_id){
+         console.log("debug commentLists:", commentLists);
+         // 遍历评论列表
+         const results = await Promise.all(commentLists.map(async commentList => {
+            console.log("debug commentList111:", commentList);
+            const comment_detail = commentList.comment_detail;
+            const reply_list = commentList.reply_list;
+            
+            //查看有没有点赞评论
+            const flag = await db.likecomment.findOne({
+                where: {
+                    team_id: comment_detail.team_id,
+                    comment_id: comment_detail.id
+                }
+            });
+
+            //获取队伍头像
+            const team_avatar = await db.team.findOne({
+                where: {
+                id: comment_detail.team_id
+                },
+                attributes:['avatar'] 
+            });
+                
+            // 增加评论详情字段
+            const comment_result= {
+                ...comment_detail,
+                fabulous: flag ? true : false, 
+                team_avatar: team_avatar ? team_avatar.avatar : null, // 假设都是一样的team_avatar
+                del_flag: team_id == comment_detail.team_id ? true : false // 假设都是del_flag
+            };
+
+            // 遍历回复列表
+            const reply_result = await Promise.all(reply_list.map(async reply => {
+                //获取队伍头像
+                const team_avatar = await db.team.findOne({
+                    where: {
+                    id: reply.reply_id
+                    },
+                    attributes:['avatar'] 
+                });
+
+                //查看有没有点赞回复
+                const flag = await db.likereply.findOne({
+                    where: {
+                        team_id: reply.reply_id,
+                        reply_id: reply.id
+                    }
+                });
+
+                // 增加回复字段
+                return {
+                    ...reply,
+                    team_avatar: team_avatar ? team_avatar.avatar : null, 
+                    fabulous: flag ? true : false, 
+                }; 
+            }));
+            return {
+                comment_detail : comment_result,
+                reply_list : reply_result
+            }
+        }));
+        console.log("debug results:",results);
+        return {comment_list : results};
+    }
+
+    static async getDetailedCommentsForPost(post_id, team_id){
+        const comments = await this.getCommentsForPost(post_id);
+        const results = await this.getCommentHandled(comments.comment_list, team_id);
+        return results;
+    }
     static async commentOnPost(post_id, team_id, text){
         try {
             // 创建新的评论

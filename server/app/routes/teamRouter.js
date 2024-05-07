@@ -31,7 +31,8 @@ router.post('/authentification', TeamController.authentification);
 router.post('/commentactivity', TeamController.commentActivity);
 router.post('/pyq/createpost', PostController.createPost);
 router.post('/pyq/comment', postController.commentOnPost)
-router.post('/pyq/like', postController.likePost);
+router.post('/pyq/likePost', postController.likePost);
+router.post('/pyq/likeCom', postController.likeCom);
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 

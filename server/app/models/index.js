@@ -34,5 +34,8 @@ db.datawall_com=require("./datawall_com.js")(sequelize, Sequelize);
 db.teacher=require("./teacher.js")(sequelize, Sequelize);
 db.keywords=require("./key_words.js")(sequelize, Sequelize);
 db.reply=require("./reply.js")(sequelize, Sequelize);
+db.likepost=require("./likepost.js")(sequelize, Sequelize);
+db.likecomment=require("./likecomment.js")(sequelize, Sequelize);
+db.likereply=require("./likereply.js")(sequelize, Sequelize);
 
 module.exports = db;
