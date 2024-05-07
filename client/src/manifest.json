@@ -63,7 +63,8 @@
 			"urlCheck": false
 		},
 		"usingComponents": true,
-		"lazyCodeLoading": "requiredComponents"  //组件按需注入
+		"lazyCodeLoading": "requiredComponents",  //组件按需注入
+		"libVersion": "latest"  //开发者工具版本
 	},
 	"mp-alipay" : {
         "usingComponents" : true
