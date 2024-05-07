@@ -293,6 +293,10 @@
 					uni.reLaunch({
 						url: '../../page_commitee/page/index/index',   /*进入团委首页*/
 					});
+				}else if(this.account == '3'){
+					uni.reLaunch({
+						url: '../../page_community/page/index/index',   /*进入社区首页*/
+					});
 				}
 
 				}
