@@ -23,6 +23,7 @@ router.get('/pyq/getdetail', PostController.getPostDetails);
 router.get('/pyq/hit', PostController.getHit);
 router.get('/pyq/samearea', PostController.getSameAreaPosts);
 router.get('/pyq/latest', PostController.getLatestPosts);
+router.get('/pyq/getnotice', PostController.getnotice);
 
 router.put('/favor', TeamController.favoriteActivity);
 

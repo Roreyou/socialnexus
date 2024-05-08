@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('activity', {
     id: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
@@ -43,7 +43,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     category_id: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     community_id: {

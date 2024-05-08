@@ -140,6 +140,11 @@ class postController{
         }
     }
 
+    // 获取通知
+    static async getnotice(req, res){
+        const { my_id:team_id } = req.query;
+    }
+
 }
 
 module.exports = postController;
