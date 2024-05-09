@@ -7,11 +7,11 @@
 		<view class="cu-bar search bg-white">
 			<view class="search-form round">
 				<text class="cuIcon-search"></text>
-				<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索活动"
+				<input v-model="searchContent" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索活动"
 					confirm-type="search">
 			</view>
 			<view class="action">
-				<button class="cu-btn bg-green shadow-blur round">搜索</button>
+				<button @click="search" class="cu-btn bg-green shadow-blur round">搜索</button>
 			</view>
 		</view>
 
@@ -28,7 +28,7 @@
 
 	// 显示筛选的活动
 	<view class="accontent">
-      <All v-if="TabCur === 0"></All>
+      <All ref="allComponent" v-if="TabCur === 0"></All>
       <Unreviewed v-if="TabCur === 1"></Unreviewed>
       <Reviewed v-if="TabCur === 2"></Reviewed>
     </view>
@@ -57,6 +57,8 @@
 				showContent: true,
 				TabCur: 0,
 				scrollLeft: 0,
+				searchContent: '',
+				community_id: '',
 
 				// 全屏组件
 				list: [{
@@ -118,7 +120,37 @@
 			},
 			key() {
                 return this.TabCur
-            }
+            },
+			search(){
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/queryActivity',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'GET',
+					data: {
+						name: this.searchContent,
+						// token: this.$userinfo.token
+                	    // activity_status: this.index
+						community_id: this.community_id
+					},
+					success: res => {
+						//不用懒加载
+						const all = this.$refs.allComponent;
+						all.acList = res.data.data.list;
+						this.TabCur = 0 // 设置顶部为“全部”
+						console.log("成功请求-模糊查询社区需求");
+						console.log(all.acList);
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			}
 		}
 	}
 </script>
