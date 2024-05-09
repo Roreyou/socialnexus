@@ -1,10 +1,10 @@
 // services/postService.js
 
 const { where } = require('sequelize');
-const activity = require('../models/activity');
 const db = require('../models/index');
 const ActivityService = require('./activityService');
 const teamService = require('./teamService');
+const otherService = require('./otherService');
 
 class postService{
     static async createPost(postData){
@@ -168,13 +168,15 @@ class postService{
 
                 return "unlike successfully!";
             } else {
+
                 // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
                 const newLike = await db.likepost.create({
                     post_id: post_id,
                     team_id: team_id,
-                    ifread: 1
+                    ifread: 1,
+                    liketime: await otherService.getCurrentTime()
                 });
-                
+                console.log("debug post_id00:",post_id);
                 // 更新帖子点赞数
                 const post = await db.post.findByPk(post_id);
                 if (!post) {
@@ -227,7 +229,8 @@ class postService{
                 const newLike = await db.likecomment.create({
                     comment_id: comment_id,
                     team_id: team_id,
-                    ifread: 1
+                    ifread: 1,
+                    liketime: await otherService.getCurrentTime()
                 });
                 
                 // 更新评论点赞数
@@ -286,7 +289,8 @@ class postService{
                 const newLike = await db.likereply.create({
                     reply_id: reply_id,
                     team_id: team_id,
-                    ifread: 1
+                    ifread: 1,
+                    liketime: await otherService.getCurrentTime()
                 });
                 
                 // 更新回复点赞数
@@ -306,6 +310,34 @@ class postService{
             }
         } catch (error) {
             throw new Error('Error liking reply');
+        }
+    }
+
+    static async getnotice(team_id) {
+        try {
+            // 查询评论列表
+            const commentList = await db.comment.findAll({
+                where: { team_id: team_id }
+            });
+            const enhancedCommentList = await Promise.all(commentList.map(async (comment) => {
+                const team = await db.team.findByPk(comment.team_id, { attributes: ['team_name', 'avatar'] });
+                const teamInfo = team ? { team_name: team.team_name, avatar: team.avatar } : null;
+                return { ...comment.dataValues, team_info: teamInfo };
+            }));
+            
+            console.log("comlist:",commentList);
+            // 查询点赞列表
+            const likeList = await db.likepost.findAll({
+                where: { team_id: team_id },
+                include: [{
+                    model: db.team,
+                    attributes: ['team_name', 'avatar']
+                }]
+            });
+
+            return { comment_list: commentList, like_list: likeList };
+        } catch (error) {
+            throw new Error('Error fetching notifications');
         }
     }
 

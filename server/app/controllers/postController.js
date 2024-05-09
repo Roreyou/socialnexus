@@ -15,19 +15,11 @@ class postController{
             const postId = await postService.createPost(postData);
     
             // 返回成功响应
-            res.status(200).json({
-                code: 0,
-                msg: "Success",
-                data: {postId:postId}
-            });
+            return res.json(Result.success(postId));
         } catch (error) {
             // 处理异常情况
             console.error('Error:', error);
-            res.status(500).json({
-                code: -1,
-                msg: "Failed to create post",
-                data: null
-            });
+            return res.json(Result.fail(error.message));
         }
     }
     static async getPostDetails(req, res){
@@ -47,7 +39,7 @@ class postController{
             return res.json(Result.success(result));
         } catch (error) {
             console.error('Error fetching post details:', error);
-            res.status(500).json({ code: 'error', msg: 'Internal Server Error' });
+            return res.json(Result.fail(error.message));
         }
     }
     static async getHit(req, res){
@@ -63,6 +55,7 @@ class postController{
             return res.json(Result.fail(error.message));
         }
     }
+
     static async getSameAreaPosts(req, res){
         const {province, city, page} = req.query;
         try {
@@ -142,7 +135,14 @@ class postController{
 
     // 获取通知
     static async getnotice(req, res){
-        const { my_id:team_id } = req.query;
+        try {
+            const { my_id: team_id } = req.query;
+            const notifications = await postService.getnotice(team_id);
+            return res.json(Result.success(notifications));
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+            return res.json(Result.fail(error.message));
+        }
     }
 
 }
