@@ -87,7 +87,11 @@
 			}
 		},
 		onLoad() {
-			
+
+		},
+		mounted() {
+			// 组件被挂载后发起请求
+			this.getAll();
 		},
 		methods: {
 			// 审核通过
@@ -97,6 +101,34 @@
 			// 驳回
 			handleReject(item){
 				console.log("点击驳回");
+			},
+			// 获取全部活动
+			getAll(){
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/activities',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'GET',
+					data: {
+						community_id: '0',
+						// token: this.$userinfo.token
+                	    // activity_status: this.index
+						status: '全部'
+					},
+					success: res => {						
+						this.acList = res.data.data;
+						console.log("成功请求-查询社区需求列表-全部");
+						console.log(this.acList);
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
 			}
 		}
 	}

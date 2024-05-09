@@ -15,7 +15,7 @@
 			</view>
 		</view>
 
-		<!-- 横向滚动的导航栏 全部/已审核/待审核-->
+		<!-- 横向滚动的导航栏 全部/已审核/未审核-->
 		<scroll-view scroll-x class="bg-white nav">
 			<view class="flex text-center">
 				<view class="cu-item flex-sub" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in list" :key="index" @tap="tabSelect" :data-id="index">
