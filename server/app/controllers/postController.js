@@ -145,6 +145,18 @@ class postController{
         }
     }
 
+    //回复
+    static async Reply(req, res){
+        const { comment_id, reply_content, team_id } = req.body;
+        try {
+            const reply = await postService.createReply(comment_id, reply_content, team_id);
+            return res.json(Result.success(reply));
+        } catch (error) {
+            console.error('Error:', error);
+            return res.json(Result.fail(error.message));
+        }
+    }
+
 }
 
 module.exports = postController;

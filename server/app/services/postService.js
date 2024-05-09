@@ -341,6 +341,24 @@ class postService{
         }
     }
 
+    static async createReply(comment_id, reply_content, team_id){
+        try {
+            console.log("debug team_id:", team_id);
+            const reply = await db.reply.create({
+                comment_id: comment_id,
+                reply_id: team_id,
+                content: reply_content,
+                time: await otherService.getCurrentTime(),
+                like: 0
+            });
+            // 获取该评论的新的回复列表
+            
+            return reply;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 

@@ -35,6 +35,7 @@ router.post('/pyq/comment', postController.commentOnPost)
 router.post('/pyq/likePost', postController.likePost);
 router.post('/pyq/likeCom', postController.likeCom);
 router.post('/pyq/likereply', postController.likeReply);
+router.post('/pyq/reply', postController.Reply);
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 
