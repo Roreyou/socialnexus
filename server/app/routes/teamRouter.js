@@ -5,6 +5,8 @@ const TeamController = require('../controllers/teamController.js');
 const ActivityController = require('../controllers/activityController.js');
 const PostController = require('../controllers/postController.js');
 const postController = require('../controllers/postController.js');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 const router = express.Router();
 
@@ -36,6 +38,8 @@ router.post('/pyq/likePost', postController.likePost);
 router.post('/pyq/likeCom', postController.likeCom);
 router.post('/pyq/likereply', postController.likeReply);
 router.post('/pyq/reply', postController.Reply);
+router.post('/pyq/delcomment', postController.delcomment);
+router.post('/pyq/createpost/uploadpics', upload.single('image'), postController.savePostImg);
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 

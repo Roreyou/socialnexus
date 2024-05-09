@@ -5,6 +5,8 @@ const db = require('../models/index');
 const ActivityService = require('./activityService');
 const teamService = require('./teamService');
 const otherService = require('./otherService');
+const fs = require('fs/promises');
+const path = require('path');
 
 class postService{
     static async createPost(postData){
@@ -352,13 +354,53 @@ class postService{
                 like: 0
             });
             // 获取该评论的新的回复列表
-            
+
             return reply;
         } catch (error) {
             throw error;
         }
     }
 
+    static async deleteComment(commentId) {
+        try {
+            const deletedComment = await db.comment.destroy({
+                where: {
+                    id: commentId
+                }
+            });
+            console.log("debug delete:",deletedComment);
+            return deletedComment;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async savePostImg(post_id, image){
+        try {
+            const imagePath = path.join(__dirname, 'uploads', image.filename);
+            const imageUrl = `/uploads/${image.filename}`;
+
+            console.log("debug path:", imagePath);
+            // 将上传的图片保存到本地文件系统
+            await fs.writeFile(imagePath, image.originalname);
+
+            // 创建帖子并保存图片信息到数据库
+            // 查找帖子
+            const post = await db.post.findById(post_id);
+            if (!post) {
+                throw new Error('Post not found');
+            }
+
+            // 更新帖子的图片信息
+            post.picture = imageUrl;
+            await post.save();
+            
+            return { postId: post.id, imageUrl: imageUrl };
+        } catch (error) {
+            throw error;
+        }
+    }
+    
 }
 
 

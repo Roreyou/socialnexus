@@ -157,6 +157,42 @@ class postController{
         }
     }
 
+    //删除帖子的评论
+    static async delcomment(req, res){
+        const { comment_id } = req.body;
+
+        try {
+            const deletedComment = await postService.deleteComment(comment_id);
+            if (deletedComment === 0) {
+                return res.json(new Result(404, "comment not found!"));
+            } else {
+                return res.json(Result.success("delete successfully!"));
+            }           
+        } catch (error) {
+            console.error('Error:', error);
+            return res.json(Result.fail(error.message));
+        }
+    }
+
+    static async savePostImg(req, res){
+        try {
+            // 在这里获取上传的图片
+            const image = req.file;
+
+            const post_id = req.body;
+
+            // 调用服务层创建帖子
+            const postInfo = await postService.savePostImg(post_id, image);
+    
+            // 做其他操作，比如保存帖子到数据库
+    
+            return res.json(Result.success("save the image successfully!"));
+        } catch (error) {
+            console.error('Error:', error);
+            return res.json(Result.fail(error.message));
+        }
+    }
+
 }
 
 module.exports = postController;
