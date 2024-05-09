@@ -26,6 +26,7 @@ router.get('/pyq/hit', PostController.getHit);
 router.get('/pyq/samearea', PostController.getSameAreaPosts);
 router.get('/pyq/latest', PostController.getLatestPosts);
 router.get('/pyq/getnotice', PostController.getnotice);
+router.get('/pyq/noticenum', PostController.getNoticeNum);
 
 router.put('/favor', TeamController.favoriteActivity);
 
@@ -40,6 +41,7 @@ router.post('/pyq/likereply', postController.likeReply);
 router.post('/pyq/reply', postController.Reply);
 router.post('/pyq/delcomment', postController.delcomment);
 router.post('/pyq/createpost/uploadpics', upload.single('image'), postController.savePostImg);
+
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 

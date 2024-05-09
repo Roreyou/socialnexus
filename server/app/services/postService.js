@@ -375,27 +375,27 @@ class postService{
         }
     }
 
-    static async savePostImg(post_id, image){
+    static async savePostImg(image){
         try {
-            const imagePath = path.join(__dirname, 'uploads', image.filename);
+            const imagePath = path.join(__dirname, 'uploads');
             const imageUrl = `/uploads/${image.filename}`;
 
-            console.log("debug path:", imagePath);
+            console.log("debug path:", imageUrl);
             // 将上传的图片保存到本地文件系统
             await fs.writeFile(imagePath, image.originalname);
-
-            // 创建帖子并保存图片信息到数据库
-            // 查找帖子
-            const post = await db.post.findById(post_id);
-            if (!post) {
-                throw new Error('Post not found');
-            }
-
-            // 更新帖子的图片信息
-            post.picture = imageUrl;
-            await post.save();
             
-            return { postId: post.id, imageUrl: imageUrl };
+            return imageUrl;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getNoticeNum(team_id) {
+        try {
+            // 在这里查询数据库，计算通知的数量
+            // 假设你的通知存储在名为 'notifications' 的表中，可以使用 Sequelize 查询
+            const noticeNum = await Notification.count({ where: { team_id } });
+            return noticeNum;
         } catch (error) {
             throw error;
         }

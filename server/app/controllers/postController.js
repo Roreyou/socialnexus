@@ -179,20 +179,28 @@ class postController{
             // 在这里获取上传的图片
             const image = req.file;
 
-            const post_id = req.body;
-
             // 调用服务层创建帖子
-            const postInfo = await postService.savePostImg(post_id, image);
+            const imageUrl = await postService.savePostImg(image);
     
             // 做其他操作，比如保存帖子到数据库
     
-            return res.json(Result.success("save the image successfully!"));
+            return res.json(Result.success(imageUrl));
         } catch (error) {
             console.error('Error:', error);
             return res.json(Result.fail(error.message));
         }
     }
 
+    static async getNoticeNum(req, res){
+        try {
+            const { team_id } = req.query;
+            const noticeNum = await postService.getNoticeNum(team_id);
+            return res.json(Result.success(noticeNum));
+        } catch (error) {
+            console.error('Error fetching notice number:', error);
+            return res.json(Result.fail(error.message));
+        }
+    }
 }
 
 module.exports = postController;

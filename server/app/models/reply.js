@@ -26,6 +26,10 @@ module.exports = function(sequelize, DataTypes) {
     like: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    ifread: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {
     sequelize,
