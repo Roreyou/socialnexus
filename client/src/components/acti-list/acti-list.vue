@@ -20,17 +20,22 @@
 								</view>
 
 								<view class="title"><view :class="{ 'title-font': !ismyac, 'text-cut': ismyac}">{{item.name}}</view></view>
-								<view class="content">
-									<view class="desc">
-										<view class="text-content"> 日期: {{item.start_time}}</view>
-										<view class="text-content"> 省份: {{item.province}}</view>
-										<view class="text-content"> 详细地址: {{item.address}}</view>
-										
-										<view class="wordcont">	
-											<view class="ackeywords" v-for="(word,index) in item.keywords" :key="index">
-												<view class="cu-tag bg-red light sm round">{{word}}</view>
+								<view class="conpic">
+									<view class="content">
+										<view class="desc">
+											<view class="text-content"> 日期: {{item.start_time}}</view>
+											<view class="text-content"> 省份: {{item.province}}</view>
+											<view class="text-content"> 详细地址: {{item.address}}</view>
+											
+											<view class="wordcont">	
+												<view class="ackeywords" v-for="(word,index) in item.keywords" :key="index">
+													<view class="cu-tag bg-red light sm round">{{word}}</view>
+												</view>
 											</view>
 										</view>
+									</view>
+									<view class="pic">
+										<img class="avatar" src="https://pic35.photophoto.cn/20150511/0034034892281415_b.jpg" alt="Avatar">
 									</view>
 								</view>
 							</view>
@@ -135,8 +140,14 @@
 	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 	}
 
+	/* 标题 */
+	.title{
+		margin-right: -20rpx;
+	}
+
 	/* 首页推荐列表样式 */
 	/* 标题 */
+
 	.title-font{
 		font-size: 35rpx;
 	} 
@@ -152,5 +163,28 @@
 		background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+	}
+
+	/* 加了图片 */
+	.conpic{
+		overflow: hidden; /* 清除浮动后的高度塌陷问题 */
+		display: flex;
+		align-items: center;
+		width: 680rpx;
+	}
+	.pic{
+		/* float: left;  */
+		margin-left: 40rpx; /* 设置图片和内容之间的间距 */
+	}
+	.content{
+		padding: 20rpx; /* 内容的内边距，rpx是uni-app中的单位 */
+	}
+	.avatar {
+ 	width: 200rpx;
+ 	height: 200rpx;
+ 	/* border-radius: 50%; */
+	object-fit: cover; 
+ 	background-color: #ffffff;
+ 	margin-right: 30rpx;
 	}
 </style>
