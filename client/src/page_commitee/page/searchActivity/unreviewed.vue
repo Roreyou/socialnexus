@@ -8,19 +8,19 @@
 							<!-- 卡片的最上面一行 -->
 							<view class="action">
 								<text class="cuIcon-titles text-green"></text>
-								<text class="text-xl text-bold">{{item.state}}</text>
+								<text class="text-xl text-bold">{{item.veri_status}}</text>
 							</view>
-							<view class="action right-buttons" v-if="item.state === '待审核'" >
+							<view class="action right-buttons" v-if="item.veri_status === '待审核'" >
 									<button class="cu-btn bg-blue shadow-blur" @click="handlePass(item)">通过</button>
 									<button class="cu-btn bg-grey shadow-blur" @click="handleReject(item)">驳回</button>
 							</view>
 						</view>
-						<view class="title"><view class="text-cut">{{item.title}}</view></view>
+						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
 							<view class="desc">
-								<view class="text-content"> 日期: {{item.time}}</view>
-								<view class="text-content"> 地点: {{item.place}}</view>
-								<view class="text-content"> 岗位: {{item.job}}</view>
+								<view class="text-content"> 发布日期: {{item.setup_date}}</view>
+								<view class="text-content"> 所属社区: {{item.community_name}}</view>
+								<view class="text-content"> {{item.province}} {{item.city}} {{item.address}}</view>
 								<view class="wordcont">	
 									<view class="ackeywords" v-for="(word,index) in item.keywords.split(',')" :key="index">
 										<view class="cu-tag bg-red light sm round">{{word}}</view>
@@ -42,22 +42,52 @@
 		data() {
 			return {
 				acList:[
-					{	
-						state: "待审核",
-						title: "5月15日实践活动",
-						time: "2020-05-15",
-						place: "北京",
-						job: "志愿者",
-						keywords: "服务,实践"
-					}
+					// {	
+					// 	veri_status: "待审核",
+					// 	title: "5月15日实践活动",
+					// 	time: "2020-05-15",
+					// 	place: "北京",
+					// 	job: "志愿者",
+					// 	keywords: "服务,实践"
+					// }
 				]
 			}
 		},
 		onLoad() {
 
 		},
+		mounted() {
+			// 组件被挂载后发起请求
+			this.getAllUnreviewed();
+		},
 		methods: {
-
+			getAllUnreviewed(){
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/activities',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'GET',
+					data: {
+						community_id: '0',
+						// token: this.$userinfo.token
+                	    // activity_status: this.index
+						status: '未审核'
+					},
+					success: res => {						
+						this.acList = res.data.data;
+						console.log("成功请求-查询社区需求列表-未审核");
+						console.log(this.acList);
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			}
 		}
 	}
 </script>
