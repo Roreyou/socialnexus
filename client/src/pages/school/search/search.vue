@@ -25,13 +25,13 @@
 		<!-- <view>
 			<invite></invite>
 		</view> -->
-		<view>
+		<!-- <view>
 			<picker></picker>
-		</view>
-		</view>
-		<!-- <view class="accontent">
-			<scontent :acList="acList" :searchlist="searchlist" :searchcontent="newontent"></scontent>
 		</view> -->
+		</view>
+		<view class="accontent">
+			<scontent :acList="acList" :searchlist="searchlist" :searchcontent="newontent"></scontent>
+		</view>
 	</view>
 </template>
 	 
