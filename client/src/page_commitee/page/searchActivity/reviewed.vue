@@ -160,4 +160,8 @@
 .rejected {
   background-color: red;
 }
+.desc{
+	margin-bottom: 8px;
+    margin-left: 25rpx;
+}
 </style>

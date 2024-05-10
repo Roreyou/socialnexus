@@ -2,7 +2,7 @@
 <template>
   <view class="u-p-l-10 u-p-r-10">    
     <!-- 最顶部信息 -->
-		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
+		<view class="cu-list menu-avatar padding-lg background">
 			<view class="user-section">
 				<image :src="avatar" class="cu-avatar xl round"></image>
 				<view class="text-white text-xl padding">中大校团委</view>
@@ -126,7 +126,10 @@
 				swiperList: [
         		  { id: 1, imageSrc: 'https://img.zcool.cn/community/012a2f5f9cce0f11013fdcc7329e32.jpg@1280w_1l_2o_100sh.jpg' },
         		  { id: 2, imageSrc: 'https://p4.img.cctvpic.com/photoworkspace/contentimg/2021/11/08/2021110810083211648.jpg' },
-        		  { id: 3, imageSrc: 'https://picnew7.photophoto.cn/20130724/hongsegemingtupian-18805580_1.jpg' }          
+        		  { id: 3, imageSrc: 'https://picnew7.photophoto.cn/20130724/hongsegemingtupian-18805580_1.jpg' }, 
+				  { id: 4, imageSrc: 'http://scu5azomr.hn-bkt.clouddn.com/static/2.png' },
+				  { id: 5, imageSrc: 'http://scu5azomr.hn-bkt.clouddn.com/static/3.png' },
+				  { id: 6, imageSrc: 'http://scu5azomr.hn-bkt.clouddn.com/static/4.png' }
         		],
 				// 通知
 				noticeList: [
@@ -639,5 +642,14 @@
 	margin-right: 5px;
     margin-right: 5px;
 	background-size: 300px 110px;
+}
+.background{
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+    background-size: 730rpx 350rpx;
+    height: 350rpx;
+    border-radius: 30rpx;
+    margin-top: 20rpx;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
 }
 </style>
