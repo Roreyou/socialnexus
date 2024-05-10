@@ -2,7 +2,7 @@
  * @Author: happy 2630391116@qq.com
  * @Date: 2024-04-29 14:38:05
  * @LastEditors: happy 2630391116@qq.com
- * @LastEditTime: 2024-04-29 17:24:00
+ * @LastEditTime: 2024-05-10 15:09:06
  * @FilePath: \socialnexus\client\src\pages\committee\searchActivity\reviewed.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,21 +16,22 @@
 						<view class="cu-bar bg-white">
 							<view class="action">
 								<text class="cuIcon-titles text-green"></text>
-								<text class="text-xl text-bold">{{item.state}}</text>
+								<text class="text-xl text-bold">{{item.veri_status}}</text>
 							</view>
 							
 							<view class="action right-buttons" v-if="item.state === '已审核'" >
-								<span class="status-label passed" v-if="true">已通过</span>
-    							<span class="status-label rejected" v-else>已驳回</span>
+								<span class="status-label passed" v-if="item.verification_status === 2">已通过</span>
+    							<span class="status-label rejected" v-if="item.verification_status === 3">已驳回</span>
 							</view>
 							
 						</view>
-						<view class="title"><view class="text-cut">{{item.name}}</view></view>
+						<view class="title"><view class="text-cut">{{item.team_name}}</view></view>
 						<view class="content">
+							<img class="avatar" :src="item.avatar" alt="Avatar">
 							<view class="desc">
 								<view class="text-content"> 成立日期: {{item.setup_date}}</view>
-								<view class="text-content"> 指导老师: {{item.instructor}}</view>
-								<view class="text-content"> 领队学生: {{item.leader}}</view>
+								<view class="text-content"> 指导老师: {{item.instructor_name}}</view>
+								<view class="text-content"> 领队学生: {{item.leader_name}}</view>
 								<view class="wordcont">	
 								</view>
 							</view>
@@ -49,21 +50,45 @@
 		data() {
 			return {
 				acList:[
-				{	
-						state: "已审核",
-						name: "中山大学软件工程学院",
-						setup_date: "2020-05-15",
-						instructor: "王乐球",
-						leader:"李华"
-					},
+					
 				]
 			}
 		},
 		onLoad() {
 
 		},
+		mounted() {
+			// 组件被挂载后发起请求
+			this.getAllReviewed();
+		},
 		methods: {
-
+			getAllReviewed(){
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/teams',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'GET',
+					data: {
+						// community_id: '0',
+						// token: this.$userinfo.token
+                	    // activity_status: this.index
+						status: 1
+					},
+					success: res => {						
+						this.acList = res.data.data.list;
+						console.log("成功请求-查询高校队伍列表-已审核");
+						console.log(this.acList);
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -111,5 +136,12 @@
 
 .rejected {
   background-color: red;
+}
+.avatar {
+	width: 50rpx;
+	height: 50rpx;
+	border-radius: 50%;
+	background-color: #ffffff;
+	margin-right: 10px;
 }
 </style>

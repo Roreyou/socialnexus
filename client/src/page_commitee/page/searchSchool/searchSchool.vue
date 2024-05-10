@@ -184,7 +184,7 @@
 
 				  		allTeams.acList = res.data.data;
 				  		this.TabCur = 0 // 设置顶部为“全部”
-				  		console.log("成功请求-模糊查询高校队伍-按队伍名查询");
+				  		console.log("成功请求-模糊查询高校队伍-按活动名查询");
 				  		console.log(allTeams.acList);
 				  		this.net_error = false;
 				  	},
