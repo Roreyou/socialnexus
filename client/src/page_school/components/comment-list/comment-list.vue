@@ -20,7 +20,7 @@
                                     <view class="text-content"> {{item.team_to_activity}}</view>    
                                 </view>
                                 <!-- 这里放活动卡片 -->
-                                <view class="acti_card"">
+                                <view class="acti_card">
                                     <view class="title">
                                         <view class="acti_name" :class="{ 'text-cut': ismyac}">{{item.activity_name}}</view>
                                         <view class="desc">
@@ -114,19 +114,27 @@ font-size: larger;
 }
 
 /* 活动卡片 */
+.title{
+    border-radius: 20rpx;
+}
 .acti_card{
-    background-color: #f3f4f6;
+    border-radius: 20rpx;
+    background-color: #13603e;
     margin: 15rpx 25rpx;
     padding-bottom: 15rpx;
 }
+.whitecard{
+    background-color: white;
+}
 .acti_name{
     font-size: larger;
+    color: white;
 }
 
 .ac_time{
     margin: auto;
     /* margin-bottom: 15rpx; */
-    color: gray;
+    color: white;
 }
 
 /* 评价按钮 */
