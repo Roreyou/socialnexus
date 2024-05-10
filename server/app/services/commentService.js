@@ -4,6 +4,7 @@ const db = require('../models/index');
 const replyService = require('../services/replyService');
 const { Op } = require('sequelize');
 const teamService = require('./teamService');
+const postService = require('./postService');
 
 class commentService{
     static async getCommentsForPost(post_id) {
@@ -120,8 +121,12 @@ class commentService{
                 team_id: team_id,
                 content: text,
                 time: new Date(),
-                like: 0
+                like: 0,
+                ifread: 1
             });
+
+            // 更新在notification表里面
+            await postService.updateNotification(post_id, true);
 
             // 获取新的评论详情以及相关的回复详情
             const newCommentList = this.getCommentsForPost(post_id);
