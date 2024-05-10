@@ -167,10 +167,30 @@
 				return 'left'
 			}
 		},
-		// mounted() {
-		// 	this.$refs.inputElement.placeholder = "中山大学";
-		// 	this.$refs.inputElement.readOnly = true;
-		// },
+		mounted() {
+			uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/community/myInfo',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'GET',
+					data: {
+						community_id: '0',
+					},
+					success: res => {						
+						this.acList = res.data.data;
+						console.log("成功请求-查询社区信息");
+						console.log(this.acList);
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+		},
 		onLoad() {},
 		onReady() {
 			// 设置自定义表单校验规则，必须在节点渲染完毕后执行
@@ -188,7 +208,29 @@
 				console.log(this.dynamicFormData.domains)
 			},
 			modifyPassword() {
-
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/community/modifyPassword',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						community_id: '0',
+						password,
+					},
+					success: res => {						
+						this.acList = res.data.data;
+						console.log("成功请求-修改密码");
+						console.log(this.acList);
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
 			},
 			submit(ref) {
 				console.log(this.baseFormData);
@@ -199,6 +241,29 @@
 					})
 				}).catch(err => {
 					console.log('err', err);
+				});
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/community/updateInfo',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						community_id: '0',
+						baseFormData,
+					},
+					success: res => {						
+						this.acList = res.data.data;
+						console.log("成功请求-更新社区信息");
+						console.log(this.acList);
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
 				})
 			},
 		}
