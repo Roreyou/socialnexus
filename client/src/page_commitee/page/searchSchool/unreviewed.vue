@@ -8,19 +8,20 @@
 							<!-- 卡片的最上面一行 -->
 							<view class="action">
 								<text class="cuIcon-titles text-green"></text>
-								<text class="text-xl text-bold">{{item.state}}</text>
+								<text class="text-xl text-bold">{{item.veri_status}}</text>
 							</view>
-							<view class="action right-buttons" v-if="item.state === '待审核'" >
+							<view class="action right-buttons" v-if="item.veri_status === '待审核'" >
 									<button class="cu-btn bg-blue shadow-blur" @click="handlePass(item)">通过</button>
 									<button class="cu-btn bg-grey shadow-blur" @click="handleReject(item)">驳回</button>
 							</view>
 						</view>
-						<view class="title"><view class="text-cut">{{item.name}}</view></view>
+						<view class="title"><view class="text-cut">{{item.team_name}}</view></view>
 						<view class="content">
+							<img class="avatar" :src="item.avatar" alt="Avatar">
 							<view class="desc">
 								<view class="text-content"> 成立日期: {{item.setup_date}}</view>
-								<view class="text-content"> 指导老师: {{item.instructor}}</view>
-								<view class="text-content"> 领队学生: {{item.leader}}</view>
+								<view class="text-content"> 指导老师: {{item.instructor_name}}</view>
+								<view class="text-content"> 领队学生: {{item.leader_name}}</view>
 								<view class="wordcont">	
 								</view>
 							</view>
@@ -39,35 +40,143 @@
 		data() {
 			return {
 				acList:[
-				{
-						state: "待审核",
-						name: "中山大学人工智能学院",
-						setup_date: "2020-05-15",
-						instructor: "肖云",
-						leader:"李华"
-					},
-					{
-						state: "待审核",
-						name: "中山大学微电子学院",
-						setup_date: "2020-05-15",
-						instructor: "保延祥",
-						leader:"李华"
-					},
-					{
-						state: "待审核",
-						name: "中山大学土木工程学院",
-						setup_date: "2020-05-15",
-						instructor: "俞烜",
-						leader:"李华"
-					}
+
 				]
 			}
 		},
 		onLoad() {
 
 		},
+		mounted() {
+			// 组件被挂载后发起请求
+			this.getAllUnreviewed();
+		},
 		methods: {
-
+			getAllUnreviewed(){
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/teams',
+					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'GET',
+					data: {
+						// community_id: '0',
+						// token: this.$userinfo.token
+                	    // activity_status: this.index
+						status: 2
+					},
+					success: res => {						
+						this.acList = res.data.data.list;
+						console.log("成功请求-获取高校队伍列表-未审核");
+						console.log(this.acList);
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			},
+			// 审核：通过
+			handlePass(item){
+				console.log("审核：通过");
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						id: item.id,
+						approve: 1
+					},
+					success: res => {
+						if(res.data.code==200){
+							this.$u.toast(`审核成功！已通过申请。`);
+							// 重新显示
+							this.getAllUnreviewed();
+						}
+						else if(res.data.code == 401){
+							console.log("token过期");
+							uni.showModal({
+							title: '',
+							content: '登录已过期。是否前去登录？',
+							success: function(res) {
+							if (res.confirm) {
+								// 用户点击了确定
+								uni.reLaunch({
+									url: '../../../pages/login/login',
+								})
+							} else if (res.cancel) {
+								// uni.navigateBack()
+								return;							
+							}
+							}
+						});
+						}
+						else if(res.data.code == 500){
+							this.$u.toast(`审核失败，活动不存在！`);
+							this.getAllUnreviewed();
+						}
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			},
+			// 审核：驳回
+			handleReject(item){
+				console.log("审核：驳回");
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						id: item.id,
+						approve: 2
+					},
+					success: res => {
+						if(res.data.code==200){
+							this.$u.toast(`审核成功！已驳回申请。`);
+							// 重新显示
+							this.getAllUnreviewed();
+						}
+						else if(res.data.code == 401){
+							console.log("token过期");
+							uni.showModal({
+							title: '',
+							content: '登录已过期。是否前去登录？',
+							success: function(res) {
+							if (res.confirm) {
+								// 用户点击了确定
+								uni.reLaunch({
+									url: '../../../pages/login/login',
+								})
+							} else if (res.cancel) {
+								// uni.navigateBack()
+								return;							
+							}
+							}
+						});
+						}
+						else if(res.data.code == 500){
+							this.$u.toast(`审核失败，活动不存在！`);
+							this.getAllUnreviewed();
+						}
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -102,5 +211,12 @@
 .right-buttons {
   /* margin-left: auto; */
   margin-right: 0;
+}
+.avatar {
+	width: 50rpx;
+	height: 50rpx;
+	border-radius: 50%;
+	background-color: #ffffff;
+	margin-right: 10px;
 }
 </style>
