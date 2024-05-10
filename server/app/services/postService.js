@@ -343,7 +343,9 @@ class postService{
                 await reply.save();
 
                 // 更新通知
-                
+                const post_id = await this.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, false);
     
                 return "unlike successfully!";
             } else {
@@ -367,7 +369,10 @@ class postService{
                 }
                 reply.like += 1;
                 await reply.save();
-    
+                //更新通知：
+                const post_id = await this.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, true);
                 return "like successfully!";
             }
         } catch (error) {
