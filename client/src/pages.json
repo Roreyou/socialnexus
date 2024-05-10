@@ -2,7 +2,7 @@
  * @Author: happy 2630391116@qq.com
  * @Date: 2024-04-19 13:00:55
  * @LastEditors: happy 2630391116@qq.com
- * @LastEditTime: 2024-04-19 13:59:27
+ * @LastEditTime: 2024-05-10 15:23:31
  * @FilePath: \socialnexus\client\src\pages.json
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */{
@@ -10,14 +10,14 @@
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"entryPagePath": "pages/login/login",
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages 
-	{
-		"path": "pages/login/login",
-		"style": {
-			"navigationBarTitleText": "登录",
-			"disableSwipeBack": true
-		}
-	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"disableSwipeBack": true
+			}
+		},
 		{
 			"path": "pages/reg/reg",
 			"style": {
@@ -38,7 +38,7 @@
 						"style": "circle" //小圈圈的样式
 					}
 				},
-				"componentPlaceholder":{
+				"componentPlaceholder": {
 					"picker": "view"
 				}
 			}
@@ -53,7 +53,7 @@
 			"path": "pages/school/search/search",
 			"style": {
 				"navigationBarTitleText": "找活动",
-				"componentPlaceholder":{
+				"componentPlaceholder": {
 					//占位组件
 					"scontent": "view",
 					"actipickers": "view",
@@ -84,9 +84,22 @@
 					"style": {
 						"navigationBarTitleText": "高校队伍"
 					}
+				},
+				{
+					"path": "page/details/details",
+					"style": {
+						"navigationBarTitleText": "活动详情"
+					}
+				}
+				,
+				{
+					"path": "page/details/teamDetails",
+					"style": {
+						"navigationBarTitleText": "队伍详情"
+					}
 				}
 			]
-		}, 
+		},
 		{
 			"root": "page_community",
 			"pages": [
@@ -201,19 +214,18 @@
 			"root": "page_school",
 			"pages": [
 				{
-					"path" : "pages/poster/poster",
-					"style" : {
+					"path": "pages/poster/poster",
+					"style": {
 						"navigationBarTitleText": "生成海报"
 					}
 				},
 				{
-					"path" : "pages/draw/draw",
-					"style" : {}
+					"path": "pages/draw/draw",
+					"style": {}
 				},
 				{
-					"path" : "pages/posterMultiple/posterMultiple",
-					"style" :
-					{
+					"path": "pages/posterMultiple/posterMultiple",
+					"style": {
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": false
 					}
