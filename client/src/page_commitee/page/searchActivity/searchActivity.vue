@@ -28,7 +28,7 @@
 
 	// 显示筛选的活动
 	<view class="accontent">
-      <All ref="allComponent" v-if="TabCur === 0"></All>
+      <All ref="allComponent" :is-search="isSearch" @update:is-search="handleIsSearchUpdate" v-if="TabCur === 0"></All>
       <Unreviewed v-if="TabCur === 1"></Unreviewed>
       <Reviewed v-if="TabCur === 2"></Reviewed>
     </view>
@@ -85,7 +85,8 @@
 						id: "Reviewed"
 					}
 				],
-				currentTabComponent: "All"
+				currentTabComponent: "All",
+				// isSearch: false
 			}
 		},
 
@@ -110,6 +111,12 @@
 				// 当前被选中的id
 				this.TabCur = e.currentTarget.dataset.id;
 				console.log("Cur,", this.TabCur);
+				if(this.TabCur == 0){
+					// const allComponent = this.$refs.allComponent;
+					// console.log(allComponent);
+					// allComponent.updateIsSearch(false); // 推荐通过方法更新属性
+					// console.log(allComponent.isSearch);
+				}
 				// 设置横向滚动容器的滚动位置
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 				// 切换组件时页面滚动到顶部
@@ -138,7 +145,12 @@
 					success: res => {
 						//不用懒加载
 						const all = this.$refs.allComponent;
-						all.acList = res.data.data.list;
+						// all.updateIsSearch(true); 
+						// 是搜索，取消自动调用“获取列表接口”
+						// console.log("赋值前：");
+						console.log("success设置前: all.isSearch="+all.isSearch);
+						all.updateIsSearch(true); // 推荐通过方法更新属性
+						console.log("success设置后: all.isSearch="+all.isSearch);
 						this.TabCur = 0 // 设置顶部为“全部”
 						console.log("成功请求-模糊查询社区需求");
 						console.log(all.acList);
@@ -150,7 +162,11 @@
 					complete: () => {
 					}
 				})
-			}
+			},
+			handleIsSearchUpdate(updatedData) {
+      			// 处理从子组件传递过来的数据
+      			// console.log("从子组件传过来的数据"+updatedData);
+    		}
 		}
 	}
 </script>

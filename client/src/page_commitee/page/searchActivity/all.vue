@@ -48,50 +48,23 @@
 
 <script>
 	export default {
+		// props: ['search'],
 		data() {
 			return {
 				acList:[
-					// {	
-					// 	veri_status: "已审核",
-					// 	name: "5月15日实践活动",
-					// 	setup_date: "2020-05-15",
-					// 	address: "北京",
-					// 	job: "志愿者",
-					// 	keywords: "服务,实践"
-					// },
-					// {
-					// 	veri_status: "未审核",
-					// 	name: "5月5日实践活动",
-					// 	setup_date: "2020-05-5",
-					// 	address: "深圳",
-					// 	job: "志愿者",
-					// 	keywords: "支教,教育"
-					// },
-					// {
-					// 	veri_status: "未审核",
-					// 	name: "5月5日实践活动",
-					// 	setup_date: "2020-05-5",
-					// 	address: "深圳",
-					// 	job: "志愿者",
-					// 	keywords: "支教,教育"
-					// },
-					// {
-					// 	veri_status: "未审核",
-					// 	name: "5月5日实践活动",
-					// 	setup_date: "2020-05-5",
-					// 	address: "深圳",
-					// 	job: "志愿者",
-					// 	keywords: "支教,教育"
-					// }
-				]
+
+				],
+				isSearch: false
 			}
 		},
 		onLoad() {
 
 		},
 		mounted() {
+			console.log("this.isSearch"+this.isSearch)
 			// 组件被挂载后发起请求
-			this.getAll();
+			if(!this.isSearch) //搜索的话不调用这个接口
+				this.getAll();
 		},
 		methods: {
 			// 审核通过
@@ -104,6 +77,7 @@
 			},
 			// 获取全部活动
 			getAll(){
+				console.log("获取全部this.isSearch="+this.isSearch);
 				uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/school/activities',
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
@@ -129,6 +103,11 @@
 					complete: () => {
 					}
 				})
+			},
+			updateIsSearch(newVal){
+				this.isSearch = newVal;
+				// 触发事件通知父组件更新数据
+				this.$emit('update:is-search', this.isSearch);
 			}
 		}
 	}
