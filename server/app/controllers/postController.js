@@ -10,7 +10,6 @@ class postController{
         try {
             // 获取客户端提交的帖子数据
             const postData = req.body;
-
             // 调用服务层函数来创建帖子
             const postId = await postService.createPost(postData);
     
