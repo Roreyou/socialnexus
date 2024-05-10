@@ -7,11 +7,12 @@
       <view class="cu-bar search bg-white">
         <view class="search-form round">
           <text class="cuIcon-search"></text>
-          <input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索队伍"
+          <input v-model="searchContent" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索队伍"
             confirm-type="search">
         </view>
         <view class="action">
-          <button class="cu-btn bg-green shadow-blur round">搜索</button>
+          <button @click="searchByTeam" class="cu-btn bg-green shadow-blur round">按队伍</button>
+          <button @click="searchByActiv" class="cu-btn bg-green shadow-blur round">按活动</button>
         </view>
       </view>
   
@@ -28,7 +29,7 @@
   
     // 显示筛选的活动
     <view class="accontent">
-        <All v-if="TabCur === 0"></All>
+        <All ref="allTeams" v-if="TabCur === 0"></All>
         <Unreviewed v-if="TabCur === 1"></Unreviewed>
         <Reviewed v-if="TabCur === 2"></Reviewed>
       </view>
@@ -83,7 +84,8 @@
               id: "Reviewed"
             }
           ],
-          currentTabComponent: "All"
+          currentTabComponent: "All",
+          searchContent: '',
         }
       },
   
@@ -117,8 +119,82 @@
             });
         },
         key() {
-                  return this.TabCur
-              }
+            return this.TabCur
+        },
+        searchByTeam(){
+				  uni.request({
+				  	url: this.$url.BASE_URL + '/4142061-0-default/school/queryTeamByName',
+				  	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                  	header:{
+				  		Authorization:uni.getStorageSync("token")
+				  	},	
+				  	method: 'GET',
+				  	data: {
+				  		team_name: this.searchContent,
+				  		// token: this.$userinfo.token
+                  	    // activity_status: this.index
+				  		community_id: this.community_id
+				  	},
+				  	success: res => {
+				  		//不用懒加载
+				  		const allTeams = this.$refs.allTeams;
+				  		// all.updateIsSearch(true); 
+				  		// 是搜索，取消自动调用“获取列表接口”
+				  		// console.log("赋值前：");
+				  		console.log("success设置前: all.isSearch="+allTeams.isSearch);
+				  		allTeams.updateIsSearch(true); // 推荐通过方法更新属性
+				  		console.log("success设置后: all.isSearch="+allTeams.isSearch);
+
+				  		allTeams.acList = res.data.data;
+				  		this.TabCur = 0 // 设置顶部为“全部”
+				  		console.log("成功请求-模糊查询高校队伍-按队伍名查询");
+				  		console.log(allTeams.acList);
+				  		this.net_error = false;
+				  	},
+				  	fail: res => {
+				  		this.net_error = true;
+				  	},
+				  	complete: () => {
+				  	}
+				  })
+			  },
+        searchByActiv(){
+				  uni.request({
+				  	url: this.$url.BASE_URL + '/4142061-0-default/school/queryTeamByAct',
+				  	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+                  	header:{
+				  		Authorization:uni.getStorageSync("token")
+				  	},	
+				  	method: 'GET',
+				  	data: {
+				  		act_name: this.searchContent,
+				  		// token: this.$userinfo.token
+                  	    // activity_status: this.index
+				  		community_id: this.community_id
+				  	},
+				  	success: res => {
+				  		//不用懒加载
+				  		const allTeams = this.$refs.allTeams;
+				  		// all.updateIsSearch(true); 
+				  		// 是搜索，取消自动调用“获取列表接口”
+				  		// console.log("赋值前：");
+				  		console.log("success设置前: all.isSearch="+allTeams.isSearch);
+				  		allTeams.updateIsSearch(true); // 推荐通过方法更新属性
+				  		console.log("success设置后: all.isSearch="+allTeams.isSearch);
+
+				  		allTeams.acList = res.data.data;
+				  		this.TabCur = 0 // 设置顶部为“全部”
+				  		console.log("成功请求-模糊查询高校队伍-按活动名查询");
+				  		console.log(allTeams.acList);
+				  		this.net_error = false;
+				  	},
+				  	fail: res => {
+				  		this.net_error = true;
+				  	},
+				  	complete: () => {
+				  	}
+				  })
+			  },
       }
     }
   </script>

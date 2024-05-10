@@ -7,6 +7,7 @@ const teamService = require('./teamService');
 const otherService = require('./otherService');
 const fs = require('fs/promises');
 const path = require('path');
+const replyService = require('./replyService');
 
 class postService{
     static async createPost(postData){
@@ -16,7 +17,15 @@ class postService{
             // 将转换后的字符串赋值给 postData.picture
             postData.picture = pictureString;
             const newPost = await db.post.create(postData); // 在数据库中创建新的帖子
+            // 补充 postTime 字段
+            const currentTime = new Date().toISOString();
+            newPost.post_time = currentTime;
+
+            // 将 like 字段设置为 0
+            newPost.like = 0;
+            await newPost.save();
             return newPost.id; // 返回新创建帖子的ID
+
         } catch (error) {
             console.error('Error creating post:', error);
             throw new Error('Error creating post');
@@ -143,6 +152,39 @@ class postService{
         }
     }
 
+    static async getOwnerTeamIdByPostId(post_id){
+        // 根据 post_id 在 post 表中找到对应的 team_id
+        const post = await db.post.findByPk(post_id);
+        if (!post) {
+            throw new Error('Post not found');
+        }
+        const ownerTeam_id = post.team_id;
+        return ownerTeam_id;
+    }
+
+    // 更新通知
+    static async updateNotification(post_id, ownerTeam_id, ifadd){
+        // 更新在notification表里面
+
+        // 在 notification 表中找到对应的记录并将 num 字段加 1
+        var notification = await db.notification.findOne({ where: { post_id:post_id, team_id:ownerTeam_id } });
+        if (!notification) {
+            // 创建新的通知记录
+            notification = await db.notification.create({ post_id, team_id:ownerTeam_id, num: 0 });
+        }       
+        if(ifadd){
+            // 更新 num 字段
+            console.log("debug ifadd:",ifadd);
+            notification.num += 1;
+        }else{
+            // 更新 num 字段
+            console.log("debug ifadd01:",ifadd);
+            notification.num -= 1;
+        }
+
+        await notification.save();
+    }
+
     // 给帖子点赞/取消点赞
     static async likePost(post_id, team_id){
         try { 
@@ -168,6 +210,10 @@ class postService{
                 post.like -= 1;
                 await post.save();
 
+                // 更新通知数        
+                const ownerTeam_id = this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id,ownerTeam_id, false);
+
                 return "unlike successfully!";
             } else {
 
@@ -187,6 +233,9 @@ class postService{
                 post.like += 1;
                 await post.save();
 
+                // 更新通知数
+                const ownerTeam_id = this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id,ownerTeam_id, true);
                 return "like successfully!";
             }
         } catch (error) {
@@ -224,7 +273,10 @@ class postService{
                 }
                 comment.like -= 1;
                 await comment.save();
-
+                //更新通知：
+                const post_id = await this.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, false);
                 return "unlike successfully!";
             } else {
                 // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
@@ -248,6 +300,11 @@ class postService{
                 }
                 likeCom.like += 1;
                 await likeCom.save();
+
+                //更新通知：
+                const post_id = await this.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, true);
 
                 return "like successfully!";
             }
@@ -284,6 +341,11 @@ class postService{
                 }
                 reply.like -= 1;
                 await reply.save();
+
+                // 更新通知
+                const post_id = await this.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, false);
     
                 return "unlike successfully!";
             } else {
@@ -307,7 +369,10 @@ class postService{
                 }
                 reply.like += 1;
                 await reply.save();
-    
+                //更新通知：
+                const post_id = await this.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, true);
                 return "like successfully!";
             }
         } catch (error) {
@@ -343,32 +408,152 @@ class postService{
         }
     }
 
-    static async createReply(comment_id, reply_content, team_id){
+    static async getPostIdByCommentId(comment_id){
         try {
-            console.log("debug team_id:", team_id);
-            const reply = await db.reply.create({
-                comment_id: comment_id,
-                reply_id: team_id,
-                content: reply_content,
-                time: await otherService.getCurrentTime(),
-                like: 0
-            });
-            // 获取该评论的新的回复列表
-
-            return reply;
+            // 根据评论ID查找对应的帖子
+            const comment = await db.comment.findByPk(comment_id);
+            if (!comment) {
+                throw new Error('Comment not found');
+            }
+            // 获取帖子ID
+            const postId = comment.post_id;
+            return postId;
         } catch (error) {
             throw error;
         }
     }
 
+    static async createReply(comment_id, reply_content, team_id){
+        try {
+            const reply = await db.reply.create({
+                comment_id: comment_id,
+                reply_id: team_id,
+                content: reply_content,
+                time: await otherService.getCurrentTime(),
+                like: 0,
+                ifread:1
+            });
+            //更新通知
+            //找到comment id对应的帖子id，在帖子中找到该帖子拥有者的id
+            const post_id = await this.getPostIdByCommentId(comment_id);
+            const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+            await this.updateNotification(post_id, ownerTeam_id, true);
+            // 获取该评论的新的回复列表
+            const newReply = await replyService.getReplyForComment(comment_id);
+            return newReply;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async deleteCommentNotification(relatedLikeComments){
+        for (const likeComment of relatedLikeComments) {
+            const ifread = likeComment.ifread;
+            // 删除点赞信息
+            await likeComment.destroy();
+
+            // 如果点赞信息的 ifread 字段为 1，则更新通知
+            if (ifread  === 1) {
+                const post_id = await this.getPostIdByCommentId(likeComment.comment_id);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, false);
+            }
+        }
+    }
+
+    static async deletelikeComment(commentId){
+        // 删除与该评论相关的所有点赞信息，并检查每个点赞信息的 ifread 字段
+        const relatedLikeComments = await db.likecomment.findAll({
+            where: {
+                comment_id: commentId
+            }
+        });
+        await this.deleteCommentNotification(relatedLikeComments);     
+    }
+
+    static async deleteReplyNotification(relatedLikeReply){
+        for (const likeReply of relatedLikeReply) {
+            const ifread = likeReply.ifread;
+            // 删除点赞信息
+            await likeReply.destroy();
+
+            // 如果点赞信息的 ifread 字段为 1，则更新通知
+            if (ifread === 1) {
+                const post_id = await this.getPostIdByCommentId(likeReply.comment_id);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, false);
+            }
+        }
+    }
+
+    static async deleteLikeReply(replyId){
+        // 删除与该评论相关的所有点赞信息，并检查每个点赞信息的 ifread 字段
+        const relatedLikeReply = await db.likereply.findAll({
+            where: {
+                reply_id: replyId
+            }
+        });
+        await this.deleteReplyNotification(relatedLikeReply);
+    }
+
+    static async deleteAllRealtedReply(commentId){
+        // 删除与该评论相关的所有回复，并检查每个回复的 ifread 字段
+        const relatedReplies = await db.reply.findAll({
+            where: {
+                comment_id: commentId
+            }
+        });
+
+        for (const reply of relatedReplies) {
+            const ifread = reply.ifread;
+            const replyId = reply.id;
+
+            // 如果回复的 ifread 字段为 1，则更新通知
+            if (ifread === 1) {
+                const post_id = await this.getPostIdByCommentId(commentId);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, false);
+            }
+
+            // 删除回复相关的点赞信息
+            await this.deleteLikeReply(replyId);
+            
+            // 删除回复
+            await reply.destroy();
+        }
+    }
+
     static async deleteComment(commentId) {
         try {
+            // 检查是否存在该评论
+            const comment = await db.comment.findByPk(commentId);
+            if (!comment) {
+                throw new Error('Comment not found');
+            }
+
+            // 获取评论的 ifread 字段的值
+            const ifread = comment.ifread;
+    
+            // 更新通知（如果 ifread 字段的值为 1）
+            if (ifread === 1) {
+                const post_id = await this.getPostIdByCommentId(commentId);
+                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
+                await this.updateNotification(post_id, ownerTeam_id, false);
+            }
+
+            // 删除与该评论相关的所有点赞信息
+            await this.deletelikeComment(commentId);
+    
+            // 删除与该评论相关的所有回复
+            await this.deleteAllRealtedReply(commentId);
+
+            // 删除评论
             const deletedComment = await db.comment.destroy({
                 where: {
                     id: commentId
                 }
             });
-            console.log("debug delete:",deletedComment);
+
             return deletedComment;
         } catch (error) {
             throw error;
