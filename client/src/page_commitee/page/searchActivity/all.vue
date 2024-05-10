@@ -3,7 +3,7 @@
 	<view class="content">
 		<!-- 循环显示卡片 -->
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
-			<view class="cu-card article" :class="isCard?'no-card':''">
+			<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id)">
 					<view class="cu-item shadow">
 						<view class="cu-bar bg-white">
 
@@ -67,13 +67,103 @@
 				this.getAll();
 		},
 		methods: {
-			// 审核通过
+			// 审核：通过
 			handlePass(item){
-				console.log("点击通过");
+				console.log("审核：通过");
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						id: item.id,
+						approve: 1
+					},
+					success: res => {
+						if(res.data.code==200){
+							this.$u.toast(`审核成功！已通过申请。`);
+							// 重新显示
+							this.getAllUnreviewed();
+						}
+						else if(res.data.code == 401){
+							console.log("token过期");
+							uni.showModal({
+							title: '',
+							content: '登录已过期。是否前去登录？',
+							success: function(res) {
+							if (res.confirm) {
+								// 用户点击了确定
+								uni.reLaunch({
+									url: '../../../pages/login/login',
+								})
+							} else if (res.cancel) {
+								// uni.navigateBack()
+								return;							
+							}
+							}
+						});
+						}
+						else if(res.data.code == 500){
+							this.$u.toast(`审核失败，活动不存在！`);
+							this.getAllUnreviewed();
+						}
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
 			},
-			// 驳回
+			// 审核：驳回
 			handleReject(item){
-				console.log("点击驳回");
+				console.log("审核：驳回");
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						id: item.id,
+						approve: 2
+					},
+					success: res => {
+						if(res.data.code==200){
+							this.$u.toast(`审核成功！已驳回申请。`);
+							// 重新显示
+							this.getAllUnreviewed();
+						}
+						else if(res.data.code == 401){
+							console.log("token过期");
+							uni.showModal({
+							title: '',
+							content: '登录已过期。是否前去登录？',
+							success: function(res) {
+							if (res.confirm) {
+								// 用户点击了确定
+								uni.reLaunch({
+									url: '../../../pages/login/login',
+								})
+							} else if (res.cancel) {
+								// uni.navigateBack()
+								return;							
+							}
+							}
+						});
+						}
+						else if(res.data.code == 500){
+							this.$u.toast(`审核失败，活动不存在！`);
+							this.getAllUnreviewed();
+						}
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
 			},
 			// 获取全部活动
 			getAll(){
@@ -206,7 +296,21 @@
 					complete: () => {
 					}
 				})
-			}
+			},
+			//前往详情页
+			todetail(id){
+				console.log("id:", id)
+				// uni.navigateTo({
+				// 	//注意用这个的话page前面有一个斜杠，不然会说找不到这个组件
+				// 	url: '../../page_school/pages/details/details?acti_id=' + id
+				// })
+				uni.navigateTo({
+					url:'/page_commitee/page/details/details?acti_id=' + id
+				});
+				// this.$u.route({
+				// 	url: 'pages/school/details/details?acti_id=' + id
+				// })
+			},
 		}
 	}
 </script>
