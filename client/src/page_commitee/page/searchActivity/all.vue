@@ -48,50 +48,23 @@
 
 <script>
 	export default {
+		// props: ['search'],
 		data() {
 			return {
 				acList:[
-					// {	
-					// 	veri_status: "已审核",
-					// 	name: "5月15日实践活动",
-					// 	setup_date: "2020-05-15",
-					// 	address: "北京",
-					// 	job: "志愿者",
-					// 	keywords: "服务,实践"
-					// },
-					// {
-					// 	veri_status: "未审核",
-					// 	name: "5月5日实践活动",
-					// 	setup_date: "2020-05-5",
-					// 	address: "深圳",
-					// 	job: "志愿者",
-					// 	keywords: "支教,教育"
-					// },
-					// {
-					// 	veri_status: "未审核",
-					// 	name: "5月5日实践活动",
-					// 	setup_date: "2020-05-5",
-					// 	address: "深圳",
-					// 	job: "志愿者",
-					// 	keywords: "支教,教育"
-					// },
-					// {
-					// 	veri_status: "未审核",
-					// 	name: "5月5日实践活动",
-					// 	setup_date: "2020-05-5",
-					// 	address: "深圳",
-					// 	job: "志愿者",
-					// 	keywords: "支教,教育"
-					// }
-				]
+
+				],
+				isSearch: false
 			}
 		},
 		onLoad() {
 
 		},
 		mounted() {
+			console.log("this.isSearch"+this.isSearch)
 			// 组件被挂载后发起请求
-			this.getAll();
+			if(!this.isSearch) //搜索的话不调用这个接口
+				this.getAll();
 		},
 		methods: {
 			// 审核通过
@@ -104,6 +77,7 @@
 			},
 			// 获取全部活动
 			getAll(){
+				console.log("获取全部this.isSearch="+this.isSearch);
 				uni.request({
 					url: this.$url.BASE_URL + '/4142061-0-default/school/activities',
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
@@ -122,6 +96,109 @@
 						console.log("成功请求-查询社区需求列表-全部");
 						console.log(this.acList);
 						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			},
+			updateIsSearch(newVal){
+				this.isSearch = newVal;
+				// 触发事件通知父组件更新数据
+				this.$emit('update:is-search', this.isSearch);
+			},
+			// 审核：通过
+			handlePass(item){
+				console.log("审核：通过");
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						id: item.id,
+						approve: 1
+					},
+					success: res => {
+						if(res.data.code==200){
+							this.$u.toast(`审核成功！已通过申请。`);
+							// 重新显示
+							this.getAllUnreviewed();
+						}
+						else if(res.data.code == 401){
+							console.log("token过期");
+							uni.showModal({
+							title: '',
+							content: '登录已过期。是否前去登录？',
+							success: function(res) {
+							if (res.confirm) {
+								// 用户点击了确定
+								uni.reLaunch({
+									url: '../../../pages/login/login',
+								})
+							} else if (res.cancel) {
+								// uni.navigateBack()
+								return;							
+							}
+							}
+						});
+						}
+						else if(res.data.code == 500){
+							this.$u.toast(`审核失败，活动不存在！`);
+							this.getAllUnreviewed();
+						}
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			},
+			// 审核：驳回
+			handleReject(item){
+				console.log("审核：驳回");
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						id: item.id,
+						approve: 2
+					},
+					success: res => {
+						if(res.data.code==200){
+							this.$u.toast(`审核成功！已驳回申请。`);
+							// 重新显示
+							this.getAllUnreviewed();
+						}
+						else if(res.data.code == 401){
+							console.log("token过期");
+							uni.showModal({
+							title: '',
+							content: '登录已过期。是否前去登录？',
+							success: function(res) {
+							if (res.confirm) {
+								// 用户点击了确定
+								uni.reLaunch({
+									url: '../../../pages/login/login',
+								})
+							} else if (res.cancel) {
+								// uni.navigateBack()
+								return;							
+							}
+							}
+						});
+						}
+						else if(res.data.code == 500){
+							this.$u.toast(`审核失败，活动不存在！`);
+							this.getAllUnreviewed();
+						}
 					},
 					fail: res => {
 						this.net_error = true;
