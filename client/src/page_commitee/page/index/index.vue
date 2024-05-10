@@ -2,7 +2,7 @@
 <template>
   <view class="u-p-l-10 u-p-r-10">    
     <!-- 最顶部信息 -->
-		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
+		<view class="cu-list menu-avatar padding-lg background">
 			<view class="user-section">
 				<image :src="avatar" class="cu-avatar xl round"></image>
 				<view class="text-white text-xl padding">中大校团委</view>
@@ -639,5 +639,14 @@
 	margin-right: 5px;
     margin-right: 5px;
 	background-size: 300px 110px;
+}
+.background{
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+    background-size: 730rpx 350rpx;
+    height: 350rpx;
+    border-radius: 30rpx;
+    margin-top: 20rpx;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
 }
 </style>
