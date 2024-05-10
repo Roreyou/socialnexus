@@ -151,6 +151,8 @@
 						console.log("success设置前: all.isSearch="+all.isSearch);
 						all.updateIsSearch(true); // 推荐通过方法更新属性
 						console.log("success设置后: all.isSearch="+all.isSearch);
+
+						all.acList = res.data.data.list;
 						this.TabCur = 0 // 设置顶部为“全部”
 						console.log("成功请求-模糊查询社区需求");
 						console.log(all.acList);

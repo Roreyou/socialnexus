@@ -87,6 +87,104 @@
 					complete: () => {
 					}
 				})
+			},
+			// 审核：通过
+			handlePass(item){
+				console.log("审核：通过");
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						id: item.id,
+						approve: 1
+					},
+					success: res => {
+						if(res.data.code==200){
+							this.$u.toast(`审核成功！已通过申请。`);
+							// 重新显示
+							this.getAllUnreviewed();
+						}
+						else if(res.data.code == 401){
+							console.log("token过期");
+							uni.showModal({
+							title: '',
+							content: '登录已过期。是否前去登录？',
+							success: function(res) {
+							if (res.confirm) {
+								// 用户点击了确定
+								uni.reLaunch({
+									url: '../../../pages/login/login',
+								})
+							} else if (res.cancel) {
+								// uni.navigateBack()
+								return;							
+							}
+							}
+						});
+						}
+						else if(res.data.code == 500){
+							this.$u.toast(`审核失败，活动不存在！`);
+							this.getAllUnreviewed();
+						}
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+			},
+			// 审核：驳回
+			handleReject(item){
+				console.log("审核：驳回");
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'PUT',
+					data: {
+						id: item.id,
+						approve: 2
+					},
+					success: res => {
+						if(res.data.code==200){
+							this.$u.toast(`审核成功！已驳回申请。`);
+							// 重新显示
+							this.getAllUnreviewed();
+						}
+						else if(res.data.code == 401){
+							console.log("token过期");
+							uni.showModal({
+							title: '',
+							content: '登录已过期。是否前去登录？',
+							success: function(res) {
+							if (res.confirm) {
+								// 用户点击了确定
+								uni.reLaunch({
+									url: '../../../pages/login/login',
+								})
+							} else if (res.cancel) {
+								// uni.navigateBack()
+								return;							
+							}
+							}
+						});
+						}
+						else if(res.data.code == 500){
+							this.$u.toast(`审核失败，活动不存在！`);
+							this.getAllUnreviewed();
+						}
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
 			}
 		}
 	}
