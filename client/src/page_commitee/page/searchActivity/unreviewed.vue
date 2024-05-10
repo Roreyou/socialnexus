@@ -2,7 +2,7 @@
 <template>
 	<view class="content">
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
-			<view class="cu-card article" :class="isCard?'no-card':''">
+			<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id)" >
 					<view class="cu-item shadow">
 						<view class="cu-bar bg-white">
 							<!-- 卡片的最上面一行 -->
@@ -185,7 +185,21 @@
 					complete: () => {
 					}
 				})
-			}
+			},
+			//前往详情页
+			todetail(id){
+				console.log("id:", id)
+				// uni.navigateTo({
+				// 	//注意用这个的话page前面有一个斜杠，不然会说找不到这个组件
+				// 	url: '../../page_school/pages/details/details?acti_id=' + id
+				// })
+				uni.navigateTo({
+					url:'/page_commitee/page/details/details?acti_id=' + id
+				});
+				// this.$u.route({
+				// 	url: 'pages/school/details/details?acti_id=' + id
+				// })
+			},
 		}
 	}
 </script>
