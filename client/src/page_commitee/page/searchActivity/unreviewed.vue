@@ -235,4 +235,8 @@
   /* margin-left: auto; */
   margin-right: 0;
 }
+.desc{
+	margin-bottom: 8px;
+    margin-left: 25rpx;
+}
 </style>
