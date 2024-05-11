@@ -15,8 +15,8 @@
 		<view class="rowClass">
         <!-- 点击去高校队伍/社区需求 -->
 				<u-row>
-					<u-col span="6" text-align="center" v-for="(item,index) in navList" :key="index">
-						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass">
+					<u-col span="6" text-align="center" v-for="(item,index) in navList" :key="index" >
+						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass" style="background-color: #ffffff; border-radius: 30rpx; margin-right: 4rpx;">
 							<image :src="item.src" style="width: 90rpx;height: 90rpx;" mode="widthFix"></image>
 							<view class="tabName">{{item.name}}</view>
 						</view>
@@ -25,7 +25,7 @@
 			</view>
 
       <!-- 一个间隔 -->
-			<u-gap height="10"></u-gap>
+			<!-- <u-gap height="10"></u-gap> -->
 
       <!-- 滚动通知栏 -->
 			<view @click="notice" class="margin-fixed">
@@ -490,7 +490,7 @@
 	
 	.rowClass{
 		border-radius: 30rpx;
-    	background-color: rgb(255, 255, 255);
+    	// background-color: rgb(255, 255, 255);
     	margin-top: 20rpx;
     	margin-left: 20rpx;
     	margin-right: 20rpx;
@@ -618,11 +618,11 @@
 .text-xl{
 	font-size: 52rpx;
 	font-weight: 600;
-	margin-top: 40rpx; 
 	color: #ffffff; 
 	font-family: 'Arial'; 
 	font-style: normal; 
 	background-color: transparent;
+	// background-color: rgba(110,144,252);
 }
 // 轮播图样式
 .uni-margin-wrap {
@@ -653,7 +653,7 @@
 .temp{
 	border-radius: 10px;
 	background-color: #ffffff;
-	background-image: url('../../static/graph.png');
+	// background-image: url('../../static/graph.png');
 	height: 120px;
 	margin-right: 5px;
     margin-right: 5px;
@@ -661,12 +661,14 @@
 }
 .background{
 	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
-    background-size: 730rpx 350rpx;
+    // background-size: 730rpx 350rpx;
     height: 350rpx;
     border-radius: 30rpx;
     margin-top: 20rpx;
     margin-left: 20rpx;
     margin-right: 20rpx;
+    background-position: right;
+    background-size: 122.666% 100%;
 }
 .margin-fixed{
 	border-radius: 30rpx;
