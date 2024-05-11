@@ -2,12 +2,16 @@
 	<view class="u-col" :class="[
 		'u-col-' + span
 	]" :style="{
-		padding: `0 ${Number(gutter)/2 + 'rpx'}`,
-		marginLeft: 100 / 12 * offset + '%',
-		flex: `0 0 ${100 / 12 * span}%`,
+		// padding: `0 ${Number(gutter)/2.0 + 'rpx'}`,
+		marginLeft: 100 / 12.0 * offset + '%',
+		flex: `0 0 ${100 / 12.0 * span}%`,
 		alignItems: uAlignItem,
 		justifyContent: uJustify,
-		textAlign: textAlign
+		textAlign: textAlign,
+		// border: '2px solid black',
+		borderRadius: '30rpx',
+		// backgroundColor: '#ffffff',
+		// marginRight: '0.1rpx'
 	}"
 	 @tap="click">
 		<slot></slot>

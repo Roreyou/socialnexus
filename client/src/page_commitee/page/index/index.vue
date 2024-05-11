@@ -15,8 +15,8 @@
 		<view class="rowClass">
         <!-- 点击去高校队伍/社区需求 -->
 				<u-row>
-					<u-col span="6" text-align="center" v-for="(item,index) in navList" :key="index">
-						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass">
+					<u-col span="6" text-align="center" v-for="(item,index) in navList" :key="index" >
+						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass" style="background-color: #ffffff; border-radius: 30rpx; margin-right: 4rpx;">
 							<image :src="item.src" style="width: 90rpx;height: 90rpx;" mode="widthFix"></image>
 							<view class="tabName">{{item.name}}</view>
 						</view>
@@ -25,7 +25,7 @@
 			</view>
 
       <!-- 一个间隔 -->
-			<u-gap height="10"></u-gap>
+			<!-- <u-gap height="10"></u-gap> -->
 
       <!-- 滚动通知栏 -->
 			<view @click="notice" class="margin-fixed">
@@ -55,13 +55,35 @@
 		<text class="text-xl"> 99 </text>
 		<text class="text-xl wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 234个 </text>
 	</view>
-	<!-- 数据墙-饼图部分-->
-	<view class="dataWallBG margin-fixed">
-
+	
+	<!-- 玫瑰图 高校院系比例 -->
+	<view class="roseBG margin-fixed">
+		<view class="action" style="margin-left: 15rpx;padding: 10px 0px 0px 0px;">
+			<text class="cuIcon-titles text-green"></text>
+			<text class="roseTitle text-bold">高校院系人数比例分析</text>
+		</view>
+		<!-- <rose :chartData="teamChartData"></rose> -->
+		<view class="charts-box">
+      		<qiun-data-charts 
+      		  type="rose"
+      		  :opts="opts"
+      		  :chartData="teamChartData"
+      		  background="rgba(255,255,255,0)"
+      		/>
+    	</view>
 	</view>
-	<view class="dataWallBG margin-fixed">
 
+	<!-- 玫瑰图 活动类型比例 -->
+	<view class="roseBG margin-fixed">
+		<view class="action" style="margin-left: 15rpx;padding: 10px 0px 0px 0px;">
+			<text class="cuIcon-titles text-green"></text>
+			<text class="roseTitle text-bold">活动类型比例分析</text>
+		</view>
+		<rose :chartData="activityChartData"></rose>
 	</view>
+
+
+
 
 	<view style="background-color: rgb(234, 231, 231);" class="margin-fixed" v-show="false">
 		
@@ -115,11 +137,13 @@
 	} from 'vuex'
 	import actilist from '../../../components/acti-list/acti-list.vue';
 	// import * as echarts from "echarts";
-
+	import rose from '../../../components/u-charts/rose/rose.vue';
+	import qiunDataCharts from "@/uni_modules/qiun-data-charts/components/qiun-data-charts/qiun-data-charts.vue";
 	export default {
 		components: {
 			actilist,
-			// echarts
+			rose,
+			qiunDataCharts 
 		},
 
 		data() {
@@ -157,42 +181,107 @@
 				flowList: [],
 				uvCode: uni.getStorageSync('uvCode'),
 
-				// 数据墙部分-柱状图
-				xData: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], //横坐标
-      			yData: [23, 24, 18, 25, 27, 28, 25], //人数数据
-      			taskDate: [10, 11, 9, 17, 14, 13, 14],
-      			myChartStyle: { float: "left", width: "100%", height: "400px" }, //图表样式
-
-				// 这里初始化一个null，待会儿用来充当echarts实例
-				myChart: null,
+				// 图表数据
+				teamChartData:{
+            	  series: [
+            	    {
+            	        data: [
+            	            {"name":"其他","value":50},{"name":"软件工程学院","value":30},{"name":"中法核","value":20},{"name":"商学院","value":18},{"name":"历史学系","value":8}              
+            	        ]
+            	    }
+            	  ]
+            	},
+				activityChartData:{
+					series: [
+            	    {
+            	        data: [
+            	            {"name":"22","value":50},{"name":"11","value":30},{"name":"33","value":20},{"name":"商学院","value":18},{"name":"历史学系","value":8}              
+            	        ]
+            	    }
+            	  ]
+            	},
+				// rose组件
+				//这里的 opts 是图表类型 type="rose" 的全部配置参数，您可以将此配置复制到 config-ucharts.js 文件中下标为 ['rose'] 的节点中来覆盖全局默认参数。实际应用过程中 opts 只需传入与全局默认参数中不一致的【某一个属性】即可实现同类型的图表显示不同的样式，达到页面简洁的需求。
+				opts: {
+    		        timing: "easeOut",
+    		        duration: 1000,
+    		        rotate: false,
+    		        rotateLock: false,
+    		        color: ["#1890FF","#91CB74","#FAC858","#EE6666","#73C0DE","#3CA272","#FC8452","#9A60B4","#ea7ccc"],
+    		        padding: [0,0,0,0],
+    		        fontSize: 11,
+    		        fontColor: "#666666",
+    		        dataLabel: false,
+    		        dataPointShape: true,
+    		        dataPointShapeType: "solid",
+    		        touchMoveLimit: 60,
+    		        enableScroll: false,
+    		        enableMarkLine: false,
+    		        // 右侧图例的配置
+    		        legend: {
+    		          show: true,
+    		          position: "right",
+    		          lineHeight: 25,
+    		          float: "center",
+    		          padding: 5,
+    		          margin: 0,
+    		          backgroundColor: "rgba(0,0,0,0)",
+    		          borderColor: "rgba(0,0,0,0)",
+    		          borderWidth: 0,
+    		          fontSize: 11,
+    		          fontColor: "#666666",
+    		          hiddenColor: "#CECECE",
+    		          itemGap: 10
+    		        },
+    		        extra: {
+    		          rose: {
+    		            type: "area",
+    		            minRadius: 50,
+    		            activeOpacity: 0.5,
+    		            activeRadius: 10,
+    		            offsetAngle: 0,
+    		            labelWidth: 15,
+    		            border: true,
+    		            borderWidth: 2,
+    		            borderColor: "#FFFFFF",
+    		            linearType: "custom"
+    		          },
+    		          tooltip: {
+    		            showBox: true,
+    		            showArrow: true,
+    		            showCategory: false,
+    		            borderWidth: 0,
+    		            borderRadius: 0,
+    		            borderColor: "#000000",
+    		            borderOpacity: 0.7,
+    		            bgColor: "#000000",
+    		            bgOpacity: 0.7,
+    		            gridType: "solid",
+    		            dashLength: 4,
+    		            gridColor: "#CCCCCC",
+    		            boxPadding: 3,
+    		            fontSize: 13,
+    		            lineHeight: 20,
+    		            fontColor: "#FFFFFF",
+    		            legendShow: true,
+    		            legendShape: "auto",
+    		            splitLine: true,
+    		            horizentalLine: false,
+    		            xAxisLabel: false,
+    		            yAxisLabel: false,
+    		            labelBgColor: "#FFFFFF",
+    		            labelBgOpacity: 0.7,
+    		            labelFontColor: "#666666"
+    		          }
+    		        }
+    		      }
+				
+				
 			}
 		},
-		// mounted() {
-    	// 	this.initEcharts();
-  		// },
-		// mounted() {
-		// 	this.myChart = echarts.init(document.getElementById('myEcharts'));
-		// 	let option = {
-		// 		xAxis: {
-		// 			type: 'category',
-		// 			data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-		// 		},
-		// 		yAxis: {
-		// 			type: 'value'
-		// 		},
-		// 		series: [
-		// 			{
-		// 				data: [150, 230, 224, 218, 135, 147, 260],
-		// 				type: 'line'
-		// 			}
-		// 		]
-		//     };
-		// 	this.myChart.setOption(option);
-			 
-		//     window.addEventListener('resize', () => {
-		// 	    this.myChart.resize()
-		//     });
-    	// },
+		onReady() {
+   		  this.getChartData();
+   		},
 
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin'])
@@ -211,51 +300,7 @@
 			uni.$off('findIndexHouseList');
 		},
 		onShow(){
-			// 检测升级
-			// this.checkUpdate();
-			// 流量统计
-			// this.appSysFlowInfo()
-
-			// uni.request({
-			// 	url: this.$url + '/__api.php',
-			// 	method: 'GET',
-			// 	data: {
-			// 		'a': 'list-card',
-			// 		token: this.$userinfo.token
-			// 	},
-			// 	success: res => {
-			// 		this.list = res.data.list;
-			// 		this.net_error = false;
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
-			uni.request({
-				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				// header:{
-				// 	Authorization:uni.getStorageSync("token")
-				// },	 //感觉这个功能可以不检查权限？				
-				method: 'GET',
-				data: {
-					province: '1',
-					// token: this.$userinfo.token
-				},
-				success: res => {
-					this.acList = res.data.data.acti_list;
-					this.acList[0].keywords = "服务,实践"
-					console.log(this.acList)
-					this.net_error = false;
-				},
-				fail: res => {
-					this.net_error = true;
-				},
-				complete: () => {
-				}
-			})
+			this.getChartData();
 		},
 		onPageScroll(e) {
 		    this.scrollTop = e.scrollTop;
@@ -273,49 +318,74 @@
 		// 	uni.stopPullDownRefresh();
 		// },
 		methods: {
-			// 初始化柱状图
-			// initEcharts() {
-      		// 	// 多列柱状图
-      		// 	const mulColumnZZTData = {
-      		// 	  xAxis: {
-      		// 	    data: this.xData
-      		// 	  },
-      		// 	  // 图例
-      		// 	  legend: {
-      		// 	    data: ["人数", "任务数"],
-      		// 	    top: "0%"
-      		// 	  },
-      		// 	  yAxis: {},
-      		// 	  series: [
-      		// 	    {
-      		// 	      type: "bar", //形状为柱状图
-      		// 	      data: this.yData,
-      		// 	      name: "人数", // legend属性
-      		// 	      label: {
-      		// 	        // 柱状图上方文本标签，默认展示数值信息
-      		// 	        show: true,
-      		// 	        position: "top"
-      		// 	      }
-      		// 	    },
-      		// 	    {
-      		// 	      type: "bar", //形状为柱状图
-      		// 	      data: this.taskDate,
-      		// 	      name: "任务数", // legend属性
-      		// 	      label: {
-      		// 	        // 柱状图上方文本标签，默认展示数值信息
-      		// 	        show: true,
-      		// 	        position: "top"
-      		// 	      }
-      		// 	    }
-      		// 	  ]
-      		// 	};
-			// 	const myChart = echarts.init(document.getElementById("mychart"));
-    		//   	myChart.setOption(mulColumnZZTData);
-    		//   	//随着屏幕大小调节图表
-    		//   	window.addEventListener("resize", () => {
-    		//   	  myChart.resize();
-    		//   	});
-    		// },
+			getChartData(){
+				// 同时请求数据
+				// uni.request({
+				// 	url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_team',
+                // 	header:{
+				// 		Authorization:uni.getStorageSync("token")
+				// 	},	
+				// 	method: 'GET',
+				// 	data: {
+						
+				// 	},
+				// 	success: res => {	
+				// 		console.log("成功请求-数据墙-院系人数比例");
+				// 		console.log(res.data.data);					
+				// 		this.teamChartData.series[0].data = res.data.data;
+				// 		this.net_error = false;
+				// 	},
+				// 	fail: res => {
+				// 		this.net_error = true;
+				// 	},
+				// 	complete: () => {
+				// 	}
+				// });
+
+				// 活动类型
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_act',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'GET',
+					data: {
+						
+					},
+					success: res => {	
+						console.log("成功请求-数据墙-活动类型比例");
+						console.log(res.data.data);					
+						this.activityChartData.series[0].data = res.data.data;
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+				// uni.request({
+				// 	url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_act',
+                // 	header:{
+				// 		Authorization:uni.getStorageSync("token")
+				// 	},	
+				// 	method: 'GET',
+				// 	data: {
+						
+				// 	},
+				// 	success: res => {	
+				// 		console.log("成功请求-数据墙-活动类型比例");
+				// 		console.log(res.data.data);					
+				// 		this.activityChartData.series[0].data = res.data.data;
+				// 		this.net_error = false;
+				// 	},
+				// 	fail: res => {
+				// 		this.net_error = true;
+				// 	},
+				// 	complete: () => {
+				// 	}
+				// })
+			},
 			handleAuthentication(){
 				this.$u.route({
 					url: 'pages/school/index/verify',
@@ -336,61 +406,6 @@
 					url: 'pages/notice/notice'
 				})
 			},
-			// findHouseList(type = 0) {
-			// 	if(type == 1){
-			// 		this.pageNum = 1
-			// 		this.flowList = []
-			// 		this.$refs.uWaterfall.clear();
-			// 	}
-			// 	let url = "/api/houseApi/findHouseRoomList";
-			// 	// this.$u.get(url, {
-			// 	// 	pageNum: this.pageNum,
-			// 	// 	pageSize: this.pageSize,
-			// 	// 	orderByColumn: 'update_time,create_time',
-			// 	// 	isAsc: 'desc'
-			// 	// }).then(result => {
-			// 	// 	const data = result.rows;
-			// 	// 	if(this.pageNum>1 && data.length < this.pageSize){
-			// 	// 		return this.loadStatus = 'nomore';
-			// 	// 	}
-			// 	// 	this.houseList = data;
-			// 	// 	for (let i = 0; i < this.houseList.length; i++) {
-			// 	// 	    // 先转成字符串再转成对象，避免数组对象引用导致数据混乱
-			// 	// 	    let item = this.houseList[i]
-			// 	// 		item.image = item.faceUrl
-			// 	// 		if(item.type == 0){
-			// 	// 			item.type = '整租'
-			// 	// 		}else if(item.type == 1){
-			// 	// 			item.type = '合租'
-			// 	// 		}
-			// 	// 		if(item.roomType == 1){
-			// 	// 			item.roomType = '主卧'
-			// 	// 		}else if(item.roomType == 2){
-			// 	// 			item.roomType = '次卧'
-			// 	// 		}else{
-			// 	// 			item.roomType = '未知'
-			// 	// 		}
-						
-			// 	// 		if(this.$u.test.isEmpty(item.houseNum)){
-			// 	// 			item.houseNum = ''
-			// 	// 		}
-			// 	// 		if(this.$u.test.isEmpty(item.houseHall)){
-			// 	// 			item.houseHall = ''
-			// 	// 		}
-			// 	// 		if(this.$u.test.isEmpty(item.toiletNum)){
-			// 	// 			item.toiletNum = ''
-			// 	// 		}
-			// 	// 		if(this.$u.test.isEmpty(item.floor)){
-			// 	// 			item.floor = ''
-			// 	// 		}else{
-			// 	// 			item.floor = item.floor + '层'
-			// 	// 		}
-			// 	// 	    this.flowList.push(item);
-			// 	// 	}
-			// 	// 	++ this.pageNum 
-			// 	// 	this.loadStatus = 'loadmore';
-			// 	// });
-			// },
 			checkUpdate(){
 				uni.getSystemInfo({
 					success:(res) => {
@@ -452,18 +467,6 @@
 			server(){
 				// window.open('https://sourcebyte.cn')
 			},
-			//点击加载更多活动
-			torec(){
-				this.$u.route({
-					url: 'pages/school/search/recommend',
-				  })
-			},
-			//前往详情页
-			todetail(){
-				this.$u.route({
-					url: 'pages/school/details/details',
-				  })
-			}
 		}
 	}
 </script>
@@ -490,7 +493,7 @@
 	
 	.rowClass{
 		border-radius: 30rpx;
-    	background-color: rgb(255, 255, 255);
+    	// background-color: rgb(255, 255, 255);
     	margin-top: 20rpx;
     	margin-left: 20rpx;
     	margin-right: 20rpx;
@@ -618,11 +621,11 @@
 .text-xl{
 	font-size: 52rpx;
 	font-weight: 600;
-	margin-top: 40rpx; 
 	color: #ffffff; 
 	font-family: 'Arial'; 
 	font-style: normal; 
 	background-color: transparent;
+	// background-color: rgba(110,144,252);
 }
 // 轮播图样式
 .uni-margin-wrap {
@@ -653,7 +656,7 @@
 .temp{
 	border-radius: 10px;
 	background-color: #ffffff;
-	background-image: url('../../static/graph.png');
+	// background-image: url('../../static/graph.png');
 	height: 120px;
 	margin-right: 5px;
     margin-right: 5px;
@@ -661,12 +664,14 @@
 }
 .background{
 	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
-    background-size: 730rpx 350rpx;
+    // background-size: 730rpx 350rpx;
     height: 350rpx;
     border-radius: 30rpx;
     margin-top: 20rpx;
     margin-left: 20rpx;
     margin-right: 20rpx;
+    background-position: right;
+    background-size: 122.666% 100%;
 }
 .margin-fixed{
 	border-radius: 30rpx;
@@ -679,4 +684,20 @@
 	height: 350rpx;
 	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
 }
+.roseBG{
+	height: 400rpx;
+	background-color: white;
+}
+.roseTitle{
+	font-size: 35rpx;
+}
+.cuIcon-titles:before {
+	content: "\e701";
+	font-size: 37rpx;
+}
+    /* 请根据实际需求修改父元素尺寸，组件自动识别宽高 */
+    .charts-box {
+      width: 100%;
+      height: 80%;
+    }
 </style>
