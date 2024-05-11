@@ -638,11 +638,13 @@ class teamService {
         ...instrData,
         team_id:team_id
       };
-      console.log(modifyInstructor)
-      await teamService.insertInstructor(instrData);
-      
+      await teamService.insertInstructor(modifyInstructor);
       // 存入队长信息
-      await teamService.insertLeader(leaderData);
+      const modifyLeader = {
+        ...leaderData,
+        team_id:team_id
+      };
+      await teamService.insertLeader(modifyLeader);
 
       // 存入队伍成员
       await teamService.addTeamMembers(team_id, membersData);
@@ -664,7 +666,7 @@ class teamService {
           await db.modify_teammember.create(leaderData);
   }
 
-    static async  addTeamMembers(team_id, membersData) {
+  static async addTeamMembers(team_id, membersData) {
       await Promise.all(membersData.map(memberData => db.modify_teammember.create({
           team_id: team_id,
           ...memberData
