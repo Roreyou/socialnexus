@@ -1,6 +1,5 @@
 //controllers/teasmController.js
-const BaseResultCode = require('../common/BaseResultCode');
-const ResultCode = require('../common/Result');
+const Result = require('../common/Result');
 const teamService = require('../services/teamService');
 const activityService = require('../services/activityService');
 
@@ -271,15 +270,15 @@ class teamController {
             const activList = await activityService.searchMyActiv(team_id, activity_name);
 
             // 返回成功响应
-            res.json(ResultCode.success(activList)); 
+            return res.json(Result.success(activList));
           }else{
-            res.json(ResultCode.fail("Can not find the team!"));
+            return res.json(Result.fail("Can not find the team!"));
           }
 
       } catch (error) {
           // 返回错误响应
           console.error('Error searching my activities:', error);
-          res.json(ResultCode.fail("Error searching my activities"));
+          res.json(Result.fail("Error searching my activities"));
       }
   }
 
@@ -291,18 +290,18 @@ class teamController {
         const existingEvent = await teamService.findEvent(activ_id, team_id);
         
         if(!existingEvent || team_id == null || activ_id ==null ){
-          res.status(500).json({code: 500, msg: 'Can not cancel non-existed registration', data: null });
+          return res.json(Result.fail("Can not cancel non-existed registration!"));
         }
 
         // 调用服务方法取消报名活动
         await activityService.cancelRegisterEvent(team_id, activ_id);
 
         // 返回成功响应
-        res.json({code: 200 ,msg: 'Successfully canceled registration'});
+        return res.json(Result.success("Successfully canceled registration!"));
       } catch (error) {
           // 返回错误响应
           console.error('Error canceling registration:', error);
-          res.status(500).json({code: 500, msg: 'Failed to cancel registration', data: null });
+          return res.json(Result.fail("Failed to cancel registration!"));
       }
   }
 
@@ -311,10 +310,10 @@ class teamController {
     try {
       const { team_id, activity_id } = req.query;
       const results = await teamService.getMyComments(team_id, activity_id);
-      return res.status(200).json({ code: 200, msg: 'Success', data: { com_llist: results } });
+      return res.json(Result.success({ com_llist: results }));
     } catch (error) {
       console.error('Failed to get my comments:', error);
-      return res.status(500).json({ code: 500, msg: 'Failed to get my comments', data: null });
+      return res.json(Result.fail("Failed to get my comments!"));
     }
   }
 
@@ -324,10 +323,10 @@ class teamController {
       const { team_id, activity_id, comment } = req.body;
 
       const result = await teamService.commentActivity(team_id, activity_id, comment);
-      return res.json(result);
+      return res.json(Result.success(result));
     } catch (error) {
       console.error('Failed to comment activity:', error);
-      return res.status(500).json({ code: 500, msg: 'Failed to comment activity' });
+      return res.json(Result.fail("Failed to comment activity!"));
     }
   }
 
@@ -336,10 +335,10 @@ class teamController {
     try {
       const { team_id} = req.query;
       const communityComments = await teamService.getCommunityComments(team_id);
-      return res.status(200).json({ code: 200, msg: 'Success', data: { com_list: communityComments } });
+      return res.json(Result.success({ com_list: communityComments }));
     } catch (error) {
       console.error('Failed to get community comments:', error);
-      return res.status(500).json({ code: 500, msg: 'Failed to get community comments', data: null });
+      return res.json(Result.fail("Failed to get community comments!"));
     }
   }
 
@@ -348,11 +347,11 @@ class teamController {
     try {
       const { team_id } = req.query;
       const teamInfo = await teamService.getTeamInfo(team_id);
-      return res.status(200).json({ code: 200, msg: 'Success', data: { info: teamInfo } });
+      return res.json(Result.success({ info: teamInfo }));
     } catch (error) {
       console.error('Failed to get team info:', error);
-      return res.status(500).json({ code: 500, msg: 'Failed to get team info', data: null });
-    }
+      return res.json(Result.fail("Failed to get team info!"));
+   }
   }
 
   // 获取收藏的活动
@@ -360,10 +359,10 @@ class teamController {
     try {
       const { team_id } = req.query;
       const teamFavorites = await teamService.getTeamFavorites(team_id);
-      return res.status(200).json({ code: 200, msg: 'Success', data: { acti_list: teamFavorites } });
+      return res.json(Result.success({ acti_list: teamFavorites }));
     } catch (error) {
       console.error('Failed to get team favorites:', error);
-      return res.status(500).json({ code: 500, msg: 'Failed to get team favorites', data: null });
+      return res.json(Result.fail("Failed to get team favorites!"));
     }
   }
 }

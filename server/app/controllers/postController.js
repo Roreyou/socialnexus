@@ -136,6 +136,7 @@ class postController{
     static async getnotice(req, res){
         try {
             const { my_id: team_id } = req.query;
+            //console.log(team_id);
             const notifications = await postService.getnotice(team_id);
             return res.json(Result.success(notifications));
         } catch (error) {
@@ -197,6 +198,17 @@ class postController{
             return res.json(Result.success(noticeNum));
         } catch (error) {
             console.error('Error fetching notice number:', error);
+            return res.json(Result.fail(error.message));
+        }
+    }
+
+    static async delNotice(req, res){
+        try {
+            const { team_id, post_id } = req.body;
+            const noticeNum = await postService.delNotice(team_id, post_id);
+            return res.json(Result.success("delete successfully!"));
+        } catch (error) {
+            console.error('Error deleting notice:', error);
             return res.json(Result.fail(error.message));
         }
     }

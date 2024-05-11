@@ -15,6 +15,16 @@ class teamService {
     return await db.team.findByPk(id);
   }
 
+  static async getTeamAvatar(teamId){
+    const teamAvatar = await db.team.findOne({
+      where: {
+      id: teamId
+      },
+      attributes:['avatar'] 
+    });
+    return teamAvatar;
+  }
+
   //依据社区和状态
   static async getTeamByCommu(commu_id, status) {
     let whereCondition_commu = {};
@@ -347,7 +357,7 @@ class teamService {
   }
 
   // 根据给定的单个队伍id找到队伍名
-  static async getTeamMapName(id){
+  static async getTeamName(id){
     try {
       const team = await db.team.findOne({
           where: {
