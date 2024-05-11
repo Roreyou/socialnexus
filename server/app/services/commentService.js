@@ -8,6 +8,7 @@ const postService = require('./postService');
 
 class commentService{
     static async getCommentsofPost(post_id){
+        // 返回结构：[{a comment},...,{a comment}}] of a post
         try {
             // 获取新的评论详情
             const new_comments = await db.comment.findAll({ where: { post_id: post_id } });
@@ -25,7 +26,7 @@ class commentService{
 
             const CommentList = await Promise.all(new_comments.map(async (comment) => {
                 // 对每条评论查询对应的回复列表                
-                const replies = await replyService.getReplyOfComment(comment.id);
+                const replies = await replyService.getReplyOfAComment(comment.id);
                 const replyDetailList = await Promise.all(replies.map(async (reply) => {
                     // 查询回复对应的队伍信息
                     const replyTeam = await db.team.findByPk(reply.reply_id);

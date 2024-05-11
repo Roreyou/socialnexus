@@ -441,7 +441,7 @@ class postService{
             const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
             await this.updateNotification(post_id, ownerTeam_id, true);
             // 获取该评论的新的回复列表
-            const newReply = await replyService.getReplyOfComment(comment_id);
+            const newReply = await replyService.getReplyOfAComment(comment_id);
             return newReply;
         } catch (error) {
             throw error;
@@ -458,7 +458,9 @@ class postService{
     }
 
     static async getCommentLikesFromComments(comments){
-        const commentLikes = [];
+        // 返回结构：[[{likecomment},...,{likecooment}],...,[{likecomment},...,{likecooment}] ]
+        // 最外层元素是不同的comments，内层数组的不同元素是同一个comment的不同点赞信息
+        var commentLikes = [];
         for (const comment of comments) {
             // 获取每个评论的点赞信息
             const relatedLikeComments = await this.getCommentLikesFromAcomment(comment.id);
@@ -611,42 +613,66 @@ class postService{
     }
 
     static async delNotice(team_id, post_id){
-        //更新通知
-        await db.notification.update(
-        {num : 0}, 
-        {
+        const notification = await db.notification.findOne({
             where:{
                 team_id : team_id, 
                 post_id : post_id
             }
         });
-        //点赞帖子的ifread全部置0
+        //console.log(notification.dataValues);
+        if(notification.num == 0){
+            return;
+        }
+
+        // -更新通知
+        notification.num = 0;
+        notification.save();
+        
+        // -点赞帖子的ifread全部置0
         await db.likepost.update(
             {ifread : 0}, 
             {
                 where:{
-                    team_id : team_id, 
                     post_id : post_id
                 }
             });
-        //点赞评论的ifread全部置0
-        const allComments = await commentService.getCommentsofPost(post_id);
-        const allCommentLikes = await this.getCommentLikesFromComments(allComments);
+              
+        // -点赞评论的ifread全部置0
+        const allComments = await commentService.getCommentsofPost(post_id); 
+            //console.log(allComments);
+        const allCommentLikes = await this.getCommentLikesFromComments(allComments);  
+            //console.log(allCommentLikes);
         for (const commentLikeArray of allCommentLikes) {
             for (const like of commentLikeArray) {
                 like.ifread = 0;
+                like.save();
             }
         }
-        //点赞回复的ifread全部置0
-        await db.likepost.update(
-            {ifread : 0}, 
-            {
-                where:{
-                    post_id : post_id
-                }
-            });
-        //评论的ifread全部置0
-        //回复的ifread全部置0
+        // -评论的ifread全部置0
+        for(const comment of allComments){
+            comment.ifread = 0;
+            comment.save();
+        }
+
+        // -点赞回复的ifread全部置0
+        const allReplies = await replyService.getAllRepliesFromComments(allComments);
+            //console.log(allReplies);
+        const allReplyLikes = await replyService.getReplyLikesFromReplies(allReplies);
+            //console.log(allReplyLikes);
+        for(const replies of allReplyLikes){
+            for(const like of replies){
+                like.ifread = 0;
+                like.save();
+            }
+        }
+
+        // -回复的ifread全部置0
+        for(const repliesOfAComment of allReplies){
+            for(const reply of repliesOfAComment){
+                reply.ifread = 0;
+                reply.save();
+            }
+        }
     }
     
 }
