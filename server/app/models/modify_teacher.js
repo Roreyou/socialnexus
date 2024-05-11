@@ -6,6 +6,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
+    team_id: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    },
     pwd: {
       type: DataTypes.STRING(45),
       allowNull: true

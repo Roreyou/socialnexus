@@ -630,54 +630,80 @@ class teamService {
     };
   }
 
-  static async modifyInfo(team_id, teamData, instrData, leaderData, membersData){
+  // 更新队伍信息 待用
+  static async updateTeamInfo(team_id, instrData, leaderData, membersData) {
     try {
-      // 更新队伍名称
-      await teamService.updateTeamName(team_id, teamData.team_name);
+        // 更新指导员信息
+        await teamService.updateInstructor(instrData);
 
-      // 更新指导员信息
-      await teamService.updateInstructor(instrData);
+        // 更新队长信息
+        await teamService.updateLeader(leaderData);
 
-      // 更新队长信息
-      await teamService.updateLeader(leaderData);
+        // 删除队伍成员中非队长的成员
+        await teamService.deleteNonLeaderTeamMembers(team_id, leaderData.id);
 
-      // 删除队伍成员中非队长的成员
-      await teamService.deleteNonLeaderTeamMembers(team_id, leaderData.id);
+        // 添加新的队伍成员
+        await addTeamMembers(team_id, membersData);
 
-      // 添加新的队伍成员
-      await teamService.addTeamMembers(team_id, membersData);
+        //将修改审核字段设置为xxx
+        // todo
 
-      // 将修改审核字段设置为1
-      await db.team.update({ modification_status: 1 }, { where: { id: team_id } });
-
-      return 'Team information updated successfully' ;
     } catch (error) {
         throw new Error('Failed to update team information: ' + error.message);
     }
   }
 
-  static async updateTeamName(team_id, team_name) {
-    await db.team.update({ team_name: team_name }, { where: { id: team_id } });
-  }
 
-  static async  updateInstructor(instrData) {
+  static async updateInstructor(instrData) {
       await db.teacher.update(instrData, { where: { id: instrData.id } });
   }
 
   static async updateLeader(leaderData) {
-      await db.teammember.update(leaderData, { where: { id: leaderData.id } });
+      await db.leader.update(leaderData, { where: { id: leaderData.id } });
+  }
+  
+  // 删除队伍成员中非队长的成员
+  static async deleteNonLeaderTeamMembers(team_id, leaderId) {
+    await db.teammember.destroy({ where: { team_id: team_id, id: { [Op.ne]: leaderId } } });
   }
 
-  static async  deleteNonLeaderTeamMembers(team_id, leaderId) {
-      await db.teammember.destroy({ where: { team_id: team_id, id: { [Op.ne]: leaderId } } });
+  // 修改队伍信息，送去团委审核
+  static async modifyInfo(team_id, instrData, leaderData, membersData){
+    try {
+      // 存入指导员信息
+      await teamService.insertInstructor(instrData);
+
+      // 存入队长信息
+      await teamService.insertLeader(leaderData);
+
+      // 存入队伍成员
+      await teamService.addTeamMembers(team_id, membersData);
+
+      // 将修改审核字段设置为1
+      await db.team.update({ modification_status: 1 }, { where: { id: team_id } });
+
+      return 'Team information will be verified again!' ;
+    } catch (error) {
+        throw new Error('Failed to update team information: ' + error.message);
+    }
   }
 
-  static async  addTeamMembers(team_id, membersData) {
+  static async insertInstructor(instrData) {
+        await db.teacher.create(instrData);
+  }
+
+  static async insertLeader(leaderData) {
+          await db.teammember.create(leaderData);
+  }
+
+    static async  addTeamMembers(team_id, membersData) {
       await Promise.all(membersData.map(memberData => db.teammember.create({
           team_id: team_id,
           ...memberData
       })));
   }
+
+
 }
 
 module.exports = teamService;

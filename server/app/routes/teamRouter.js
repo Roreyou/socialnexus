@@ -46,7 +46,7 @@ router.post('/pyq/reply', postController.Reply);
 router.post('/pyq/delcomment', postController.delcomment);
 router.post('/pyq/createpost/uploadpics', upload.single('image'), postController.savePostImg);
 router.post('/pyq/delnotice', postController.delNotice);
-router.post('/pyq/modifyinfo', TeamController.modifyInfo);
+router.post('/modifyinfo', TeamController.modifyInfo);
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 
