@@ -4,9 +4,9 @@
 		<view class="top_fix">
 		<!-- 标题栏和搜索框 -->
 		<view>
-			<view class="title">
+			<!-- <view class="title">
 				活动广场
-			</view>
+			</view> -->
 			<view class="cu-bar search bg-white search">
 				<view class="search-form round">
 					<text class="cuIcon-search"></text>
@@ -25,13 +25,13 @@
 		<!-- <view>
 			<invite></invite>
 		</view> -->
-		<view>
+		<!-- <view>
 			<picker></picker>
-		</view>
-		</view>
-		<!-- <view class="accontent">
-			<scontent :acList="acList" :searchlist="searchlist" :searchcontent="newontent"></scontent>
 		</view> -->
+		</view>
+		<view class="accontent">
+			<scontent :acList="acList" :searchlist="searchlist" :searchcontent="newontent"></scontent>
+		</view>
 	</view>
 </template>
 	 
@@ -197,7 +197,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 	 
 	<style>
 	.top_fix{
-	  background-color: white;
+	  background-color: transparent;
 	  position: fixed;
 	  top: 0; /* 或者设置为底部时使用 bottom: 0; */
 	  left: 0;
@@ -205,7 +205,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 	  z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
 	}
 	.accontent{
-		margin-top: 210rpx;	
+		margin-top: 110rpx;	
 	}
 
 	.title{

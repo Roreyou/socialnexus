@@ -158,4 +158,9 @@
 	background-color: #ffffff;
 	margin-right: 10px;
 }
+.desc{
+	margin-bottom: 8px;
+    margin-left: 25rpx;
+}
+
 </style>

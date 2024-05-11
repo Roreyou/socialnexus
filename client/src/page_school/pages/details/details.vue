@@ -1,6 +1,9 @@
 <!--高校 - 活动详情 -->
 <template>
 	<view class="container">
+		<view class="img">
+			<image :src="detail.picture" mode="aspectFill"></image>
+		</view>
 		<!-- 第一块 -->
 		<view>
 			<view class="part first">
@@ -34,7 +37,7 @@
 							活动类别
 						</view>
 						<view class="value">
-							{{ detail.category_name }}
+							{{ detail.category }}
 						</view>
 					</view>
 
@@ -362,5 +365,12 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
 	.phone{
 		color: red
+	}
+
+	/* 大图 */
+	.img{
+		margin-right: 20rpx;
+		margin-left: 20rpx;
+		border-radius: 30rpx;
 	}
 </style>

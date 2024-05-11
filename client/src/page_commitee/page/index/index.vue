@@ -2,7 +2,7 @@
 <template>
   <view class="u-p-l-10 u-p-r-10">    
     <!-- 最顶部信息 -->
-		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
+		<view class="cu-list menu-avatar padding-lg background">
 			<view class="user-section">
 				<image :src="avatar" class="cu-avatar xl round"></image>
 				<view class="text-white text-xl padding">中大校团委</view>
@@ -28,8 +28,8 @@
 			<u-gap height="10"></u-gap>
 
       <!-- 滚动通知栏 -->
-			<view @click="notice">
-				<u-notice-bar mode="vertical" :list="noticeList" type="primary" more-icon
+			<view @click="notice" class="margin-fixed">
+				<u-notice-bar mode="vertical" :list="noticeList" type="primary" :more-icon="false"
 				bg-color="#fff" :duration="5000" border-radius="15"></u-notice-bar>
 			</view>
 			<u-gap height="5"></u-gap>
@@ -39,7 +39,7 @@
 		<!-- <view>
 			<u-swiper :list="swiperList" height="400"></u-swiper>
 		</view>	  -->
-    <view class="uni-margin-wrap">
+    <view class="uni-margin-wrap margin-fixed" >
 			<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
 				:duration="duration">
         <swiper-item v-for="item in swiperList" :key="item.id">
@@ -50,8 +50,21 @@
 
     <u-gap height="10"></u-gap>
 		
-	<!-- 数据墙-->
-	<view style="background-color: rgb(234, 231, 231);">
+	<!-- 数据墙-数字部分-->
+	<view class="dataWallBG margin-fixed">
+		<text class="text-xl"> 99 </text>
+		<text class="text-xl wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 234个 </text>
+	</view>
+	<!-- 数据墙-饼图部分-->
+	<view class="dataWallBG margin-fixed">
+
+	</view>
+	<view class="dataWallBG margin-fixed">
+
+	</view>
+
+	<view style="background-color: rgb(234, 231, 231);" class="margin-fixed" v-show="false">
+		
 		<!-- 标题 -->
 		<view class="cu-bar" style="background-color: transparent">
 			<view class="action">
@@ -126,7 +139,10 @@
 				swiperList: [
         		  { id: 1, imageSrc: 'https://img.zcool.cn/community/012a2f5f9cce0f11013fdcc7329e32.jpg@1280w_1l_2o_100sh.jpg' },
         		  { id: 2, imageSrc: 'https://p4.img.cctvpic.com/photoworkspace/contentimg/2021/11/08/2021110810083211648.jpg' },
-        		  { id: 3, imageSrc: 'https://picnew7.photophoto.cn/20130724/hongsegemingtupian-18805580_1.jpg' }          
+        		  { id: 3, imageSrc: 'https://picnew7.photophoto.cn/20130724/hongsegemingtupian-18805580_1.jpg' }, 
+				  { id: 4, imageSrc: 'http://scu5azomr.hn-bkt.clouddn.com/static/2.png' },
+				  { id: 5, imageSrc: 'http://scu5azomr.hn-bkt.clouddn.com/static/3.png' },
+				  { id: 6, imageSrc: 'http://scu5azomr.hn-bkt.clouddn.com/static/4.png' }
         		],
 				// 通知
 				noticeList: [
@@ -473,9 +489,11 @@
 	}
 	
 	.rowClass{
-		border-radius: 8px;
-		background-color: rgb(255, 255, 255);
-		margin-top: 10rpx;
+		border-radius: 30rpx;
+    	background-color: rgb(255, 255, 255);
+    	margin-top: 20rpx;
+    	margin-left: 20rpx;
+    	margin-right: 20rpx;
 	}
 	
 	.hoverClass{
@@ -597,17 +615,18 @@
 .action{
 	background-color: transparent;
 }
-.text-xl text-bold{
+.text-xl{
 	font-size: 52rpx;
 	font-weight: 600;
-	font-family: 'pangmen';
-	font-style: italic;
-	margin-top: 30px;
+	margin-top: 40rpx; 
+	color: #ffffff; 
+	font-family: 'Arial'; 
+	font-style: normal; 
+	background-color: transparent;
 }
 // 轮播图样式
 .uni-margin-wrap {
 		width: 690rpx;
-		width: 100%;
 	}
 .swiper {
 		height: 400rpx;
@@ -639,5 +658,25 @@
 	margin-right: 5px;
     margin-right: 5px;
 	background-size: 300px 110px;
+}
+.background{
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+    background-size: 730rpx 350rpx;
+    height: 350rpx;
+    border-radius: 30rpx;
+    margin-top: 20rpx;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
+}
+.margin-fixed{
+	border-radius: 30rpx;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	margin-top:20rpx;
+	// margin-bottom: 20rpx;
+}
+.dataWallBG{
+	height: 350rpx;
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
 }
 </style>

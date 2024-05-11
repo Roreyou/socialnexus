@@ -12,9 +12,9 @@
 :disabled="true" style="width: 565rpx;" @click="search"></u-search> -->
 			</view>
 		</u-navbar>
-		<view>
+		<!-- <view>
 			<picker></picker>
-		</view>
+		</view> -->
 		<!-- 轮播图 -->
 		<!-- <view>
 			<u-swiper :list="swiperList" height="400"></u-swiper>
