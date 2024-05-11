@@ -339,7 +339,7 @@
 				"pagePath": "pages/school/search/search",
 				"iconPath": "static/search.png",
 				"selectedIconPath": "static/search_select.png",
-				"text": "找活动"
+				"text": "活动广场"
 			},
 			{
 				"pagePath": "pages/school/user/user",

@@ -35,7 +35,8 @@
 										</view>
 									</view>
 									<view class="pic">
-										<img class="avatar" src="https://pic35.photophoto.cn/20150511/0034034892281415_b.jpg" alt="Avatar">
+										<img class="avatar" :src="item.picture" alt="Avatar">
+										<!-- <img class="avatar" src="http://scu5azomr.hn-bkt.clouddn.com/static/4.png" alt="Avatar"> -->
 									</view>
 								</view>
 							</view>
@@ -149,6 +150,7 @@
 	/* 标题 */
 
 	.title-font{
+		margin-bottom: -10rpx;
 		font-size: 35rpx;
 	} 
 
