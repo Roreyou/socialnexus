@@ -411,7 +411,18 @@ class teamController {
   }
 
   static async modifyInfo(req, res){
-    
+    try {
+      const { team_id, teamData, instrData, leaderData, membersData } = req.body;
+
+      // 调用服务层方法更新队伍信息
+      const result = await teamService.modifyInfo(team_id, teamData, instrData, leaderData, membersData);
+
+      // 返回成功信息
+      return res.json(Result.success(result));
+    } catch (error) {
+        // 返回错误信息
+        return res.json(Result.fail(error));
+    }
   }
 
 }

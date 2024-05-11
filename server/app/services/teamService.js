@@ -629,6 +629,52 @@ class teamService {
       acti_status:activity.activity_status
     };
   }
+
+  static async modifyInfo(team_id, teamData, instrData, leaderData, membersData){
+    try {
+      // 更新队伍名称
+      await teamService.updateTeamName(team_id, teamData.team_name);
+
+      // 更新指导员信息
+      await teamService.updateInstructor(instrData);
+
+      // 更新队长信息
+      await updateLeader(leaderData);
+
+      // 删除队伍成员中非队长的成员
+      await deleteNonLeaderTeamMembers(team_id, leaderData.id);
+
+      // 添加新的队伍成员
+      await addTeamMembers(team_id, membersData);
+
+      return { success: true, message: 'Team information updated successfully' };
+    } catch (error) {
+        throw new Error('Failed to update team information: ' + error.message);
+    }
+  }
+
+  static async updateTeamName(team_id, team_name) {
+    await db.team.update({ team_name: team_name }, { where: { id: team_id } });
+  }
+
+  static async  updateInstructor(instrData) {
+      await db.teacher.update(instrData, { where: { id: instrData.id } });
+  }
+
+  static async updateLeader(leaderData) {
+      await db.leader.update(leaderData, { where: { id: leaderData.id } });
+  }
+
+  static async  deleteNonLeaderTeamMembers(team_id, leaderId) {
+      await db.teammember.destroy({ where: { team_id: team_id, id: { [Op.ne]: leaderId } } });
+  }
+
+  static async  addTeamMembers(team_id, membersData) {
+      await Promise.all(membersData.map(memberData => db.teammember.create({
+          team_id: team_id,
+          ...memberData
+      })));
+  }
 }
 
 module.exports = teamService;
