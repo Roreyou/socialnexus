@@ -10,6 +10,8 @@ var _key_words = require("./key_words");
 var _likecomment = require("./likecomment");
 var _likepost = require("./likepost");
 var _likereply = require("./likereply");
+var _modify_teacher = require("./modify_teacher");
+var _modify_teammember = require("./modify_teammember");
 var _notification = require("./notification");
 var _post = require("./post");
 var _reply = require("./reply");
@@ -31,6 +33,8 @@ function initModels(sequelize) {
   var likecomment = _likecomment(sequelize, DataTypes);
   var likepost = _likepost(sequelize, DataTypes);
   var likereply = _likereply(sequelize, DataTypes);
+  var modify_teacher = _modify_teacher(sequelize, DataTypes);
+  var modify_teammember = _modify_teammember(sequelize, DataTypes);
   var notification = _notification(sequelize, DataTypes);
   var post = _post(sequelize, DataTypes);
   var reply = _reply(sequelize, DataTypes);
@@ -53,6 +57,8 @@ function initModels(sequelize) {
     likecomment,
     likepost,
     likereply,
+    modify_teacher,
+    modify_teammember,
     notification,
     post,
     reply,

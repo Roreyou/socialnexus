@@ -639,15 +639,18 @@ class teamService {
       await teamService.updateInstructor(instrData);
 
       // 更新队长信息
-      await updateLeader(leaderData);
+      await teamService.updateLeader(leaderData);
 
       // 删除队伍成员中非队长的成员
-      await deleteNonLeaderTeamMembers(team_id, leaderData.id);
+      await teamService.deleteNonLeaderTeamMembers(team_id, leaderData.id);
 
       // 添加新的队伍成员
-      await addTeamMembers(team_id, membersData);
+      await teamService.addTeamMembers(team_id, membersData);
 
-      return { success: true, message: 'Team information updated successfully' };
+      // 将修改审核字段设置为1
+      await db.team.update({ modification_status: 1 }, { where: { id: team_id } });
+
+      return 'Team information updated successfully' ;
     } catch (error) {
         throw new Error('Failed to update team information: ' + error.message);
     }
@@ -662,7 +665,7 @@ class teamService {
   }
 
   static async updateLeader(leaderData) {
-      await db.leader.update(leaderData, { where: { id: leaderData.id } });
+      await db.teammember.update(leaderData, { where: { id: leaderData.id } });
   }
 
   static async  deleteNonLeaderTeamMembers(team_id, leaderId) {
