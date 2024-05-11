@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `activity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `activity` (
-  `id` varchar(45) NOT NULL,
+  `id` int NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `setup_date` date DEFAULT NULL,
   `application_deadline` varchar(45) DEFAULT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE `activity` (
   `province` varchar(45) DEFAULT NULL,
   `city` varchar(45) DEFAULT NULL,
   `address` varchar(45) DEFAULT NULL,
-  `category_id` varchar(20) DEFAULT NULL,
+  `category_id` int DEFAULT NULL,
   `community_id` varchar(20) DEFAULT NULL,
   `remark` text,
   `keywords_id` varchar(90) DEFAULT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `activity` (
 
 LOCK TABLES `activity` WRITE;
 /*!40000 ALTER TABLE `activity` DISABLE KEYS */;
-INSERT INTO `activity` VALUES ('1','社区趣味运动会','2002-09-21',NULL,'2022-06-15 09:30:45','2022-06-18 09:30:45',NULL,'广东省','佛山市','1','1','1','1','1,2,3',1,1),('2','关爱老人活动','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-18 09:30:45',NULL,'广东省','珠海市','1','2','1','1','1,3',1,1),('3','社区大扫除活动','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-16 09:30:45',NULL,'广东省','珠海市','1','1','1','1','1',1,3),('4','运动会','2002-09-21',NULL,'2023-06-15 09:30:45','2023-06-16 09:30:45',NULL,'浙江省','嘉兴市','1','1','1','1','2',1,3);
+INSERT INTO `activity` VALUES (1,'社区趣味运动会','2002-09-21','2002-09-25','2022-06-15 09:30:45','2022-06-18 09:30:45',20,'广东省','佛山市','1',1,'1','1','1,2,3',1,3),(2,'关爱老人活动','2002-09-21','2002-09-29','2023-06-15 09:30:45','2023-06-18 09:30:45',20,'广东省','珠海市','1',2,'1','1','1,3',1,3),(3,'社区大扫除活动','2002-09-21','2002-09-28','2023-06-15 09:30:45','2023-06-16 09:30:45',20,'广东省','珠海市','1',1,'1','1','1',1,3),(4,'运动会','2002-09-21','2002-09-27','2023-06-15 09:30:45','2023-06-16 09:30:45',20,'浙江省','嘉兴市','1',1,'1','1','2',1,3);
 /*!40000 ALTER TABLE `activity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,8 +91,9 @@ CREATE TABLE `comment` (
   `content` text,
   `time` datetime DEFAULT NULL,
   `like` int DEFAULT NULL,
+  `ifread` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +102,7 @@ CREATE TABLE `comment` (
 
 LOCK TABLES `comment` WRITE;
 /*!40000 ALTER TABLE `comment` DISABLE KEYS */;
-INSERT INTO `comment` VALUES (1,'97','70','好丰富的活动！','2024-04-20 08:30:00',5),(2,'77','70','今天我们的体验很不错！','2024-04-18 08:30:00',4),(4,'55','1','测试评价功能！','2024-04-14 13:56:40',5),(5,'55','1','测试评价功能2！','2024-04-14 14:04:16',2),(15,'55','1','测试评价功能3！','2024-04-14 14:18:20',0),(16,'55','1','测试评价功能5！','2024-04-14 14:37:08',0),(17,'55','1','测试评价功能5！','2024-04-14 14:39:28',0),(18,'55','1','测试评价功能5！','2024-04-14 14:40:07',0),(19,'55','1','测试评价功能6！','2024-04-14 14:41:16',0);
+INSERT INTO `comment` VALUES (1,'97','70','好丰富的活动！','2024-04-20 08:30:00',2,NULL),(2,'77','70','今天我们的体验很不错！','2024-04-18 08:30:00',4,NULL),(4,'55','1','测试评价功能！','2024-04-14 13:56:40',5,NULL),(5,'55','1','测试评价功能2！','2024-04-14 14:04:16',2,NULL),(15,'55','1','测试评价功能3！','2024-04-14 14:18:20',0,NULL),(32,'77','1','测试评论+统计！','2024-05-10 02:45:58',0,1);
 /*!40000 ALTER TABLE `comment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,6 +235,107 @@ INSERT INTO `key_words` VALUES (1,'教育'),(2,'助老'),(3,'劳动');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `likecomment`
+--
+
+DROP TABLE IF EXISTS `likecomment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `likecomment` (
+  `comment_id` varchar(20) NOT NULL,
+  `team_id` varchar(20) NOT NULL,
+  `ifread` int DEFAULT NULL,
+  `liketime` datetime DEFAULT NULL,
+  PRIMARY KEY (`comment_id`,`team_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `likecomment`
+--
+
+LOCK TABLES `likecomment` WRITE;
+/*!40000 ALTER TABLE `likecomment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `likecomment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `likepost`
+--
+
+DROP TABLE IF EXISTS `likepost`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `likepost` (
+  `post_id` varchar(20) NOT NULL,
+  `team_id` varchar(20) NOT NULL,
+  `ifread` int DEFAULT NULL,
+  `liketime` datetime DEFAULT NULL,
+  PRIMARY KEY (`post_id`,`team_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `likepost`
+--
+
+LOCK TABLES `likepost` WRITE;
+/*!40000 ALTER TABLE `likepost` DISABLE KEYS */;
+INSERT INTO `likepost` VALUES ('70','77',1,'2024-05-10 03:11:24');
+/*!40000 ALTER TABLE `likepost` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `likereply`
+--
+
+DROP TABLE IF EXISTS `likereply`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `likereply` (
+  `reply_id` varchar(20) NOT NULL,
+  `team_id` varchar(20) NOT NULL,
+  `ifread` int DEFAULT NULL,
+  `liketime` datetime DEFAULT NULL,
+  PRIMARY KEY (`reply_id`,`team_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `likereply`
+--
+
+LOCK TABLES `likereply` WRITE;
+/*!40000 ALTER TABLE `likereply` DISABLE KEYS */;
+/*!40000 ALTER TABLE `likereply` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification`
+--
+
+DROP TABLE IF EXISTS `notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notification` (
+  `team_id` varchar(20) NOT NULL,
+  `post_id` varchar(20) NOT NULL,
+  `num` int DEFAULT NULL,
+  PRIMARY KEY (`team_id`,`post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification`
+--
+
+LOCK TABLES `notification` WRITE;
+/*!40000 ALTER TABLE `notification` DISABLE KEYS */;
+INSERT INTO `notification` VALUES ('77','1',1),('77','70',2);
+/*!40000 ALTER TABLE `notification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `post`
 --
 
@@ -255,7 +357,7 @@ CREATE TABLE `post` (
   `post_time` datetime DEFAULT NULL,
   `like` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -264,7 +366,7 @@ CREATE TABLE `post` (
 
 LOCK TABLES `post` WRITE;
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
-INSERT INTO `post` VALUES (1,'77','1','non incididunt Lorem veniam',35,'http://dummyimage.com/400x400,http://dummyimage.com/200x200','1992-04-26','1977-09-06','北京市','北京市','陕西省九龙琼山区','2009-11-14 10:31:14',5),(70,'77','1','non incididunt Lorem veniam',35,'http://dummyimage.com/400x400,http://dummyimage.com/200x200','1992-04-26','1977-09-06','北京市','北京市','陕西省九龙琼山区','2009-11-14 10:31:14',4),(71,'55','1','reprehenderit mollit exercitation esse est',72,'http://dummyimage.com/400x400','2012-03-09','1971-12-28','福建省','广元市','西藏自治区恩施土家族苗族自治州韶山市','1979-10-03 06:38:23',3),(74,'77','是么须五近人','ut anim',34,'http://dummyimage.com/400x400','1977-05-03','1999-09-30','河北省','玉树藏族自治州','河南省重庆市克东县','1994-02-02 13:00:31',1);
+INSERT INTO `post` VALUES (1,'77','1','non incididunt Lorem veniam',35,'http://dummyimage.com/400x400,http://dummyimage.com/200x200','1992-04-26','1977-09-06','北京市','北京市','陕西省九龙琼山区','2009-11-14 10:31:14',5),(70,'77','1','non incididunt Lorem veniam',35,'http://dummyimage.com/400x400,http://dummyimage.com/200x200','1992-04-26','1977-09-06','北京市','北京市','陕西省九龙琼山区','2009-11-14 10:31:14',7),(71,'97','1','reprehenderit mollit exercitation esse est',72,'http://dummyimage.com/400x400','2012-03-09','1971-12-28','福建省','广元市','西藏自治区恩施土家族苗族自治州韶山市','1979-10-03 06:38:23',3),(74,'77','是么须五近人','ut anim',34,'http://dummyimage.com/400x400','1977-05-03','1999-09-30','河北省','玉树藏族自治州','河南省重庆市克东县','1994-02-02 13:00:31',1),(76,'77',NULL,'minim cupidatat',NULL,'http://dummyimage.com/400x400','1998-11-28','2009-09-19','江苏省','海口市','吉林省巴中市固始县','2024-05-10 03:25:21',0);
 /*!40000 ALTER TABLE `post` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,14 +378,15 @@ DROP TABLE IF EXISTS `reply`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reply` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `comment_id` varchar(45) DEFAULT NULL,
   `reply_id` varchar(45) DEFAULT NULL,
   `content` text,
   `time` datetime DEFAULT NULL,
   `like` int DEFAULT NULL,
+  `ifread` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,7 +395,7 @@ CREATE TABLE `reply` (
 
 LOCK TABLES `reply` WRITE;
 /*!40000 ALTER TABLE `reply` DISABLE KEYS */;
-INSERT INTO `reply` VALUES (1,'2','97','真的你们表现很不错！','2024-04-20 08:30:00',1),(2,'4','97','下次我们队伍也想去看看！','2024-04-20 08:30:00',0),(3,'4','55','回复功能测试1！','2024-04-20 08:30:00',5);
+INSERT INTO `reply` VALUES (1,'2','97','真的你们表现很不错！','2024-04-20 08:30:00',2,NULL),(2,'4','97','下次我们队伍也想去看看！','2024-04-20 08:30:00',0,NULL),(3,'4','55','回复功能测试1！','2024-04-20 08:30:00',5,NULL),(4,'3','77','你的评论很不错！','2024-05-09 10:33:24',0,NULL),(5,'3','77','你的评论很不错！','2024-05-09 12:52:55',0,NULL),(6,'3','77','测试新增！你的评论很不错！','2024-05-10 03:44:03',0,1),(7,'2','77','测试新增！你的评论很不错！','2024-05-10 03:44:23',0,1);
 /*!40000 ALTER TABLE `reply` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,7 +459,7 @@ CREATE TABLE `schoolteam` (
 
 LOCK TABLES `schoolteam` WRITE;
 /*!40000 ALTER TABLE `schoolteam` DISABLE KEYS */;
-INSERT INTO `schoolteam` VALUES ('77','$2b$10$6qe1MYwjeGq1H8VpDTha3.wzt72ty6sNK3Y9LWZ6ehPeqrYOg01O.','成深大持体角达','52','1993-01-29','in in laboris adipisicing ut','34','53',NULL,NULL,NULL,NULL),('97','$2b$10$wv3X3cHvgLShaZGpLRHZmeuJ8eL/SDH8n55pRyaI8jba0AS7nVlki','种战题般','37','2023-02-16','sed tempor ea occaecat','19','99',NULL,NULL,0,NULL);
+INSERT INTO `schoolteam` VALUES ('1','$2b$10$wv3X3cHvgLShaZGpLRHZmeuJ8eL/SDH8n55pRyaI8jba0AS7nVlki','测试队名','52','2023-02-16','sed tempor ea occaecat','19','99',NULL,NULL,NULL,NULL),('77','$2b$10$6qe1MYwjeGq1H8VpDTha3.wzt72ty6sNK3Y9LWZ6ehPeqrYOg01O.','成深大持体角达','52','1993-01-29','in in laboris adipisicing ut','34','53',NULL,NULL,NULL,NULL),('97','$2b$10$wv3X3cHvgLShaZGpLRHZmeuJ8eL/SDH8n55pRyaI8jba0AS7nVlki','种战题般','37','2023-02-16','sed tempor ea occaecat','19','99',NULL,NULL,0,NULL);
 /*!40000 ALTER TABLE `schoolteam` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -411,7 +514,7 @@ CREATE TABLE `teamactivity` (
 
 LOCK TABLES `teamactivity` WRITE;
 /*!40000 ALTER TABLE `teamactivity` DISABLE KEYS */;
-INSERT INTO `teamactivity` VALUES ('2','1','excellent','good',NULL,2),('3','1','not bad','good',NULL,2);
+INSERT INTO `teamactivity` VALUES ('2','1','excellent','good',NULL,2),('3','1','not bad','good',NULL,2),('4','1','not bad','not bad',NULL,2);
 /*!40000 ALTER TABLE `teamactivity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -454,4 +557,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-06 14:17:16
+-- Dump completed on 2024-05-10 21:32:57

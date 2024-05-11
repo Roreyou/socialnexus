@@ -4,7 +4,7 @@ const db = require('../models/index');
 const { Op } = require('sequelize');
 
 class replyService{
-    static async getReplyForComment(commentId) {
+    static async getReplyOfComment(commentId) {
         try {
             const replies = await db.reply.findAll({ where: { comment_id: commentId } });
             return replies;

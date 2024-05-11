@@ -200,6 +200,17 @@ class postController{
             return res.json(Result.fail(error.message));
         }
     }
+
+    static async delNotice(req, res){
+        try {
+            const { team_id, post_id } = req.body;
+            const noticeNum = await postService.delNotice(team_id, post_id);
+            return res.json(Result.success("delete successfully!"));
+        } catch (error) {
+            console.error('Error deleting notice:', error);
+            return res.json(Result.fail(error.message));
+        }
+    }
 }
 
 module.exports = postController;

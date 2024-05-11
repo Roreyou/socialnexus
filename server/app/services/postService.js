@@ -8,6 +8,8 @@ const otherService = require('./otherService');
 const fs = require('fs/promises');
 const path = require('path');
 const replyService = require('./replyService');
+const notification = require('../models/notification');
+const commentService = require('./commentService');
 
 class postService{
     static async createPost(postData){
@@ -439,11 +441,33 @@ class postService{
             const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
             await this.updateNotification(post_id, ownerTeam_id, true);
             // 获取该评论的新的回复列表
-            const newReply = await replyService.getReplyForComment(comment_id);
+            const newReply = await replyService.getReplyOfComment(comment_id);
             return newReply;
         } catch (error) {
             throw error;
         }
+    }
+
+    static async getCommentLikesFromAcomment(commentId){
+        const relatedLikeComments = await db.likecomment.findAll({
+            where: {
+                comment_id: commentId
+            }
+        });
+        return relatedLikeComments;
+    }
+
+    static async getCommentLikesFromComments(comments){
+        const commentLikes = [];
+        for (const comment of comments) {
+            // 获取每个评论的点赞信息
+            const relatedLikeComments = await this.getCommentLikesFromAcomment(comment.id);
+
+            // 将每个评论的点赞信息加入到结果数组中
+            commentLikes.push(relatedLikeComments);
+        }
+
+        return commentLikes; // 结构：[[{},{},...,{}],[{},{},...,{}]...[{},{},...,{}]]
     }
 
     static async deleteCommentNotification(relatedLikeComments){
@@ -463,11 +487,7 @@ class postService{
 
     static async deletelikeComment(commentId){
         // 删除与该评论相关的所有点赞信息，并检查每个点赞信息的 ifread 字段
-        const relatedLikeComments = await db.likecomment.findAll({
-            where: {
-                comment_id: commentId
-            }
-        });
+        const relatedLikeComments = await this.getCommentLikesFromAcomment(commentId);
         await this.deleteCommentNotification(relatedLikeComments);     
     }
 
@@ -578,12 +598,55 @@ class postService{
     static async getNoticeNum(team_id) {
         try {
             // 在这里查询数据库，计算通知的数量
-            // 假设你的通知存储在名为 'notifications' 的表中，可以使用 Sequelize 查询
-            const noticeNum = await Notification.count({ where: { team_id } });
-            return noticeNum;
+            const notifications = await db.notification.findAll({ where: { team_id } });
+            var noticeNum = 0;
+            for(const notification of notifications){
+                var tmp = notification.num;
+                noticeNum += tmp;
+            }
+            return {notice_num:noticeNum};
         } catch (error) {
             throw error;
         }
+    }
+
+    static async delNotice(team_id, post_id){
+        //更新通知
+        await db.notification.update(
+        {num : 0}, 
+        {
+            where:{
+                team_id : team_id, 
+                post_id : post_id
+            }
+        });
+        //点赞帖子的ifread全部置0
+        await db.likepost.update(
+            {ifread : 0}, 
+            {
+                where:{
+                    team_id : team_id, 
+                    post_id : post_id
+                }
+            });
+        //点赞评论的ifread全部置0
+        const allComments = await commentService.getCommentsofPost(post_id);
+        const allCommentLikes = await this.getCommentLikesFromComments(allComments);
+        for (const commentLikeArray of allCommentLikes) {
+            for (const like of commentLikeArray) {
+                like.ifread = 0;
+            }
+        }
+        //点赞回复的ifread全部置0
+        await db.likepost.update(
+            {ifread : 0}, 
+            {
+                where:{
+                    post_id : post_id
+                }
+            });
+        //评论的ifread全部置0
+        //回复的ifread全部置0
     }
     
 }
