@@ -132,10 +132,10 @@ class ActivityController {
   // 模糊查询活动信息
   static async searchActivities(req, res) {
     try {
-      const { text } = req.query;
+      const { text, page } = req.query;
   
       // 调用服务层方法进行活动模糊查询
-      const activities = await activityService.queryActivity2(text);
+      const activities = await activityService.queryActivity2(text, page);
   
   
       // 返回成功响应

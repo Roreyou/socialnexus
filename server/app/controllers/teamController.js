@@ -4,6 +4,21 @@ const teamService = require('../services/teamService');
 const activityService = require('../services/activityService');
 
 class teamController {
+  static async modifyPwd(req, res){
+    try {
+      const { old_pwd, new_pwd } = req.body;
+      const teamId = req.user.teamId; // 假设从请求中获取团队 ID，这里假设使用 req.user.teamId 获取
+
+      // 调用服务层方法修改团队密码
+      const result = await teamService.changePassword(teamId, old_pwd, new_pwd);
+
+      // 返回结果
+      return res.json(Result.success(result));
+    } catch (error) {
+      return res.json(Result.fail(error));
+    }
+  }
+
   static async getAllTeams(req, res) {
     try {
       const teams = await teamService.getAllTeams();
@@ -12,7 +27,6 @@ class teamController {
       return res.json(Result.fail(error.message));
     }
   }
-
 
   static async getTeamById(req, res) {
     // console.log('req.query:',req.query);
@@ -150,13 +164,10 @@ class teamController {
       const { instructor: savedInstructor, members: savedMembers } = await teamService.saveInstructorAndMembers(instructor, members);
   
       // 返回响应告诉前端该信息正在被团委审核
-      const response = new Result(ResultCode.SUCCESS.code, 'The information is being reviewed by the committee.', {
-        status: 3});
-      return res.json(response);
+      return res.json(Result.success({status: 3}));
     } catch (error) {
       console.error(error);
-      const response = new Result(ResultCode.FAILED.code, 'Internal Server Error', {status:0});
-      return  re.json(response);
+      return res.json(Result.fail(error));
     }
   }
 
@@ -176,7 +187,7 @@ class teamController {
           // 创建新记录
           await teamService.createFavorite(team_id, activity_id);
           // 返回成功响应
-          return res.json({code:ResultCode.SUCCESS.code, msg: 'Activity favorited successfully' });
+          return res.json(Result.success('Activity favorited successfully!'));
           }
         else if (favor==1){
           // 取消收藏功能
@@ -189,7 +200,7 @@ class teamController {
           // 删除收藏记录
           await teamService.deleteFavorite(team_id, activity_id);
           // 返回成功响应
-          return res.json({ code: ResultCode.SUCCESS.code, msg: 'Activity unfavorited successfully' });
+          return res.json(Result.success('Activity favorited Unsuccessfully!'));
         }
     } catch (error) {
         console.error('Error favoriting activity:', error);
@@ -220,18 +231,17 @@ class teamController {
 
   static async getRecommend(req, res){
     try {
-      const { city, province } = req.query;
+      const { city, province, page } = req.query;
   
       // 调用服务方法获取活动推荐列表
-      const recommendations = await teamService.getRecommend(city, province);
+      const recommendations = await teamService.getRecommend(city, province, page);
 
       // 返回成功响应
-      console.log("debug:",ResultCode.SUCCESS.code);
-      res.json({code: ResultCode.SUCCESS.code, msg: 'Success to get recommendations', data: {acti_list: recommendations}});
+      return res.json(Result.success({acti_list: recommendations}));
     } catch (error) {
         // 返回错误响应
         console.error('Error getting recommendations:', error);
-        res.json({code: ResultCode.FAILED.code, msg: 'Failed to get recommendations', data: null});
+        return res.json(Result.fail('Failed to get recommendations！'));        
     }
   }
 
@@ -247,15 +257,15 @@ class teamController {
           // 调用服务方法获取已报名活动列表
           const myActivList = await activityService.getMyActiv(team_id, activity_status, page);
           // 返回成功响应
-          res.json(ResultCode.success(myActivList));
+          return res.json(Result.success(myActivList));
         }
         else{
-          res.json(ResultCode.fail("Can not find the team!"));
+          return res.json(Result.fail("Can not find the team!"));
         }
 
     } catch (error) {
         // 返回错误响应
-        res.json(ResultCode.fail(myActivList));
+        return res.json(Result.fail(error));
     }
 }
 
@@ -310,7 +320,7 @@ class teamController {
     try {
       const { team_id, activity_id } = req.query;
       const results = await teamService.getMyComments(team_id, activity_id);
-      return res.json(Result.success({ com_llist: results }));
+      return res.json(Result.success({ com_list: results }));
     } catch (error) {
       console.error('Failed to get my comments:', error);
       return res.json(Result.fail("Failed to get my comments!"));
@@ -365,6 +375,45 @@ class teamController {
       return res.json(Result.fail("Failed to get team favorites!"));
     }
   }
+
+  // 获取已评价列表
+  static async getMyCommentsFinished(req,res){
+    try {
+      const { team_id } = req.query;
+      const results = await teamService.getMyCommentsFinished(team_id);
+      return res.json(Result.success({ com_list: results }));
+    } catch (error) {
+      console.error('Failed to get my comments:', error);
+      return res.json(Result.fail("Failed to get my comments!"));
+    }
+  }
+
+  static async getMyCommentsUnfinished(req,res){
+    try {
+      const { team_id } = req.query;
+      const results = await teamService.getMyCommentsUnfinished(team_id);
+      return res.json(Result.success({ com_list: results }));
+    } catch (error) {
+      console.error('Failed to get my comments:', error);
+      return res.json(Result.fail("Failed to get my comments!"));
+    }
+  }
+
+  //验证队伍是否报名
+  static async getIsRegister(req, res){
+    try {
+      const { team_id, acti_id } = req.query;
+      const results = await teamService.getIsRegister(team_id, acti_id);
+      return res.json(Result.success( results ));
+    } catch (error) {
+      return res.json(Result.fail(error));
+    }
+  }
+
+  static async modifyInfo(req, res){
+    
+  }
+
 }
 
 module.exports = teamController;

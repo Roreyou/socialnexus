@@ -3,6 +3,8 @@ const db = require('../models/index');
 const { Op } = require('sequelize');
 const ActivityService = require('./activityService');
 const CommunityService = require('./communityService');
+const post = require('../models/post');
+const activity = require('../models/activity');
 
 class teamService {
   static async getAllTeams() {
@@ -303,7 +305,8 @@ class teamService {
     }
   }
 
-  static async getRecommend(city, province){
+
+  static async getRecommend(city, province, page){
     try {
       // 在这里编写获取活动推荐列表的逻辑
       // 假设根据省份和城市查询数据库中的活动信息
@@ -314,45 +317,9 @@ class teamService {
           },
           limit: 10 // 限制返回结果数量为 10 条
       });
-
-      // 对每个活动进行处理
-      const recommendations = await Promise.all(activities.map(async activity => {
-        // 获取活动对应的分类名称
-        const category = await db.activity_type.findOne({
-          where: {
-            id: activity.category_id
-          },
-          attributes:['type_name'] 
-        });
-
-        // 获取活动对应的关键词名称
-        const keywords = await db.keywords.findAll({
-          where: {
-            id: { [Op.in]: activity.keywords_id.split(',') } // 根据逗号分隔的关键词 id 查询
-          },
-          attributes:['key_name']
-        });
-        console.log("debug:",keywords);
-
-        // 获取活动对应的社区名字
-        const community = await db.community.findOne({
-          where: {
-            id: activity.community_id
-          },
-          attributes: ['name']
-        });
-
-        const { category_id, keywords_id, community_id,remark, ...rest } = activity.toJSON();
-        // 构造处理后的活动信息
-        return {
-          ...rest,
-          category: category ? category.type_name : null,
-          keywords: keywords.map(keyword => keyword.key_name).join(','),
-          community: community ? community.name : null
-        };
-      }));
-      
-      return recommendations;
+      const recommendations = await ActivityService.getCategKeyCommuIdsMap(activities);
+      const results = await ActivityService.getPageData(page, recommendations);
+      return results;
     } catch (error) {
         throw error;
     }
@@ -443,7 +410,8 @@ class teamService {
         id: activityIdsArray
       }
     }); 
-    return teamFavorites;
+    const results = await ActivityService.getCategKeyCommuIdsMap(teamFavorites);
+    return results;
   }
 
   static async commentActivity(teamId, activityId, comment){
@@ -564,6 +532,102 @@ class teamService {
         console.error('Error:', error);
         throw error;
     }
+  }
+
+  static async getMyCommentsFinished(teamId){
+    try {
+      // 在数据库中查找符合条件的所有记录
+      const teamActivities = await db.teamactivity.findAll({
+        where: {
+            team_id: teamId,
+            comment_status:2
+        }
+      });
+  
+      // 定义用于存储评价信息的数组
+      const comments = [];
+  
+      // 遍历查询结果，将每条记录的评价信息添加到数组中
+        for (const teamActivity of teamActivities) {
+          // 在activity表中查找对应的活动名称
+          const activity = await db.activity.findOne({
+            where: {
+                id: teamActivity.activity_id
+            }
+          });          
+          comments.push({
+            activity_name: activity ? activity.name : null,
+              team_to_activity: teamActivity.team_to_activity,
+              com_time: teamActivity.team_to_activity_time,
+              acti_time:activity.start_time
+          });
+        }
+        return comments;  
+      
+      } catch (error) {
+          // 处理异常情况
+          console.error('Error:', error);
+          throw error;
+      }
+  }
+
+  static async getMyCommentsUnfinished(teamId){
+    try {
+      // 在数据库中查找符合条件的所有记录
+      const teamActivities = await db.teamactivity.findAll({
+        where: {
+            team_id: teamId,
+            comment_status:1
+        }
+      });
+  
+      // 定义用于存储评价信息的数组
+      const comments = [];
+  
+      // 遍历查询结果，将每条记录的评价信息添加到数组中
+        for (const teamActivity of teamActivities) {
+          // 在activity表中查找对应的活动名称
+          const activity = await db.activity.findOne({
+            where: {
+                id: teamActivity.activity_id
+            }
+          });          
+          comments.push({
+            activity_name: activity ? activity.name : null,
+            acti_content: activity ? activity.remark : null,
+            acti_time:activity.start_time,
+            acti_id: activity.id.toString()
+          });
+        }
+        return comments;  
+      
+      } catch (error) {
+          // 处理异常情况
+          console.error('Error:', error);
+          throw error;
+      }
+  }
+
+  static async getIsRegister(team_id, acti_id){
+    const teamActivity = await db.teamactivity.findOne({
+      where:{
+        activity_id: acti_id,
+        team_id: team_id
+      }
+    });
+    console.log(teamActivity);
+    if(!teamActivity){
+      return {
+        flag: "0",
+        acti_status: 0
+      };
+    }
+    const activity = await ActivityService.getActivityById(teamActivity.activity_id);
+    console.log(activity);
+    return {
+      flag:"1",
+      acti_status:activity.activity_status
+    };
   }
 }
 

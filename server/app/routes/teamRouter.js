@@ -17,6 +17,8 @@ router.get('/activsquare/search', ActivityController.searchActivities);
 router.get('/getmyactiv', TeamController.getMyActiv);
 router.get('/searchmyactiv', TeamController.searchMyActiv);
 router.get('/team2activ', TeamController.getMyComments);
+router.get('/team2activ_finished',TeamController.getMyCommentsFinished)
+router.get('/team2activ_unfinished',TeamController.getMyCommentsUnfinished)
 router.get('/commu2team', TeamController.getCommunityComments);
 router.get('/getteamInfo', TeamController.getTeamInfo);
 router.get('/getteamfavor', TeamController.getTeamFavorites);
@@ -27,6 +29,8 @@ router.get('/pyq/samearea', PostController.getSameAreaPosts);
 router.get('/pyq/latest', PostController.getLatestPosts);
 router.get('/pyq/getnotice', PostController.getnotice);
 router.get('/pyq/noticenum', PostController.getNoticeNum);
+router.get('/modifypwd', TeamController.modifyPwd);
+router.get('/getisregister', TeamController.getIsRegister);
 
 router.put('/favor', TeamController.favoriteActivity);
 
@@ -42,6 +46,7 @@ router.post('/pyq/reply', postController.Reply);
 router.post('/pyq/delcomment', postController.delcomment);
 router.post('/pyq/createpost/uploadpics', upload.single('image'), postController.savePostImg);
 router.post('/pyq/delnotice', postController.delNotice);
+router.post('/pyq/modifyinfo', TeamController.modifyInfo);
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 

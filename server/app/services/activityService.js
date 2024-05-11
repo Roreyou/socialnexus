@@ -89,7 +89,7 @@ class ActivityService {
     return activity;
   }
 
-  static async queryActivity2(text) {
+  static async queryActivity2(text, page) {
     const whereCondition = {
       [Op.and]: [
           {
@@ -107,7 +107,9 @@ class ActivityService {
     if (!activities) {
       return null; // 返回null表示活动不存在
     }
-    return activities;
+    const results = await ActivityService.getCategKeyCommuIdsMap(activities);
+    const pageResults = await ActivityService.getPageData(page, results);
+    return pageResults;
   }
 
   static async filterActivities(location, categoryId, activityTime) {
@@ -134,8 +136,8 @@ class ActivityService {
 
     // 查询符合条件的活动
     const activities = await db.activity.findAll({ where: whereCondition });
-
-    return activities;
+    const results = await ActivityService.getCategKeyCommuIdsMap(activities);
+    return results;
   }
 
   //
@@ -155,7 +157,7 @@ class ActivityService {
   }
 
   //获取ids->名称的映射
-  static async getIdMap(events){
+  static async getCategKeyCommuIdsMap(events){
     // 对每个活动进行处理
     const results = await Promise.all(events.map(async activity => {
       // 获取活动对应的分类名称
@@ -183,13 +185,13 @@ class ActivityService {
         attributes: ['name']
       });
 
-      const { category_id, keywords_id, community_id,...rest } = activity.toJSON();
+      const { ...rest } = activity.toJSON();
       // 构造处理后的活动信息
       return {
         ...rest,
-        category: category ? category.type_name : null,
+        category_name: category ? category.type_name : null,
         keywords: keywords.map(keyword => keyword.key_name).join(','),
-        community: community ? community.name : null
+        community_name: community ? community.name : null
       };
     }));
     return results;
@@ -237,7 +239,7 @@ class ActivityService {
           }
       });
   
-      const handledActivityList = await this.getIdMap(myActivList)
+      const handledActivityList = await this.getCategKeyCommuIdsMap(myActivList)
       handledActivityList.forEach(async activity => {
           // 获取活动状态
           const status = await this.getActivityStatusMap(activity.activity_status);
@@ -287,7 +289,7 @@ class ActivityService {
       if (!activList) {
         return null; // 返回null表示活动不存在
       }else{
-        const handledActivityList = await this.getIdMap(activList)
+        const handledActivityList = await this.getCategKeyCommuIdsMap(activList)
         handledActivityList.forEach(async activity => {
             // 获取活动状态
             const status = await this.getActivityStatusMap(activity.activity_status);
@@ -334,7 +336,7 @@ class ActivityService {
     const activity = await db.activity.findByPk(id);
     const community_id = activity.community_id;
     const activityArray = [activity];
-    const handledActicityArray = await this.getIdMap(activityArray);
+    const handledActicityArray = await this.getCategKeyCommuIdsMap(activityArray);
     const handledActicity = handledActicityArray[0];
     //查找该活动对应的社区的联系电话
     const community = await db.community.findOne({
