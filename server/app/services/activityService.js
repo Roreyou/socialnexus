@@ -354,6 +354,34 @@ class ActivityService {
     return {detail:handledActicity};
   }
 
+  static async getActTime(activId){
+    try {
+      const activ = await db.activity.findOne({
+          where: {
+              id: activId
+          },
+          attributes:['start_time'] 
+      });
+      if (activ) {
+          return activ;
+      } else {
+          throw new Error('Activity not found');
+      }
+    } catch (error) {
+        console.error('Error getting activity time:', error);
+    }
+  }
+
+  static async getActName(activId){
+    const activity = await db.activity.findOne({
+      where: {
+          id: activId
+      },
+      attributes:['name'] 
+    });
+    return activity;
+  }
+
 }
 
 module.exports = ActivityService;

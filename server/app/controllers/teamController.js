@@ -347,7 +347,7 @@ class teamController {
     try {
       const { team_id } = req.query;
       const teamInfo = await teamService.getTeamInfo(team_id);
-      return res.json(Result.success({ info: teamInfo }));
+      return res.json(Result.success(teamInfo));
     } catch (error) {
       console.error('Failed to get team info:', error);
       return res.json(Result.fail("Failed to get team info!"));

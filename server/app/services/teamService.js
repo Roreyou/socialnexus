@@ -1,6 +1,8 @@
 //services/teamService.js
 const db = require('../models/index');
 const { Op } = require('sequelize');
+const ActivityService = require('./activityService');
+const CommunityService = require('./communityService');
 
 class teamService {
   static async getAllTeams() {
@@ -376,7 +378,6 @@ class teamService {
     }
   }
 
-
   static async FindTeam(teamId){
     // 获取队伍信息
     const teamInfo = await db.team.findOne({ where: { id: teamId } });
@@ -392,12 +393,21 @@ class teamService {
   static async getTeamInfo(teamId) {
     try {
       // 获取队伍信息
+      
       const teamInfo = await db.team.findOne({ where: { id: teamId } });
-
-      if (!teamInfo) {
-        return { code: '500', msg: 'Team not found', data: null };
-      }
-
+      const school = await db.school.findByPk(teamInfo.school_id);
+      const leader = await db.teammember.findByPk(teamInfo.leader_id);
+      const instructor = await db.teacher.findByPk(teamInfo.instructor_id);
+      const menNum = await db.teammember.count({where:{team_id: teamInfo.id}});
+      console.log(teamInfo);
+      const updateTeamInfo = {
+        ...teamInfo.dataValues,
+        school_name: school.name,
+        leader_name: leader.name,
+        instructor_name: instructor.name,
+        mem_num: menNum
+      };
+      console.log(updateTeamInfo);
       // 获取指导老师信息
       const instructorInfo = await db.teacher.findOne({ where: { id: teamInfo.instructor_id } });
 
@@ -406,11 +416,13 @@ class teamService {
 
       // 组合数据
       const responseData = {
-        team_info: teamInfo,
+        team_info: updateTeamInfo,
+        leader_info:leader,
         member_info: memberInfo,
         instructor_info: instructorInfo
       };
-      return { code: '200', msg: 'Success', data: responseData };
+      console.log(responseData);
+      return responseData ;
     } catch (error) {
       console.error('Failed to get team info:', error);
       return { code: '500', msg: 'Failed to get team info', data: null };
@@ -499,7 +511,8 @@ class teamService {
           comments.push({
             activity_name: activity ? activity.name : null,
               team_to_activity: teamActivity.team_to_activity,
-              comment_status: teamActivity.comment_status
+              comment_status: teamActivity.comment_status,
+              time:teamActivity.team_to_activity_time
           });
         }
         return comments;  
@@ -532,10 +545,15 @@ class teamService {
               }
           });
 
+          // 获取社区基层名字
+          const communityName = await CommunityService.getCommunityNameById(activity.community_id);
+
           // 将查询到的活动名称和团队评论信息添加到结果数组中
           results.push({
               activity_name: activity ? activity.name : null,
-              com_to_team: teamActivity.com_to_team
+              com_to_team: teamActivity.com_to_team,
+              acti_time: activity.start_time,
+              community_name: communityName,
           });
       }
 
