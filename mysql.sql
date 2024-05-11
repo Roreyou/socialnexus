@@ -323,7 +323,6 @@ DROP TABLE IF EXISTS `modify_teacher`;
 CREATE TABLE `modify_teacher` (
   `id` varchar(20) NOT NULL,
   `team_id` varchar(45) DEFAULT NULL,
-  `pwd` varchar(45) DEFAULT NULL,
   `name` varchar(45) DEFAULT NULL,
   `tel` varchar(45) DEFAULT NULL,
   `major` varchar(45) DEFAULT NULL,
@@ -338,6 +337,7 @@ CREATE TABLE `modify_teacher` (
 
 LOCK TABLES `modify_teacher` WRITE;
 /*!40000 ALTER TABLE `modify_teacher` DISABLE KEYS */;
+INSERT INTO `modify_teacher` VALUES ('30',NULL,'法争线容','13544400638','exercitation aliquip dolore',NULL);
 /*!40000 ALTER TABLE `modify_teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,7 +356,6 @@ CREATE TABLE `modify_teammember` (
   `major` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `grade` varchar(20) DEFAULT NULL,
-  `pwd` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`,`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -622,4 +621,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-11 22:20:08
+-- Dump completed on 2024-05-11 22:31:45

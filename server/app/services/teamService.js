@@ -630,49 +630,17 @@ class teamService {
     };
   }
 
-  // 更新队伍信息 待用
-  static async updateTeamInfo(team_id, instrData, leaderData, membersData) {
-    try {
-        // 更新指导员信息
-        await teamService.updateInstructor(instrData);
-
-        // 更新队长信息
-        await teamService.updateLeader(leaderData);
-
-        // 删除队伍成员中非队长的成员
-        await teamService.deleteNonLeaderTeamMembers(team_id, leaderData.id);
-
-        // 添加新的队伍成员
-        await addTeamMembers(team_id, membersData);
-
-        //将修改审核字段设置为xxx
-        // todo
-
-    } catch (error) {
-        throw new Error('Failed to update team information: ' + error.message);
-    }
-  }
-
-
-  static async updateInstructor(instrData) {
-      await db.teacher.update(instrData, { where: { id: instrData.id } });
-  }
-
-  static async updateLeader(leaderData) {
-      await db.leader.update(leaderData, { where: { id: leaderData.id } });
-  }
-  
-  // 删除队伍成员中非队长的成员
-  static async deleteNonLeaderTeamMembers(team_id, leaderId) {
-    await db.teammember.destroy({ where: { team_id: team_id, id: { [Op.ne]: leaderId } } });
-  }
-
   // 修改队伍信息，送去团委审核
   static async modifyInfo(team_id, instrData, leaderData, membersData){
     try {
       // 存入指导员信息
+      const modifyInstructor = {
+        ...instrData,
+        team_id:team_id
+      };
+      console.log(modifyInstructor)
       await teamService.insertInstructor(instrData);
-
+      
       // 存入队长信息
       await teamService.insertLeader(leaderData);
 
@@ -689,15 +657,15 @@ class teamService {
   }
 
   static async insertInstructor(instrData) {
-        await db.teacher.create(instrData);
+        await db.modify_teacher.create(instrData);
   }
 
   static async insertLeader(leaderData) {
-          await db.teammember.create(leaderData);
+          await db.modify_teammember.create(leaderData);
   }
 
     static async  addTeamMembers(team_id, membersData) {
-      await Promise.all(membersData.map(memberData => db.teammember.create({
+      await Promise.all(membersData.map(memberData => db.modify_teammember.create({
           team_id: team_id,
           ...memberData
       })));

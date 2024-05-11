@@ -10,10 +10,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: true
     },
-    pwd: {
-      type: DataTypes.STRING(45),
-      allowNull: true
-    },
     name: {
       type: DataTypes.STRING(45),
       allowNull: true
