@@ -26,6 +26,14 @@ module.exports = function(sequelize, DataTypes) {
     comment_status: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    com_to_team_time: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    team_to_activity_time: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
     sequelize,
