@@ -51,9 +51,11 @@
     <u-gap height="10"></u-gap>
 		
 	<!-- 数据墙-数字部分-->
-	<view class="dataWallBG margin-fixed">
-		<text class="text-xl"> 99 </text>
-		<text class="text-xl wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 234个 </text>
+	<view class="dataWallBG margin-fixed grid-container">
+		<view class="grid-item" v-for="(item,index) in wallDataList" :key="index">
+  		  <view class="text-num">{{item.number}}</view>
+  		  <view class="description" :class="{ 'black-font': index === 2 }" >{{item.description}}</view>
+  		</view>
 	</view>
 	
 	<!-- 玫瑰图 高校院系比例 -->
@@ -62,7 +64,6 @@
 			<text class="cuIcon-titles text-green"></text>
 			<text class="roseTitle text-bold">高校院系人数比例分析</text>
 		</view>
-		<!-- <rose :chartData="teamChartData"></rose> -->
 		<view class="charts-box">
       		<qiun-data-charts 
       		  type="rose"
@@ -109,12 +110,6 @@
 					<text class="text-xl text-bold" style="margin-top: 40px; color: rgb(195, 193, 197); font-size: 20rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 现有成员 </text>
 					<text class="text-xl text-bold wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 28240名 </text>
 				</view>
-			</view>
-
-			<view class="temp" :class="isCard?'no-card':''">
-				<!-- <view>
-    				<canvas style="height: 30vh;width: 100vw;" id="myEcharts"></canvas>
-  				</view> -->
 			</view>
 
 		</view>
@@ -180,6 +175,24 @@
 				loadStatus: 'loadmore',
 				flowList: [],
 				uvCode: uni.getStorageSync('uvCode'),
+				wallDataList:[
+					{
+						number: 70,
+						description:'学院、直属系'
+					},
+					{
+						number: 22,
+						description:'两院院士'
+					},
+					{
+						number: 44,
+						description:'博士后科研流动站'
+					},
+					{
+						number: 36,
+						description:'国家级研究机构'
+					}
+				],
 
 				// 图表数据
 				teamChartData:{
@@ -211,7 +224,7 @@
     		        padding: [0,0,0,0],
     		        fontSize: 11,
     		        fontColor: "#666666",
-    		        dataLabel: false,
+    		        dataLabel: true,
     		        dataPointShape: true,
     		        dataPointShapeType: "solid",
     		        touchMoveLimit: 60,
@@ -223,7 +236,7 @@
     		          position: "right",
     		          lineHeight: 25,
     		          float: "center",
-    		          padding: 5,
+    		          padding: 4,
     		          margin: 0,
     		          backgroundColor: "rgba(0,0,0,0)",
     		          borderColor: "rgba(0,0,0,0)",
@@ -240,7 +253,7 @@
     		            activeOpacity: 0.5,
     		            activeRadius: 10,
     		            offsetAngle: 0,
-    		            labelWidth: 15,
+    		            labelWidth: 1,
     		            border: true,
     		            borderWidth: 2,
     		            borderColor: "#FFFFFF",
@@ -320,27 +333,27 @@
 		methods: {
 			getChartData(){
 				// 同时请求数据
-				// uni.request({
-				// 	url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_team',
-                // 	header:{
-				// 		Authorization:uni.getStorageSync("token")
-				// 	},	
-				// 	method: 'GET',
-				// 	data: {
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_team',
+                	header:{
+						Authorization:uni.getStorageSync("token")
+					},	
+					method: 'GET',
+					data: {
 						
-				// 	},
-				// 	success: res => {	
-				// 		console.log("成功请求-数据墙-院系人数比例");
-				// 		console.log(res.data.data);					
-				// 		this.teamChartData.series[0].data = res.data.data;
-				// 		this.net_error = false;
-				// 	},
-				// 	fail: res => {
-				// 		this.net_error = true;
-				// 	},
-				// 	complete: () => {
-				// 	}
-				// });
+					},
+					success: res => {	
+						console.log("成功请求-数据墙-院系人数比例");
+						console.log(res.data.data);					
+						this.teamChartData.series[0].data = res.data.data;
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				});
 
 				// 活动类型
 				uni.request({
@@ -364,27 +377,6 @@
 					complete: () => {
 					}
 				})
-				// uni.request({
-				// 	url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_act',
-                // 	header:{
-				// 		Authorization:uni.getStorageSync("token")
-				// 	},	
-				// 	method: 'GET',
-				// 	data: {
-						
-				// 	},
-				// 	success: res => {	
-				// 		console.log("成功请求-数据墙-活动类型比例");
-				// 		console.log(res.data.data);					
-				// 		this.activityChartData.series[0].data = res.data.data;
-				// 		this.net_error = false;
-				// 	},
-				// 	fail: res => {
-				// 		this.net_error = true;
-				// 	},
-				// 	complete: () => {
-				// 	}
-				// })
 			},
 			handleAuthentication(){
 				this.$u.route({
@@ -681,8 +673,9 @@
 	// margin-bottom: 20rpx;
 }
 .dataWallBG{
-	height: 350rpx;
-	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+	height: 400rpx;
+	background-image: url('http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/333.png');
+	background-size: 100% 100%;
 }
 .roseBG{
 	height: 400rpx;
@@ -695,9 +688,33 @@
 	content: "\e701";
 	font-size: 37rpx;
 }
-    /* 请根据实际需求修改父元素尺寸，组件自动识别宽高 */
-    .charts-box {
-      width: 100%;
-      height: 80%;
-    }
+/* 请根据实际需求修改父元素尺寸，组件自动识别宽高 */
+.charts-box {
+  width: 100%;
+  height: 80%;
+}
+// 数据墙数据部分的数字样式
+.text-num{
+	font-family: 'number';
+	font-size: 80rpx;
+	color: black;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+.grid-item {
+  padding: 20rpx;
+  text-align: center;
+}
+.description {
+	margin-top: -19rpx;
+	font-size: 26rpx;
+	color: floralwhite;
+}
+.black-font{
+	color: black;
+}
+
 </style>
