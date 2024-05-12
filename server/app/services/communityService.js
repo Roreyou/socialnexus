@@ -19,7 +19,6 @@ class CommunityService{
     }
 
     static async getCommunityNameById(id){
-        // 目前只有这一个我写了只返回属性，其它都是返回的字典
         const community = await db.community.findOne({
             where: {
                 id: id

@@ -14,6 +14,8 @@ const router = express.Router();
 router.get('/getRecommend', TeamController.getRecommend);
 router.get('/activsquare/filter', ActivityController.filterActivity);
 router.get('/activsquare/search', ActivityController.searchActivities);
+router.get('/activsquare/register_details',ActivityController.getRegisterDetail);
+router.get('/activsquare/posterinfo', ActivityController.getPosterInfo);
 router.get('/getmyactiv', TeamController.getMyActiv);
 router.get('/searchmyactiv', TeamController.searchMyActiv);
 router.get('/team2activ', TeamController.getMyComments);
@@ -29,7 +31,6 @@ router.get('/pyq/samearea', PostController.getSameAreaPosts);
 router.get('/pyq/latest', PostController.getLatestPosts);
 router.get('/pyq/getnotice', PostController.getnotice);
 router.get('/pyq/noticenum', PostController.getNoticeNum);
-router.get('/modifypwd', TeamController.modifyPwd);
 router.get('/getisregister', TeamController.getIsRegister);
 
 router.put('/favor', TeamController.favoriteActivity);
@@ -47,6 +48,7 @@ router.post('/pyq/delcomment', postController.delcomment);
 router.post('/pyq/createpost/uploadpics', upload.single('image'), postController.savePostImg);
 router.post('/pyq/delnotice', postController.delNotice);
 router.post('/modifyinfo', TeamController.modifyInfo);
+router.post('/modifypwd', TeamController.modifyPwd);
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 

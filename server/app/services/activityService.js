@@ -1,5 +1,14 @@
 const db = require('../models/index');
+const cloud = require('wx-server-sdk')
 const { Op } = require('sequelize');
+const teamService = require('./teamService');
+const activity = require('../models/activity');
+const activity = require('../models/activity');
+const CommunityService = require('./communityService');
+
+cloud.init({
+  env: cloud.DYNAMIC_CURRENT_ENV,
+})
 
 class ActivityService {
   static async getAllActivities() {
@@ -382,6 +391,65 @@ class ActivityService {
       attributes:['name'] 
     });
     return activity;
+  }
+
+
+  static async getRegisterDetail(teamId, activityId){
+    const teamInfo = await teamService.getTeamById(teamId);
+    const leader = await teamService.getLeaderById(teamInfo.leader_id);
+    const instructor = await teamService.getInstructorById(teamInfo.instructor_id);
+    const team_detail = {
+      ...teamInfo.dataValues,
+      leader_name: leader.name,
+      instructor_name: instructor.name,
+      instructor_tel: instructor.tel,
+      leader_tel: leader.tel
+    }
+
+    const acti_detail = await ActivityService.getActivityById(activityId);
+    return {team_detail, acti_detail};
+  }
+
+  static async getPosterInfo(activityId){
+    const activity = await ActivityService.getActivityById(activityId);
+    const name = activity.name;
+    const begin_time = activity.start_time;
+    const end_time = activity.end_time;
+    const community_name = await CommunityService.getCommunityNameById(activity.community_id);
+    const address =  `${activity.province}  ${activity.city} ${activity.address}`;
+    const acti_picture = activity.picture;
+
+    //获取二维码图片
+    const code_picture = await ActivityService.getActivityQRCodePicture(activityId);
+  }
+
+  //获取二维码图片
+  static async getActivityQRCodePicture(activityId){
+    try {
+      // 构建请求参数
+      const params = {
+        page: "page school/pages/details/details",
+        scene: `acti_id=${activityId}`,
+        check_path: true,
+        env_version: "develop"
+      };
+
+      // 发送请求到微信接口获取小程序码
+      const response = await axios.post('https://api.weixin.qq.com/wxa/getwxacode', params, {
+          params: {
+              access_token: 'your_access_token' // 替换为你的微信小程序访问令牌
+          },
+          responseType: 'arraybuffer' // 响应类型为数组缓冲区
+      });
+
+      // 将响应的二进制数据保存到文件中，或者在需要的时候返回给调用者
+      fs.writeFileSync('activity_qr_code.png', response.data);
+
+      console.log('Activity QR code saved successfully');
+    } catch (error) {
+        console.error('Error getting activity QR code:', error);
+        throw new Error('Error getting activity QR code');
+    }
   }
 
 }

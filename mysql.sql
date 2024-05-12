@@ -337,7 +337,7 @@ CREATE TABLE `modify_teacher` (
 
 LOCK TABLES `modify_teacher` WRITE;
 /*!40000 ALTER TABLE `modify_teacher` DISABLE KEYS */;
-INSERT INTO `modify_teacher` VALUES ('30',NULL,'法争线容','13544400638','exercitation aliquip dolore',NULL);
+INSERT INTO `modify_teacher` VALUES ('30','81','历更世手题入热','18176116651','cupidatat','u.pqpkvmfgkf@qq.com'),('42',NULL,'数现报题力候','18685328537','pariatur ullamco Excepteur','e.uwolxd@qq.com'),('53','41','工解所适','19853216855','enim culpa mollit veniam do','p.kmsqpo@qq.com'),('98','21','两常行平革准','19872712489','in dolore','f.ptynofzhq@qq.com');
 /*!40000 ALTER TABLE `modify_teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,6 +366,7 @@ CREATE TABLE `modify_teammember` (
 
 LOCK TABLES `modify_teammember` WRITE;
 /*!40000 ALTER TABLE `modify_teammember` DISABLE KEYS */;
+INSERT INTO `modify_teammember` VALUES ('4','81','约县置权写较','18185589507','amet minim proident tempor ut','s.ggkc@qq.com','irure ut'),('41','21','但之间林行','18158764427','ut consequat non do amet','m.xwugfnpn@qq.com','do sunt'),('7','69','一没过极','18128009688','et pariatur adipisicing','e.xvoclym@qq.com','in sed nulla'),('73','21','北分之育问','18127598460','dolor','n.cvfql@qq.com','dolore ipsum id'),('95','81','活听团个亲件可','18152566965','in dolor ipsum','p.ixt@qq.com','ea cillum velit id');
 /*!40000 ALTER TABLE `modify_teammember` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -520,7 +521,7 @@ CREATE TABLE `schoolteam` (
 
 LOCK TABLES `schoolteam` WRITE;
 /*!40000 ALTER TABLE `schoolteam` DISABLE KEYS */;
-INSERT INTO `schoolteam` VALUES ('1','$2b$10$wv3X3cHvgLShaZGpLRHZmeuJ8eL/SDH8n55pRyaI8jba0AS7nVlki','测试队名','1','2023-02-16','sed tempor ea occaecat','19','99',NULL,NULL,NULL,NULL,NULL),('77','$2b$10$6qe1MYwjeGq1H8VpDTha3.wzt72ty6sNK3Y9LWZ6ehPeqrYOg01O.','77队名','1','1993-01-29','in in laboris adipisicing ut','34','53',NULL,NULL,NULL,NULL,'111'),('97','$2b$10$wv3X3cHvgLShaZGpLRHZmeuJ8eL/SDH8n55pRyaI8jba0AS7nVlki','种战题般','1','2023-02-16','sed tempor ea occaecat','19','99',NULL,NULL,0,NULL,NULL);
+INSERT INTO `schoolteam` VALUES ('1','$2b$10$wv3X3cHvgLShaZGpLRHZmeuJ8eL/SDH8n55pRyaI8jba0AS7nVlki','测试队名','1','2023-02-16','sed tempor ea occaecat','19','99',NULL,NULL,NULL,NULL,NULL),('21','$2b$10$wv3X3cHvgLShaZGpLRHZmeuJ8eL/SDH8n55pRyaI8jba0AS7nVlki','种战题般','1','2023-02-16','sed tempor ea occaecat','19','99',NULL,NULL,0,1,NULL),('77','$2b$10$6qe1MYwjeGq1H8VpDTha3.wzt72ty6sNK3Y9LWZ6ehPeqrYOg01O.','77队名','1','1993-01-29','in in laboris adipisicing ut','34','53',NULL,NULL,NULL,NULL,'111');
 /*!40000 ALTER TABLE `schoolteam` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -533,7 +534,7 @@ DROP TABLE IF EXISTS `teacher`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `teacher` (
   `id` varchar(20) NOT NULL,
-  `pwd` varchar(45) DEFAULT NULL,
+  `pwd` varchar(60) DEFAULT NULL,
   `name` varchar(45) DEFAULT NULL,
   `tel` varchar(45) DEFAULT NULL,
   `major` varchar(45) DEFAULT NULL,
@@ -548,7 +549,7 @@ CREATE TABLE `teacher` (
 
 LOCK TABLES `teacher` WRITE;
 /*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
-INSERT INTO `teacher` VALUES ('53',NULL,'吴老师','12345678910','软件工程学院',NULL),('90','exercitation in','叫矿边严','18145681888','id adipisicing incididunt cupidatat',NULL),('99',NULL,'南半油联信','18151694055','软件工程学院',NULL);
+INSERT INTO `teacher` VALUES ('53','123','吴老师','12345678910','软件工程学院',NULL),('90','123','叫矿边严','18145681888','id adipisicing incididunt cupidatat',NULL),('99','123','南半油联信','18151694055','软件工程学院',NULL);
 /*!40000 ALTER TABLE `teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -597,7 +598,7 @@ CREATE TABLE `teammember` (
   `major` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `grade` varchar(20) DEFAULT NULL,
-  `pwd` varchar(45) DEFAULT NULL,
+  `pwd` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`,`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -608,7 +609,7 @@ CREATE TABLE `teammember` (
 
 LOCK TABLES `teammember` WRITE;
 /*!40000 ALTER TABLE `teammember` DISABLE KEYS */;
-INSERT INTO `teammember` VALUES ('19','77','传由较周收快需','18119155591','软件工程学院','z.efxtgychkh@qq.com','ea',NULL),('34','77','哈哈哈','122','人工智能学院','xxxx@qq.com','1',NULL);
+INSERT INTO `teammember` VALUES ('19','77','传由较周收快需','18119155591','软件工程学院','z.efxtgychkh@qq.com','ea','123456'),('34','77','哈哈哈','122','人工智能学院','xxxx@qq.com','1','123456');
 /*!40000 ALTER TABLE `teammember` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -621,4 +622,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-11 22:31:45
+-- Dump completed on 2024-05-12 12:18:45
