@@ -180,7 +180,7 @@ class postController{
             const image = req.file;
 
             // 调用服务层创建帖子
-            const imageUrl = await postService.savePostImg(image);
+            const imageUrl = await postService.savePostImg(image, "uploads");
     
             // 做其他操作，比如保存帖子到数据库
     

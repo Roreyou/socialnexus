@@ -25,7 +25,6 @@ class CommunityService{
             },
             attributes:['name'] 
           });
-          console.log(community);
           return community.name;
     }
 
