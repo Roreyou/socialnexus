@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('teacher', {
+  return sequelize.define('modify_teacher', {
     id: {
       type: DataTypes.STRING(20),
       allowNull: false,
       primaryKey: true
     },
-    pwd: {
+    team_id: {
       type: DataTypes.STRING(45),
       allowNull: true
     },
@@ -28,7 +28,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'teacher',
+    tableName: 'modify_teacher',
     timestamps: false,
     indexes: [
       {

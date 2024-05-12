@@ -38,6 +38,8 @@ db.likepost=require("./likepost.js")(sequelize, Sequelize);
 db.likecomment=require("./likecomment.js")(sequelize, Sequelize);
 db.likereply=require("./likereply.js")(sequelize, Sequelize);
 db.notification=require("./notification.js")(sequelize, Sequelize);
+db.modify_teacher=require("./modify_teacher.js")(sequelize, Sequelize);
+db.modify_teammember=require("./modify_teammember.js")(sequelize, Sequelize);
 
 
 module.exports = db;

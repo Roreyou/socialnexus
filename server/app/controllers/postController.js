@@ -136,6 +136,7 @@ class postController{
     static async getnotice(req, res){
         try {
             const { my_id: team_id } = req.query;
+            //console.log(team_id);
             const notifications = await postService.getnotice(team_id);
             return res.json(Result.success(notifications));
         } catch (error) {

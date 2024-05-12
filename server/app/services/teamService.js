@@ -1,6 +1,10 @@
 //services/teamService.js
 const db = require('../models/index');
 const { Op } = require('sequelize');
+const ActivityService = require('./activityService');
+const CommunityService = require('./communityService');
+const post = require('../models/post');
+const activity = require('../models/activity');
 
 class teamService {
   static async getAllTeams() {
@@ -13,6 +17,16 @@ class teamService {
 
   static async getTeamById(id) {
     return await db.team.findByPk(id);
+  }
+
+  static async getTeamAvatar(teamId){
+    const teamAvatar = await db.team.findOne({
+      where: {
+      id: teamId
+      },
+      attributes:['avatar'] 
+    });
+    return teamAvatar;
   }
 
   //依据社区和状态
@@ -291,7 +305,8 @@ class teamService {
     }
   }
 
-  static async getRecommend(city, province){
+
+  static async getRecommend(city, province, page){
     try {
       // 在这里编写获取活动推荐列表的逻辑
       // 假设根据省份和城市查询数据库中的活动信息
@@ -302,52 +317,16 @@ class teamService {
           },
           limit: 10 // 限制返回结果数量为 10 条
       });
-
-      // 对每个活动进行处理
-      const recommendations = await Promise.all(activities.map(async activity => {
-        // 获取活动对应的分类名称
-        const category = await db.activity_type.findOne({
-          where: {
-            id: activity.category_id
-          },
-          attributes:['type_name'] 
-        });
-
-        // 获取活动对应的关键词名称
-        const keywords = await db.keywords.findAll({
-          where: {
-            id: { [Op.in]: activity.keywords_id.split(',') } // 根据逗号分隔的关键词 id 查询
-          },
-          attributes:['key_name']
-        });
-        console.log("debug:",keywords);
-
-        // 获取活动对应的社区名字
-        const community = await db.community.findOne({
-          where: {
-            id: activity.community_id
-          },
-          attributes: ['name']
-        });
-
-        const { category_id, keywords_id, community_id,remark, ...rest } = activity.toJSON();
-        // 构造处理后的活动信息
-        return {
-          ...rest,
-          category: category ? category.type_name : null,
-          keywords: keywords.map(keyword => keyword.key_name).join(','),
-          community: community ? community.name : null
-        };
-      }));
-      
-      return recommendations;
+      const recommendations = await ActivityService.getCategKeyCommuIdsMap(activities);
+      const results = await ActivityService.getPageData(page, recommendations);
+      return results;
     } catch (error) {
         throw error;
     }
   }
 
   // 根据给定的单个队伍id找到队伍名
-  static async getTeamMapName(id){
+  static async getTeamName(id){
     try {
       const team = await db.team.findOne({
           where: {
@@ -366,7 +345,6 @@ class teamService {
     }
   }
 
-
   static async FindTeam(teamId){
     // 获取队伍信息
     const teamInfo = await db.team.findOne({ where: { id: teamId } });
@@ -382,12 +360,21 @@ class teamService {
   static async getTeamInfo(teamId) {
     try {
       // 获取队伍信息
+      
       const teamInfo = await db.team.findOne({ where: { id: teamId } });
-
-      if (!teamInfo) {
-        return { code: '500', msg: 'Team not found', data: null };
-      }
-
+      const school = await db.school.findByPk(teamInfo.school_id);
+      const leader = await db.teammember.findByPk(teamInfo.leader_id);
+      const instructor = await db.teacher.findByPk(teamInfo.instructor_id);
+      const menNum = await db.teammember.count({where:{team_id: teamInfo.id}});
+      console.log(teamInfo);
+      const updateTeamInfo = {
+        ...teamInfo.dataValues,
+        school_name: school.name,
+        leader_name: leader.name,
+        instructor_name: instructor.name,
+        mem_num: menNum
+      };
+      console.log(updateTeamInfo);
       // 获取指导老师信息
       const instructorInfo = await db.teacher.findOne({ where: { id: teamInfo.instructor_id } });
 
@@ -396,11 +383,13 @@ class teamService {
 
       // 组合数据
       const responseData = {
-        team_info: teamInfo,
+        team_info: updateTeamInfo,
+        leader_info:leader,
         member_info: memberInfo,
         instructor_info: instructorInfo
       };
-      return { code: '200', msg: 'Success', data: responseData };
+      console.log(responseData);
+      return responseData ;
     } catch (error) {
       console.error('Failed to get team info:', error);
       return { code: '500', msg: 'Failed to get team info', data: null };
@@ -421,7 +410,8 @@ class teamService {
         id: activityIdsArray
       }
     }); 
-    return teamFavorites;
+    const results = await ActivityService.getCategKeyCommuIdsMap(teamFavorites);
+    return results;
   }
 
   static async commentActivity(teamId, activityId, comment){
@@ -489,7 +479,8 @@ class teamService {
           comments.push({
             activity_name: activity ? activity.name : null,
               team_to_activity: teamActivity.team_to_activity,
-              comment_status: teamActivity.comment_status
+              comment_status: teamActivity.comment_status,
+              time:teamActivity.team_to_activity_time
           });
         }
         return comments;  
@@ -522,10 +513,15 @@ class teamService {
               }
           });
 
+          // 获取社区基层名字
+          const communityName = await CommunityService.getCommunityNameById(activity.community_id);
+
           // 将查询到的活动名称和团队评论信息添加到结果数组中
           results.push({
               activity_name: activity ? activity.name : null,
-              com_to_team: teamActivity.com_to_team
+              com_to_team: teamActivity.com_to_team,
+              acti_time: activity.start_time,
+              community_name: communityName,
           });
       }
 
@@ -537,6 +533,147 @@ class teamService {
         throw error;
     }
   }
+
+  static async getMyCommentsFinished(teamId){
+    try {
+      // 在数据库中查找符合条件的所有记录
+      const teamActivities = await db.teamactivity.findAll({
+        where: {
+            team_id: teamId,
+            comment_status:2
+        }
+      });
+  
+      // 定义用于存储评价信息的数组
+      const comments = [];
+  
+      // 遍历查询结果，将每条记录的评价信息添加到数组中
+        for (const teamActivity of teamActivities) {
+          // 在activity表中查找对应的活动名称
+          const activity = await db.activity.findOne({
+            where: {
+                id: teamActivity.activity_id
+            }
+          });          
+          comments.push({
+            activity_name: activity ? activity.name : null,
+              team_to_activity: teamActivity.team_to_activity,
+              com_time: teamActivity.team_to_activity_time,
+              acti_time:activity.start_time
+          });
+        }
+        return comments;  
+      
+      } catch (error) {
+          // 处理异常情况
+          console.error('Error:', error);
+          throw error;
+      }
+  }
+
+  static async getMyCommentsUnfinished(teamId){
+    try {
+      // 在数据库中查找符合条件的所有记录
+      const teamActivities = await db.teamactivity.findAll({
+        where: {
+            team_id: teamId,
+            comment_status:1
+        }
+      });
+  
+      // 定义用于存储评价信息的数组
+      const comments = [];
+  
+      // 遍历查询结果，将每条记录的评价信息添加到数组中
+        for (const teamActivity of teamActivities) {
+          // 在activity表中查找对应的活动名称
+          const activity = await db.activity.findOne({
+            where: {
+                id: teamActivity.activity_id
+            }
+          });          
+          comments.push({
+            activity_name: activity ? activity.name : null,
+            acti_content: activity ? activity.remark : null,
+            acti_time:activity.start_time,
+            acti_id: activity.id.toString()
+          });
+        }
+        return comments;  
+      
+      } catch (error) {
+          // 处理异常情况
+          console.error('Error:', error);
+          throw error;
+      }
+  }
+
+  static async getIsRegister(team_id, acti_id){
+    const teamActivity = await db.teamactivity.findOne({
+      where:{
+        activity_id: acti_id,
+        team_id: team_id
+      }
+    });
+    console.log(teamActivity);
+    if(!teamActivity){
+      return {
+        flag: "0",
+        acti_status: 0
+      };
+    }
+    const activity = await ActivityService.getActivityById(teamActivity.activity_id);
+    console.log(activity);
+    return {
+      flag:"1",
+      acti_status:activity.activity_status
+    };
+  }
+
+  // 修改队伍信息，送去团委审核
+  static async modifyInfo(team_id, instrData, leaderData, membersData){
+    try {
+      // 存入指导员信息
+      const modifyInstructor = {
+        ...instrData,
+        team_id:team_id
+      };
+      await teamService.insertInstructor(modifyInstructor);
+      // 存入队长信息
+      const modifyLeader = {
+        ...leaderData,
+        team_id:team_id
+      };
+      await teamService.insertLeader(modifyLeader);
+
+      // 存入队伍成员
+      await teamService.addTeamMembers(team_id, membersData);
+
+      // 将修改审核字段设置为1
+      await db.team.update({ modification_status: 1 }, { where: { id: team_id } });
+
+      return 'Team information will be verified again!' ;
+    } catch (error) {
+        throw new Error('Failed to update team information: ' + error.message);
+    }
+  }
+
+  static async insertInstructor(instrData) {
+        await db.modify_teacher.create(instrData);
+  }
+
+  static async insertLeader(leaderData) {
+          await db.modify_teammember.create(leaderData);
+  }
+
+  static async addTeamMembers(team_id, membersData) {
+      await Promise.all(membersData.map(memberData => db.modify_teammember.create({
+          team_id: team_id,
+          ...memberData
+      })));
+  }
+
+
 }
 
 module.exports = teamService;

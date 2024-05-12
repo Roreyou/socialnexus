@@ -65,6 +65,10 @@ module.exports = function(sequelize, DataTypes) {
     activity_status: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    picture: {
+      type: DataTypes.STRING(45),
+      allowNull: true
     }
   }, {
     sequelize,

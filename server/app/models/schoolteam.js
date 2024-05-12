@@ -46,6 +46,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    modification_status: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     avatar: {
       type: DataTypes.STRING(45),
       allowNull: true

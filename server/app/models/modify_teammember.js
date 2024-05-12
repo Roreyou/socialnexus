@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('teamactivity', {
-    activity_id: {
+  return sequelize.define('modify_teammember', {
+    id: {
       type: DataTypes.STRING(20),
       allowNull: false,
       primaryKey: true
@@ -11,33 +11,29 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    com_to_team: {
-      type: DataTypes.TEXT,
+    name: {
+      type: DataTypes.STRING(45),
       allowNull: true
     },
-    team_to_activity: {
-      type: DataTypes.TEXT,
+    tel: {
+      type: DataTypes.STRING(45),
       allowNull: true
     },
-    admission_status: {
-      type: DataTypes.INTEGER,
+    major: {
+      type: DataTypes.STRING(45),
       allowNull: true
     },
-    comment_status: {
-      type: DataTypes.INTEGER,
+    email: {
+      type: DataTypes.STRING(45),
       allowNull: true
     },
-    com_to_team_time: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    team_to_activity_time: {
-      type: DataTypes.DATE,
+    grade: {
+      type: DataTypes.STRING(20),
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'teamactivity',
+    tableName: 'modify_teammember',
     timestamps: false,
     indexes: [
       {
@@ -45,7 +41,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "activity_id" },
+          { name: "id" },
           { name: "team_id" },
         ]
       },

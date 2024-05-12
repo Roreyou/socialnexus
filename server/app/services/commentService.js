@@ -5,13 +5,22 @@ const replyService = require('../services/replyService');
 const { Op } = require('sequelize');
 const teamService = require('./teamService');
 const postService = require('./postService');
+const post = require('../models/post');
 
 class commentService{
-    static async getCommentsofPost(post_id){
+    static async getCommentsofPost(post_id, flag=true){
+        // 返回结构：[{a comment},...,{a comment}}] of a post
+        // 如果flag为flase，则只返回ifread字段为1的评论
         try {
+            var results;
             // 获取新的评论详情
-            const new_comments = await db.comment.findAll({ where: { post_id: post_id } });
-            return new_comments;
+            if(!flag){ //只返回ifread字段为1的评论
+                console.log(flag);
+                results = await db.comment.findAll({ where: { post_id: post_id, ifread:1 } });
+            }else{ // 全返回
+                results = await db.comment.findAll({ where: { post_id: post_id } });
+            }
+            return results;
         } catch (error) {
             console.log(error);
             throw new Error('Error fetching comments of post');
@@ -25,7 +34,7 @@ class commentService{
 
             const CommentList = await Promise.all(new_comments.map(async (comment) => {
                 // 对每条评论查询对应的回复列表                
-                const replies = await replyService.getReplyOfComment(comment.id);
+                const replies = await replyService.getReplyOfAComment(comment.id);
                 const replyDetailList = await Promise.all(replies.map(async (reply) => {
                     // 查询回复对应的队伍信息
                     const replyTeam = await db.team.findByPk(reply.reply_id);
@@ -61,7 +70,7 @@ class commentService{
             const comment_detail = commentList.comment_detail;
             const reply_list = commentList.reply_list;
             
-            //查看有没有点赞评论
+            //查看有没有该评论的点赞信息
             const flag = await db.likecomment.findOne({
                 where: {
                     team_id: comment_detail.team_id,
@@ -70,12 +79,7 @@ class commentService{
             });
 
             //获取队伍头像
-            const team_avatar = await db.team.findOne({
-                where: {
-                id: comment_detail.team_id
-                },
-                attributes:['avatar'] 
-            });
+            const team_avatar = await teamService.getTeamAvatar(comment_detail.team_id);
                 
             // 增加评论详情字段
             const comment_result= {
@@ -147,6 +151,18 @@ class commentService{
             console.log(error)
             throw new Error('Error commenting on post');
         }
+    }
+
+    static async getCommentsofAllPosts(allPosts, flag=true){
+        //返回结构：[[{comment},...,{commnet}],...,[{comment},...,{commnet}]]
+        //最外层元素为不同的帖子的评价；最内侧元素同意帖子的不同评价
+        //如果flag为flase，则只返回ifread字段为1的评论
+        const commentLists = [];
+        for(const post of allPosts){
+            const comments = await commentService.getCommentsofPost(post.id, flag);
+            commentLists.push(comments)
+        }
+        return commentLists;
     }
 }
 
