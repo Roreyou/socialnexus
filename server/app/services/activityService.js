@@ -1,7 +1,5 @@
 const db = require('../models/index');
-const cloud = require('wx-server-sdk');
 const axios = require('axios');
-const qs = require('qs');
 const { Op } = require('sequelize');
 const teamService = require('./teamService');
 const activity = require('../models/activity');
