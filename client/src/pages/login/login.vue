@@ -1,13 +1,51 @@
 <!-- 统一登录界面 -->
 <template>
-	<view class="content">
-    	<!-- <image class="logo" src="../../static/logo.png"></image> -->
+	<view class="content back">
+		<!-- 选择角色 -->
+		<view class="container" v-if="step === 0">
+			<view class="text1">选择登录角色</view>
+    		<view class="team-box"  :class="selectedRole == item.id ? 'selected' : 'team-box'" v-for="item in list" :key="item.id" @click="selectRole(item.id)">
+				<img class="avatar" :src="item.avatarUrl" alt="Avatar">
+				<view class="team-name">{{ item.name }}</view>
+			</view>
+		</view>
+
+		<!-- 团委/社区基层登录 -->
+		<view class="container" v-else-if="step === 1 || step === 3">
+			<view class="text1">选择登录角色</view>
+			<view>
+				<view class="input-group">
+					<view class="input-row border">
+						<text class="title">账号：</text>
+						<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入账号"></m-input>
+					</view>
+					<view class="input-row">
+						<text class="title">密码：</text>
+						<m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
+					</view>
+				</view>
+				<!-- 直接登录 -->
+				<view class="btn-row">
+					<button class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
+				</view>
+				<view class="back-button" bindtap="navigateBack"></view>
+			</view>
+		</view>
+
+		<!-- 高校队伍登录 -->
+		<view class="container" v-else-if="step === 2">
+			<view class="text1">选择登录角色</view>
+    		<view class="team-box"  :class="selectedRole == item.id ? 'selected' : 'team-box'" v-for="item in list" :key="item.id" @click="selectRole(item.id)">
+				<img class="avatar" :src="item.avatarUrl" alt="Avatar">
+				<view class="team-name">{{ item.name }}</view>
+			</view>
+		</view>
+
 		
 		<!-- 切换身份按钮 -->
-		<view style="padding: 30rpx;">
-			<!-- 由于应用场景可能存在边距，所有组件中没有默认设置边距，可以通过父元素来控制 -->
+		<!-- <view style="padding: 30rpx;">
 			<YtabBtns :data="list" :index.sync="index"></YtabBtns>
-		</view>
+		</view> -->
 
 		<view v-show="!chooseTeam">
 			<!-- 高校队伍成员登录 -->
@@ -80,69 +118,32 @@
 			mInput,
 			YtabBtns
 		},
-
-		// 身份按钮
-		// props: {
-		// 	/**
-		// 	 * 展示字段的key 值为一个字符串
-		// 	 */
-		// 	listKey: {
-		// 		type: String,
-		// 		default: 'name'
-		// 	},
-		// 	/**
-		// 	 * 按钮列表 [{name:'按钮1', ...其他参数},{name:'按钮2', ...其他参数}]
-		// 	 */
-		// 	data: {
-		// 		type: Array,
-		// 		default: []
-		// 	},
-		// 	/**
-		// 	 * 前景色 文字 边框 及选中时的背景颜色
-		// 	 */
-		// 	color: {
-		// 		type: String,
-		// 		default: '#1E5EFF'
-		// 	},
-
-		// 	/**
-		// 	 * 背景色 未选中时背景色 及 选中时的文字颜色
-		// 	 */
-		// 	background: {
-		// 		type: String,
-		// 		default: '#FFFFFF'
-		// 	},
-		// 	/**
-		// 	 * 索引值 用来指定选中的值 绑定时需使用 .sync 
-		// 	 */
-		// 	borderColor: {
-		// 		type: String,
-		// 		default: '#1E5EFF'
-		// 	},
-		// 	/**
-		// 	 * 索引值 用来指定选中的值 绑定时需使用 .sync 
-		// 	 */
-		// 	index: {
-		// 		type: Number,
-		// 		default: 0
-		// 	},
-		// },
-
 		data() {
 			return {
 				// 身份按钮
 				index: 0,
-				list: [{
-					name: '校团委',
-					id: 1,
-				}, {
-					name: '高校队伍',
-					id: 2,
-				}, {
-
-					name: '基层工作人员',
-					id: 3,
-				}, ],
+				list: [
+					{
+						name: '我是校团委',
+						id: 1,
+						avatarUrl: 'https://imagepphcloud.thepaper.cn/pph/image/294/493/450.jpg',
+					},
+					{
+						name: '我是高校队伍',
+						id: 2,
+						avatarUrl: 'https://bpic.588ku.com/element_pic/23/04/23/aaecb8696eb1b5818cbe3d3b296ee5bd.png!/fw/150/unsharp/true/compress/true',
+					},
+					{
+						name: '我是基层工作人员',
+						id: 3,
+						avatarUrl: 'https://pic.616pic.com/ys_img/00/82/30/uBXdSziguA.jpg',
+					}, 
+					{
+						name: '我只是一名游客',
+						id: 4,
+						avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn6i34jCCfME1TIH_gJK7Kr-JKWFe3VGlPXQ&usqp=CAU',
+					},
+				],
 
 				index1: 0,
 
@@ -166,6 +167,8 @@
 				],
 				selectedTeam: 1,
 				chooseTeam: false,
+				selectedRole: null,
+				step: 0,
 			}
 		},
 		computed: mapState(['forcedLogin']),
@@ -189,6 +192,29 @@
 				console.log("this.selectedTeam before", this.selectedTeam);
 				this.selectedTeam = teamID;
 				console.log("this.selectedTeam after", this.selectedTeam);
+			},
+			// 我是xxx
+			selectRole(roleID){
+				console.log("选择的角色", roleID);
+				this.selectedRole = roleID;
+				if(this.selectedRole === 1){
+					// 校团委
+					this.step = 1;
+				}
+				else if(this.selectedRole === 2){
+					// 高校队伍
+					this.step = 2;
+				}
+				else if(this.selectedRole === 3){
+					// 社区基层
+					this.step = 3;
+				}
+				else if(this.selectedRole === 4){
+					// 游客
+					uni.navigateTo({
+							url:'../../page_school/pages/index/index'
+						});
+				}
 			},
 
 			initPosition() {
@@ -363,25 +389,24 @@
     cursor: pointer;
   }
   .team-box {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-bottom: 5px;
+	display: flex;
+    align-items: center;
+    padding: 30rpx;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 30rpx;
+    cursor: pointer;
+    margin-bottom: 18rpx;
 }
 
 .selected {
-  border:2px solid#39B54A;
+  border:2rpx solid#39B54A;
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #ccc;
-  margin-right: 10px;
+	width: 120rpx;
+    height: 120rpx;
+    border-radius: 50%;
+    margin-right: 44rpx;
 }
 
 .team-name {
@@ -407,6 +432,38 @@
 //   margin-right: 10px;
   border-color: white ;
 }
-
+.back{
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/11.png);
+	background-size: 100% 100%;
+    height: 100vh;
+	background-attachment: fixed;
+}
+.container{
+	// border-radius: 30rpx;
+	background-color: rgba(255,255,255,0.3);
+	margin-top: 300rpx;
+}
+.text1{
+	font-size: 30rpx;
+    font-family: 'Arial';
+    margin-top: 20rpx;
+    margin-left: 20rpx;
+	margin-bottom: 20rpx;
+    font-weight: bold;  
+}
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: transparent;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  color: #333333;
+  font-size: 14px;
+  cursor: pointer;
+  background-image: url(https://pic.616pic.com/ys_img/00/05/51/scUAovfXGL.jpg);
+  background-size: 100% 100%;
+}
 
 </style>
