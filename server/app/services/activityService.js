@@ -3,7 +3,6 @@ const cloud = require('wx-server-sdk')
 const { Op } = require('sequelize');
 const teamService = require('./teamService');
 const activity = require('../models/activity');
-const activity = require('../models/activity');
 const CommunityService = require('./communityService');
 
 cloud.init({
@@ -426,8 +425,20 @@ class ActivityService {
   //获取二维码图片
   static async getActivityQRCodePicture(activityId){
     try {
+      //http调用获取token
+      const grant_type = 'client_credential';
+      const appid = 'wx8fe05dd20b9f8b5d'; // 替换为你的小程序 AppID
+      const secret = 'f794a13206475d25bb3f0fc2341f903b'; // 替换为你的小程序 AppSecret
+
+      const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=${grant_type}&appid=${appid}&secret=${secret}`;
+
+      const responseToken = await axios.get(url);
+
+
+      // 第三方调用获取二维码
       // 构建请求参数
       const params = {
+        access_token: responseToken.access_token,
         page: "page school/pages/details/details",
         scene: `acti_id=${activityId}`,
         check_path: true,
@@ -435,17 +446,13 @@ class ActivityService {
       };
 
       // 发送请求到微信接口获取小程序码
-      const response = await axios.post('https://api.weixin.qq.com/wxa/getwxacode', params, {
-          params: {
-              access_token: 'your_access_token' // 替换为你的微信小程序访问令牌
-          },
-          responseType: 'arraybuffer' // 响应类型为数组缓冲区
-      });
+      const response = await cloud.openapi.wxacode.getUnlimited(params);
 
-      // 将响应的二进制数据保存到文件中，或者在需要的时候返回给调用者
-      fs.writeFileSync('activity_qr_code.png', response.data);
-
+      // 
+      console.log(response);
       console.log('Activity QR code saved successfully');
+    
+      return "成功了吗";
     } catch (error) {
         console.error('Error getting activity QR code:', error);
         throw new Error('Error getting activity QR code');
