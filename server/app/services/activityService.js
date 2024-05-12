@@ -16,10 +16,6 @@ const axiosInstance = axios.create({
   transformRequest: [customTransformRequest]
 });*/
 
-cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV,
-})
-
 class ActivityService {
   static async getAllActivities() {
     return await db.activity.findAll();
