@@ -25,8 +25,8 @@
           </view>
         </view>
 
-        <view style="display: flex; flex-direction: row;margin-top: 10rpx;">
-          <view class="index" style="margin-left: 80rpx;">
+        <view style="display: flex; flex-direction: row; margin-top: 10rpx">
+          <view class="index" style="margin-left: 80rpx">
             <view class="form-item" @click="showPCA01">
               <view
                 bindtap="goCnCollege"
@@ -42,7 +42,7 @@
             <pcaPicker ref="pcaPicker" @confirm="getPCA01"></pcaPicker>
           </view>
 
-          <view class="index" style="margin-left: 200rpx;">
+          <view class="index" style="margin-left: 200rpx">
             <view class="form-item" @click="showPDate">
               <view
                 bindtap="goCnCollege"
@@ -58,7 +58,7 @@
             <datePicker ref="datePicker" @confirm="getDateTime"></datePicker>
           </view>
 
-          <view class="index" style="margin-left: 200rpx;">
+          <view class="index" style="margin-left: 200rpx">
             <view class="form-item" @click="showPType">
               <view
                 bindtap="goCnCollege"
@@ -74,7 +74,6 @@
             <typePicker ref="typePicker" @confirm="getType"></typePicker>
           </view>
         </view>
-
       </view>
     </view>
     <view class="accontent">
@@ -114,6 +113,15 @@ export default {
       region: "地区",
       dateTime: "时段",
       type: "类型",
+      filterParam: {
+        location: {
+          province: "",
+          city: "",
+          district: "",
+        },
+        activity_time: "",
+        category_id: 0,
+      },
       tabIndex: "0",
       currentTabComponent: "0",
       // 全屏组件
@@ -184,19 +192,51 @@ export default {
       this.$refs.pcaPicker.show();
     },
     getPCA01(e) {
-      console.log(e);
+      this.filterParam.location.province = e.province;
+      this.filterParam.location.city = e.city;
+      this.filterParam.location.district = e.district;
+      this.getFilter();
     },
     showPDate(e) {
       this.$refs.datePicker.show();
     },
     getDateTime(e) {
-      console.log(e);
+      this.filterParam.activity_time = e;
+      this.getFilter();
     },
     showPType(e) {
       this.$refs.typePicker.show();
     },
     getType(e) {
-      console.log(e);
+      this.filterParam.category_id = e;
+      this.getFilter();
+    },
+    getFilter() {
+      uni.request({
+        url:
+          this.$url.BASE_URL +
+          "/4142061-3780993-default/schoolteam/activsquare/filter",
+        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/activsquare/filter,
+        method: "GET",
+        data: {
+          location: {
+            province: this.filterParam.location.province,
+            city: this.filterParam.location.city,
+            district: this.filterParam.location.district,
+          },
+          activity_time: this.filterParam,
+          category_id: this.filterParam.category_id,
+        },
+        success: (res) => {
+          // this.searchlist = res.data.data.acti_list;
+          this.searchlist = this.searchlist.concat(res.data.data.acti_list);
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
     },
     getRelist(data) {
       uni.request({
