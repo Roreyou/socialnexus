@@ -32,6 +32,11 @@
             <view>{{ minute }}</view>
           </block>
         </picker-view-column>
+        <picker-view-column>
+          <block v-for="(second, index) in seconds" :key="index">
+            <view>{{ second }}</view>
+          </block>
+        </picker-view-column>
       </picker-view>
     </view>
   </view>
@@ -42,16 +47,17 @@ export default {
   data() {
     return {
       popFlag: false,
-      dateTimeIndex: [0, 0, 0, 0, 0], // Indexes for year, month, day, hour, minute
+      dateTimeIndex: [0, 0, 0, 0, 0, 0], // Indexes for year, month, day, hour, minute, second
       years: [],
       months: [],
       days: [],
       hours: [],
       minutes: [],
+      seconds: [],
     };
   },
   mounted() {
-    // Initialize years, months, days, hours, and minutes data
+    // Initialize years, months, days, hours, minutes, and seconds data
     this.initDateTimeData();
   },
   methods: {
@@ -72,13 +78,19 @@ export default {
     },
     // Confirm selection
     confirm() {
-      const [yearIndex, monthIndex, dayIndex, hourIndex, minuteIndex] =
-        this.dateTimeIndex;
-      const selectedDateTime = `${this.years[yearIndex]}-${this.months[monthIndex]}-${this.days[dayIndex]} ${this.hours[hourIndex]}:${this.minutes[minuteIndex]}`;
+      const [
+        yearIndex,
+        monthIndex,
+        dayIndex,
+        hourIndex,
+        minuteIndex,
+        secondIndex,
+      ] = this.dateTimeIndex;
+      const selectedDateTime = `${this.years[yearIndex]}-${this.months[monthIndex]}-${this.days[dayIndex]} ${this.hours[hourIndex]}:${this.minutes[minuteIndex]}:${this.seconds[secondIndex]}`;
       this.$emit("confirm", selectedDateTime);
       this.hide();
     },
-    // Initialize years, months, days, hours, and minutes data
+    // Initialize years, months, days, hours, minutes, and seconds data
     initDateTimeData() {
       // Initialize years
       const currentYear = new Date().getFullYear();
@@ -102,6 +114,11 @@ export default {
       // Initialize minutes
       for (let i = 0; i < 60; i++) {
         this.minutes.push(i < 10 ? "0" + i : i);
+      }
+
+      // Initialize seconds
+      for (let i = 0; i < 60; i++) {
+        this.seconds.push(i < 10 ? "0" + i : i);
       }
     },
     // Update days based on selected year and month

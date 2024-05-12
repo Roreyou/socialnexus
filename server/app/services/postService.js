@@ -10,7 +10,6 @@ const path = require('path');
 const replyService = require('./replyService');
 const notification = require('../models/notification');
 const commentService = require('./commentService');
-const { all } = require('../routes/teamRouter');
 
 class postService{
     static async createPost(postData){
@@ -629,10 +628,10 @@ class postService{
         }
     }
 
-    static async savePostImg(image){
+    static async savePostImg(image, folderName){
         try {
-            const imagePath = path.join(__dirname, 'uploads');
-            const imageUrl = `/uploads/${image.filename}`;
+            const imagePath = path.join(__dirname, folderName);
+            const imageUrl = `/${folderName}/${image.filename}`;
 
             console.log("debug path:", imageUrl);
             // 将上传的图片保存到本地文件系统

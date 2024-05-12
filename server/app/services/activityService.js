@@ -1,14 +1,20 @@
 const db = require('../models/index');
-const cloud = require('wx-server-sdk')
+const axios = require('axios');
 const { Op } = require('sequelize');
 const teamService = require('./teamService');
 const activity = require('../models/activity');
-const activity = require('../models/activity');
 const CommunityService = require('./communityService');
+const fs = require('fs/promises');
+const postService = require('./postService');
+/*
+//防止request自编码
+// 自定义请求数据序列化函数，这里仅将请求数据返回，不做任何处理
+const customTransformRequest = (data, headers) => data;
 
-cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV,
-})
+// 创建 Axios 实例，并设置 transformRequest 为自定义序列化函数
+const axiosInstance = axios.create({
+  transformRequest: [customTransformRequest]
+});*/
 
 class ActivityService {
   static async getAllActivities() {
@@ -410,6 +416,29 @@ class ActivityService {
     return {team_detail, acti_detail};
   }
 
+  static async saveQRCodeImg(code_picture, folderName, QRCodeName){
+    // code_picture是二进制流
+    try {
+      const imagePath = path.join(__dirname, folderName);
+      const imageUrl = `/${folderName}/${QRCodeName}`;
+
+      console.log("debug path:", imageUrl);
+      // 将上传的图片保存到本地文件系统
+      await fs.writeFile(imagePath, code_picture, 'binary', (err) => {
+        if (err) {
+          console.error('Error saving image:', err);
+          return;
+        }
+        console.log('Image saved successfully as image.jpg');
+        });
+      
+      return imageUrl;
+    } catch (error) {
+        throw error;
+    }
+    
+  }
+
   static async getPosterInfo(activityId){
     const activity = await ActivityService.getActivityById(activityId);
     const name = activity.name;
@@ -419,33 +448,62 @@ class ActivityService {
     const address =  `${activity.province}  ${activity.city} ${activity.address}`;
     const acti_picture = activity.picture;
 
-    //获取二维码图片
-    const code_picture = await ActivityService.getActivityQRCodePicture(activityId);
+    //获取二维码图片的二进制数据
+      const code_picture = await ActivityService.getActivityQRCodePicture(activityId);
+      // 将二进制数据写入文件查看
+      await ActivityService.saveQRCodeImg(code_picture, "QRCodes", "codeimage01.png");
+      /*
+      await fs.writeFile('./QRcode/codeimage01.png', code_picture, 'binary', (err) => {
+      if (err) {
+        console.error('Error saving image:', err);
+        return;
+      }
+      console.log('Image saved successfully as image.jpg');
+      });*/
+
+    return {
+      name: name,
+      begin_time: begin_time,
+      end_time: end_time,
+      community_name:community_name,
+      address:address,
+      //code_picture:code_picture,
+      acti_picture:acti_picture
+    };
   }
 
   //获取二维码图片
   static async getActivityQRCodePicture(activityId){
     try {
-      // 构建请求参数
+      //http调用获取token
+      const grant_type = 'client_credential';
+      const appid = 'wx8fe05dd20b9f8b5d'; // 替换为你的小程序 AppID
+      const secret = 'f794a13206475d25bb3f0fc2341f903b'; // 替换为你的小程序 AppSecret
+
+      const getTokenUrl = `https://api.weixin.qq.com/cgi-bin/token?grant_type=${grant_type}&appid=${appid}&secret=${secret}`;
+
+      const responseToken = await axios.get(getTokenUrl);
+      const access_token = responseToken.data.access_token;
+      //console.log("debug-responseToken",responseToken);
+      //console.log("debug-access_token",access_token);
+
+      // http调用获取程序码
+      const getQRCodeUrl = `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${access_token}`;
       const params = {
-        page: "page school/pages/details/details",
+        //page: "page_school/pages/details/details",
         scene: `acti_id=${activityId}`,
-        check_path: true,
+        //check_path: true,
         env_version: "develop"
       };
 
-      // 发送请求到微信接口获取小程序码
-      const response = await axios.post('https://api.weixin.qq.com/wxa/getwxacode', params, {
-          params: {
-              access_token: 'your_access_token' // 替换为你的微信小程序访问令牌
-          },
-          responseType: 'arraybuffer' // 响应类型为数组缓冲区
+      // 发送 HTTPS 请求
+      const responseCode = await axios.post(getQRCodeUrl, params,{
+        responseType: 'arraybuffer' // 设置响应类型为二进制数组
       });
-
-      // 将响应的二进制数据保存到文件中，或者在需要的时候返回给调用者
-      fs.writeFileSync('activity_qr_code.png', response.data);
-
+      //console.log("debug-response",responseCode);
       console.log('Activity QR code saved successfully');
+      return responseCode.data;
+
     } catch (error) {
         console.error('Error getting activity QR code:', error);
         throw new Error('Error getting activity QR code');
