@@ -6,16 +6,15 @@ const activityService = require('../services/activityService');
 class teamController {
   static async modifyPwd(req, res){
     try {
-      const { old_pwd, new_pwd } = req.body;
-      const teamId = req.user.teamId; // 假设从请求中获取团队 ID，这里假设使用 req.user.teamId 获取
+        const { identity, old_pwd, new_pwd, user_id } = req.body;
+        // 调用服务层方法修改密码
+        const result = await teamService.modifyPwd(identity, old_pwd, new_pwd, user_id);
 
-      // 调用服务层方法修改团队密码
-      const result = await teamService.changePassword(teamId, old_pwd, new_pwd);
-
-      // 返回结果
-      return res.json(Result.success(result));
+        // 返回结果
+        return res.json(Result.success("modify successfully!"));
     } catch (error) {
-      return res.json(Result.fail(error));
+        // 返回错误信息
+        return res.json(Result.fail("modify unsuccessfully!"));
     }
   }
 

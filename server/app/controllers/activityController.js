@@ -165,6 +165,28 @@ class ActivityController {
       return res.json(Result.fail(error.message));
     }
   }
+
+  // 获取报名页面详情
+  static async getRegisterDetail(req, res){
+    try {
+      const {team_id, acti_id} = req.query;
+      const results = await activityService.getRegisterDetail(team_id, acti_id);
+      return res.json(Result.success(results));
+    } catch (error) {
+      return res.json(Result.fail(error));
+    }
+  }
+
+  // 获取海报信息
+  static async getPosterInfo(req, res){
+    try {
+      const {acti_id} = req.query;
+      const results = await activityService.getPosterInfo(acti_id);
+      return res.json(Result.success(results));
+    } catch (error) {
+      return res.json(Result.fail(error));
+    }
+  }
 }
 
 module.exports = ActivityController;

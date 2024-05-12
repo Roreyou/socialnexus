@@ -69,6 +69,10 @@ module.exports = function(sequelize, DataTypes) {
     picture: {
       type: DataTypes.STRING(45),
       allowNull: true
+    },
+    QRCode: {
+      type: DataTypes.STRING(45),
+      allowNull: true
     }
   }, {
     sequelize,

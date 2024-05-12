@@ -52,7 +52,7 @@
 		{
 			"path": "pages/school/search/search",
 			"style": {
-				"navigationBarTitleText": "找活动",
+				"navigationBarTitleText": "活动广场",
 				"componentPlaceholder": {
 					//占位组件
 					"scontent": "view",

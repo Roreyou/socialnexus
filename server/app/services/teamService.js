@@ -1,5 +1,6 @@
 //services/teamService.js
 const db = require('../models/index');
+const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 const ActivityService = require('./activityService');
 const CommunityService = require('./communityService');
@@ -673,7 +674,100 @@ class teamService {
       })));
   }
 
+  static async modifyPwd(identity, old_pwd, new_pwd, user_id){
+    try {
+      // 根据身份（如teacher、student等）和用户ID检查用户是否存在
+      const user = await teamService.getUserByIdentityAndId(identity, user_id);
 
+      // 验证旧密码是否正确
+      const passwordMatch = await bcrypt.compare(old_pwd, user.pwd);
+
+      if (!passwordMatch) {
+        throw new Error('密码错误');
+      }
+
+      // 更新密码
+      await teamService.updateUserPassword(identity, user_id, new_pwd);
+
+      return 'Password changed successfully' ;
+    } catch (error) {
+        throw new Error('Failed to change password: ' + error.message);
+    }
+  }
+
+  // 根据身份和用户ID从数据库中获取用户信息
+  static async  getUserByIdentityAndId(identity, userId) {
+    if (identity == '1') { // 是队长
+        return await db.teammember.findByPk(userId);
+    }else if(identity == '2'){// 是队员
+        return await db.teammember.findOne({
+          where:{id:userId}
+        });
+    } else if (identity == '3') { //是指导老师
+        return await db.teacher.findByPk(userId);
+    }
+  }
+
+  static async updateUserPassword(identity, userId, newPassword) {
+    // 更新用户密码
+    // 加密密码
+    const hash_pwd = await bcrypt.hash(newPassword, 10);
+    if (identity == '1') { // 是队长
+      await db.teammember.update({ pwd: hash_pwd }, { where: { id: userId } }); 
+    } if(identity == '2' ){ // 是队员
+      await db.teammember.update({ pwd: hash_pwd }, { where: { id: userId } }); 
+    }else if (identity == '3'){ //是指导老师
+      await db.teacher.update({ pwd: hash_pwd }, { where: { id: userId } });
+    }
+  }
+
+  static async getLeaderNameById(leaderId){
+      const leader = await db.teammember.findOne({
+        where: {
+            id: leaderId
+        },
+        attributes:['name'] 
+      });
+      return leader.name;
+  }
+
+  static async getInstructorNameById(instructorId){
+    const instructor = await db.teacher.findOne({
+      where: {
+          id: instructorId
+      },
+      attributes:['name'] 
+    });
+    return instructor.name;
+  }
+
+  static async getLeaderById(leaderId){
+    const leader = await db.teammember.findOne({
+      where: {
+          id: leaderId
+      }
+    });
+    return leader;
+  }
+
+  static async getInstructorById(instructorId){
+    const instructor = await db.teacher.findOne({
+      where: {
+          id: instructorId
+      },
+    });
+    return instructor;
+  }
+
+  static async getTeamActivityById(teamId, activityId){
+    const result = db.teamactivity.findOne({
+      where:{
+        team_id:teamId,
+        activity_id:activityId
+      }
+    });
+    return result;
+  }
 }
 
 module.exports = teamService;
