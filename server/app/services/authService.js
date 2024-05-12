@@ -70,7 +70,6 @@ class AuthService {
         
         // 加密密码
         user.pwd = await bcrypt.hash(user.pwd, 10);
-        // console.log("debug user:", user);
         
         try {
             // 注册成功

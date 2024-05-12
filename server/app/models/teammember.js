@@ -32,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     pwd: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING(60),
       allowNull: true
     }
   }, {
