@@ -8,7 +8,7 @@ const store = new Vuex.Store({
 		/**
 		 * 是否需要强制登录
 		 */
-		forcedLogin: true,
+		forcedLogin: false,
 		hasLogin: false,
 		user_id: "",
 		userName: "游客",
@@ -21,6 +21,7 @@ const store = new Vuex.Store({
 	},
 	mutations: {
 		login(state, {user_id, verification_status, user_name, avatar, isleader}) {
+			// 登录
 			state.userInfo.isUser = true;
 			// console.log("login-avatar", avatar)
 			state.user_id = user_id      // user_id根据情况可能是社区的id，高校的id...
@@ -32,6 +33,7 @@ const store = new Vuex.Store({
 			state.userInfo.avatar = avatar || a;
 		},
 		logout(state) {
+			// 登出
 			state.user_id = "";
 			state.userName = "游客";
 			state.userInfo = {

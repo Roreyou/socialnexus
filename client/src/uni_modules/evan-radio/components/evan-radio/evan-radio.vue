@@ -14,7 +14,7 @@
 </template>
 
 <script>
-	import UniIcons from '@/components/uni-icons/uni-icons.vue'
+	import UniIcons from '../uni-icons/uni-icons.vue'
 	export default {
 		name: 'EvanRadio',
 		components: {
