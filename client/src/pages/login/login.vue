@@ -32,7 +32,7 @@
 				<view class="back-button" @tap="back"></view>
 			</view>
 			<view class="action-row" style="margin-top: -17rpx">
-				<navigator url="../reg/reg" style="font-weight: bold; color: darkgreen">注册账号</navigator>
+				<navigator url="../reg/reg" style="font-weight: bold; color: darkgreen" v-if="step ===3">注册账号</navigator>
 				<text style="color: white">|</text>
 				<navigator url="../pwd/pwd" style="font-weight: bold; color: darkgreen" >忘记密码</navigator>
 				<text style="color: white;" >|</text>
