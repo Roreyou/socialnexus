@@ -31,6 +31,13 @@
 				<!-- 返回 -->
 				<view class="back-button" @tap="back"></view>
 			</view>
+			<view class="action-row" style="margin-top: -17rpx">
+				<navigator url="../reg/reg" style="font-weight: bold; color: darkgreen">注册账号</navigator>
+				<text style="color: white">|</text>
+				<navigator url="../pwd/pwd" style="font-weight: bold; color: darkgreen" >忘记密码</navigator>
+				<text style="color: white;" >|</text>
+				<navigator url="../school/index/index" open-type="reLaunch" style="font-weight: bold; color: darkgreen">游客模式</navigator>
+			</view>
 		</view>
 
 		<!-- 高校队伍登录 -->
@@ -70,6 +77,13 @@
 				<!-- 返回 -->
 				<view class="back-button" @tap="back"></view>
 			</view>
+			<view class="action-row" style="margin-top: -17rpx">
+				<navigator url="../reg/reg" style="font-weight: bold; color: darkgreen">注册账号</navigator>
+				<text style="color: white">|</text>
+				<navigator url="../pwd/pwd" style="font-weight: bold; color: darkgreen" >忘记密码</navigator>
+				<text style="color: white;" >|</text>
+				<navigator url="../school/index/index" open-type="reLaunch" style="font-weight: bold; color: darkgreen">游客模式</navigator>
+			</view>
 		</view>
 
 		
@@ -77,15 +91,7 @@
 		<!-- <view style="padding: 30rpx;">
 			<YtabBtns :data="list" :index.sync="index"></YtabBtns>
 		</view> -->
-
-		<view class="action-row">
-			<navigator url="../reg/reg">注册账号</navigator>
-			<text>|</text>
-			<navigator url="../pwd/pwd">忘记密码</navigator>
-			<text>|</text>
-			<navigator url="../school/index/index" open-type="reLaunch">游客模式</navigator>
-			<!-- <button class="guest-button" @click="gotoIndex">游客模式</button> -->
-		</view>
+	
 	</view>
 </template>
 
@@ -148,7 +154,7 @@
 				selectedTeam: '',
 				chooseTeam: false,
 				selectedRole: null,
-				step: 2.1,
+				step: 0,
 			}
 		},
 		computed: mapState(['forcedLogin']),
@@ -238,8 +244,8 @@
 				}
 				else if(this.selectedRole === 4){
 					// 游客
-					uni.navigateTo({
-							url:'../../page_school/pages/index/index'
+					uni.reLaunch({
+							url:'../school/index/index'
 						});
 				}
 			},
