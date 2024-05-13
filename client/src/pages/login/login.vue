@@ -1,32 +1,19 @@
 <!-- 统一登录界面 -->
 <template>
-	<view class="content">
-    	<!-- <image class="logo" src="../../static/logo.png"></image> -->
-		
-		<!-- 切换身份按钮 -->
-		<view style="padding: 30rpx;">
-			<!-- 由于应用场景可能存在边距，所有组件中没有默认设置边距，可以通过父元素来控制 -->
-			<YtabBtns :data="list" :index.sync="index"></YtabBtns>
+	<view class="content back">
+		<!-- step0 选择角色 -->
+		<view class="container" v-if="step === 0">
+			<view class="text1">选择登录角色</view>
+    		<view class="team-box"  :class="selectedRole == item.id ? 'selected' : 'team-box'" v-for="item in list" :key="item.id" @click="selectRole(item.id)">
+				<img class="avatar" :src="item.avatarUrl" alt="Avatar">
+				<view class="team-name">{{ item.name }}</view>
+			</view>
 		</view>
 
-		<view v-show="!chooseTeam">
-			<!-- 高校队伍成员登录 -->
-			<view v-if="index==1">
-				<view class="input-group" >
-					<view class="input-row border" v-if="index==1">
-						<text class="title">个人ID：</text>
-						<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入个人ID"></m-input>
-					</view>
-				</view>
-				<!-- 高校队伍成员登录，下一步 -->
-				<view class="btn-row" v-if="index==1">
-					<button class="cu-btn bg-green block lg" @tap="teamNext">下一步</button>
-				</view>
-
-			</view>
-
-			<!-- 团委/社区基层登录 -->
-			<view v-else>
+		<!-- step1 step3团委/社区基层登录 -->
+		<view class="container" v-else-if="step === 1 || step === 3">
+			<view class="text1">{{step === 1 ? '校团委登录' : '社区基层登录'}}</view>
+			<view>
 				<view class="input-group">
 					<view class="input-row border">
 						<text class="title">账号：</text>
@@ -37,10 +24,65 @@
 						<m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
 					</view>
 				</view>
-				<!-- 团委/社区基层直接登录 -->
+				<!-- 直接登录 -->
 				<view class="btn-row">
 					<button class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
 				</view>
+				<!-- 返回 -->
+				<view class="back-button" @tap="back"></view>
+			</view>
+		</view>
+
+		<!-- 高校队伍登录 -->
+		<view class="container" v-else-if="Math.floor(step) === 2">
+			<view class="text1">高校队伍登录</view>
+			<!-- step2.1 第一步，填写账号 -->
+			<view v-if="step === 2.1">
+				<view class="input-group" >
+					<view class="input-row border">
+						<text class="title">个人ID：</text>
+						<m-input class="m-input" type="text" clearable focus v-model="member_id" placeholder="请输入个人ID"></m-input>
+					</view>
+				</view>
+				<view class="radio-container">
+    				<evan-radio v-model="member_iden" label=0 primary-color="#39B54A" style="color: darkgreen;">队长/队员</evan-radio>
+					<evan-radio v-model="member_iden" label=1 primary-color="#39B54A" style="color: darkgreen;">指导老师</evan-radio>
+				</view>
+				<!-- 下一步 -->
+				<view class="btn-row" >
+					<button class="cu-btn bg-green block lg" @tap="teamNext">下一步</button>
+				</view>
+				<!-- 返回 -->
+				<view class="back-button" @tap="back"></view>
+			</view>
+			<!-- 2.2 -->
+			<view v-else-if="step === 2.2">
+    			<view  class="team-box"  :class="selectedTeam == item.team_id ? 'selected' : 'team-box'" v-for="item in teamList" :key="item.team_id" @click="selectTeam(item.team_id)">
+					<img class="avatar" :src="item.avatarUrl" alt="Avatar">
+					<view class="team-name">{{ item.team_name }}</view>
+				</view>
+				<view v-if="selectedTeam.length != 0">
+					<m-input class="input-pwd" type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
+					<view class="btn-row">
+							<button class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
+					</view>
+				</view>
+				<!-- 返回 -->
+				<view class="back-button" @tap="back"></view>
+			</view>
+		</view>
+
+		
+		<!-- 切换身份按钮 -->
+		<!-- <view style="padding: 30rpx;">
+			<YtabBtns :data="list" :index.sync="index"></YtabBtns>
+		</view> -->
+
+		<view v-show="!chooseTeam">
+			<!-- 高校队伍成员登录 -->
+			<view v-if="index==1">
+				
+
 			</view>
 		</view>
 
@@ -50,7 +92,7 @@
 					<img class="avatar" :src="item.avatarUrl" alt="Avatar">
 					<view class="team-name">{{ item.team_name }}</view>
 			</view>
-			<m-input class="input-pwd" type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
+			
 			<button style="margin-top: 10px;" class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
 
 		</view>
@@ -74,75 +116,41 @@
 	} from 'vuex'
 	import mInput from '../../components/m-input.vue'
 	import YtabBtns from '../../components/login-tab/YtabBtns.vue'
-	
+	import EvanRadioGroup from '@/uni_modules/evan-radio/components/evan-radio-group/evan-radio-group.vue'
+	import EvanRadio from '@/uni_modules/evan-radio/components/evan-radio/evan-radio.vue'
 	export default {
 		components: {
 			mInput,
-			YtabBtns
+			YtabBtns,
+			EvanRadio,
+			EvanRadioGroup
 		},
-
-		// 身份按钮
-		// props: {
-		// 	/**
-		// 	 * 展示字段的key 值为一个字符串
-		// 	 */
-		// 	listKey: {
-		// 		type: String,
-		// 		default: 'name'
-		// 	},
-		// 	/**
-		// 	 * 按钮列表 [{name:'按钮1', ...其他参数},{name:'按钮2', ...其他参数}]
-		// 	 */
-		// 	data: {
-		// 		type: Array,
-		// 		default: []
-		// 	},
-		// 	/**
-		// 	 * 前景色 文字 边框 及选中时的背景颜色
-		// 	 */
-		// 	color: {
-		// 		type: String,
-		// 		default: '#1E5EFF'
-		// 	},
-
-		// 	/**
-		// 	 * 背景色 未选中时背景色 及 选中时的文字颜色
-		// 	 */
-		// 	background: {
-		// 		type: String,
-		// 		default: '#FFFFFF'
-		// 	},
-		// 	/**
-		// 	 * 索引值 用来指定选中的值 绑定时需使用 .sync 
-		// 	 */
-		// 	borderColor: {
-		// 		type: String,
-		// 		default: '#1E5EFF'
-		// 	},
-		// 	/**
-		// 	 * 索引值 用来指定选中的值 绑定时需使用 .sync 
-		// 	 */
-		// 	index: {
-		// 		type: Number,
-		// 		default: 0
-		// 	},
-		// },
-
 		data() {
 			return {
 				// 身份按钮
 				index: 0,
-				list: [{
-					name: '校团委',
-					id: 1,
-				}, {
-					name: '高校队伍',
-					id: 2,
-				}, {
-
-					name: '基层工作人员',
-					id: 3,
-				}, ],
+				list: [
+					{
+						name: '我是校团委',
+						id: 1,
+						avatarUrl: 'https://imagepphcloud.thepaper.cn/pph/image/294/493/450.jpg',
+					},
+					{
+						name: '我是高校队伍',
+						id: 2,
+						avatarUrl: 'https://bpic.588ku.com/element_pic/23/04/23/aaecb8696eb1b5818cbe3d3b296ee5bd.png!/fw/150/unsharp/true/compress/true',
+					},
+					{
+						name: '我是基层工作人员',
+						id: 3,
+						avatarUrl: 'https://pic.616pic.com/ys_img/00/82/30/uBXdSziguA.jpg',
+					}, 
+					{
+						name: '我只是一名游客',
+						id: 4,
+						avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn6i34jCCfME1TIH_gJK7Kr-JKWFe3VGlPXQ&usqp=CAU',
+					},
+				],
 
 				index1: 0,
 
@@ -150,22 +158,17 @@
 				hasProvider: false,
 				account: '',
 				password: '',
+				member_id: '', //高校队伍登录时第一步输入的个人ID
+				member_iden: null,// 0为队员/队长，1为指导老师
 				positionTop: 0,
 				isDevtools: false,
 				teamList:[
-					{
-						team_id: 1,
-						team_name: "队伍1",
-						avatarUrl: 'https://photo.16pic.com/00/93/96/16pic_9396213_b.jpg'
-					},
-					{
-						team_id: 2,
-						team_name: "队伍2",
-						avatarUrl: 'https://www.zmtc.com/wp-content/uploads/2023/0308/20230308090400294.jpg'
-					}
+
 				],
-				selectedTeam: 1,
+				selectedTeam: '',
 				chooseTeam: false,
+				selectedRole: null,
+				step: 2.1,
 			}
 		},
 		computed: mapState(['forcedLogin']),
@@ -181,7 +184,54 @@
 					});
 			},
 			teamNext(){
-				this.chooseTeam = true;
+				console.log("this.member_iden",this.member_iden);
+				if(this.member_id.length === 0){
+					uni.showToast({
+						icon: 'none',
+						title: '请输入个人ID'
+					});
+					return;
+				}
+				if(this.member_iden!=0 && this.member_iden!=1){
+					uni.showToast({
+						icon: 'none',
+						title: '请选择身份'
+					});
+					return;
+				}
+				// 请求所参与的队伍列表
+				uni.request({
+					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getMyTeams',
+                	header:{
+						
+					},	
+					method: 'GET',
+					data: {
+						id: this.member_id,
+						identity: this.member_iden,
+					},
+					success: res => {	
+						if(res.data.code == 200){
+							console.log("成功请求-登录-所属于的多支队伍");
+							this.teamList = res.data.data.team_list;
+
+						}
+						else if(res.data.code == 500){
+							uni.showToast({
+								icon: 'none',
+								title: '您不属于任何队伍。'
+							});
+						}
+						this.net_error = false;
+					},
+					fail: res => {
+						this.net_error = true;
+					},
+					complete: () => {
+					}
+				})
+				// 下一步，选择哪个队伍登录进去
+				this.step = 2.2;
 			},
 			// 选择登录的队伍
 			selectTeam(teamID){
@@ -189,6 +239,29 @@
 				console.log("this.selectedTeam before", this.selectedTeam);
 				this.selectedTeam = teamID;
 				console.log("this.selectedTeam after", this.selectedTeam);
+			},
+			// 我是xxx
+			selectRole(roleID){
+				console.log("选择的角色", roleID);
+				this.selectedRole = roleID;
+				if(this.selectedRole === 1){
+					// 校团委
+					this.step = 1;
+				}
+				else if(this.selectedRole === 2){
+					// 高校队伍
+					this.step = 2.1;
+				}
+				else if(this.selectedRole === 3){
+					// 社区基层
+					this.step = 3;
+				}
+				else if(this.selectedRole === 4){
+					// 游客
+					uni.navigateTo({
+							url:'../../page_school/pages/index/index'
+						});
+				}
 			},
 
 			initPosition() {
@@ -198,53 +271,100 @@
 				 */
 				this.positionTop = uni.getSystemInfoSync().windowHeight - 100;
 			},
+			// 登录逻辑
 			bindLogin() {
 				/**
 				 * 客户端对账号信息进行一些必要的校验。
 				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
 				 */
-				/* 先删掉校验逻辑，之后再来补充
-				if (this.account.length < 5) {
+				 if( Math.floor(this.step)=== 2 && this.selectedTeam.length === 0){
 					uni.showToast({
 						icon: 'none',
-						title: '账号最短为 5 个字符'
+						title: '请选择要登录的队伍'
 					});
 					return;
 				}
-				if (this.password.length < 6) {
+				if(this.account.length === 0){
 					uni.showToast({
 						icon: 'none',
-						title: '密码最短为 6 个字符'
+						title: '请输入账号'
 					});
 					return;
-				}*/
+				}
+				if(this.password.length === 0){
+					uni.showToast({
+						icon: 'none',
+						title: '请输入密码'
+					});
+					return;
+				}
+				
+				// 团委进行登录
+				let identity = '';
+				if(this.step === 1){
+					identity = 'school';
+				}
+				else if(Math.floor(this.step) === 2){
+					identity = 'team';
+					this.account = this.selectedTeam;
+				}
+				else{
+					identity = 'community';
+				}
 
-				const identity = "school"
-				const data = {
+				const data={
 					identity: identity,
-					id: this.account,  //team_id
+					id: this.account,  //账号
 					pwd: this.password
-				};
-
+				}
+				console.log("data",data);
 				//发请求
+				// apifoxApiId=
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154463358',			
+					// 最终登录会是一个接口，由identity说明身份。apifox上为了统一写了多个所以要传apiID
+					// 高校
+					// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154463358',
+					// 团委登录接口
+					url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154755970',
+					// 社区基层
+					// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154447878',
 					method: 'POST',
 					data: data,
 					success: res => {
 						if(res.data.code == 200){
-	
-							if(identity == "school"){  //登录的是高校队伍，响应里有审核状态
-								const verification_status = res.data.data.verification_status;
-								const team_name =  res.data.data.team_name;
-								const avatar = res.data.data.avatar;
-								// console.log("data.id:", data.id)
-								const isleader = res.data.data.isleader;
-								this.toMain(data.id, verification_status, team_name, avatar, isleader);	
-							}
 							// 保存 token
 							uni.setStorageSync('token', res.data.data.token);
-						}else{
+							const user_id = data.id;
+							const verification_status = '';
+							let username = '';
+							const avatar = '';
+							const isleader = false;
+							//登录的是高校队伍，响应里有审核状态等
+							if(identity == "team"){  
+								verification_status = res.data.data.verification_status;
+								const team_name =  res.data.data.team_name;
+								avatar = res.data.data.avatar;
+								// console.log("data.id:", data.id)
+								isleader = res.data.data.isleader;
+								this.toMain(data.id, verification_status, team_name, avatar, isleader);	
+							}
+							else if(identity === 'school'){
+								username = '校团委';
+								this.login({user_id, verification_status, username, avatar, isleader});
+								uni.reLaunch({
+									url:'../../page_commitee/page/index/index'
+								});
+							}
+							else if(identity === 'community'){
+								username = '社区基层';
+								this.login({user_id, verification_status, username, avatar, isleader});
+								uni.reLaunch({
+									url:'../../page_community/page/index'
+								});
+							}
+							
+						}
+						else{
 							uni.showToast({
 								icon: 'none',
 								title: '用户账号或密码不正确',
@@ -276,31 +396,37 @@
 				// console.log("tomain-avatar", avatar)
 				const user_id = team_id;
 				const user_name = team_name;
+				// 把信息存入到store，（index.js）
 				this.login({user_id, verification_status, user_name, avatar, isleader});
+				
+				uni.reLaunch({
+							url:'../../page_school/pages/index/index'
+						});
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式
 				 */
 
-
-				//开发用的
+				//开发用的，直接进去
 				if (this.forcedLogin) {
 					if(this.account == '1'){
 						uni.reLaunch({
 						url: '../school/index/index',   /*进入高校首页*/
 					});
-					} else if(this.account == '2'){
-					uni.reLaunch({
-						url: '../../page_commitee/page/index/index',   /*进入团委首页*/
-					});
-				}else if(this.account == '3'){
-					uni.reLaunch({
-						url: '../../page_community/page/index',   /*进入社区首页*/
-					});
-				}
-
+					} 
+					else if(this.account == '2'){
+						uni.reLaunch({
+							url: '../../page_commitee/page/index/index',   /*进入团委首页*/
+						});
+					}
+					else if(this.account == '3'){
+						uni.reLaunch({
+							url: '../../page_community/page/index',   /*进入社区首页*/
+						});
+					}
 				}
 				else {
+					// 返回上一个页面
 					uni.navigateBack();
 				}
 
@@ -315,7 +441,20 @@
 				console.log("切换用户类别");
 				this.chooseTeam = false;
 				
-			}
+			},
+			back(){
+				//上一步
+				// 团委/社区基层，直接返回选择角色页面
+				if(this.step === 1 || this.step === 3){
+					this.step = 0;
+				}
+				else if(this.step === 2.1){
+					this.step = 0;
+				}
+				else if(this.step === 2.2){
+					this.step = 2.1;
+				}
+			},
 		},
 		watch:{
 			index(newIndex) {
@@ -363,25 +502,24 @@
     cursor: pointer;
   }
   .team-box {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-bottom: 5px;
+	display: flex;
+    align-items: center;
+    padding: 30rpx;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 30rpx;
+    cursor: pointer;
+    margin-bottom: 18rpx;
 }
 
 .selected {
-  border:2px solid#39B54A;
+  border:2rpx solid#39B54A;
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #ccc;
-  margin-right: 10px;
+	width: 120rpx;
+    height: 120rpx;
+    border-radius: 50%;
+    margin-right: 44rpx;
 }
 
 .team-name {
@@ -407,6 +545,43 @@
 //   margin-right: 10px;
   border-color: white ;
 }
+.back{
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/11.png);
+	background-size: 100% 100%;
+    height: 100vh;
+	background-attachment: fixed;
+}
+.container{
+	// border-radius: 30rpx;
+	background-color: rgba(255,255,255,0.3);
+	margin-top: 300rpx;
+}
+.text1{
+	font-size: 30rpx;
+    font-family: 'Arial';
+    margin-top: 20rpx;
+    margin-left: 20rpx;
+	margin-bottom: 20rpx;
+    font-weight: bold; 
+	color:  darkgreen;
+}
+.back-button {
+  background-color: transparent;
+  cursor: pointer;
+  background-image: url('https://img-bsy.txrpic.com/Element/00/79/77/49/7dcb6948_E797749_7ba3cab7XZ.png?imageMogr2/quality/90/thumbnail/!800x%3E');
+  background-size: 100% 100%;
+  height: 100rpx;
+  width: 100rpx;
+  margin-top: -33rpx;
+}
+.radio-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 20rpx;
+}
 
-
+.radio-container label {
+  flex-basis: 50%;
+}
 </style>

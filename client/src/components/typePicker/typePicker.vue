@@ -45,7 +45,7 @@ export default {
     },
     // 确认
     confirm(e) {
-      let selectedType = this.typeArr[this.typeIndex].name;
+      let selectedType = this.typeArr[this.typeIndex].id;
       this.$emit("confirm", selectedType);
       this.hide();
     },
