@@ -46,6 +46,13 @@ export default {
       },
     data() {
         return {
+			customStyles: {
+					marginTop: '20px', // 注意驼峰命名，并且值必须用引号包括，因为这是对象
+					backgroundColor: '#ffcc01',
+					boxShadow: '0 0 0px #ffcc01',
+					color: '#fff'
+				},
+
             tocom: false,
             com_list: [],
             comModal: {
@@ -276,7 +283,4 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 		margin-top: 10px;
 	}
 
-	.pl_bt{
-		background-color: #39b54a;
-	}
 </style>

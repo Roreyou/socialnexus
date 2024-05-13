@@ -12,11 +12,15 @@ const store = new Vuex.Store({
 		hasLogin: false,
 		user_id: "",
 		userName: "游客",
+		
+		//高校队伍的其它附加信息
 		userInfo: {
-			isUser: false,  //是否是正式用户(高校队伍)
+			identity: '',  //身份，队长、队员、老师
+			person_id: '',  // 高校队伍每个人的个人id
+			isUser: false,  //是否是正式用户
 			avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
-			verification_status: 5,  //游客视角的status
-			isleader: false, // 是否是队长（也就是有全部权限
+			verification_status: 5,  //认证状态，5是游客视角的
+			isleader: false, // 是否是队长（也就是有全部权限）
 		}
 	},
 	mutations: {

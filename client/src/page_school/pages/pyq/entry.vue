@@ -23,10 +23,9 @@
 							<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/upload.png"></image>
 						</view>
 					</u-upload>
-					
 					<view class="bodys_btn">
 						<u-button :custom-style="customStyles" :ripple="true" class="pl_bt" @click="saveComInfo()"
-							ripple-bg-color="#ff9b01">发布</u-button>
+							ripple-bg-color="#39b54a">发布</u-button>
 				</view>
 			</view>
 		</u-popup>
@@ -61,7 +60,7 @@
 				posted: true, //用来刷新主页页面
 				customStyles: {
 					marginTop: '20px', // 注意驼峰命名，并且值必须用引号包括，因为这是对象
-					backgroundColor: '#39b54a',
+					backgroundColor: '#6dd57b',
 					boxShadow: '0 0 0px #ffcc01',
 					color: '#fff'
 				},

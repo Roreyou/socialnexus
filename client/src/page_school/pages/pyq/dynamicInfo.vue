@@ -19,14 +19,14 @@
 								:border-color="borderColor" :height="height" :auto-height="autoHeight" />
 						</u-form-item>
 					</u-form>
-					<view class="cardZw">
+					<!-- <view class="cardZw">
 						上传照片
 					</view>
 					<u-upload :custom-btn="true" max-count="4" ref="uUpload"  :action="action" :file-list="comModal.comImgs" :auto-upload="true">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/upload.png"></image>
 						</view>
-					</u-upload>
+					</u-upload> -->
 					
 					<view class="bodys_btn">
 						<u-button :custom-style="customStyles" :ripple="true" @click="saveComInfo()"
@@ -548,8 +548,7 @@
 	}
 
 	.bodys{
-		padding: 20px;
-		
+		padding: 20px;	
 	}
 	
 	.cardZw {
