@@ -41,7 +41,7 @@
 				<view class="input-group" >
 					<view class="input-row border">
 						<text class="title">个人ID：</text>
-						<m-input class="m-input" type="text" clearable focus v-model="member_id" placeholder="请输入个人ID"></m-input>
+						<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入个人ID"></m-input>
 					</view>
 				</view>
 				<view class="radio-container">
@@ -156,9 +156,8 @@
 
 				providerList: [],
 				hasProvider: false,
-				account: '',
+				account: '', // 团委/社区的账号，高校队伍成员的个人id
 				password: '',
-				member_id: '', //高校队伍登录时第一步输入的个人ID
 				member_iden: null,// 0为队员/队长，1为指导老师
 				positionTop: 0,
 				isDevtools: false,
@@ -185,7 +184,7 @@
 			},
 			teamNext(){
 				console.log("this.member_iden",this.member_iden);
-				if(this.member_id.length === 0){
+				if(this.account.length === 0){
 					uni.showToast({
 						icon: 'none',
 						title: '请输入个人ID'
@@ -207,7 +206,7 @@
 					},	
 					method: 'GET',
 					data: {
-						id: this.member_id,
+						id: this.account,
 						identity: this.member_iden,
 					},
 					success: res => {	
@@ -299,7 +298,7 @@
 					return;
 				}
 				
-				// 团委进行登录
+				// 设置身份
 				let identity = '';
 				if(this.step === 1){
 					identity = 'school';
@@ -318,66 +317,116 @@
 					pwd: this.password
 				}
 				console.log("data",data);
-				//发请求
-				// apifoxApiId=
-				uni.request({
-					// 最终登录会是一个接口，由identity说明身份。apifox上为了统一写了多个所以要传apiID
-					// 高校
-					// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154463358',
-					// 团委登录接口
-					url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154755970',
-					// 社区基层
-					// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154447878',
-					method: 'POST',
-					data: data,
-					success: res => {
-						if(res.data.code == 200){
-							// 保存 token
-							uni.setStorageSync('token', res.data.data.token);
-							const user_id = data.id;
-							const verification_status = '';
-							let username = '';
-							const avatar = '';
-							const isleader = false;
-							//登录的是高校队伍，响应里有审核状态等
-							if(identity == "team"){  
-								verification_status = res.data.data.verification_status;
-								const team_name =  res.data.data.team_name;
-								avatar = res.data.data.avatar;
-								// console.log("data.id:", data.id)
-								isleader = res.data.data.isleader;
-								this.toMain(data.id, verification_status, team_name, avatar, isleader);	
-							}
-							else if(identity === 'school'){
-								username = '校团委';
-								this.login({user_id, verification_status, username, avatar, isleader});
-								uni.reLaunch({
-									url:'../../page_commitee/page/index/index'
-								});
-							}
-							else if(identity === 'community'){
-								username = '社区基层';
-								this.login({user_id, verification_status, username, avatar, isleader});
-								uni.reLaunch({
-									url:'../../page_community/page/index'
-								});
-							}
-							
-						}
-						else{
-							uni.showToast({
-								icon: 'none',
-								title: '用户账号或密码不正确',
-							});
-						}
-					},
-					fail: res => {
+				if(identity === 'school' || identity === 'community'){
+					//团委/社区登录
+					uni.request({
+						// 团委登录接口
+						url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154755970',
+						// 社区基层
+						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154447878',
+						method: 'POST',
+						data: data,
+						success: res => {
+							if(res.data.code == 200){
+								// 保存 token
+								uni.setStorageSync('token', res.data.data.token);
+								const user_id = this.account;
+								let username = '';
+								if(identity === 'school'){
+									username = '校团委';
+									this.login1({user_id, username, });
+									uni.reLaunch({
+										url:'../../page_commitee/page/index/index'
+									});
+								}
+								else if(identity === 'community'){
+									username = '社区基层';
+									this.login1({user_id, username, });
+									uni.reLaunch({
+										url:'../../page_community/page/index'
+									});
+								}
 
-						this.net_error = true;
-					},
-					complete: () => {
+							}
+							else{
+								uni.showToast({
+									icon: 'none',
+									title: '用户账号或密码不正确',
+								});
+							}
+						},
+						fail: res => {
+
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+				}
+				else{
+					//高校登录
+					const data2={
+						identity: identity,
+						id: this.account,  //个人ID
+						pwd: this.password,
+						team_id: this.selectedTeam, //队伍id，用来判断是否是队长
 					}
-				})
+					uni.request({
+						// 高校
+						url: this.$url.BASE_URL + '/4142061-0-default/auth/login/schoolteam',
+						method: 'POST',
+						data: data2,
+						success: res => {
+							if(res.data.code == 200){
+								// 保存 token
+								uni.setStorageSync('token', res.data.data.token);
+								//登录的是高校队伍，响应里有审核状态等
+								const user_id = data.id;
+								const team_name =  res.data.data.team_name; // 即username
+								// 下面信息是只有高校队伍有的，存在store的userInfo
+								const verification_status = res.data.data.verification_status;
+								const avatar = '';
+								const isleader = false;
+								
+								if(identity == "team"){  
+									
+									
+									avatar = res.data.data.avatar;
+									// console.log("data.id:", data.id)
+									isleader = res.data.data.isleader;
+									this.toMain(data.id, verification_status, team_name, avatar, isleader);	
+								}
+								else if(identity === 'school'){
+									username = '校团委';
+									this.login({user_id, verification_status, username, avatar, isleader});
+									uni.reLaunch({
+										url:'../../page_commitee/page/index/index'
+									});
+								}
+								else if(identity === 'community'){
+									username = '社区基层';
+									this.login({user_id, verification_status, username, avatar, isleader});
+									uni.reLaunch({
+										url:'../../page_community/page/index'
+									});
+								}
+
+							}
+							else{
+								uni.showToast({
+									icon: 'none',
+									title: '用户账号或密码不正确',
+								});
+							}
+						},
+						fail: res => {
+
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+				}
 					
 			},
 			getUserInfo({

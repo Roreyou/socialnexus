@@ -24,7 +24,14 @@ const store = new Vuex.Store({
 		}
 	},
 	mutations: {
-		login(state, {user_id, verification_status, user_name, avatar, isleader}) {
+		// 团委/社区
+		login1(state, {user_id, userName}){
+			store.hasLogin = true;
+			store.user_id = user_id;
+			store.userName = userName;
+		},
+		// 高校队伍
+		login2(state, {user_id, verification_status, user_name, avatar, isleader}) {
 			// 登录
 			state.userInfo.isUser = true;
 			// console.log("login-avatar", avatar)
