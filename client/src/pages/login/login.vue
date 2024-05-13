@@ -29,7 +29,7 @@
 					<button class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
 				</view>
 				<!-- 返回 -->
-				<view class="back-button" bindtap="back"></view>
+				<view class="back-button" @tap="back"></view>
 			</view>
 		</view>
 
@@ -52,6 +52,8 @@
 				<view class="btn-row" >
 					<button class="cu-btn bg-green block lg" @tap="teamNext">下一步</button>
 				</view>
+				<!-- 返回 -->
+				<view class="back-button" @tap="back"></view>
 			</view>
 			<!-- 2.2 -->
 			<view v-else-if="step === 2.2">
@@ -65,6 +67,8 @@
 							<button class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
 					</view>
 				</view>
+				<!-- 返回 -->
+				<view class="back-button" @tap="back"></view>
 			</view>
 		</view>
 
@@ -155,7 +159,7 @@
 				account: '',
 				password: '',
 				member_id: '', //高校队伍登录时第一步输入的个人ID
-				member_iden: 0,// 0为队员/队长，1为指导老师
+				member_iden: null,// 0为队员/队长，1为指导老师
 				positionTop: 0,
 				isDevtools: false,
 				teamList:[
@@ -180,7 +184,7 @@
 					});
 			},
 			teamNext(){
-				console.log("this.member_iden",typeof this.member_iden);
+				console.log("this.member_iden",this.member_iden);
 				if(this.member_id.length === 0){
 					uni.showToast({
 						icon: 'none',
@@ -444,8 +448,11 @@
 				if(this.step === 1 || this.step === 3){
 					this.step = 0;
 				}
-				else{
-
+				else if(this.step === 2.1){
+					this.step = 0;
+				}
+				else if(this.step === 2.2){
+					this.step = 2.1;
 				}
 			},
 		},
