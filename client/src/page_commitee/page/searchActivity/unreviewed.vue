@@ -73,7 +73,7 @@
 						community_id: '0',
 						// token: this.$userinfo.token
                 	    // activity_status: this.index
-						status: '未审核'
+						status: 2
 					},
 					success: res => {						
 						this.acList = res.data.data;
