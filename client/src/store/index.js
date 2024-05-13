@@ -26,9 +26,9 @@ const store = new Vuex.Store({
 	mutations: {
 		// 团委/社区
 		login1(state, {user_id, userName}){
-			store.hasLogin = true;
-			store.user_id = user_id;
-			store.userName = userName;
+			state.hasLogin = true;
+			state.user_id = user_id;
+			state.userName = userName;
 		},
 		// 高校队伍
 		login2(state, {user_id, user_name, person_identity, person_id, avatar, verification_status, isleader}) {
@@ -38,7 +38,7 @@ const store = new Vuex.Store({
 			// console.log("login-avatar", avatar)
 			state.user_id = user_id      // user_id根据情况可能是社区的id，高校的id...
 			state.userName = user_name || '新用户';
-			state.identity = identity;
+			state.identity = person_identity;
 			state.userInfo.person_id = person_id;
 			const a = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7';  // 游客的默认头像
 			state.userInfo.avatar = avatar || a;

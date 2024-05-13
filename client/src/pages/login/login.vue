@@ -78,25 +78,6 @@
 			<YtabBtns :data="list" :index.sync="index"></YtabBtns>
 		</view> -->
 
-		<view v-show="!chooseTeam">
-			<!-- 高校队伍成员登录 -->
-			<view v-if="index==1">
-				
-
-			</view>
-		</view>
-
-		<!-- 高校成员选择队伍 -->
-		<view v-show="chooseTeam">
-			<view class="team-box"  :class="selectedTeam == item.team_id ? 'selected' : 'team-box'" v-for="item in teamList" :key="item.team_id" @click="selectTeam(item.team_id)">
-					<img class="avatar" :src="item.avatarUrl" alt="Avatar">
-					<view class="team-name">{{ item.team_name }}</view>
-			</view>
-			
-			<button style="margin-top: 10px;" class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
-
-		</view>
-
 		<view class="action-row">
 			<navigator url="../reg/reg">注册账号</navigator>
 			<text>|</text>
@@ -175,7 +156,7 @@
 			wx.hideHomeButton();
 		},
 		methods: {
-			...mapMutations(['login']),
+			...mapMutations(['login1','login2']),
 			
 			gotoIndex(){
 				uni.reLaunch({
@@ -346,7 +327,6 @@
 										url:'../../page_community/page/index'
 									});
 								}
-
 							}
 							else{
 								uni.showToast({
@@ -378,39 +358,28 @@
 						data: data2,
 						success: res => {
 							if(res.data.code == 200){
+								console.log("登录成功-高校队伍",res.data.data);
 								// 保存 token
 								uni.setStorageSync('token', res.data.data.token);
 								//登录的是高校队伍，响应里有审核状态等
-								const user_id = data.id;
-								const team_name =  res.data.data.team_name; // 即username
+								const user_id = this.selectedTeam; //队伍id
+								const user_name =  res.data.data.team_name; // 即username
+								let person_identity = '队员';
 								// 下面信息是只有高校队伍有的，存在store的userInfo
+								if(this.member_iden == 0 && res.data.data.isleader){
+									person_identity = '队长'
+								}
+								else if(this.member_iden == 1){
+									person_identity = '老师'
+								}
+								const person_id = this.account;
 								const verification_status = res.data.data.verification_status;
-								const avatar = '';
-								const isleader = false;
-								
-								if(identity == "team"){  
-									
-									
-									avatar = res.data.data.avatar;
-									// console.log("data.id:", data.id)
-									isleader = res.data.data.isleader;
-									this.toMain(data.id, verification_status, team_name, avatar, isleader);	
-								}
-								else if(identity === 'school'){
-									username = '校团委';
-									this.login({user_id, verification_status, username, avatar, isleader});
-									uni.reLaunch({
-										url:'../../page_commitee/page/index/index'
+								const avatar = res.data.data.avatar;
+								const isleader = res.data.data.isleader;
+								this.login2({user_id, user_name, person_identity, person_id, avatar, verification_status, isleader});
+								uni.reLaunch({
+										url:'../school/index/index'
 									});
-								}
-								else if(identity === 'community'){
-									username = '社区基层';
-									this.login({user_id, verification_status, username, avatar, isleader});
-									uni.reLaunch({
-										url:'../../page_community/page/index'
-									});
-								}
-
 							}
 							else{
 								uni.showToast({
