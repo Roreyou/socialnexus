@@ -133,7 +133,7 @@
 				  		team_name: this.searchContent,
 				  		// token: this.$userinfo.token
                   	    // activity_status: this.index
-				  		community_id: this.community_id
+				  		community_id: '0'
 				  	},
 				  	success: res => {
 				  		//不用懒加载
@@ -170,7 +170,7 @@
 				  		act_name: this.searchContent,
 				  		// token: this.$userinfo.token
                   	    // activity_status: this.index
-				  		community_id: this.community_id
+				  		community_id: '0'
 				  	},
 				  	success: res => {
 				  		//不用懒加载
