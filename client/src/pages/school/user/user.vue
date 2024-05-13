@@ -114,15 +114,19 @@
 				});
 			},
 			bindLogout() {
-				this.logout();
+				// this.logout();	
 				/**
 				 * 如果需要强制登录跳转回登录页面
 				 */
-				if (this.forcedLogin) {
-					uni.reLaunch({
+				// if (this.forcedLogin) {
+				// 	uni.reLaunch({
+				// 		url: '../../login/login',
+				// 	});
+				// }
+				this.logout();
+				uni.reLaunch({
 						url: '../../login/login',
-					});
-				}
+				});
 			},
 			PickerChange(e) {
 				this.index = e.detail.value
