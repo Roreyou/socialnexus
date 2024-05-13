@@ -8,19 +8,24 @@ const store = new Vuex.Store({
 		/**
 		 * 是否需要强制登录
 		 */
-		forcedLogin: true,
+		forcedLogin: false,
 		hasLogin: false,
 		user_id: "",
 		userName: "游客",
+		
+		//高校队伍的其它附加信息
 		userInfo: {
-			isUser: false,  //是否是正式用户(高校队伍)
+			identity: '',  //身份，队长、队员、老师
+			person_id: '',  // 高校队伍每个人的个人id
+			isUser: false,  //是否是正式用户
 			avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
-			verification_status: 5,  //游客视角的status
-			isleader: false, // 是否是队长（也就是有全部权限
+			verification_status: 5,  //认证状态，5是游客视角的
+			isleader: false, // 是否是队长（也就是有全部权限）
 		}
 	},
 	mutations: {
 		login(state, {user_id, verification_status, user_name, avatar, isleader}) {
+			// 登录
 			state.userInfo.isUser = true;
 			// console.log("login-avatar", avatar)
 			state.user_id = user_id      // user_id根据情况可能是社区的id，高校的id...
@@ -32,6 +37,7 @@ const store = new Vuex.Store({
 			state.userInfo.avatar = avatar || a;
 		},
 		logout(state) {
+			// 登出
 			state.user_id = "";
 			state.userName = "游客";
 			state.userInfo = {

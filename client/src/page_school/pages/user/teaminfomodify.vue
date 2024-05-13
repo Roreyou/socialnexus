@@ -1,4 +1,4 @@
-<!-- 高校 队伍信息修改 -->
+<!-- 高校 修改资料 -->
 <template>
 	<view class="container">
         <uni-section title="队伍基本信息修改" type="line">
@@ -6,7 +6,7 @@
 				<!-- 基础用法，不包含校验规则 -->
 				<uni-forms ref="teamData" :model="teamData" labelWidth="80px">
 					<uni-forms-item label="队伍名称" :rules="[{ required: true, errorMessage: '队伍名称项必填', trigger: 'blur' }]" name="team_name">
-						<uni-easyinput v-model="teamData.team_name" :placeholder="team_info.team_name" />
+						<uni-easyinput v-model="teamData.team_name" :placeholder="team_info.team_name" disabled="true" />
 					</uni-forms-item>
 					<uni-forms-item label="相关院系" :rules="[{ required: true, trigger: 'blur' }]" name="relevant_faculties">
 						<uni-easyinput v-model="teamData.relevant_faculties" :placeholder="team_info.relevant_faculties" disabled="true" />
@@ -362,7 +362,7 @@
 								data: {
 									id:this.user_id,
 									// status:this.userInfo.verification_status,
-									teamData: this.teamData,
+									// teamData: this.teamData,
 									instrData: this.instrData,
 									leaderData: this.leaderData,	
 									membersData: this.dynamicFormData2.domains,									

@@ -1,3 +1,4 @@
+<!-- 高校 - 修改密码 -->
 <template>
 	<view class="page">
 		<view class="input-group">
@@ -24,6 +25,9 @@
 </template>
 
 <script>
+		import {
+		mapState,
+	} from 'vuex'
 	import mInput from '../../../components/m-input.vue'
 
 	export default {
@@ -37,6 +41,9 @@
 				newpassword1: '',
 				newpassword2: ''
 			}
+		},
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id','userInfo'])
 		},
 		watch: {
 			newpassword2(newValue, oldValue) {
@@ -62,7 +69,8 @@
 						},
 						method: 'POST',
 						data: {
-							team_id: this.user_id,
+							person_id: this.userInfo.person_id,
+							identity: this.userInfo.identity,
 							old_pwd:  this.curpassword,
 							new_pwd:  this.newpassword1,
 						},
