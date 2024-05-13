@@ -47,7 +47,7 @@ const store = new Vuex.Store({
 			state.userInfo.isleader = isleader;
 			
 		},
-		setProvince(state, province) {(){
+		setProvince(state, province) {
 			state.userInfo.province = province;
 		},
 		logout(state) {
