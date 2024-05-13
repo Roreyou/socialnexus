@@ -21,6 +21,7 @@ const store = new Vuex.Store({
 			avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
 			verification_status: 5,  //认证状态，5是游客视角的
 			isleader: false, // 是否是队长（也就是有全部权限）
+			province: '',
 		}
 	},
 	mutations: {
@@ -45,6 +46,9 @@ const store = new Vuex.Store({
 			state.userInfo.verification_status = verification_status;
 			state.userInfo.isleader = isleader;
 			
+		},
+		setProvince(state, province) {(){
+			state.userInfo.province = province;
 		},
 		logout(state) {
 			// 登出
