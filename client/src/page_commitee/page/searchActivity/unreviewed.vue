@@ -10,13 +10,14 @@
 								<text class="cuIcon-titles text-green"></text>
 								<text class="text-xl text-bold">{{item.veri_status}}</text>
 							</view>
-							<view class="action right-buttons" v-if="item.veri_status === '待审核'" >
-									<button class="cu-btn bg-blue shadow-blur" @click="handlePass(item)">通过</button>
+							<view class="action right-buttons" v-if="item.veri_status === '未审核'" >
+									<button class="cu-btn bg-green shadow-blur" @click="handlePass(item)">通过</button>
 									<button class="cu-btn bg-grey shadow-blur" @click="handleReject(item)">驳回</button>
 							</view>
 						</view>
 						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
+							<img class="avatar" :src="item.picture" alt="Avatar">
 							<view class="desc">
 								<view class="text-content"> 发布日期: {{item.setup_date}}</view>
 								<view class="text-content"> 所属社区: {{item.community_name}}</view>
@@ -236,7 +237,14 @@
   margin-right: 0;
 }
 .desc{
-	margin-bottom: 8px;
+	margin-bottom: 8rpx;
     margin-left: 25rpx;
+}
+.avatar {
+	width: 50rpx;
+	height: 50rpx;
+	border-radius: 50%;
+	background-color: #ffffff;
+	margin-right: 10rpx;
 }
 </style>
