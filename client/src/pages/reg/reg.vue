@@ -8,7 +8,7 @@
 			<YtabBtns :data="list" :index.sync="index" @change="change" ></YtabBtns>
 		</view>
 
-    	<view class="container">
+    	<view class="container" v-if="index === 0">
 			<u-upload :class="{ 'banner': avatar === '' }" @on-success="handleSuccess" @on-remove="handleRemove" :custom-btn="true" :max-count="1" ref="uUpload" 
 						:action="action" :file-list="avatarList" :auto-upload="true" style="display: flex; align-items: center; ">
 				<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
@@ -56,15 +56,12 @@
 					<m-input type="text" focus clearable v-model="tel" placeholder="请输入联系方式"></m-input>
 				</view>
 				<view class="input-row border">
-					<button @tap="open">选择地区</button>
+					<text class="title">省/市：</text>
 					<cityPicker :column="city_picker.column" :default-value="city_picker.defaultValue" :mask-close-able="city_picker.maskCloseAble" 
 								@confirm="confirm" @cancel="cancel" :visible="city_picker.visible"/>
-					<text class="title">省：</text>
-					<m-input type="text" focus clearable v-model="province" placeholder="请输入省"></m-input>
-				</view>
-				<view class="input-row border">
-					<text class="title">市：</text>
-					<m-input type="text" focus clearable v-model="city" placeholder="请输入市"></m-input>
+					<m-input type="text" focus clearable v-model="city_picker.data.name" placeholder="请选择地区"> 	
+					</m-input>
+					<button @tap="open" class="city_btn">选择地区</button>
 				</view>
 				<view class="input-row border">
 					<text class="title">详细地址：</text>
@@ -72,7 +69,7 @@
 				</view>
 				<view class="input-row border">
 					<text class="title">简介：</text>
-					<m-input type="text" focus clearable v-model="account" placeholder="请输入简介"></m-input>
+					<m-input type="text" focus clearable v-model="remark" placeholder="请输入简介"></m-input>
 				</view>
 				<view class="input-row border">
 					<text class="title">密码：</text>
@@ -118,13 +115,13 @@
 				],
 
 				// identity: '', //指示高校/社区
-				// 高校队伍注册需要的信息
 				account: '',
 				password: '',
 				confirm_pwd: '',
-				team_name: '',
-				setup_date: '',
 				remark: '',
+				// 高校队伍注册需要的信息
+				team_name: '',
+				// setup_date: '', // 在computed属性里面写了
 				leader_id: '',
 				avatar:'',
 				avatarList: [
@@ -145,10 +142,10 @@
 				city_picker:{
 					visible: false,
 					maskCloseAble: true,
-               		str: '',
+               		data: '',
                		defaultValue: '420103',
                		// defaultValue: ['河北省','唐山市','丰南区'],
-               		column: 3
+               		column: 2
 				},
 
 				// 传给后端，拿到地址
@@ -158,6 +155,10 @@
 		computed: {
 			identity(){
 				return this.index==0 ? 'team' : 'community' ;
+			},
+			setup_date(){
+				console.log((new Date().toISOString().split('T')[0]));
+				return (new Date().toISOString().split('T')[0]);
 			}
 		},
 		onShow(){
@@ -199,8 +200,8 @@
 						pwd: this.password,
 						team_name: this.team_name,
 						remark: this.remark,
-						avatar: this.avatar
-
+						avatar: this.avatar,
+						setup_date: this.setup_date,
 					}
 					console.log('data',data)
 					uni.request({
@@ -245,6 +246,85 @@
 						}
 					})
 				}
+				else{
+					console.log('社区基层注册');
+					if(this.account == '' || this.name == '' || this.tel == '' || this.province == '' || this.city == '' || this.address == '' || this.remark == ''){
+						uni.showToast({
+							icon: 'error',
+							title: '请填写完整信息！'
+						}); 
+						return ;
+					}
+					if(this.password != this.confirm_pwd){
+						uni.showToast({
+							icon: 'error',
+							title: '前后密码不一致！'
+						}); 
+						return ;
+					}
+					if(this.avatar == ''){
+						uni.showToast({
+							icon: 'error',
+							title: '请上传头像！'
+						}); 
+						return ;
+					}
+					const data = {
+						identity: this.identity,
+						id: this.account,
+						pwd: this.password,
+						name: this.name,
+						tel: this.tel,
+						province: this.province,
+						city: this.city,
+						address: this.address,
+						remark: this.remark,
+						avatar: this.avatar,
+						setup_date: this.setup_date,
+					}
+					console.log('data',data)
+					uni.request({
+						// 高校
+						url: this.$url.BASE_URL + '/4142061-0-default/auth/register/community',
+						method: 'POST',
+						data: data,
+						success: res => {
+							if(res.data.code == 200){
+								console.log("注册成功-社区基层",res.data.data);
+								uni.showToast({
+									icon: 'success',
+									title: '注册成功，前往登录界面',
+								});
+								uni.navigateTo({
+									url:'../login/login'
+								});
+							}
+							else if(res.data.code == 500){
+								uni.showModal({
+								    title: '提示',
+								    content: '用户已存在，是否直接去登录？',
+								    success: function (res) {
+								        if (res.confirm) {
+								            console.log('确定去登录');
+											uni.reLaunch({
+												url:'../login/login'
+											});
+								        } 
+										else if (res.cancel) {
+								            console.log('取消去登录');
+								        }
+								    }
+								});
+							}
+						},
+						fail: res => {
+
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+				}
 
 			},
 			open(){
@@ -252,6 +332,9 @@
 			},
 			confirm (val) {
                 console.log(val);
+				this.city_picker.data = val;
+				this.province = val.provinceName;
+				this.city = val.cityName;
                 this.city_picker.str = JSON.stringify(val);
                 this.city_picker.visible = false;
             },
@@ -272,11 +355,11 @@
 				
 				
 			},
-			//删除时
+			//删除时自动调用
 			handleRemove(index, lists, name){
 				console.log('删除图片',index,lists,name);
 				console.log('删除图片',index,lists,name);
-				this.avatar = '';
+				this.avatar = ''; //要设置为空
 				console.log('删除图片',index,lists,name);
 			},
 			change(){
@@ -366,7 +449,7 @@
 .slot-btn__hover {
 	background-color: rgb(235, 236, 238);
 } */
-.noCSS{
-
+.city_btn{
+    font-size: inherit;
 }
 </style>
