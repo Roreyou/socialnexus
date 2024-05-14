@@ -2,7 +2,7 @@
  * @Author: happy 2630391116@qq.com
  * @Date: 2024-04-29 14:38:05
  * @LastEditors: happy 2630391116@qq.com
- * @LastEditTime: 2024-05-10 15:09:06
+ * @LastEditTime: 2024-05-14 20:21:06
  * @FilePath: \socialnexus\client\src\pages\committee\searchActivity\reviewed.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,7 +11,7 @@
 	<view class="content">
 		<!-- 循环显示卡片 -->
 		<view class="cu-item" v-for="(item,index) in acList" :key="index">
-			<view class="cu-card article" :class="isCard?'no-card':''"@click="todetail(item.id)"  >
+			<view class="cu-card article" :class="isCard?'no-card':''" @click="todetail(item.id)"  >
 					<view class="cu-item shadow">
 						<view class="cu-bar bg-white">
 							<view class="action">
@@ -19,7 +19,7 @@
 								<text class="text-xl text-bold">{{item.veri_status}}</text>
 							</view>
 							
-							<view class="action right-buttons" v-if="item.state === '已审核'" >
+							<view class="action right-buttons" v-if="item.veri_status === '已审核'" >
 								<span class="status-label passed" v-if="item.verification_status === 2">已通过</span>
     							<span class="status-label rejected" v-if="item.verification_status === 3">已驳回</span>
 							</view>
@@ -135,12 +135,12 @@
 }
 .status-label {
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
+  padding: 8rpx 16rpx;
+  border-radius: 24rpx;
   color: #fff;
-  font-size: 12px;
+  font-size: 32rpx;
   font-weight: bold;
-  margin-right: 8px;
+  margin-right: 16rpx;
 }
 
 .passed {
@@ -155,10 +155,10 @@
 	height: 50rpx;
 	border-radius: 50%;
 	background-color: #ffffff;
-	margin-right: 10px;
+	margin-right: 10rpx;
 }
 .desc{
-	margin-bottom: 8px;
+	margin-bottom: 8rpx;
     margin-left: 25rpx;
 }
 

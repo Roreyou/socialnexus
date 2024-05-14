@@ -2,7 +2,7 @@
  * @Author: happy 2630391116@qq.com
  * @Date: 2024-04-29 16:32:53
  * @LastEditors: happy 2630391116@qq.com
- * @LastEditTime: 2024-05-14 17:59:27
+ * @LastEditTime: 2024-05-14 20:13:21
  * @FilePath: \socialnexus\client\src\pages\committee\searchSchool\all.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -89,7 +89,7 @@
 						if(res.data.code==200){
 							this.$u.toast(`审核成功！已通过申请。`);
 							// 重新显示
-							this.getAllUnreviewed();
+							this.getAll();
 						}
 						else if(res.data.code == 401){
 							console.log("token过期");
@@ -111,7 +111,7 @@
 						}
 						else if(res.data.code == 500){
 							this.$u.toast(`审核失败，活动不存在！`);
-							this.getAllUnreviewed();
+							this.getAll();
 						}
 					},
 					fail: res => {
@@ -138,7 +138,7 @@
 						if(res.data.code==200){
 							this.$u.toast(`审核成功！已驳回申请。`);
 							// 重新显示
-							this.getAllUnreviewed();
+							this.getAll();
 						}
 						else if(res.data.code == 401){
 							console.log("token过期");
@@ -160,7 +160,7 @@
 						}
 						else if(res.data.code == 500){
 							this.$u.toast(`审核失败，活动不存在！`);
-							this.getAllUnreviewed();
+							this.getAll();
 						}
 					},
 					fail: res => {
@@ -206,16 +206,9 @@
 			//前往详情页
 			todetail(id){
 				console.log("id:", id)
-				// uni.navigateTo({
-				// 	//注意用这个的话page前面有一个斜杠，不然会说找不到这个组件
-				// 	url: '../../page_school/pages/details/details?acti_id=' + id
-				// })
 				uni.navigateTo({
 					url:'/page_commitee/page/details/teamDetails?team_id=' + id
 				});
-				// this.$u.route({
-				// 	url: 'pages/school/details/details?acti_id=' + id
-				// })
 			},
 		}
 	}

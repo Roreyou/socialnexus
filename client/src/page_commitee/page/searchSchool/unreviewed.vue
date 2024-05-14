@@ -10,8 +10,8 @@
 								<text class="cuIcon-titles text-green"></text>
 								<text class="text-xl text-bold">{{item.veri_status}}</text>
 							</view>
-							<view class="action right-buttons" v-if="item.veri_status === '待审核'" >
-									<button class="cu-btn bg-blue shadow-blur" @click="handlePass(item)">通过</button>
+							<view class="action right-buttons" v-if="item.veri_status === '未审核'" >
+									<button class="cu-btn bg-green shadow-blur" @click="handlePass(item)">通过</button>
 									<button class="cu-btn bg-grey shadow-blur" @click="handleReject(item)">驳回</button>
 							</view>
 						</view>
@@ -230,10 +230,10 @@
 	height: 50rpx;
 	border-radius: 50%;
 	background-color: #ffffff;
-	margin-right: 10px;
+	margin-right: 10rpx;
 }
 .desc{
-	margin-bottom: 8px;
+	margin-bottom: 8rpx;
     margin-left: 25rpx;
 }
 </style>

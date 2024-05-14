@@ -63,7 +63,7 @@
           list: [{
             name: '全部'
           }, {
-            name: '待审核'
+            name: '未审核'
           }, {
             name: '已审核'
           }],
@@ -76,7 +76,7 @@
               id: "All"
             },
             {
-              name:"待审核",
+              name:"未审核",
               id:"Unreviewed"
             },
             {
