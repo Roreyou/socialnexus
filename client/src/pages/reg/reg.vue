@@ -186,6 +186,13 @@
 						}); 
 						return ;
 					}
+					if(this.avatar == ''){
+						uni.showToast({
+							icon: 'error',
+							title: '请上传头像！'
+						}); 
+						return ;
+					}
 					const data = {
 						identity: this.identity,
 						leader_id: this.account,
