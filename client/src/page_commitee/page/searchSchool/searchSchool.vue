@@ -7,12 +7,12 @@
       <view class="cu-bar search bg-white">
         <view class="search-form round">
           <text class="cuIcon-search"></text>
-          <input v-model="searchContent" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索队伍"
+          <input v-model="searchContent" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="按队伍/活动 搜索队伍"
             confirm-type="search">
         </view>
         <view class="action">
-          <button @click="searchByTeam" class="cu-btn bg-green shadow-blur round">按队伍</button>
-          <button @click="searchByActiv" class="cu-btn bg-green shadow-blur round">按活动</button>
+          <button @click="searchByTeam" class="cu-btn bg-blue shadow-blur round" style="margin-right: 16rpx;">按队伍</button>
+          <button @click="searchByActiv" class="cu-btn bg-blue shadow-blur round">按活动</button>
         </view>
       </view>
   
@@ -209,9 +209,6 @@
     z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
   }
   .accontent{
-    margin-top: 65px;	
+    margin-top: 160rpx;	
   }
-  .desc {
-		margin-bottom: 8px;
-	}
   </style>
