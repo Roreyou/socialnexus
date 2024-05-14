@@ -3,6 +3,9 @@
 	<view class="container">
 		<!-- 队伍信息 -->
 		<view>
+			<view class="img">
+			 	<image :src="team_info.avatar" mode="aspectFill"></image>
+		 	</view>
 			<view class="part first">
 				<view class="de_total_title sub_title">
 					队伍基本信息
@@ -16,41 +19,41 @@
 						<view class="value">
 							{{ team_info.team_name }}
 						</view>
+				</view>
+            <view class="de_content">
+					<view class="key">
+						指导老师姓名
 					</view>
-          <view class="de_content">
-						<view class="key">
-							指导老师姓名
-						</view>
-						<view class="value">
-							{{ team_info.instructor_name }}
-						</view>
+					<view class="value">
+						{{ team_info.instructor_name }}
 					</view>
-          <view class="de_content">
-						<view class="key">
-							队长姓名
-						</view>
-						<view class="value">
-							{{ team_info.leader_name }}
-						</view>
-					</view>
-          <view class="de_content">
-						<view class="key">
-							相关院系
-						</view>
-						<view class="value">
-							{{ team_info.relevant_faculties }}
-						</view>
-					</view>
-          <view class="de_content">
-						<view class="key">
-							队员人数
-						</view>
-						<view class="value">
-							{{ team_info.mem_num }}
-						</view>
-					</view>
+			</view>
+            <view class="de_content">
+				<view class="key">
+					队长姓名
+				</view>
+				<view class="value">
+					{{ team_info.leader_name }}
 				</view>
 			</view>
+            <view class="de_content">
+				<view class="key">
+					相关院系
+				</view>
+				<view class="value">
+					{{ team_info.relevant_faculties }}
+				</view>
+			</view>
+            <view class="de_content">
+				<view class="key">
+					队员人数
+				</view>
+				<view class="value">
+					{{ team_info.mem_num }}
+				</view>
+			</view>
+		</view>
+		</view>
 		</view>
 		<view class="custom-container">
     		<hr class="horizontal-line">
@@ -137,14 +140,14 @@
 			</view>
 		</view>
 
-    <view class="button-container" v-if="team_info.verification_status === 0">
+    <view class="button-container" v-if="team_info.verification_status === 4">
       <button class="status-label passed" @click="handlePass()">通过</button>
-      <button class="status-label rejected" @click="handleReject()" >驳回</button>
-    </view>
-    <view class="button-container" v-else-if="team_info.verification_status === 1">
-      <button class="status-label passed"  >已通过</button>
+      <button class="status-label rejected bg-grey" @click="handleReject()" >驳回</button>
     </view>
     <view class="button-container" v-else-if="team_info.verification_status === 2">
+      <button class="status-label passed"  >已通过</button>
+    </view>
+    <view class="button-container" v-else-if="team_info.verification_status === 3">
       <button class="status-label rejected">已驳回</button>
     </view>
   </view>
@@ -152,10 +155,10 @@
 </template>
  
 <script>
-import {
-		mapState,
-	} from 'vuex'
-import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
+	import {
+			mapState,
+		} from 'vuex'
+	import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
 	export default {
     components: {
@@ -163,55 +166,55 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 		},
 		data(){
 			return{
-        team_id: '',
-        team_info: {
+        	team_id: '',
+        	team_info: {
 
-        },
-        instructor_info:{
+        	},
+        	instructor_info:{
 
-        },
-				memberList:[
-					// {
-					// 	name: "第一个队员",
-					// 	id: "21311212"
-					// },
-					// {
-					// 	name: "第二个队员",
-					// 	id: "21311988"
-					// },
-				],
-			}
-		},
+        	},
+			memberList:[
+				// {
+				// 	name: "第一个队员",
+				// 	id: "21311212"
+				// },
+				// {
+				// 	name: "第二个队员",
+				// 	id: "21311988"
+				// },
+			],
+		}
+	},
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin','user_id', 'userInfo'])
 		},
 		mounted() {
-      console.log("发出请求");
+      		console.log("发出请求");
 			uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/teamInfo',
-					header:{
-							Authorization:uni.getStorageSync("token")
-						},
-					method: 'GET',
-					data: {
-						id: this.team_id,
-						// token: this.$userinfo.token
-						// activity_status: this.index
+				url: this.$url.BASE_URL + '/4142061-0-default/school/teamInfo',
+				header:{
+						Authorization:uni.getStorageSync("token")
 					},
-					success: res => {
-            console.log(res.data.data);
-            console.log(res.data.code);
-						//队伍信息
-						if(res.data.code == 200){
-              
-              this.team_info = res.data.data.team_info;
-              this.instructor_info = res.data.data.instructor_info;
-              this.memberList = res.data.data.member_list;					
-						}
-            else if(res.data.code == 500){
-							this.$u.toast(`请求失败，队伍不存在！`);
-						}
-						this.net_error = false;
+				method: 'GET',
+				data: {
+					id: this.team_id,
+					// token: this.$userinfo.token
+					// activity_status: this.index
+				},
+				success: res => {
+            		console.log(res.data.data);
+            		console.log(res.data.code);
+					//队伍信息
+					if(res.data.code == 200){
+              			this.team_info = res.data.data.team_info;
+              			this.instructor_info = res.data.data.instructor_info;
+              			this.memberList = res.data.data.members_list;					
+					}
+            		else if(res.data.code == 500){
+						this.$u.toast(`请求失败，队伍不存在！`);
+					}
+					this.net_error = false;
+
 					},
 					fail: res => {
 						this.net_error = true;
@@ -232,7 +235,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 					}
 				})
 			},
-      // 审核：通过
+      		// 审核：通过
 			handlePass(){
 				console.log("审核：通过");
 				uni.request({
@@ -249,7 +252,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						if(res.data.code==200){
 							this.$u.toast(`审核成功！已通过申请。`);
 							// 重新显示
-							this.team_info.verification_status = 1;
+							this.team_info.verification_status = 2;
 						}
 						else if(res.data.code == 401){
 							console.log("token过期");
@@ -298,7 +301,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						if(res.data.code==200){
 							this.$u.toast(`审核成功！已驳回申请。`);
 							// 重新显示
-							this.team_info.verification_status = 2;
+							this.team_info.verification_status = 3;
 						}
 						else if(res.data.code == 401){
 							console.log("token过期");
@@ -479,11 +482,17 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
     align-items: center;
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 46rpx;
     height: 130rpx;
-    /* background-color: #ffffff; */
     margin-top: 20rpx;
-    /* border-top: 5rpx solid #ccc; */
+}
+.status-label {
+  display: inline-block;
+  padding: 8rpx 16rpx;
+  border-radius: 24rpx;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-right: 16rpx;
 }
 </style>
