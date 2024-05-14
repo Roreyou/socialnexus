@@ -8,6 +8,10 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
 import actilist from '../../../components/acti-list/acti-list.vue';
 	
 export default {
@@ -23,9 +27,13 @@ export default {
 				net_error: false
 			}
 		},
+		computed: {
+			...mapState(['userInfo']),
+		},
 		onLoad() {
 			const data ={
-				province: '1',
+				province: this.userInfo.province,
+				city: this.userInfo.city,
 				page: this.page
 			}
 			this.getRecommend(data);
@@ -43,7 +51,8 @@ export default {
 			getmore(){
 				this.page ++
 				const data = {
-					province: '1',
+					province: this.userInfo.provice,
+					city: this.userInfo.city,
 					page: this.page
 				}
 				this.getRecommend(data);
