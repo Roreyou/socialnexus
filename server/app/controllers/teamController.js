@@ -41,6 +41,20 @@ class teamController {
     }
   }
 
+  static async getTeamByStatus(req, res) {
+    // console.log('req.query:',req.query);
+    const { status } = req.query;
+    try {
+      const team = await teamService.getTeamByStatus(status);
+      if (!team) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success({"list":team}));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
   static async getTeamByCommu(req, res) {
     const commu_id = req.query.community_id;
     const status=req.query.status;
@@ -147,9 +161,9 @@ class teamController {
     try {
       const team = await teamService.approveTeam(team_id,approve);
       if (!team) {
-        return res.json(Result.fail('队伍不存在'));
+        return res.json(Result.fail({status:'队伍不存在'}));
       }
-      return res.json(Result.success('审核成功'));
+      return res.json(Result.success({status:'审核成功'}));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }
