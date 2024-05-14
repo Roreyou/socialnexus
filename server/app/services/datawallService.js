@@ -49,13 +49,13 @@ class DatawallService {
         const otherCount = sortedMajorCounts.slice(4).reduce((sum, major) => sum + major.count, 0);
       
         // 构建返回结果数组
-        const result = topFour.map(major => ({ major: major.major, count: major.count }));
+        const result = topFour.map(major => ({ name: major.major, value: major.count }));
         if (otherCount > 0) {
-          result.push({ major: '其他', count: otherCount });
+          result.push({ name: '其他', value: otherCount });
         }
       
         return result;
-      }
+    }
 
 }
 

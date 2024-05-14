@@ -429,17 +429,7 @@ class teamService {
       return null; // 返回null表示队伍不存在
     }
 
-    // 检查 vertification_status 是否为 4
-    if (team.vertification_status === 4) {
-      approve++; // 将 approve 值增加1
-    }
-
-    await team.update(
-      {
-        vertification_status: approve
-      },
-      { returning: true }
-    );
+    await db.team.update({ verification_status: approve+1 }, { where: { id: id } });
     return team;
   }
 
