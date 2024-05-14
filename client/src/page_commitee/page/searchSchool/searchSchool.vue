@@ -7,12 +7,12 @@
       <view class="cu-bar search bg-white">
         <view class="search-form round">
           <text class="cuIcon-search"></text>
-          <input v-model="searchContent" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索队伍"
+          <input v-model="searchContent" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="按队伍/活动 搜索队伍"
             confirm-type="search">
         </view>
         <view class="action">
-          <button @click="searchByTeam" class="cu-btn bg-green shadow-blur round">按队伍</button>
-          <button @click="searchByActiv" class="cu-btn bg-green shadow-blur round">按活动</button>
+          <button @click="searchByTeam" class="cu-btn bg-blue shadow-blur round" style="margin-right: 16rpx;">按队伍</button>
+          <button @click="searchByActiv" class="cu-btn bg-blue shadow-blur round">按活动</button>
         </view>
       </view>
   
@@ -63,7 +63,7 @@
           list: [{
             name: '全部'
           }, {
-            name: '待审核'
+            name: '未审核'
           }, {
             name: '已审核'
           }],
@@ -76,7 +76,7 @@
               id: "All"
             },
             {
-              name:"待审核",
+              name:"未审核",
               id:"Unreviewed"
             },
             {
@@ -133,7 +133,7 @@
 				  		team_name: this.searchContent,
 				  		// token: this.$userinfo.token
                   	    // activity_status: this.index
-				  		community_id: this.community_id
+				  		community_id: '0'
 				  	},
 				  	success: res => {
 				  		//不用懒加载
@@ -170,7 +170,7 @@
 				  		act_name: this.searchContent,
 				  		// token: this.$userinfo.token
                   	    // activity_status: this.index
-				  		community_id: this.community_id
+				  		community_id: '0'
 				  	},
 				  	success: res => {
 				  		//不用懒加载
@@ -209,9 +209,6 @@
     z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
   }
   .accontent{
-    margin-top: 65px;	
+    margin-top: 160rpx;	
   }
-  .desc {
-		margin-bottom: 8px;
-	}
   </style>

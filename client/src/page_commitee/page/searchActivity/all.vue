@@ -179,7 +179,7 @@
 						community_id: '0',
 						// token: this.$userinfo.token
                 	    // activity_status: this.index
-						status: '全部'
+						status: 0
 					},
 					success: res => {						
 						this.acList = res.data.data;
