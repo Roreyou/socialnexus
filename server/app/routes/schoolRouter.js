@@ -3,7 +3,6 @@
 const express = require('express');
 const router = express.Router();
 const ActivityController = require('../controllers/activityController.js');
-const CommunityController= require('../controllers/communityController.js');
 const TeamController= require('../controllers/teamController.js');
 const DatawallController= require('../controllers/datawallController.js');
 

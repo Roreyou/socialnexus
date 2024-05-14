@@ -120,7 +120,7 @@ class teamService {
     // 根据 status 设置不同的状态值
     teamsToReturn = teams.map(team => ({
       ...team,
-      veri_status: team.verification_status === 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
+      veri_status: team.verification_status == 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
       leader_name: team["teammember.leader_name"], // 将 "teammember.leader_name" 改为 "leader_name"
       instructor_name: team["teacher.instructor_name"],
       // 删除原始的字段名
@@ -150,7 +150,7 @@ class teamService {
     if (commu_id !== '0') {
       whereCondition_commu.community_id = commu_id;
     }
-    if (status !== '0') {
+    if (status !== 0) {
       whereCondition_status.status = status;
     }
 
@@ -245,7 +245,7 @@ class teamService {
   }
 
   static async queryTeamByName(commu_id, team_name) {
-    const teams_by_commu = await this.getTeamByCommu(commu_id, '0')
+    const teams_by_commu = await this.getTeamByCommu(commu_id, 0)
     if (!teams_by_commu)
       return null;
     //继续模糊查询by_teamName
