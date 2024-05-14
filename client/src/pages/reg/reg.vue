@@ -8,7 +8,7 @@
 			<YtabBtns :data="list" :index.sync="index" @change="change" ></YtabBtns>
 		</view>
 
-    	<view class="container" v-if="index === 0">
+    	<view class="container">
 			<u-upload :class="{ 'banner': avatar === '' }" @on-success="handleSuccess" @on-remove="handleRemove" :custom-btn="true" :max-count="1" ref="uUpload" 
 						:action="action" :file-list="avatarList" :auto-upload="true" style="display: flex; align-items: center; ">
 				<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
@@ -59,9 +59,8 @@
 					<text class="title">省/市：</text>
 					<cityPicker :column="city_picker.column" :default-value="city_picker.defaultValue" :mask-close-able="city_picker.maskCloseAble" 
 								@confirm="confirm" @cancel="cancel" :visible="city_picker.visible"/>
-					<m-input type="text" focus clearable v-model="city_picker.data.name" placeholder="请选择地区"> 	
-					</m-input>
-					<button @tap="open" class="city_btn">选择地区</button>
+					<input type="text" readonly disabled placeholder="请选择地区" v-model="city_picker.data.name" class="input">
+					<button @tap="open" class="city_btn">选择</button>
 				</view>
 				<view class="input-row border">
 					<text class="title">详细地址：</text>
@@ -248,7 +247,7 @@
 				}
 				else{
 					console.log('社区基层注册');
-					if(this.account == '' || this.name == '' || this.tel == '' || this.province == '' || this.city == '' || this.address == '' || this.remark == ''){
+					if(this.account == '' || this.name == '' || this.tel == '' || this.province == '' || this.city == ''|| this.address == '' || this.remark == ''){
 						uni.showToast({
 							icon: 'error',
 							title: '请填写完整信息！'
@@ -450,6 +449,15 @@
 	background-color: rgb(235, 236, 238);
 } */
 .city_btn{
-    font-size: inherit;
+	font-size: inherit;
+    padding-left: 24rpx;
+    padding-right: 24rpx;
+    margin-left: 11rpx;
+    padding-top: 11rpx;
+}
+.input {
+	margin-top: 25rpx;
+    margin-bottom: -21rpx;
+    padding-left: 24rpx;
 }
 </style>
