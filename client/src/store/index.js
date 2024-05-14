@@ -21,20 +21,34 @@ const store = new Vuex.Store({
 			avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
 			verification_status: 5,  //认证状态，5是游客视角的
 			isleader: false, // 是否是队长（也就是有全部权限）
+			province: '',
 		}
 	},
 	mutations: {
-		login(state, {user_id, verification_status, user_name, avatar, isleader}) {
+		// 团委/社区
+		login1(state, {user_id, userName}){
+			state.hasLogin = true;
+			state.user_id = user_id;
+			state.userName = userName;
+		},
+		// 高校队伍
+		login2(state, {user_id, user_name, person_identity, person_id, avatar, verification_status, isleader}) {
 			// 登录
+			state.hasLogin = true;
 			state.userInfo.isUser = true;
 			// console.log("login-avatar", avatar)
 			state.user_id = user_id      // user_id根据情况可能是社区的id，高校的id...
 			state.userName = user_name || '新用户';
-			state.hasLogin = true;
+			state.identity = person_identity;
+			state.userInfo.person_id = person_id;
+			const a = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7';  // 游客的默认头像
+			state.userInfo.avatar = avatar || a;
 			state.userInfo.verification_status = verification_status;
 			state.userInfo.isleader = isleader;
-			const a = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7';  // 默认头像
-			state.userInfo.avatar = avatar || a;
+			
+		},
+		setProvince(state, province) {
+			state.userInfo.province = province;
 		},
 		logout(state) {
 			// 登出

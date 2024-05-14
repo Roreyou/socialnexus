@@ -31,6 +31,13 @@
 				<!-- 返回 -->
 				<view class="back-button" @tap="back"></view>
 			</view>
+			<view class="action-row" style="margin-top: -17rpx">
+				<navigator url="../reg/reg" style="font-weight: bold; color: darkgreen" v-if="step ===3">注册账号</navigator>
+				<text style="color: white">|</text>
+				<navigator url="../pwd/pwd" style="font-weight: bold; color: darkgreen" >忘记密码</navigator>
+				<text style="color: white;" >|</text>
+				<navigator url="../school/index/index" open-type="reLaunch" style="font-weight: bold; color: darkgreen">游客模式</navigator>
+			</view>
 		</view>
 
 		<!-- 高校队伍登录 -->
@@ -41,7 +48,7 @@
 				<view class="input-group" >
 					<view class="input-row border">
 						<text class="title">个人ID：</text>
-						<m-input class="m-input" type="text" clearable focus v-model="member_id" placeholder="请输入个人ID"></m-input>
+						<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入个人ID"></m-input>
 					</view>
 				</view>
 				<view class="radio-container">
@@ -70,6 +77,13 @@
 				<!-- 返回 -->
 				<view class="back-button" @tap="back"></view>
 			</view>
+			<view class="action-row" style="margin-top: -17rpx">
+				<navigator url="../reg/reg" style="font-weight: bold; color: darkgreen">注册账号</navigator>
+				<text style="color: white">|</text>
+				<navigator url="../pwd/pwd" style="font-weight: bold; color: darkgreen" >忘记密码</navigator>
+				<text style="color: white;" >|</text>
+				<navigator url="../school/index/index" open-type="reLaunch" style="font-weight: bold; color: darkgreen">游客模式</navigator>
+			</view>
 		</view>
 
 		
@@ -77,34 +91,7 @@
 		<!-- <view style="padding: 30rpx;">
 			<YtabBtns :data="list" :index.sync="index"></YtabBtns>
 		</view> -->
-
-		<view v-show="!chooseTeam">
-			<!-- 高校队伍成员登录 -->
-			<view v-if="index==1">
-				
-
-			</view>
-		</view>
-
-		<!-- 高校成员选择队伍 -->
-		<view v-show="chooseTeam">
-			<view class="team-box"  :class="selectedTeam == item.team_id ? 'selected' : 'team-box'" v-for="item in teamList" :key="item.team_id" @click="selectTeam(item.team_id)">
-					<img class="avatar" :src="item.avatarUrl" alt="Avatar">
-					<view class="team-name">{{ item.team_name }}</view>
-			</view>
-			
-			<button style="margin-top: 10px;" class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
-
-		</view>
-
-		<view class="action-row">
-			<navigator url="../reg/reg">注册账号</navigator>
-			<text>|</text>
-			<navigator url="../pwd/pwd">忘记密码</navigator>
-			<text>|</text>
-			<navigator url="../school/index/index" open-type="reLaunch">游客模式</navigator>
-			<!-- <button class="guest-button" @click="gotoIndex">游客模式</button> -->
-		</view>
+	
 	</view>
 </template>
 
@@ -156,9 +143,8 @@
 
 				providerList: [],
 				hasProvider: false,
-				account: '',
+				account: '', // 团委/社区的账号，高校队伍成员的个人id
 				password: '',
-				member_id: '', //高校队伍登录时第一步输入的个人ID
 				member_iden: null,// 0为队员/队长，1为指导老师
 				positionTop: 0,
 				isDevtools: false,
@@ -168,7 +154,7 @@
 				selectedTeam: '',
 				chooseTeam: false,
 				selectedRole: null,
-				step: 2.1,
+				step: 0,
 			}
 		},
 		computed: mapState(['forcedLogin']),
@@ -176,7 +162,7 @@
 			wx.hideHomeButton();
 		},
 		methods: {
-			...mapMutations(['login']),
+			...mapMutations(['login1','login2']),
 			
 			gotoIndex(){
 				uni.reLaunch({
@@ -185,7 +171,7 @@
 			},
 			teamNext(){
 				console.log("this.member_iden",this.member_iden);
-				if(this.member_id.length === 0){
+				if(this.account.length === 0){
 					uni.showToast({
 						icon: 'none',
 						title: '请输入个人ID'
@@ -207,7 +193,7 @@
 					},	
 					method: 'GET',
 					data: {
-						id: this.member_id,
+						id: this.account,
 						identity: this.member_iden,
 					},
 					success: res => {	
@@ -258,8 +244,8 @@
 				}
 				else if(this.selectedRole === 4){
 					// 游客
-					uni.navigateTo({
-							url:'../../page_school/pages/index/index'
+					uni.reLaunch({
+							url:'../school/index/index'
 						});
 				}
 			},
@@ -299,7 +285,7 @@
 					return;
 				}
 				
-				// 团委进行登录
+				// 设置身份
 				let identity = '';
 				if(this.step === 1){
 					identity = 'school';
@@ -318,66 +304,104 @@
 					pwd: this.password
 				}
 				console.log("data",data);
-				//发请求
-				// apifoxApiId=
-				uni.request({
-					// 最终登录会是一个接口，由identity说明身份。apifox上为了统一写了多个所以要传apiID
-					// 高校
-					// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154463358',
-					// 团委登录接口
-					url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154755970',
-					// 社区基层
-					// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154447878',
-					method: 'POST',
-					data: data,
-					success: res => {
-						if(res.data.code == 200){
-							// 保存 token
-							uni.setStorageSync('token', res.data.data.token);
-							const user_id = data.id;
-							const verification_status = '';
-							let username = '';
-							const avatar = '';
-							const isleader = false;
-							//登录的是高校队伍，响应里有审核状态等
-							if(identity == "team"){  
-								verification_status = res.data.data.verification_status;
-								const team_name =  res.data.data.team_name;
-								avatar = res.data.data.avatar;
-								// console.log("data.id:", data.id)
-								isleader = res.data.data.isleader;
-								this.toMain(data.id, verification_status, team_name, avatar, isleader);	
+				if(identity === 'school' || identity === 'community'){
+					//团委/社区登录
+					uni.request({
+						// 团委登录接口
+						url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154755970',
+						// 社区基层
+						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154447878',
+						method: 'POST',
+						data: data,
+						success: res => {
+							if(res.data.code == 200){
+								// 保存 token
+								uni.setStorageSync('token', res.data.data.token);
+								const user_id = this.account;
+								let username = '';
+								if(identity === 'school'){
+									username = '校团委';
+									this.login1({user_id, username, });
+									uni.reLaunch({
+										url:'../../page_commitee/page/index/index'
+									});
+								}
+								else if(identity === 'community'){
+									username = '社区基层';
+									this.login1({user_id, username, });
+									uni.reLaunch({
+										url:'../../page_community/page/index'
+									});
+								}
 							}
-							else if(identity === 'school'){
-								username = '校团委';
-								this.login({user_id, verification_status, username, avatar, isleader});
-								uni.reLaunch({
-									url:'../../page_commitee/page/index/index'
+							else{
+								uni.showToast({
+									icon: 'none',
+									title: '用户账号或密码不正确',
 								});
 							}
-							else if(identity === 'community'){
-								username = '社区基层';
-								this.login({user_id, verification_status, username, avatar, isleader});
-								uni.reLaunch({
-									url:'../../page_community/page/index'
-								});
-							}
-							
-						}
-						else{
-							uni.showToast({
-								icon: 'none',
-								title: '用户账号或密码不正确',
-							});
-						}
-					},
-					fail: res => {
+						},
+						fail: res => {
 
-						this.net_error = true;
-					},
-					complete: () => {
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+				}
+				else{
+					//高校登录
+					const data2={
+						identity: identity,
+						id: this.account,  //个人ID
+						pwd: this.password,
+						team_id: this.selectedTeam, //队伍id，用来判断是否是队长
 					}
-				})
+					uni.request({
+						// 高校
+						url: this.$url.BASE_URL + '/4142061-0-default/auth/login/schoolteam',
+						method: 'POST',
+						data: data2,
+						success: res => {
+							if(res.data.code == 200){
+								console.log("登录成功-高校队伍",res.data.data);
+								// 保存 token
+								uni.setStorageSync('token', res.data.data.token);
+								//登录的是高校队伍，响应里有审核状态等
+								const user_id = this.selectedTeam; //队伍id
+								const user_name =  res.data.data.team_name; // 即username
+								let person_identity = '队员';
+								// 下面信息是只有高校队伍有的，存在store的userInfo
+								if(this.member_iden == 0 && res.data.data.isleader){
+									person_identity = '队长'
+								}
+								else if(this.member_iden == 1){
+									person_identity = '老师'
+								}
+								const person_id = this.account;
+								const verification_status = res.data.data.verification_status;
+								const avatar = res.data.data.avatar;
+								const isleader = res.data.data.isleader;
+								this.login2({user_id, user_name, person_identity, person_id, avatar, verification_status, isleader});
+								uni.reLaunch({
+										url:'../school/index/index'
+									});
+							}
+							else{
+								uni.showToast({
+									icon: 'none',
+									title: '用户账号或密码不正确',
+								});
+							}
+						},
+						fail: res => {
+
+							this.net_error = true;
+						},
+						complete: () => {
+						}
+					})
+				}
 					
 			},
 			getUserInfo({

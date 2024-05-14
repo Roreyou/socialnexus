@@ -11,4 +11,4 @@ only for the SSE Project
 
 ## Server:
 使用Node.js开发RESTfuI API 接口(Node.js + Express + Sequelize + MySQL)
-数据库导入-更新models文件命令：sequelize-auto -h localhost -d socialnexus -u root -x 0921  -p 3306
+数据库导入-更新models文件命令：sequelize-auto -o "./app/models" -d socialnexus -h localhost -u root -p 3306 -x 《密码》
