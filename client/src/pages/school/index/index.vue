@@ -149,7 +149,6 @@ import picker from '../../../page_school/components/picker/picker.vue'
 
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin','userName', 'userInfo']),
-			...mapMutations(['setAddress'])
 		},
 
 		// onLoad() {
@@ -250,37 +249,41 @@ import picker from '../../../page_school/components/picker/picker.vue'
 		// 	uni.stopPullDownRefresh();
 		// },
 		methods: {
-			//获取位置
-			getlocation() {
-				var that=this
-				uni.getFuzzyLocation({
-				success: function(res) {
-					this.longitude=res.longitude
-					this.latitude=res.latitude
-					console.log(res)
-					this.locationn()
-				},
-				});
-			},
+			...mapMutations(['setAddress']),
 			//转义为省市
 			locationn() {
 				console.log(this.longitude)
 				console.log(this.latitude)
+				const _this = this
 				uni.request({
-				url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${encodeURIComponent(this.latitude)},${encodeURIComponent(this.longitude)}&key=IX3BZ-LQOLL-TXNPJ-EZVS4-BTGOO-BKFMX`,
+				url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${encodeURIComponent(this.latitude)},${encodeURIComponent(this.longitude)}&key=P56BZ-H7RC3-54T3L-R753V-L5BNH-G7FIF`,
 				method: 'GET',
 				success: (res) => {
-					console.log(res)
-					this.province=res.data.result.ad_info.province
-					this.city=res.data.result.ad_info.city
-					const p = this.province
-					const c = this.city
-					console.log("p=", p)
-					console.log("c=", c)
-					setAddress({p, c})
+					console.log("res=",res)
+					_this.province=res.data.result.address_component.province
+					_this.city=res.data.result.address_component.city
+					const province = _this.province
+					const city = _this.city
+					// console.log("p=", p)
+					// console.log("c=", c)
+					this.setAddress({province, city, })
 				}
 				})
 
+			},
+
+			//获取位置
+			getlocation() {
+				var that=this
+				const _this = this
+				uni.getFuzzyLocation({
+				success: function(res) {
+					_this.longitude=res.longitude
+					_this.latitude=res.latitude
+					console.log(res)
+					_this.locationn()
+				},
+				});
 			},
 
 			loadActilist(data){  //加载活动列表

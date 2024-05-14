@@ -22,6 +22,7 @@ const store = new Vuex.Store({
 			verification_status: 5,  //认证状态，5是游客视角的
 			isleader: false, // 是否是队长（也就是有全部权限）
 			province: '',
+			city: ''
 		}
 	},
 	mutations: {
@@ -47,8 +48,10 @@ const store = new Vuex.Store({
 			state.userInfo.isleader = isleader;
 			
 		},
-		setProvince(state, province) {
+		setAddress(state, {province, city}) {
+			console.log("setAddress", province, city)
 			state.userInfo.province = province;
+			state.userInfo.city = city;
 		},
 		logout(state) {
 			// 登出
