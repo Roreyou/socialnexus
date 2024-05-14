@@ -2,7 +2,7 @@
  * @Author: happy 2630391116@qq.com
  * @Date: 2024-04-29 16:32:53
  * @LastEditors: happy 2630391116@qq.com
- * @LastEditTime: 2024-05-10 14:52:31
+ * @LastEditTime: 2024-05-14 17:59:27
  * @FilePath: \socialnexus\client\src\pages\committee\searchSchool\all.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -20,8 +20,8 @@
 								<text class="cuIcon-titles text-green"></text>
 								<text class="text-xl text-bold">{{item.veri_status}}</text>
 							</view>
-							<view class="action right-buttons" v-if="item.veri_status === '待审核'" >
-									<button class="cu-btn bg-blue shadow-blur" @click="handlePass(item)">通过</button>
+							<view class="action right-buttons" v-if="item.veri_status === '未审核'" >
+									<button class="cu-btn bg-green shadow-blur" @click="handlePass(item)">通过</button>
 									<button class="cu-btn bg-grey shadow-blur" @click="handleReject(item)">驳回</button>
 							</view>
 							<view class="action right-buttons" v-if="item.veri_status === '已审核'" >
@@ -68,7 +68,7 @@
 		mounted() {
 			console.log("this.isSearch"+this.isSearch)
 			// 组件被挂载后发起请求
-			if(!this.isSearch) //搜索的话不调用这个接口
+			if(!this.isSearch) //搜索的话不调用 '获取全部'这个接口
 				this.getAll();
 		},
 		methods: {
@@ -255,12 +255,12 @@
 }
 .status-label {
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
+  padding: 8rpx 16rpx;
+  border-radius: 24rpx;
   color: #fff;
-  font-size: 12px;
+  font-size: 32rpx;
   font-weight: bold;
-  margin-right: 8px;
+  margin-right: 16rpx;
 }
 
 .passed {
@@ -275,10 +275,10 @@
 	height: 50rpx;
 	border-radius: 50%;
 	background-color: #ffffff;
-	margin-right: 10px;
+	margin-right: 10rpx;
 }
 .desc{
-	margin-bottom: 8px;
+	margin-bottom: 8rpx;
     margin-left: 25rpx;
 }
 </style>
