@@ -11,7 +11,7 @@
 					confirm-type="search">
 			</view>
 			<view class="action">
-				<button @click="search" class="cu-btn bg-green shadow-blur round">搜索</button>
+				<button @click="search" class="cu-btn bg-blue shadow-blur round">搜索</button>
 			</view>
 		</view>
 
@@ -64,7 +64,7 @@
 				list: [{
 					name: '全部'
 				}, {
-					name: '待审核'
+					name: '未审核'
 				}, {
 					name: '已审核'
 				}],
@@ -77,7 +77,7 @@
 						id: "All"
 					},
 					{
-						name:"待审核",
+						name:"未审核",
 						id:"Unreviewed"
 					},
 					{
@@ -140,7 +140,7 @@
 						name: this.searchContent,
 						// token: this.$userinfo.token
                 	    // activity_status: this.index
-						community_id: this.community_id
+						community_id: '0'
 					},
 					success: res => {
 						//不用懒加载
@@ -152,7 +152,7 @@
 						all.updateIsSearch(true); // 推荐通过方法更新属性
 						console.log("success设置后: all.isSearch="+all.isSearch);
 
-						all.acList = res.data.data.list;
+						all.acList = res.data.data;
 						this.TabCur = 0 // 设置顶部为“全部”
 						console.log("成功请求-模糊查询社区需求");
 						console.log(all.acList);
@@ -183,6 +183,6 @@
   z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
 }
 .accontent{
-	margin-top: 65px;	
+	margin-top: 160rpx;	
 }
 </style>

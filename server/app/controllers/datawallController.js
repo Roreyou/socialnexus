@@ -4,10 +4,9 @@ const { activity } = require('../models');
 const DatawallService = require('../services/datawallService');
 
 class DatawallController {
-    static async getDatawallByActivity(req, res) {
-        const activity_id = req.query.activity_id;
+    static async getActivityTypeCounts(req, res) {
         try {
-            const datawall = await DatawallService.getDatawallByActivity(activity_id);
+            const datawall = await DatawallService.getActivityTypeCounts();
             if(!datawall)
                 return res.json(Result.fail('数据不存在'));
             return res.json(Result.success(datawall));
@@ -16,10 +15,9 @@ class DatawallController {
         }
     }
 
-    static async getDatawallByCommunity(req, res) {
-        const community_id = req.query.community_id;
+    static async getMajorTypeCounts(req, res) {
         try {
-            const datawall = await DatawallService.getDatawallByCommunity(community_id);
+            const datawall = await DatawallService.getMajorTypeCounts();
             if(!datawall)
                 return res.json(Result.fail('数据不存在'));
             return res.json(Result.success(datawall));

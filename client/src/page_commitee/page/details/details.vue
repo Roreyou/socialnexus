@@ -3,6 +3,9 @@
 	<view class="container">
 		<!-- 第一块 -->
 		<view>
+			<view class="img">
+			 	<image :src="detail.picture" mode="aspectFill"></image>
+		 	</view>
 			<view class="part first">
 				<view class="de_total_title">
 					{{ detail.name }}
@@ -168,14 +171,14 @@
 		</view>
 
 			<!-- <bttab v-if="hasactiid" :team_id="user_id" :acti_id="acti_id"></bttab> -->
-      <view class="button-container" v-if="detail.verification_status === 0">
+      <view class="button-container" v-if="detail.verification_status === 1">
         <button class="status-label passed" @click="handlePass()">通过</button>
         <button class="status-label rejected" @click="handleReject()" >驳回</button>
       </view>
-      <view class="button-container" v-else-if="detail.verification_status === 1">
+      <view class="button-container" v-else-if="detail.verification_status === 2">
         <button class="status-label passed"  >已通过</button>
       </view>
-      <view class="button-container" v-else-if="detail.verification_status === 2">
+      <view class="button-container" v-else-if="detail.verification_status === 3">
         <button class="status-label rejected">已驳回</button>
       </view>
 
@@ -420,12 +423,13 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
     	font-size: larger;
 		/* justify-content: space-between;  */
 	}
-	.keywords{
+	/* .keywords{
 		display: inline-block; 
   		margin-right: 10px; /* 可根据需求调整按钮之间的间距 */
-		margin-bottom: 10px;
-		padding: 0 8px; /* 调整内边距来控制块的大小 */
-	}
+		/* margin-bottom: 10px; */
+		/* padding: 0 8px; 调整内边距来控制块的大小 */
+	/*} 
+	*/
 	
 	/* 灰线 */
 	.custom-container {
@@ -435,7 +439,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
 	.horizontal-line {
 	border: none; /* 移除默认的边框样式 */
-	border-top: 1px solid #ccc; /* 设置上边框为 1px 灰色实线 */
+	border-top: 2rpx solid #ccc; /* 设置上边框为 1px 灰色实线 */
 	width: 100%; /* 设置水平线的宽度为容器的宽度 */
 	}
 
@@ -485,24 +489,6 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
     /* border-top: 5rpx solid #ccc; */
 }
 
-.button-left, .button-right {
-  flex: 1;
-  height: 100%;
-  font-size: 16px;
-  border: none;
-  outline: none;
-}
-
-.button-left {
-  background-color: #4caf50;
-  color: white;
-}
-
-.button-right {
-  background-color: #f44336;
-  color: white;
-}
-
 .status-label {
   display: inline-block;
   padding: 4px 8px;
@@ -518,5 +504,24 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 
 .rejected {
   background-color: red;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: -14rpx;
+    height: 130rpx;
+    margin-top: 20rpx;
+}
+.status-label {
+  display: inline-block;
+  padding: 8rpx 16rpx;
+  border-radius: 24rpx;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-right: 16rpx;
 }
 </style>

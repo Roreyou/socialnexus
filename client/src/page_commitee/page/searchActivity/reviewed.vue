@@ -20,13 +20,14 @@
 							</view>
 							
 							<view class="action right-buttons" v-if="item.veri_status === '已审核'" >
-								<span class="status-label passed" v-if="item.veri_status === '通过'">已通过</span>
-    							<span class="status-label rejected" v-if="item.veri_status === '驳回'">已驳回</span>
+								<span class="status-label passed" v-if="item.verification_status === 1">已通过</span>
+    							<span class="status-label rejected" v-if="item.verification_status === 2">已驳回</span>
 							</view>
 							
 						</view>
 						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
+							<img class="avatar" :src="item.picture" alt="Avatar">
 							<view class="desc">
 								<view class="text-content"> 发布日期: {{item.setup_date}}</view>
 								<view class="text-content"> 所属社区: {{item.community_name}}</view>
@@ -52,14 +53,7 @@
 		data() {
 			return {
 				acList:[
-					// {	
-					// 	veri_status: "已审核",
-					// 	title: "5月15日实践活动",
-					// 	time: "2020-05-15",
-					// 	place: "北京",
-					// 	job: "志愿者",
-					// 	keywords: "服务,实践"
-					// }
+
 				]
 			}
 		},
@@ -83,7 +77,7 @@
 						community_id: '0',
 						// token: this.$userinfo.token
                 	    // activity_status: this.index
-						status: '已审核'
+						status: 1
 					},
 					success: res => {						
 						this.acList = res.data.data;
@@ -145,12 +139,12 @@
 }
 .status-label {
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
+  padding: 8rpx 16rpx;
+  border-radius: 24rpx;
   color: #fff;
-  font-size: 12px;
+  font-size: 32rpx;
   font-weight: bold;
-  margin-right: 8px;
+  margin-right: 16rpx;
 }
 
 .passed {
@@ -161,7 +155,7 @@
   background-color: red;
 }
 .desc{
-	margin-bottom: 8px;
+	margin-bottom: 8rpx;
     margin-left: 25rpx;
 }
 </style>

@@ -98,7 +98,7 @@ class ActivityController {
       if (!activity) {
         return res.json(Result.fail('活动不存在'));
       }
-      return res.json(Result.success('审核成功'));
+      return res.json(Result.success({status:'审核成功'}));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }

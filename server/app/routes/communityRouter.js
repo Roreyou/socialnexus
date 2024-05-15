@@ -28,6 +28,6 @@ router.post('/admitTeam',TeamController.admitTeam);//录取或驳回队伍
 router.post('/commentTeam',TeamController.commentTeam);//评价队伍的成果
 
 //数据墙
-router.get('/datawall_com',DatawallController.getDatawallByCommunity);//查询by社区
+// router.get('/datawall_com',DatawallController.getDatawallByCommunity);//查询by社区
 
 module.exports = router;

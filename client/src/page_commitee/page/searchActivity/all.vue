@@ -13,17 +13,18 @@
 								<text class="text-xl text-bold">{{item.veri_status}}</text>
 							</view>
 							<view class="action right-buttons" v-if="item.veri_status === '未审核'" >
-									<button class="cu-btn bg-blue shadow-blur" @click="handlePass(item)">通过</button>
+									<button class="cu-btn bg-green shadow-blur" @click="handlePass(item)">通过</button>
 									<button class="cu-btn bg-grey shadow-blur" @click="handleReject(item)">驳回</button>
 							</view>
 							<view class="action right-buttons" v-if="item.veri_status === '已审核'" >
-								<span class="status-label passed" v-if="item.veri_status === '通过'">已通过</span>
-    							<span class="status-label rejected" v-if="item.veri_status === '驳回'">已驳回</span>
+								<span class="status-label passed" v-if="item.verification_status === 1">已通过</span>
+    							<span class="status-label rejected" v-if="item.verification_status === 2">已驳回</span>
 							</view>
 
 						</view>
 						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
+							<img class="avatar" :src="item.picture" alt="Avatar">
 							<view class="desc">
 								<view class="text-content"> 发布日期: {{item.setup_date}}</view>
 								<view class="text-content"> 所属社区: {{item.community_name}}</view>
@@ -84,7 +85,7 @@
 						if(res.data.code==200){
 							this.$u.toast(`审核成功！已通过申请。`);
 							// 重新显示
-							this.getAllUnreviewed();
+							this.getAll();
 						}
 						else if(res.data.code == 401){
 							console.log("token过期");
@@ -106,7 +107,7 @@
 						}
 						else if(res.data.code == 500){
 							this.$u.toast(`审核失败，活动不存在！`);
-							this.getAllUnreviewed();
+							this.getAll();
 						}
 					},
 					fail: res => {
@@ -133,7 +134,7 @@
 						if(res.data.code==200){
 							this.$u.toast(`审核成功！已驳回申请。`);
 							// 重新显示
-							this.getAllUnreviewed();
+							this.getAll();
 						}
 						else if(res.data.code == 401){
 							console.log("token过期");
@@ -155,7 +156,7 @@
 						}
 						else if(res.data.code == 500){
 							this.$u.toast(`审核失败，活动不存在！`);
-							this.getAllUnreviewed();
+							this.getAll();
 						}
 					},
 					fail: res => {
@@ -179,7 +180,7 @@
 						community_id: '0',
 						// token: this.$userinfo.token
                 	    // activity_status: this.index
-						status: '全部'
+						status: 0
 					},
 					success: res => {						
 						this.acList = res.data.data;
@@ -199,104 +200,6 @@
 				// 触发事件通知父组件更新数据
 				this.$emit('update:is-search', this.isSearch);
 			},
-			// 审核：通过
-			// handlePass(item){
-			// 	console.log("审核：通过");
-			// 	uni.request({
-			// 		url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
-			// 		header:{
-			// 			Authorization:uni.getStorageSync("token")
-			// 		},	
-			// 		method: 'PUT',
-			// 		data: {
-			// 			id: item.id,
-			// 			approve: 1
-			// 		},
-			// 		success: res => {
-			// 			if(res.data.code==200){
-			// 				this.$u.toast(`审核成功！已通过申请。`);
-			// 				// 重新显示
-			// 				this.getAllUnreviewed();
-			// 			}
-			// 			else if(res.data.code == 401){
-			// 				console.log("token过期");
-			// 				uni.showModal({
-			// 				title: '',
-			// 				content: '登录已过期。是否前去登录？',
-			// 				success: function(res) {
-			// 				if (res.confirm) {
-			// 					// 用户点击了确定
-			// 					uni.reLaunch({
-			// 						url: '../../../pages/login/login',
-			// 					})
-			// 				} else if (res.cancel) {
-			// 					// uni.navigateBack()
-			// 					return;							
-			// 				}
-			// 				}
-			// 			});
-			// 			}
-			// 			else if(res.data.code == 500){
-			// 				this.$u.toast(`审核失败，活动不存在！`);
-			// 				this.getAllUnreviewed();
-			// 			}
-			// 		},
-			// 		fail: res => {
-			// 			this.net_error = true;
-			// 		},
-			// 		complete: () => {
-			// 		}
-			// 	})
-			// },
-			// // 审核：驳回
-			// handleReject(item){
-			// 	console.log("审核：驳回");
-			// 	uni.request({
-			// 		url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
-			// 		header:{
-			// 			Authorization:uni.getStorageSync("token")
-			// 		},	
-			// 		method: 'PUT',
-			// 		data: {
-			// 			id: item.id,
-			// 			approve: 2
-			// 		},
-			// 		success: res => {
-			// 			if(res.data.code==200){
-			// 				this.$u.toast(`审核成功！已驳回申请。`);
-			// 				// 重新显示
-			// 				this.getAllUnreviewed();
-			// 			}
-			// 			else if(res.data.code == 401){
-			// 				console.log("token过期");
-			// 				uni.showModal({
-			// 				title: '',
-			// 				content: '登录已过期。是否前去登录？',
-			// 				success: function(res) {
-			// 				if (res.confirm) {
-			// 					// 用户点击了确定
-			// 					uni.reLaunch({
-			// 						url: '../../../pages/login/login',
-			// 					})
-			// 				} else if (res.cancel) {
-			// 					// uni.navigateBack()
-			// 					return;							
-			// 				}
-			// 				}
-			// 			});
-			// 			}
-			// 			else if(res.data.code == 500){
-			// 				this.$u.toast(`审核失败，活动不存在！`);
-			// 				this.getAllUnreviewed();
-			// 			}
-			// 		},
-			// 		fail: res => {
-			// 			this.net_error = true;
-			// 		},
-			// 		complete: () => {
-			// 		}
-			// 	})
-			// },
 			//前往详情页
 			todetail(id){
 				console.log("id:", id)
@@ -349,14 +252,13 @@
 }
 .status-label {
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
+  padding: 8rpx 16rpx;
+  border-radius: 24rpx;
   color: #fff;
-  font-size: 12px;
+  font-size: 32rpx;
   font-weight: bold;
-  margin-right: 8px;
+  margin-right: 16rpx;
 }
-
 .passed {
   background-color: green;
 }
@@ -364,8 +266,15 @@
 .rejected {
   background-color: red;
 }
+.avatar {
+	width: 50rpx;
+	height: 50rpx;
+	border-radius: 50%;
+	background-color: #ffffff;
+	margin-right: 10rpx;
+}
 .desc{
-	margin-bottom: 8px;
+	margin-bottom: 8rpx;
     margin-left: 25rpx;
 }
 </style>
