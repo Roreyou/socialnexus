@@ -1,12 +1,22 @@
 // services/replyService.js
 
 const db = require('../models/index');
-const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 
 class replyService{
     static async getReplyOfAComment(commentId) {
         try {
-            const replies = await db.reply.findAll({ where: { comment_id: commentId } });
+            const replies = await db.reply.findAll({ where: { comment_id: commentId },
+                attributes: {
+                    include: [
+                        [
+                        //引用原生mySQL语法，将类型转化
+                        sequelize.literal("cast(id as char)"),
+                        'id'
+                        ],
+                    ]
+                }
+            });
             return replies;
         } catch (error) {
             throw new Error('Error fetching replies for comment');
