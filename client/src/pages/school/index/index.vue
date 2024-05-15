@@ -109,6 +109,11 @@ import picker from '../../../page_school/components/picker/picker.vue'
 
 		data() {
 			return {
+				longitude: null,
+        		latitude: null,
+				province: '',
+				city:'',
+
 				avatar:'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
 
 				keyword: '',
@@ -143,7 +148,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 		},
 
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','userName', 'userInfo'])
+			...mapState(['hasLogin', 'forcedLogin','userName', 'userInfo']),
 		},
 
 		// onLoad() {
@@ -204,9 +209,11 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			// 	complete: () => {
 			// 	}
 			// })
-			
+			this.getlocation()
+
 			const data = {
-				province: '1',
+				province: this.province,
+				city: this.city,
 				page: 0
 			}
 			this.loadActilist(data)
@@ -242,6 +249,43 @@ import picker from '../../../page_school/components/picker/picker.vue'
 		// 	uni.stopPullDownRefresh();
 		// },
 		methods: {
+			...mapMutations(['setAddress']),
+			//转义为省市
+			locationn() {
+				console.log(this.longitude)
+				console.log(this.latitude)
+				const _this = this
+				uni.request({
+				url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${encodeURIComponent(this.latitude)},${encodeURIComponent(this.longitude)}&key=P56BZ-H7RC3-54T3L-R753V-L5BNH-G7FIF`,
+				method: 'GET',
+				success: (res) => {
+					console.log("res=",res)
+					_this.province=res.data.result.address_component.province
+					_this.city=res.data.result.address_component.city
+					const province = _this.province
+					const city = _this.city
+					// console.log("p=", p)
+					// console.log("c=", c)
+					this.setAddress({province, city, })
+				}
+				})
+
+			},
+
+			//获取位置
+			getlocation() {
+				var that=this
+				const _this = this
+				uni.getFuzzyLocation({
+				success: function(res) {
+					_this.longitude=res.longitude
+					_this.latitude=res.latitude
+					console.log(res)
+					_this.locationn()
+				},
+				});
+			},
+
 			loadActilist(data){  //加载活动列表
 				uni.request({
 				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
