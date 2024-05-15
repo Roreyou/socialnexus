@@ -1,11 +1,10 @@
 // services/commentService.js
 
 const db = require('../models/index');
-const replyService = require('../services/replyService');
 const { Op } = require('sequelize');
+const replyService = require('../services/replyService');
 const teamService = require('./teamService');
 const postService = require('./postService');
-const post = require('../models/post');
 
 class commentService{
     static async getCommentsofPost(post_id, flag=true){
@@ -131,7 +130,7 @@ class commentService{
     static async commentOnPost(post_id, team_id, text){
         try {
             // 创建新的评论
-             const debug = await db.comment.create({
+             await db.comment.create({
                 post_id: post_id,
                 team_id: team_id,
                 content: text,
@@ -141,10 +140,11 @@ class commentService{
             });
 
             // 更新在notification表里面
-            await postService.updateNotification(post_id, true);
+            const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+            await postService.updateNotification(post_id, ownerTeam_id, true);
 
             // 获取新的评论详情以及相关的回复详情
-            const newCommentList = this.getCommentsForPost(post_id);
+            const newCommentList = commentService.getCommentsForPost(post_id);
 
             return newCommentList;
         } catch (error) {

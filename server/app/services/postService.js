@@ -162,8 +162,11 @@ class postService{
 
     // 更新通知
     static async updateNotification(post_id, ownerTeam_id, ifadd){
-        // 更新在notification表里面
+        // post_id：该帖子的id
+        // ownerTeam_id:该帖子所属的队伍
+        // ifadd：这条通知是要增加还是应该删除
 
+        // 更新在notification表里面
         // 在 notification 表中找到对应的记录并将 num 字段加 1
         var notification = await db.notification.findOne({ where: { post_id:post_id, team_id:ownerTeam_id } });
         if (!notification) {
@@ -209,7 +212,7 @@ class postService{
                 await post.save();
 
                 // 更新通知数        
-                const ownerTeam_id = this.getOwnerTeamIdByPostId(post_id);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
                 await this.updateNotification(post_id,ownerTeam_id, false);
 
                 return "unlike successfully!";
@@ -232,8 +235,8 @@ class postService{
                 await post.save();
 
                 // 更新通知数
-                const ownerTeam_id = this.getOwnerTeamIdByPostId(post_id);
-                await this.updateNotification(post_id,ownerTeam_id, true);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+                await postService.updateNotification(post_id,ownerTeam_id, true);
                 return "like successfully!";
             }
         } catch (error) {
@@ -272,9 +275,9 @@ class postService{
                 comment.like -= 1;
                 await comment.save();
                 //更新通知：
-                const post_id = await this.getPostIdByCommentId(comment_id);
-                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
-                await this.updateNotification(post_id, ownerTeam_id, false);
+                const post_id = await postService.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+                await postService.updateNotification(post_id, ownerTeam_id, false);
                 return "unlike successfully!";
             } else {
                 // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
@@ -300,9 +303,9 @@ class postService{
                 await likeCom.save();
 
                 //更新通知：
-                const post_id = await this.getPostIdByCommentId(comment_id);
-                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
-                await this.updateNotification(post_id, ownerTeam_id, true);
+                const post_id = await postService.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+                await postService.updateNotification(post_id, ownerTeam_id, true);
 
                 return "like successfully!";
             }
@@ -341,9 +344,9 @@ class postService{
                 await reply.save();
 
                 // 更新通知
-                const post_id = await this.getPostIdByCommentId(comment_id);
-                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
-                await this.updateNotification(post_id, ownerTeam_id, false);
+                const post_id = await postService.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+                await postService.updateNotification(post_id, ownerTeam_id, false);
     
                 return "unlike successfully!";
             } else {
@@ -368,9 +371,9 @@ class postService{
                 reply.like += 1;
                 await reply.save();
                 //更新通知：
-                const post_id = await this.getPostIdByCommentId(comment_id);
-                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
-                await this.updateNotification(post_id, ownerTeam_id, true);
+                const post_id = await postService.getPostIdByCommentId(comment_id);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+                await tpostService.updateNotification(post_id, ownerTeam_id, true);
                 return "like successfully!";
             }
         } catch (error) {
@@ -484,9 +487,9 @@ class postService{
             });
             //更新通知
             //找到comment id对应的帖子id，在帖子中找到该帖子拥有者的id
-            const post_id = await this.getPostIdByCommentId(comment_id);
-            const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
-            await this.updateNotification(post_id, ownerTeam_id, true);
+            const post_id = await postService.getPostIdByCommentId(comment_id);
+            const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+            await postService.updateNotification(post_id, ownerTeam_id, true);
             // 获取该评论的新的回复列表
             const newReply = await replyService.getReplyOfAComment(comment_id);
             return newReply;
@@ -527,9 +530,9 @@ class postService{
 
             // 如果点赞信息的 ifread 字段为 1，则更新通知
             if (ifread  === 1) {
-                const post_id = await this.getPostIdByCommentId(likeComment.comment_id);
-                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
-                await this.updateNotification(post_id, ownerTeam_id, false);
+                const post_id = await postService.getPostIdByCommentId(likeComment.comment_id);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+                await postService.updateNotification(post_id, ownerTeam_id, false);
             }
         }
     }
@@ -548,9 +551,9 @@ class postService{
 
             // 如果点赞信息的 ifread 字段为 1，则更新通知
             if (ifread === 1) {
-                const post_id = await this.getPostIdByCommentId(likeReply.comment_id);
-                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
-                await this.updateNotification(post_id, ownerTeam_id, false);
+                const post_id = await postService.getPostIdByCommentId(likeReply.comment_id);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+                await postService.updateNotification(post_id, ownerTeam_id, false);
             }
         }
     }
@@ -579,9 +582,9 @@ class postService{
 
             // 如果回复的 ifread 字段为 1，则更新通知
             if (ifread === 1) {
-                const post_id = await this.getPostIdByCommentId(commentId);
-                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
-                await this.updateNotification(post_id, ownerTeam_id, false);
+                const post_id = await postService.getPostIdByCommentId(commentId);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+                await postService.updateNotification(post_id, ownerTeam_id, false);
             }
 
             // 删除回复相关的点赞信息
@@ -605,9 +608,9 @@ class postService{
     
             // 更新通知（如果 ifread 字段的值为 1）
             if (ifread === 1) {
-                const post_id = await this.getPostIdByCommentId(commentId);
-                const ownerTeam_id = await this.getOwnerTeamIdByPostId(post_id);
-                await this.updateNotification(post_id, ownerTeam_id, false);
+                const post_id = await postService.getPostIdByCommentId(commentId);
+                const ownerTeam_id = await postService.getOwnerTeamIdByPostId(post_id);
+                await postService.updateNotification(post_id, ownerTeam_id, false);
             }
 
             // 删除与该评论相关的所有点赞信息
