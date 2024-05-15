@@ -56,7 +56,7 @@
 						<uni-easyinput v-model="baseFormData2.name" placeholder="请输入姓名" />
 					</uni-forms-item>
 					<uni-forms-item label="学号" :rules="[{ required: true, errorMessage: '学号项必填', trigger: 'blur' }]" name="netid">
-						<uni-easyinput v-model="baseFormData2.netid" placeholder="请输入学号" />
+						<uni-easyinput v-model="baseFormData2.netid" placeholder="请输入学号" disabled="true" />
 					</uni-forms-item>
 					<uni-forms-item label="所属院系" :rules="[{ required: true, errorMessage: '所属院系项必填', trigger: 'blur' }]" name="major">
 						<uni-easyinput v-model="baseFormData2.major" placeholder="请输入院系名称" />
