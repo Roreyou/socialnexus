@@ -46,7 +46,6 @@ class postController{
             const {page} = req.query;
             // 调用服务层方法获取热门帖子
             const posts = await postService.getHotPosts(page);
-            console.log("debug res:",posts);
             // 返回帖子列表
             return res.json(Result.success(posts));
         } catch (error) {
@@ -99,7 +98,6 @@ class postController{
     static async likePost(req, res){
         const { post_id, team_id } = req.body;
         try {
-            console.log("debug post_id:",post_id);
             const updatedPost = await postService.likePost(post_id, team_id);
             return res.json(Result.success(updatedPost));
         } catch (error) {
@@ -136,7 +134,6 @@ class postController{
     static async getnotice(req, res){
         try {
             const { my_id: team_id } = req.query;
-            //console.log(team_id);
             const notifications = await postService.getnotice(team_id);
             return res.json(Result.success(notifications));
         } catch (error) {

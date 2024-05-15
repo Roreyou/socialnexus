@@ -1,12 +1,11 @@
 const db = require('../models/index');
 const axios = require('axios');
 const { Op, where } = require('sequelize');
-const teamService = require('./teamService');
-const activity = require('../models/activity');
-const CommunityService = require('./communityService');
 const fs = require('fs/promises');
-const postService = require('./postService');
 const path = require('path');
+const otherService = require('./otherService');
+const teamService = require('./teamService');
+const CommunityService = require('./communityService');
 
 class ActivityService {
   static async getAllActivities() {
@@ -51,7 +50,6 @@ class ActivityService {
     let activitiesToReturn;
     let whereCondition;
 
-    console.log(status);
     // 根据不同的 status 设置不同的查询条件
     if (status == 0) {
       
@@ -71,8 +69,6 @@ class ActivityService {
     if (commu_id != '0') {
       whereCondition.community_id = commu_id
     }
-
-    // console.log(whereCondition);
 
     // 建立关联关系
     db.activity.belongsTo(db.community, { foreignKey: 'community_id' });
@@ -239,7 +235,6 @@ class ActivityService {
         },
         attributes: ['key_name']
       });
-      console.log("debug:", keywords);
 
       // 获取活动对应的社区名字
       const community = await db.community.findOne({
@@ -262,12 +257,10 @@ class ActivityService {
   }
 
   static async getPageData(pageNumber, list) {
-    console.log("list:", list)
-    const pageSize = 2; // 假设每页有 10 条数据
+    const pageSize = 10; // 假设每页有 10 条数据
 
     if (pageNumber == 0) {
       // 如果页数等于 0，则表示第一部分，返回第一部分的数据
-      console.log("list2:", list.slice(0, pageSize))
       return list.slice(0, pageSize);
     } else if (pageNumber > 0) {
       const startIndex = pageNumber * pageSize;
@@ -309,6 +302,8 @@ class ActivityService {
         const status = await this.getActivityStatusMap(activity.activity_status);
         // 添加 my_state 字段
         activity.my_state = status;
+        activity = await otherService.IdInt2String("id", activity);
+        //activity = await otherService.IdInt2String("category_id", activity);
       });
       const pageActivityList = this.getPageData(page, handledActivityList);
       return pageActivityList;
@@ -353,13 +348,16 @@ class ActivityService {
       if (!activList) {
         return null; // 返回null表示活动不存在
       } else {
-        const handledActivityList = await this.getCategKeyCommuIdsMap(activList)
-        handledActivityList.forEach(async activity => {
-          // 获取活动状态
-          const status = await this.getActivityStatusMap(activity.activity_status);
-          // 添加 my_state 字段
-          activity.my_state = status;
-        });
+        var mapedActivityList = await ActivityService.getCategKeyCommuIdsMap(activList);
+        const handledActivityList = await Promise.all(mapedActivityList.map(async activity => {
+            // 获取活动状态
+            const status = await this.getActivityStatusMap(activity.activity_status);
+            // 添加 my_state 字段
+            activity.my_state = status;
+            activity = await otherService.IdInt2String("id", activity);
+            activity = await otherService.IdInt2String("category_id", activity);
+            return activity;
+        }));
         return handledActivityList;
       }
 
@@ -414,9 +412,11 @@ class ActivityService {
       handledActicity.tel = community.tel;
     } else {
       // 没有找到对应的 community 记录
-      console.log("Community not found");
+      console.error("Community not found");
       handledActicity.tel = "-1";
     }
+    var result = await otherService.IdInt2String("id", handledActicity);
+    result = await otherService.IdInt2String("category_id", result);
     return { detail: handledActicity };
   }
 
@@ -485,9 +485,6 @@ class ActivityService {
       const imagePath = path.join(targetPath, folderName, QRCodeName);
       const imageUrl = `/${folderName}/${QRCodeName}`;
 
-      //console.log("debug t:", targetPath);
-      //console.log("debug url:", imageUrl);
-      //console.log("debug path:", imagePath);
       // 将上传的图片保存到本地文件系统
       await fs.writeFile(imagePath, code_picture, 'binary', (err) => {
         if (err) {
@@ -541,8 +538,6 @@ class ActivityService {
 
       const responseToken = await axios.get(getTokenUrl);
       const access_token = responseToken.data.access_token;
-      //console.log("debug-responseToken",responseToken);
-      //console.log("debug-access_token",access_token);
 
       // http调用获取程序码
       const getQRCodeUrl = `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${access_token}`;
@@ -557,8 +552,6 @@ class ActivityService {
       const responseCode = await axios.post(getQRCodeUrl, params, {
         responseType: 'arraybuffer' // 设置响应类型为二进制数组
       });
-      console.log("debug-response", responseCode);
-      console.log('Activity QR code saved successfully');
       return responseCode.data;
 
     } catch (error) {

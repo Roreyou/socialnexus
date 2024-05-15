@@ -2,14 +2,14 @@
 
 const { where } = require('sequelize');
 const db = require('../models/index');
-const ActivityService = require('./activityService');
-const teamService = require('./teamService');
-const otherService = require('./otherService');
 const fs = require('fs/promises');
 const path = require('path');
+
 const replyService = require('./replyService');
-const notification = require('../models/notification');
 const commentService = require('./commentService');
+const activityService = require('./activityService');
+const teamService = require('./teamService');
+const otherService = require('./otherService');
 
 class postService{
     static async createPost(postData){
@@ -67,7 +67,8 @@ class postService{
 
     //处理帖子中队伍名映射、获取评论条数、获取队伍头像的统一接口
     static async getPostsHandled(posts){
-        const results = await Promise.all(posts.map(async post => {               
+        const results = await Promise.all(posts.map(async post => {   
+            post = await otherService.IdInt2String("id", post.dataValues);           
             const team_name = await teamService.getTeamName(post.team_id);
 
             // 统计评论数量
@@ -80,7 +81,7 @@ class postService{
             //获取队伍头像
             const team_avatar = await teamService.getTeamAvatar(post.team_id);
             return {
-                ...post.dataValues,
+                ...post,
                 team_name: team_name.team_name ? team_name.team_name : null,
                 com_num: commentCount,
                 team_avatar: team_avatar.avatar ? team_avatar.avatar : null
@@ -103,7 +104,7 @@ class postService{
             //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
             const results = await this.getPostsHandled(posts);  
             // 分页
-            const pageResults = ActivityService.getPageData(page, results);
+            const pageResults = await activityService.getPageData(page, results);
             return pageResults;
         } catch (error) {
             console.log(error);
@@ -123,7 +124,7 @@ class postService{
             //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
             const results = await this.getPostsHandled(posts);
             // 分页
-            const pageResults = await ActivityService.getPageData(page, results);
+            const pageResults = await activityService.getPageData(page, results);
             return pageResults;
         } catch (error) {
             throw new Error('Error fetching hot posts');
@@ -142,7 +143,7 @@ class postService{
             //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
             const results = await this.getPostsHandled(posts);
             //分页
-            const pageResults = await ActivityService.getPageData(page, results);
+            const pageResults = await activityService.getPageData(page, results);
             return pageResults;
         } catch (error) {
             throw new Error('Error fetching latest posts');
