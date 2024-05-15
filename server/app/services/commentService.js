@@ -3,13 +3,11 @@
 const db = require('../models/index');
 const replyService = require('../services/replyService');
 const teamService = require('./teamService');
-const postService = require('./postService');
 const otherService = require('./otherService');
-const comment = require('../models/comment');
 const sequelize = require('sequelize');
 
 class commentService{
-    static async getCommentsofPost(post_id, flag=true){
+    static async getCommentsOfPost(post_id, flag=true){
         // 返回结构：[{a comment},...,{a comment}}] of a post
         // 如果flag为flase，则只返回ifread字段为1的评论
         try {
@@ -17,9 +15,29 @@ class commentService{
             // 获取新的评论详情
             if(!flag){ //只返回ifread字段为1的评论
                 console.log(flag);
-                results = await db.comment.findAll({ where: { post_id: post_id, ifread:1 } });
+                results = await db.comment.findAll({ where: { post_id: post_id, ifread:1 },
+                    attributes: {
+                        include: [
+                            [
+                            //引用原生mySQL语法，将类型转化
+                            sequelize.literal("cast(id as char)"),
+                            'id'
+                            ],
+                        ]
+                    } 
+                });
             }else{ // 全返回
-                results = await db.comment.findAll({ where: { post_id: post_id } });
+                results = await db.comment.findAll({ where: { post_id: post_id },
+                    attributes: {
+                        include: [
+                            [
+                            //引用原生mySQL语法，将类型转化
+                            sequelize.literal("cast(id as char)"),
+                            'id'
+                            ],
+                        ]
+                    }                
+                });
             }
             return results;
         } catch (error) {
@@ -172,10 +190,23 @@ class commentService{
         //如果flag为flase，则只返回ifread字段为1的评论
         const commentLists = [];
         for(const post of allPosts){
-            const comments = await commentService.getCommentsofPost(post.id, flag);
+            const comments = await commentService.getCommentsOfPost(post.id, flag);
             commentLists.push(comments)
         }
         return commentLists;
+    }
+
+    static async getCommentIdByReplyId(replyId){
+        try {
+             const reply = await db.reply.findByPk(replyId);
+             if (!reply) {
+                 throw new Error('Reply not found');
+             }
+             const commentId = reply.comment_id;
+             return commentId;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 

@@ -24,7 +24,7 @@ class postService{
             // 将 like 字段设置为 0
             newPost.like = 0;
             await newPost.save();
-            return newPost.id; // 返回新创建帖子的ID
+            return newPost.id.toString(); // 返回新创建帖子的ID
 
         } catch (error) {
             console.error('Error creating post:', error);
@@ -35,7 +35,7 @@ class postService{
         try {
             const post = await db.post.findByPk(postId);
             post.picture = post.picture.split(','); // 将逗号分隔的图片链接字符串转换为数组
-            const tmp = await this.getPostsHandled([post]);
+            const tmp = await postService.getPostsHandled([post]);
 
             //查看有无点赞
             const flag = await db.likepost.findOne({
@@ -102,7 +102,7 @@ class postService{
             //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
             const results = await this.getPostsHandled(posts);  
             // 分页
-            const pageResults = await activityService.getPageData(page, results);
+            const pageResults = await otherService.getPageData(page, results);
             return pageResults;
         } catch (error) {
             console.log(error);
@@ -122,7 +122,7 @@ class postService{
             //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
             const results = await this.getPostsHandled(posts);
             // 分页
-            const pageResults = await activityService.getPageData(page, results);
+            const pageResults = await otherService.getPageData(page, results);
             return pageResults;
         } catch (error) {
             throw new Error('Error fetching hot posts');
@@ -141,7 +141,7 @@ class postService{
             //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
             const results = await this.getPostsHandled(posts);
             //分页
-            const pageResults = await activityService.getPageData(page, results);
+            const pageResults = await otherService.getPageData(page, results);
             return pageResults;
         } catch (error) {
             throw new Error('Error fetching latest posts');
@@ -217,7 +217,7 @@ class postService{
                     team_id: team_id
                 }
             });
-
+            console.log("debug 04");
             // 检查点赞状态
             if (existingLike) {
                 // 如果已经点赞，则取消点赞，删除点赞记录，减少点赞数
@@ -230,20 +230,25 @@ class postService{
                         team_id: team_id
                     }
                 });
-
+                console.log("debug 5");
                 if (!comment) {
+                    //如果这条评论不存在，会报错
                     throw new Error('Comment not found');
                 }
+                console.log("debug 06");
                 comment.like -= 1;
+                console.log("debug 07");
                 await comment.save();
                 //更新通知：
+                console.log("debug 08");
                 const post_id = await postService.getPostIdByCommentId(comment_id);
                 const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
                 await otherService.updateNotification(post_id, ownerTeam_id, false);
                 return "unlike successfully!";
+
             } else {
                 // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
-                const newLike = await db.likecomment.create({
+                await db.likecomment.create({
                     comment_id: comment_id,
                     team_id: team_id,
                     ifread: 1,
@@ -268,7 +273,6 @@ class postService{
                 const post_id = await postService.getPostIdByCommentId(comment_id);
                 const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
                 await otherService.updateNotification(post_id, ownerTeam_id, true);
-
                 return "like successfully!";
             }
         } catch (error) {
@@ -306,6 +310,7 @@ class postService{
                 await reply.save();
 
                 // 更新通知
+                const comment_id = await commentService.getCommentIdByReplyId(reply_id);
                 const post_id = await postService.getPostIdByCommentId(comment_id);
                 const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
                 await otherService.updateNotification(post_id, ownerTeam_id, false);
@@ -313,7 +318,7 @@ class postService{
                 return "unlike successfully!";
             } else {
                 // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
-                const newLike = await db.likereply.create({
+                await db.likereply.create({
                     reply_id: reply_id,
                     team_id: team_id,
                     ifread: 1,
@@ -326,13 +331,15 @@ class postService{
                         id: reply_id
                     }
                 });
-    
+                console.log("Debug 01");
                 if (!reply) {
                     throw new Error('Reply not found');
                 }
+                console.log("Debug 02");
                 reply.like += 1;
                 await reply.save();
                 //更新通知：
+                const comment_id = await commentService.getCommentIdByReplyId(reply_id);
                 const post_id = await postService.getPostIdByCommentId(comment_id);
                 const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
                 await otherService.updateNotification(post_id, ownerTeam_id, true);
@@ -346,7 +353,9 @@ class postService{
     static async getPostLikesByPostId(postId){
         try {
             // 从数据库中获取给定帖子 ID 的所有点赞
-            const postLikes = await db.likepost.findAll({ where: { post_id: postId } });
+            const postLikes = await db.likepost.findAll({ where: { post_id: postId },
+            
+            });
             // 返回点赞数组
             return postLikes;
         } catch (error) {
@@ -404,13 +413,12 @@ class postService{
             const postLikes = await postService.getPostLikesByPosts(allPosts);
             for(const onePostLikes of postLikes){
                 for(const like of onePostLikes){
-                    console.log(like);
                     const teamName = await teamService.getTeamName(like.team_id);
                     const teamAvatar = await teamService.getTeamAvatar(like.team_id);
                     const updateLike = {
                         team_name : teamName.team_name,
                         time: like.liketime,
-                        post_id: like.post_id,
+                        post_id: like.post_id.toString(),
                         team_avatar: teamAvatar.avatar
                     };
                     likeList.push(updateLike);
@@ -650,7 +658,7 @@ class postService{
             });
               
         // -点赞评论的ifread全部置0
-        const allComments = await commentService.getCommentsofPost(post_id); 
+        const allComments = await commentService.getCommentsOfPost(post_id); 
             //console.log(allComments);
         const allCommentLikes = await this.getCommentLikesByComments(allComments);  
             //console.log(allCommentLikes);

@@ -1,6 +1,7 @@
 const db = require('../models/index');
 const axios = require('axios');
-const { Op, where } = require('sequelize');
+const {Op} = require('sequelize');
+const sequelize = require('sequelize');
 const fs = require('fs/promises');
 const path = require('path');
 const otherService = require('./otherService');
@@ -45,6 +46,28 @@ class ActivityService {
 
   }
 
+  static async getActivityInfoById(activityId){
+    const activity = await db.activity.findOne({
+      where: {
+        id: activityId
+      },
+      attributes: {
+        include: [
+            [
+            //引用原生mySQL语法，将类型转化
+            sequelize.literal("cast(id as char)"),
+            'id'
+            ],
+            [
+              //引用原生mySQL语法，将类型转化
+              sequelize.literal("cast(category_id as char)"),
+              'category_id'
+              ],
+        ]
+      }
+    });
+    return activity;
+  }
 
   static async getActivityByCommu(commu_id, status) {
     let activitiesToReturn;
@@ -150,6 +173,7 @@ class ActivityService {
   }
 
   static async queryActivity2(text, page) {
+    
     const whereCondition = {
       [Op.and]: [
         {
@@ -162,13 +186,22 @@ class ActivityService {
       ]
     };
     const activities = await db.activity.findAll({
-      where: whereCondition
+      where: whereCondition,
+      attributes: {
+        include: [
+            [
+            //引用原生mySQL语法，将类型转化
+            sequelize.literal("cast(id as char)"),
+            'id'
+            ],
+        ]
+      }
     });
     if (!activities) {
       return null; // 返回null表示活动不存在
     }
-    const results = await ActivityService.getCategKeyCommuIdsMap(activities);
-    const pageResults = await ActivityService.getPageData(page, results);
+    const results = await otherService.getCategKeyCommuIdsMap(activities);
+    const pageResults = await otherService.getPageData(page, results);
     return pageResults;
   }
 
@@ -195,8 +228,19 @@ class ActivityService {
     }
 
     // 查询符合条件的活动
-    const activities = await db.activity.findAll({ where: whereCondition });
-    const results = await ActivityService.getCategKeyCommuIdsMap(activities);
+    const activities = await db.activity.findAll({ where: whereCondition,
+        attributes: {
+          include: [
+              [
+              //引用原生mySQL语法，将类型转化
+              sequelize.literal("cast(id as char)"),
+              'id'
+              ],
+              [sequelize.literal("cast(category_id as char)"),'category_id'],
+          ]
+      }
+     });
+    const results = await otherService.getCategKeyCommuIdsMap(activities);
     return results;
   }
 
@@ -213,65 +257,6 @@ class ActivityService {
         return "已结束";
       default:
         return "未知状态";
-    }
-  }
-
-  //获取ids->名称的映射
-  static async getCategKeyCommuIdsMap(events) {
-    // 对每个活动进行处理
-    const results = await Promise.all(events.map(async activity => {
-      // 获取活动对应的分类名称
-      const category = await db.activity_type.findOne({
-        where: {
-          id: activity.category_id
-        },
-        attributes: ['type_name']
-      });
-
-      // 获取活动对应的关键词名称
-      const keywords = await db.keywords.findAll({
-        where: {
-          id: { [Op.in]: activity.keywords_id.split(',') } // 根据逗号分隔的关键词 id 查询
-        },
-        attributes: ['key_name']
-      });
-
-      // 获取活动对应的社区名字
-      const community = await db.community.findOne({
-        where: {
-          id: activity.community_id
-        },
-        attributes: ['name']
-      });
-
-      const { ...rest } = activity.toJSON();
-      // 构造处理后的活动信息
-      return {
-        ...rest,
-        category_name: category ? category.type_name : null,
-        keywords: keywords.map(keyword => keyword.key_name).join(','),
-        community_name: community ? community.name : null
-      };
-    }));
-    return results;
-  }
-
-  static async getPageData(pageNumber, list) {
-    const pageSize = 10; // 假设每页有 10 条数据
-
-    if (pageNumber == 0) {
-      // 如果页数等于 0，则表示第一部分，返回第一部分的数据
-      return list.slice(0, pageSize);
-    } else if (pageNumber > 0) {
-      const startIndex = pageNumber * pageSize;
-      const endIndex = startIndex + pageSize;
-      if (startIndex >= list.length) {
-        // 如果起始索引超出了数据范围，则返回空的 acti_list
-        return [];
-      } else {
-        // 返回指定页数的数据
-        return list.slice(startIndex, endIndex);
-      }
     }
   }
 
@@ -296,7 +281,7 @@ class ActivityService {
         }
       });
 
-      const handledActivityList = await this.getCategKeyCommuIdsMap(myActivList)
+      const handledActivityList = await otherService.getCategKeyCommuIdsMap(myActivList)
       handledActivityList.forEach(async activity => {
         // 获取活动状态
         const status = await this.getActivityStatusMap(activity.activity_status);
@@ -305,7 +290,7 @@ class ActivityService {
         activity = await otherService.IdInt2String("id", activity);
         //activity = await otherService.IdInt2String("category_id", activity);
       });
-      const pageActivityList = this.getPageData(page, handledActivityList);
+      const pageActivityList = otherService.getPageData(page, handledActivityList);
       return pageActivityList;
 
 
@@ -348,7 +333,7 @@ class ActivityService {
       if (!activList) {
         return null; // 返回null表示活动不存在
       } else {
-        var mapedActivityList = await ActivityService.getCategKeyCommuIdsMap(activList);
+        var mapedActivityList = await otherService.getCategKeyCommuIdsMap(activList);
         const handledActivityList = await Promise.all(mapedActivityList.map(async activity => {
             // 获取活动状态
             const status = await this.getActivityStatusMap(activity.activity_status);
@@ -398,7 +383,7 @@ class ActivityService {
     const activity = await db.activity.findByPk(id);
     const community_id = activity.community_id;
     const activityArray = [activity];
-    const handledActicityArray = await this.getCategKeyCommuIdsMap(activityArray);
+    const handledActicityArray = await otherService.getCategKeyCommuIdsMap(activityArray);
     const handledActicity = handledActicityArray[0];
     //查找该活动对应的社区的联系电话
     const community = await db.community.findOne({
@@ -450,7 +435,7 @@ class ActivityService {
 
 
   static async getRegisterDetail(teamId, activityId) {
-    const teamInfo = await teamService.getTeamById(teamId);
+    const teamInfo = await teamService.getTeamInfoById(teamId);
     const leader = await teamService.getLeaderById(teamInfo.leader_id);
     const instructor = await teamService.getInstructorById(teamInfo.instructor_id);
     const team_detail = {
@@ -461,7 +446,7 @@ class ActivityService {
       leader_tel: leader.tel
     }
 
-    const acti_detail = await ActivityService.getActivityById(activityId);
+    const acti_detail = await ActivityService.getActivityInfoById(activityId);
     return { team_detail, acti_detail };
   }
 

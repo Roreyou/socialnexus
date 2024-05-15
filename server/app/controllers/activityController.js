@@ -1,6 +1,5 @@
 const Result = require('../common/Result');
 const activityService = require('../services/activityService');
-const teamService = require('../services/teamService');
 
 class ActivityController {
   static async getAllActivities(req, res) {
