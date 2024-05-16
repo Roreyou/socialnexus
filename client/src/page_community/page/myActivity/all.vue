@@ -1,135 +1,165 @@
 <!-- 高校 全部 -->
 <template>
-	<view class="content">
-		<!-- <image class="logo" src="/static/logo.png"></image>
+  <view class="content">
+    <!-- <image class="logo" src="/static/logo.png"></image>
 		<image class="logo" src="/static/logo.png"></image>
 		<image class="logo" src="/static/logo.png"></image>
 		<image class="logo" src="/static/logo.png"></image>
 		<view>
 			<text class="title">{{title}}</text>
 		</view> -->
-		<view class="cu-item" v-for="(item,index) in acList" :key="index">
-			<view class="cu-card article" :class="isCard?'no-card':''" @click = "todetail(item.id,item.state)">
-					<view class="cu-item shadow">
-						<view class="cu-bar bg-white">
-							<view class="action">
-								<text class="cuIcon-titles text-green"></text>
-								<text class="text-xl text-bold">{{item.state}}</text>
-							</view>
-						</view>
-						<view class="title"><view class="text-cut">{{item.title}}</view></view>
-						<view class="content">
-							<view class="desc">
-								<view class="text-content"> 日期: {{item.time}}</view>
-								<view class="text-content"> 地点: {{item.place}}</view>
-								<view class="text-content"> 岗位: {{item.job}}</view>
-								<view class="wordcont">	
-									<view class="ackeywords" v-for="(word,index) in item.keywords.split(',')" :key="index">
-										<view class="cu-tag bg-red light sm round">{{word}}</view>
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-			</view>
-		</view>
-		<view v-if="acList.length === 0" class="no-activities">
-    		没有符合要求的活动
-  		</view>
-	</view>
+    <view class="cu-item" v-for="(item, index) in acList" :key="index">
+      <view
+        class="cu-card article"
+        :class="isCard ? 'no-card' : ''"
+        @click="todetail(item.id, item.state)"
+      >
+        <view class="cu-item shadow">
+          <view class="cu-bar bg-white">
+            <view class="action">
+              <text class="cuIcon-titles text-green"></text>
+              <text class="text-xl text-bold">{{
+                getStatusText(item.activity_status)
+              }}</text>
+            </view>
+          </view>
+          <view class="title"
+            ><view class="text-cut">{{ item.name }}</view></view
+          >
+          <view class="content">
+            <view class="desc">
+              <view class="text-content"> 开始时间: {{ item.start_time }}</view>
+              <view class="text-content"> 结束时间: {{ item.end_time }}</view>
+              <view class="text-content"> 活动地点: {{ item.address }}</view>
+              <view class="wordcont">
+                <view
+                  class="ackeywords"
+                  v-for="(word, index) in item.keywords_id.split(',')"
+                  :key="index"
+                >
+                  <view class="cu-tag bg-red light sm round">{{ word }}</view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view v-if="acList.length === 0" class="no-activities">
+      没有符合要求的活动
+    </view>
+  </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				acList:[
-					{	
-						state: "已结束",
-						title: "5月15日实践活动",
-						time: "2020-05-15",
-						place: "北京",
-						job: "志愿者",
-						keywords: "服务,实践"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{	
-						state: "待开展",
-						title: "4月15日实践活动",
-						time: "2021-04-15",
-						place: "成都",
-						job: "志愿者",
-						keywords: "服务,实践"
-					}
-				]
-			}
-		},
-		onLoad() {
-
-		},
-		methods: {
-			todetail(activityId, modeString) {
-				const mode = modeString == '待开展'?'recruiting':'recruited';
-				this.$u.route({
-					url: 'page_community/page/activityDetail',
-					params: {
-						activityId: activityId,
-						mode: mode
-					}
-				})
-			},
-		}
-	}
+export default {
+  data() {
+    return {
+      acList: [],
+	  searchText:''
+    };
+  },
+  onLoad(e) {
+    this.searchText = e.searchText;
+  },
+  mounted() {
+    if (this.searchText !== '') {
+		uni.request({
+        url: this.$url.BASE_URL + "/4142061-0-default/community/queryActivity",
+        // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        method: "GET",
+        data: {
+          name: this.searchText
+        },
+        success: (res) => {
+          this.acList = res.data.data.list;
+          console.log("成功请求-查询活动",this.searchText);
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
+    } else {
+      uni.request({
+        url: this.$url.BASE_URL + "/4142061-0-default/community/activities",
+        // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        method: "GET",
+        data: {
+          community_id: "0",
+          status: 0,
+        },
+        success: (res) => {
+          this.acList = res.data.data;
+          console.log("成功请求-查询活动信息(全部)");
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
+    }
+  },
+  methods: {
+    getStatusText(status) {
+      switch (status) {
+        case 1:
+          return "待开展";
+        case 2:
+          return "开展中";
+        case 3:
+          return "已结束";
+        default:
+          return "未知状态";
+      }
+    },
+    todetail(activityId, modeString) {
+      const mode = modeString == "待开展" ? "recruiting" : "recruited";
+      this.$u.route({
+        url: "page_community/page/activityDetail",
+        params: {
+          activityId: activityId,
+          mode: mode,
+        },
+      });
+    },
+  },
+};
 </script>
 <style scoped>
-.no-activitis{
-	text-align: center;
-    line-height: 100rpx;
+.no-activitis {
+  text-align: center;
+  line-height: 100rpx;
 }
 
-.text-cut{
-	margin-top: -15rpx;
-	line-height: 60rpx;
+.text-cut {
+  margin-top: -15rpx;
+  line-height: 60rpx;
 }
-.cu-bar .action:first-child{
-	margin-left: 24rpx;
+.cu-bar .action:first-child {
+  margin-left: 24rpx;
 }
 
-.cu-item .shadow{
-	margin: 0;
-	margin-top: 10rpx;
+.cu-item .shadow {
+  margin: 0;
+  margin-top: 10rpx;
 }
-.text-content{
-	height: auto;
+.text-content {
+  height: auto;
 }
-.wordcont{
-	margin-top: 10rpx;
+.wordcont {
+  margin-top: 10rpx;
 }
 .wordcont .ackeywords {
-	display: inline-block;
+  display: inline-block;
   margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 }
 </style>
