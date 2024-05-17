@@ -46,8 +46,8 @@
           <view class="de_content">
             <view class="key"> 活动时间 </view>
             <view class="value">
-              <text>{{ detail.activity.startTime }} 开始</text><br />
-              <text>{{ detail.activity.endTime }} 结束</text>
+              <text>{{ detail.activity.start_time }} 开始</text><br />
+              <text>{{ detail.activity.end_time }} 结束</text>
             </view>
           </view>
         </view>
@@ -65,14 +65,14 @@
             <view class="de_content">
               <view class="key"> 队伍名称 </view>
               <view class="value">
-                <text>{{ detail.team.teamName }}</text
+                <text>{{ detail.team.team_name }}</text
                 ><br />
               </view>
             </view>
             <view class="de_content">
               <view class="key"> 所属学校 </view>
               <view class="value">
-                <text>{{ detail.team.schoolName }}</text
+                <text>{{ detail.team.school_name }}</text
                 ><br />
               </view>
             </view>
@@ -92,17 +92,12 @@
     </view>
     <view class="button-group">
       <view class="button-item">
-        <button type="primary" size="mini" @click="submit('dynamicForm')">
-          返回
-        </button>
-      </view>
-      <view class="button-item">
-        <button type="primary" size="mini" @click="submit('dynamicForm')">
+        <button type="primary" size="mini" @click="reject">
           驳回
         </button>
       </view>
       <view class="button-item">
-        <button type="primary" size="mini" @click="submit('dynamicForm')">
+        <button type="primary" size="mini" @click="admit">
           录取
         </button>
       </view>
@@ -140,19 +135,38 @@ export default {
     const teamId = query.teamId;
     this.teamId = teamId;
     uni.request({
-      url: this.$url.BASE_URL + "/4142061-0-default/community/admit",
+      url: this.$url.BASE_URL + "/4142061-0-default/community/activityInfo",
       // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
       header: {
         Authorization: uni.getStorageSync("token"),
       },
       method: "GET",
       data: {
-        activityId: activityId,
+        id: activityId,
         // token: this.$userinfo.token
       },
       success: (res) => {
-        this.detail = res.data.data.detail;
-        this.detail.keywords = "服务,实践";
+        this.detail.activity = res.data.data;
+        this.net_error = false;
+      },
+      fail: (res) => {
+        this.net_error = true;
+      },
+      complete: () => {},
+    });
+    uni.request({
+      url: this.$url.BASE_URL + "/4142061-0-default/community/teamInfo",
+      // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+      header: {
+        Authorization: uni.getStorageSync("token"),
+      },
+      method: "GET",
+      data: {
+        id: teamId,
+        // token: this.$userinfo.token
+      },
+      success: (res) => {
+        this.detail.team = res.data.data;
         this.net_error = false;
       },
       fail: (res) => {
@@ -185,6 +199,56 @@ export default {
     // 	}
     // })
   },
+  methods: {
+    admit() {
+      uni.request({
+        url: this.$url.BASE_URL + "/4142061-0-default/community/admitTeam",
+        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        method: "POST",
+        data: {
+          team_id: this.teamId,
+          activity_id: this.activityId,
+          admit: 2,
+          // token: this.$userinfo.token
+        },
+        success: (res) => {
+          console.log("成功录取", res.data.data.status);
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
+    },
+    reject() {
+      uni.request({
+        url: this.$url.BASE_URL + "/4142061-0-default/community/admitTeam",
+        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        method: "POST",
+        data: {
+          team_id: this.teamId,
+          activity_id: this.activityId,
+          admit: 3,
+          // token: this.$userinfo.token
+        },
+        success: (res) => {
+          console.log("拒绝录取", res.data.data.status);
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
+    }
+  }
 };
 </script>
 

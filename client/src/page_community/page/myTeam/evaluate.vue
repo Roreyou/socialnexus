@@ -35,14 +35,14 @@
             <view class="de_content">
               <view class="key"> 队伍名称 </view>
               <view class="value">
-                <text>{{ detail.team.teamName }}</text
+                <text>{{ detail.team.team_name }}</text
                 ><br />
               </view>
             </view>
             <view class="de_content">
               <view class="key"> 所属学校 </view>
               <view class="value">
-                <text>{{ detail.team.schoolName }}</text
+                <text>{{ detail.team.school_name }}</text
                 ><br />
               </view>
             </view>
@@ -62,11 +62,11 @@
     </view>
 
     <view class="comment">
-      <uni-forms>
-        <uni-forms-item label="评价" required>
+      <uni-forms ref="commentForm" :model="commentForm" :rules="rules">
+        <uni-forms-item label="评价" name="comment">
           <uni-easyinput
             type="textarea"
-            v-model="comment"
+            v-model="commentForm.comment"
             placeholder="请输入评价"
           />
         </uni-forms-item>
@@ -78,14 +78,7 @@
 
     <view class="button-group">
       <view class="button-item">
-        <button type="primary" size="mini" @click="submit('dynamicForm')">
-          返回
-        </button>
-      </view>
-      <view class="button-item">
-        <button type="primary" size="mini" @click="submit('dynamicForm')">
-          提交
-        </button>
+        <button type="primary" size="mini" @click="submit">提交</button>
       </view>
     </view>
   </view>
@@ -107,7 +100,19 @@ export default {
         activity: {},
         team: {},
       },
-      commment: "",
+      commentForm: {
+        comment: "",
+      },
+      rules: {
+        comment: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入评价",
+            },
+          ],
+        },
+      },
     };
   },
   computed: {
@@ -122,19 +127,38 @@ export default {
     const teamId = query.teamId;
     this.teamId = teamId;
     uni.request({
-      url: this.$url.BASE_URL + "/4142061-0-default/community/admit",
+      url: this.$url.BASE_URL + "/4142061-0-default/community/activityInfo",
       // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
       header: {
         Authorization: uni.getStorageSync("token"),
       },
       method: "GET",
       data: {
-        activityId: activityId,
+        id: activityId,
         // token: this.$userinfo.token
       },
       success: (res) => {
-        this.detail = res.data.data.detail;
-        this.detail.keywords = "服务,实践";
+        this.detail.activity = res.data.data;
+        this.net_error = false;
+      },
+      fail: (res) => {
+        this.net_error = true;
+      },
+      complete: () => {},
+    });
+    uni.request({
+      url: this.$url.BASE_URL + "/4142061-0-default/community/teamInfo",
+      // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+      header: {
+        Authorization: uni.getStorageSync("token"),
+      },
+      method: "GET",
+      data: {
+        id: teamId,
+        // token: this.$userinfo.token
+      },
+      success: (res) => {
+        this.detail.team = res.data.data;
         this.net_error = false;
       },
       fail: (res) => {
@@ -166,6 +190,40 @@ export default {
     // 	complete: () => {
     // 	}
     // })
+  },
+  methods: {
+    submit() {
+      this.$refs.commentForm
+        .validate()
+        .then((res) => {
+          this.evaluate();
+        })
+        .catch((err) => {});
+    },
+    evaluate() {
+      uni.request({
+        url: this.$url.BASE_URL + "/4142061-0-default/community/commentTeam",
+        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        method: "POST",
+        data: {
+          team_id: this.teamId,
+          activity_id: this.activityId,
+          comment: this.commentForm.comment,
+          // token: this.$userinfo.token
+        },
+        success: (res) => {
+          console.log("成功评价", res.data.data.status);
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
+    },
   },
 };
 </script>

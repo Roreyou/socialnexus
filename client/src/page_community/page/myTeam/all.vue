@@ -1,41 +1,43 @@
 <!-- 高校 全部 -->
 <template>
   <view class="content">
-    <!-- <image class="logo" src="/static/logo.png"></image>
-		<image class="logo" src="/static/logo.png"></image>
-		<image class="logo" src="/static/logo.png"></image>
-		<image class="logo" src="/static/logo.png"></image>
-		<view>
-			<text class="title">{{title}}</text>
-		</view> -->
-    <view class="cu-item" v-for="(item, index) in acList" :key="index">
+    <view class="cu-item" v-for="(item, index) in teamList" :key="index">
       <view
         class="cu-card article"
         :class="isCard ? 'no-card' : ''"
-        @click="toNext(item.activityId, item.teamId, item.state)"
+        @click="
+          toNext(
+            item.activity_id,
+            item.team_id,
+            getStatusText(item.admisson_status, item.comment_status)
+          )
+        "
       >
         <view class="cu-item shadow">
           <view class="cu-bar bg-white">
             <view class="action">
               <text class="cuIcon-titles text-green"></text>
-              <text class="text-xl text-bold">{{ item.state }}</text>
+              <text class="text-xl text-bold">{{
+                getStatusText(item.admisson_status, item.comment_status)
+              }}</text>
             </view>
           </view>
           <view class="title"
-            ><view class="text-cut">{{ item.name }}</view></view
+            ><view class="text-cut">{{ item.team_name }}</view></view
           >
           <view class="content">
             <view class="desc">
-              <view class="text-content"> 活动: {{ item.activity }}</view>
-              <view class="text-content"> 开始时间: {{ item.startTime }}</view>
-              <view class="text-content"> 结束时间: {{ item.endTime }}</view>
+              <view class="text-content"> 活动: {{ item.activity_name }}</view>
+              <view class="text-content">
+                学校名称: {{ item.school_name }}</view
+              >
               <view class="wordcont"> </view>
             </view>
           </view>
         </view>
       </view>
     </view>
-    <view v-if="acList.length === 0" class="no-activities">
+    <view v-if="teamList.length === 0" class="no-activities">
       没有符合要求的队伍
     </view>
   </view>
@@ -45,40 +47,110 @@
 export default {
   data() {
     return {
-      acList: [
-        {
-          state: "已评价",
-          name: "中山大学软件工程学院",
-          activity: "5月15日实践活动",
-          startTime: "2020-05-15",
-          endTime: "2020-06-15",
-        },
-        {
-          state: "待评价",
-          name: "中山大学人工智能学院",
-          activity: "2月15日实践活动",
-          startTime: "2024-02-15",
-          endTime: "2024-03-15",
-        },
-        {
-          state: "待评价",
-          name: "中山大学微电子学院",
-          activity: "3月15日实践活动",
-          startTime: "2024-03-15",
-          endTime: "2024-03-25",
-        },
-        {
-          state: "待录取",
-          name: "中山大学土木工程学院",
-          activity: "4月15日实践活动",
-          startTime: "2024-04-15",
-          endTime: "2024-05-15",
-        },
-      ],
+      teamList: [],
+      teamListName: [],
+      teamListAct: [],
+      searchText: "",
     };
   },
-  onLoad() {},
+  onLoad(e) {
+    this.searchText = e.searchText;
+  },
+  mounted() {
+    if (this.searchText !== "") {
+      Promise.all([this.queryTeamByName(), this.queryTeamByAct()])
+        .then(() => {
+          if (this.teamListName.length !== 0) this.teamList = this.teamListName;
+          else this.teamList = this.teamListAct;
+        })
+        .catch((error) => {
+          console.error("Error occurred while fetching data:", error);
+        });
+    } else {
+      uni.request({
+        url: this.$url.BASE_URL + "/4142061-0-default/community/teams",
+        // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        method: "GET",
+        data: {
+          community_id: "0",
+          status: 0,
+        },
+        success: (res) => {
+          this.teamList = res.data.data.list;
+          console.log("成功请求-查询队伍信息(全部)");
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
+    }
+  },
   methods: {
+    getStatusText(admisson_status, comment_status) {
+      if (admisson_status == 1) return "待录取";
+      if (comment_status == 1) return "待评价";
+      if (comment_status == 2) return "已评价";
+    },
+    queryTeamByName() {
+      return new Promise((resolve, reject) => {
+        uni.request({
+          url:
+            this.$url.BASE_URL + "/4142061-0-default/community/queryTeamByName",
+          header: {
+            Authorization: uni.getStorageSync("token"),
+          },
+          method: "GET",
+          data: {
+            community_id: "0",
+            team_name: this.searchText,
+          },
+          success: (res) => {
+            this.teamListName = res.data.data;
+            console.log("成功请求-查询队伍", this.searchText);
+            this.net_error = false;
+            resolve(); // 请求成功，resolve Promise
+          },
+          fail: (res) => {
+            this.net_error = true;
+            reject(res); // 请求失败，reject Promise
+          },
+          complete: () => {},
+        });
+      });
+    },
+    queryTeamByAct() {
+      return new Promise((resolve, reject) => {
+        uni.request({
+          url:
+            this.$url.BASE_URL + "/4142061-0-default/community/queryTeamByAct",
+          header: {
+            Authorization: uni.getStorageSync("token"),
+          },
+          method: "GET",
+          data: {
+            community_id: "0",
+            act_name: this.searchText,
+          },
+          success: (res) => {
+            this.teamListAct = res.data.data;
+            console.log("成功请求-查询队伍", this.searchText);
+            this.net_error = false;
+            resolve(); // 请求成功，resolve Promise
+          },
+          fail: (res) => {
+            this.net_error = true;
+            reject(res); // 请求失败，reject Promise
+          },
+          complete: () => {},
+        });
+      });
+    },
+
     toNext(activityId, teamId, state) {
       if (state !== "已评价") {
         const urlStr =
