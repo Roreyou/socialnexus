@@ -14,6 +14,14 @@ class ActivityService {
   }
 
   static async createActivity(activityData) {
+    // 切分关键词
+    const keywords = (activityData.keywords || '').split(',');
+    // 查询关键词并映射为关键词id
+    const keywords_id = await Promise.all(keywords.map(async keyword => {
+      const data = await db.keywords.findOne({ where: { key_name: keyword } });
+      return data ? data.id : null; // 如果找到了对应的关键词，则返回关键词的id；否则返回null
+    }));
+    activityData.keywords_id = keywords_id.join(','); // 将关键词id连接为字符串
     return await db.activity.create(activityData);
   }
 
@@ -31,11 +39,20 @@ class ActivityService {
       raw: true
     });
 
+    // 切分关键词
+    const keywordsIds = (activity.keywords_id || '').split(',');
+    // 查询关键词并映射为关键词名称
+    const keywords = await Promise.all(keywordsIds.map(async id => {
+      const keyword = await db.keywords.findOne({ where: { id } });
+      return keyword ? keyword.key_name : ''; // 如果找到了对应的关键词，则返回关键词；否则返回空字符串
+    }));
+
     const formattedInfo = {
       ...activity,
       category_name: activity["activity_type.category_name"],
       community_name: activity["community.community_name"],
       tel: activity["community.tel"],
+      keywords: keywords.join(','), // 将关键词连接为字符串
 
 
       'activity_type.category_name': undefined,
@@ -48,13 +65,14 @@ class ActivityService {
 
 
   static async getActivityByCommu(commu_id, status) {
+    // 这里的status是审核状态
     let activitiesToReturn;
-    let whereCondition;
+    let whereCondition = {};
 
     console.log(status);
     // 根据不同的 status 设置不同的查询条件
     if (status == 0) {
-      
+
     }
     else if (status == 1) {
       whereCondition = {
@@ -66,7 +84,60 @@ class ActivityService {
       whereCondition = {
         verification_status: 1
       };
-    } 
+    }
+
+    if (commu_id != '0') {
+      whereCondition.community_id = commu_id
+    }
+
+    // console.log(whereCondition);
+
+    // 建立关联关系
+    db.activity.belongsTo(db.community, { foreignKey: 'community_id' });
+    // 查询活动
+    const activities = await db.activity.findAll({
+      where: whereCondition,
+      include: [
+        { model: db.community, attributes: [['tel', 'tel'], ['name', 'community_name']] } // 返回电话号码和社区名称
+      ],
+      raw: true
+    });
+
+    // 处理活动关键词
+    activitiesToReturn = await Promise.all(activities.map(async activity => {
+      // 切分关键词
+      const keywordsIds = (activity.keywords_id || '').split(',');
+      // 查询关键词并映射为关键词名称
+      const keywords = await Promise.all(keywordsIds.map(async id => {
+        const keyword = await db.keywords.findOne({ where: { id } });
+        return keyword ? keyword.key_name : ''; // 如果找到了对应的关键词，则返回关键词；否则返回空字符串
+      }));
+      // 返回活动及关联信息
+      return {
+        ...activity,
+        veri_status: activity.verification_status == 1 ? '未审核' : '已审核',
+        community_name: activity["community.community_name"],
+        tel: activity["community.tel"],
+        keywords: keywords.join(','), // 将关键词连接为字符串
+        'community.community_name': undefined,
+        'community.tel': undefined,
+      };
+    }));
+    return activitiesToReturn;
+  }
+
+  static async getActivityByStatus(commu_id,status) {
+    // 这里的status是审核状态
+    let activitiesToReturn;
+    let whereCondition = {};
+
+    console.log(status);
+    // 根据不同的 status 设置不同的查询条件
+    if (status != 0) {
+      whereCondition = {
+       activity_status: status
+      };
+    }
 
     if (commu_id != '0') {
       whereCondition.community_id = commu_id
@@ -113,6 +184,14 @@ class ActivityService {
     if (!activity) {
       return null; // 返回null表示活动不存在
     }
+    // 切分关键词
+    const keywords = (activityData.keywords || '').split(',');
+    // 查询关键词并映射为关键词id
+    const keywords_id = await Promise.all(keywords.map(async keyword => {
+      const data = await db.keywords.findOne({ where: { key_name: keyword } });
+      return data ? data.id : null; // 如果找到了对应的关键词，则返回关键词的id；否则返回null
+    }));
+    activityData.keywords_id = keywords_id.join(','); // 将关键词id连接为字符串
     await activity.update(activityData);
     return activity;
   }
@@ -130,16 +209,16 @@ class ActivityService {
     const activities_by_commu = await this.getActivityByCommu(community_id, 0);
     if (!activities_by_commu)
       return null;
-    
+
     // 继续模糊查询 by_teamName
     const fuzzyActName = name;
     const activitiesFiltered = activities_by_commu
       .filter(activity => activity.name.includes(fuzzyActName))
       .map(({ tel, ...rest }) => rest); // 去除 tel 字段
-  
+
     if (activitiesFiltered.length === 0)
       return null;
-    
+
     return activitiesFiltered;
   }
 

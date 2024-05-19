@@ -143,7 +143,7 @@ class teamService {
     return teamAvatar;
   }
 
-  //依据社区和状态
+  //依据社区和状态,这里的status是队伍审核状态
   static async getTeamByCommu(commu_id, status) {
     let whereCondition_commu = {};
     let whereCondition_status = {};
@@ -298,6 +298,7 @@ class teamService {
     // 建立关联关系
     db.team.belongsTo(db.teammember, { foreignKey: 'leader_id' });
     db.team.belongsTo(db.teacher, { foreignKey: 'instructor_id' });
+    db.team.belongsTo(db.school, { foreignKey: 'school_id' });
 
     const teams = await db.team.findAll({
       where: {
@@ -315,6 +316,11 @@ class teamService {
           model: db.teacher,
           as: 'teacher',
           attributes: [['name', 'instructor_name']] // 可以同样对老师的 name 字段进行命名
+        },
+        {
+          model: db.school,
+          as: 'school',
+          attributes: [['name', 'school_name']] 
         }
       ],
       raw: true // 返回原始 JSON 对象
@@ -326,11 +332,13 @@ class teamService {
       veri_status: team.verification_status === 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
       leader_name: team["teammember.leader_name"], // 将 "teammember.leader_name" 改为 "leader_name"
       instructor_name: team["teacher.instructor_name"],
+      school_name: team["school.school_name"],
       // 删除原始的字段名
       // 如果还有其他字段需要删除，也可以在这里添加
       // 这样返回的对象中将只包含你想要的字段名
       'teammember.leader_name': undefined,
       'teacher.instructor_name': undefined,
+      'school.school_name': undefined
     }));
 
 
@@ -357,7 +365,7 @@ class teamService {
 
     // 更新找到的记录
     const updatedActivity = await teamActivity.update(
-      { status: admit },
+      { admission_status:admit },
       { returning: true }
     );
 

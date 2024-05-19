@@ -5,7 +5,6 @@ const router = express.Router();
 const ActivityController = require('../controllers/activityController.js');
 const CommunityController= require('../controllers/communityController.js');
 const TeamController= require('../controllers/teamController.js');
-const DatawallController= require('../controllers/datawallController.js');
 
 //我的
 router.get('/myInfo', CommunityController.getCommunityById);//查询byID
@@ -16,7 +15,7 @@ router.get('/activityInfo', ActivityController.getActivityById);//查询byID
 router.post('/activityInfo',ActivityController.createActivity);//添加
 router.put('/activityInfo',ActivityController.updateActivity);//修改
 router.delete('/deleteActivity',ActivityController.deleteActivity);//删除
-router.get('/activities',ActivityController.getActivityByCommu);//查询By社区和status
+router.get('/activities',ActivityController.getActivityByStatus);//查询By社区和status
 router.get('/queryActivity',ActivityController.queryActivity);//模糊查询活动byName
 
 //我的队伍
