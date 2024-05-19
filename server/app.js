@@ -29,12 +29,15 @@ const communityRouter = require('./app/routes/communityRouter');
 const authRouter = require('./app/routes/authRouter');
 const teamRouter = require('./app/routes/teamRouter');
 const schoolRouter = require('./app/routes/schoolRouter');
+const imageRouter = require('./app/routes/imageRouter');
 
 // 使用路由
 app.use('/auth', authRouter)
 app.use('/community', communityRouter)
 app.use('/school',schoolRouter)
 app.use('/schoolteam',teamRouter)
+app.use('/uploadImage',imageRouter)
+
 
 
 // 设置监听端口

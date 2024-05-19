@@ -8,12 +8,13 @@ const client = new OSS({
     bucket: 'socialnexus' // 替换为你的 OSS Bucket 名称
 });
 
-class UploadImageService {
+class ImageService {
     // 上传图片并返回签名直传 URL 的函数
-    static async uploadWithSignedUrl(filename) {
+    static async upload(filename) {
         try {
             const ext = filename.split('.').pop(); // 获取文件扩展名
             const key = `upload/images/${uuidv4()}.${ext}`; // 构造文件在 OSS 上的路径和文件名
+            // console.log('key:', key);
 
             // 生成上传图片的签名直传 URL
             const putSignedUrl = await client.signatureUrl(key, {
@@ -21,24 +22,40 @@ class UploadImageService {
                 expires: 600, // 设置 URL 的过期时间
             });
 
-            // 生成获取图片的签名直传 URL
-            const getSignedUrl = await client.signatureUrl(key, {
-                method: 'GET',
-                expires: 600, // 设置 URL 的过期时间
-            });
+            // // 生成获取图片的签名直传 URL
+            // const getSignedUrl = await client.signatureUrl(key, {
+            //     method: 'GET',
+            //     expires: 86400, // 设置 URL 的过期时间
+            // });
             // console.log('putSignedUrl:', putSignedUrl);
             // console.log('getSignedUrl:', getSignedUrl);
 
 
-            return { success: true, key, putSignedUrl, getSignedUrl };
+            return { key: key, putSignedUrl: putSignedUrl };
         } catch (error) {
-            console.error('Error:', error);
-            return { success: false, error: 'Internal Server Error' };
+            // console.error('Error:', error);
+
+        }
+    }
+
+    static async getUrl(key) {
+        try {
+            // 生成获取图片的签名直传 URL
+            console.log('key1:', key);
+            const getSignedUrl = await client.signatureUrl(key, {
+                method: 'GET',
+                expires: 86400, // 设置 URL 的过期时间为1天
+            });
+            console.log('getSignedUrl:', getSignedUrl);
+
+            return getSignedUrl;
+        } catch (error) {
+
         }
     }
 
 
-}
-// UploadImageService.uploadWithSignedUrl('test.png')
 
-module.exports = UploadImageService;
+}
+
+module.exports = ImageService;
