@@ -1,12 +1,11 @@
-const { OSS } = require('ali-oss');
+const OSS = require('ali-oss');
 const { v4: uuidv4 } = require('uuid');
-
 // 初始化阿里云 OSS 客户端
 const client = new OSS({
-    region: 'your-region', // 替换为你的 OSS 区域
-    accessKeyId: 'your-access-key-id', // 替换为你的 OSS Access Key ID
-    accessKeySecret: 'your-access-key-secret', // 替换为你的 OSS Access Key Secret
-    bucket: 'your-bucket-name' // 替换为你的 OSS Bucket 名称
+    region: 'oss-cn-shenzhen', // 替换为你的 OSS 区域
+    accessKeyId: 'LTAI5tJv2C6KSgfcMmwVHPiK', // 替换为你的 OSS Access Key ID
+    accessKeySecret: '7IqXSUlYUnGCCmYbMM86rmUW2QLOry', // 替换为你的 OSS Access Key Secret
+    bucket: 'socialnexus' // 替换为你的 OSS Bucket 名称
 });
 
 class UploadImageService {
@@ -27,6 +26,9 @@ class UploadImageService {
                 method: 'GET',
                 expires: 600, // 设置 URL 的过期时间
             });
+            // console.log('putSignedUrl:', putSignedUrl);
+            // console.log('getSignedUrl:', getSignedUrl);
+
 
             return { success: true, key, putSignedUrl, getSignedUrl };
         } catch (error) {
@@ -37,5 +39,6 @@ class UploadImageService {
 
 
 }
+// UploadImageService.uploadWithSignedUrl('test.png')
 
 module.exports = UploadImageService;
