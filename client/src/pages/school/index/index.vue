@@ -19,7 +19,7 @@
 		<!-- <view>
 			<u-swiper :list="swiperList" height="400"></u-swiper>
 		</view>	 -->  
-		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
+		<view class="cu-list menu-avatar bg-gradual-green padding-lg background">
 			<view class="user-section">
 				<image :src="userInfo.avatar" class="cu-avatar xl round"></image>
 				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
@@ -33,19 +33,19 @@
 			<view class="rowClass">
 				<u-row>
 					<u-col span="4" text-align="center" v-for="(item,index) in navList" :key="index">
-						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass">
+						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass" style="background-color: #ffffff; border-radius: 30rpx; margin-right: 10rpx;">
 							<image :src="item.src" style="width: 90rpx;height: 90rpx;" mode="widthFix"></image>
 							<view class="tabName">{{item.name}}</view>
 						</view>
 					</u-col>
 				</u-row>
 			</view>
-			<u-gap height="10"></u-gap>
-			<view @click="notice">
+			<!-- <u-gap height="10"></u-gap> -->
+			<view @click="notice" class="margin-fixed">
 				<u-notice-bar mode="vertical" :list="noticeList" type="primary" more-icon
 				bg-color="#fff" :duration="5000" border-radius="15"></u-notice-bar>
 			</view>
-			<u-gap height="5"></u-gap>
+			<!-- <u-gap height="5"></u-gap> -->
 			<!-- <u-waterfall v-model="flowList" ref="uWaterfall">
 			    <template v-slot:left="{leftList}">
 			        <view class="demo-warter" v-for="(item, index) in leftList" :key="index">
@@ -69,7 +69,7 @@
 		</view> 
 		
 		<!-- 活动推荐列表 -->
-		<view class="board">
+		<view class="board margin-fixed">
 			<view class="cu-bar" style="background-color: transparent">
 				<view class="action">
 					<text class="text-xl text-bold" style="color: #ffffff; font-size: 52rpx; font-weight: 600; font-family: 'pangmen'; font-style: italic; background-color: transparent">活动推荐</text>
@@ -109,6 +109,11 @@ import picker from '../../../page_school/components/picker/picker.vue'
 
 		data() {
 			return {
+				longitude: null,
+        		latitude: null,
+				province: '',
+				city:'',
+
 				avatar:'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
 
 				keyword: '',
@@ -143,7 +148,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 		},
 
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','userName', 'userInfo'])
+			...mapState(['hasLogin', 'forcedLogin','userName', 'userInfo']),
 		},
 
 		// onLoad() {
@@ -204,9 +209,11 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			// 	complete: () => {
 			// 	}
 			// })
-			
+			this.getlocation()
+
 			const data = {
-				province: '1',
+				province: this.province,
+				city: this.city,
 				page: 0
 			}
 			this.loadActilist(data)
@@ -242,6 +249,43 @@ import picker from '../../../page_school/components/picker/picker.vue'
 		// 	uni.stopPullDownRefresh();
 		// },
 		methods: {
+			...mapMutations(['setAddress']),
+			//转义为省市
+			locationn() {
+				console.log(this.longitude)
+				console.log(this.latitude)
+				const _this = this
+				uni.request({
+				url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${encodeURIComponent(this.latitude)},${encodeURIComponent(this.longitude)}&key=P56BZ-H7RC3-54T3L-R753V-L5BNH-G7FIF`,
+				method: 'GET',
+				success: (res) => {
+					console.log("res=",res)
+					_this.province=res.data.result.address_component.province
+					_this.city=res.data.result.address_component.city
+					const province = _this.province
+					const city = _this.city
+					// console.log("p=", p)
+					// console.log("c=", c)
+					this.setAddress({province, city, })
+				}
+				})
+
+			},
+
+			//获取位置
+			getlocation() {
+				var that=this
+				const _this = this
+				uni.getFuzzyLocation({
+				success: function(res) {
+					_this.longitude=res.longitude
+					_this.latitude=res.latitude
+					console.log(res)
+					_this.locationn()
+				},
+				});
+			},
+
 			loadActilist(data){  //加载活动列表
 				uni.request({
 				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
@@ -479,9 +523,14 @@ import picker from '../../../page_school/components/picker/picker.vue'
 	}
 	
 	.rowClass{
-		border-radius: 8px;
-		background-color: rgb(255, 255, 255);
-		margin-top: 10rpx;
+		// border-radius: 8px;
+		// background-color: rgb(255, 255, 255);
+		// margin-top: 10rpx;
+		border-radius: 30rpx;
+    	margin-top: 20rpx;
+    	margin-left: 20rpx;
+    	margin-right: 20rpx;
+		// background-color: #ffffff; 
 	}
 	
 	.hoverClass{
@@ -603,11 +652,33 @@ import picker from '../../../page_school/components/picker/picker.vue'
 .text-xl text-bold{
 	font-size: 52rpx;
 	font-weight: 600;
-	font-family: 'pangmen';
-	font-style: italic;
-	font-size: 34rpx;
+	// font-family: 'pangmen';
+	// font-style: italic;
+	// font-size: 34rpx;
+	color: #ffffff; 
+	font-family: 'Arial'; 
+	font-style: normal; 
+	background-color: transparent;
 }
 .more-btn{
 	font-size: small;
+}
+.background{
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+    // background-size: 730rpx 350rpx;
+    height: 350rpx;
+    border-radius: 30rpx;
+    margin-top: 20rpx;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
+    background-position: right;
+    background-size: 122.666% 100%;
+}
+.margin-fixed{
+	border-radius: 30rpx;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	margin-top:20rpx;
+	// margin-bottom: 20rpx;
 }
 </style>

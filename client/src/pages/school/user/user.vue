@@ -1,21 +1,33 @@
 <!-- 高校-我的 -->
 <template>
-	<view class="content">
-		<view class="cu-list menu-avatar bg-gradual-green padding-lg shadow">
+	<view class="content back1">
+		<view class="cu-list menu-avatar shadow usercard">
 			<view class="user-section">
-				<image :src="userInfo.avatar" class="cu-avatar xl round"></image>
-				<view class="text-white text-xl padding">用户名: {{userName}}<br>身份：高校队伍</view>
+				<image :src="userInfo.avatar" class="cu-avatar xl round" style="margin-top: -26px;align-items: center; "></image>
+				<view class="text-balck text-xl" style="font-weight: bold;">高校队伍: {{userName}}</view>
+				<!-- <view class="text-balck text-xl" style="font-size: 30rpx;">高校队伍</view> -->
+				<view class="text-balck comment-container">
+					<navigator class="" hover-class="none" :url="list1[0].url" style="align-items: flex-start;    margin-right: 74rpx; ">
+						<img class="commIcon" style="margin-right: 6rpx;" :src="list1[0].iconUrl" alt="Avatar">
+						<text class="text-grey" style="font-size: 13px;">我的评价</text>
+					</navigator>
+					<view> </view>
+					<navigator class="" hover-class="none" :url="list1[1].url" style="align-items: flex-start;" >
+						<img class="commIcon" style="margin-right: 6rpx;" :src="list1[1].iconUrl" alt="Avatar">
+						<text class="text-grey" style="font-size: 13px;" >收到的评价</text>
+					</navigator>
+				</view>
 			</view>
 		</view>
-		<view class="cu-list menu" style="margin-top: 0rpx;">
+		<view class="cu-list menu back2" style="margin-top: -36rpx;">
 			<!-- 评价 -->
-				<view class="custom-container">
+				<!-- <view class="custom-container"> -->
 					<!-- <hr class="horizontal-line"> -->
-					<view class="title" style="text-align: left;">
+					<!-- <view class="title" style="text-align: left;"> -->
 						<!-- <uni-icons type="email" color="gray" size="20" style="vertical-align: middle;"></uni-icons> -->
 						<!-- <text style="margin-left: 20rpx;">评价</text> -->
-					</view>
-				</view>
+					<!-- </view> -->
+				<!-- </view> -->
 				<!-- <view class="cu-item arrow com_item" v-for="(item,index) in list1" :key="index">
 					<navigator class="content" hover-class="none" :url="item.url">
 
@@ -23,7 +35,7 @@
 						<text class="text-grey">{{item.text}}</text>
 					</navigator>
 				</view> -->
-			<view class="cu-item com_item">
+			<!-- <view class="cu-item com_item">
 				<view class="navigator-wrapper">
 					<navigator class="wrapper-content" hover-class="none" :url="list1[0].url">
 						<text class="text-grey com">{{list1[0].text}}</text>
@@ -36,7 +48,7 @@
 						<text class="text-grey down-text">社区基层对我的评价</text>
 					</navigator>
 				</view>
-			</view>
+			</view> -->
 			<!-- 队伍信息管理 -->
 				<!-- <view class="custom-container"> -->
 					<!-- <hr class="horizontal-line"> -->
@@ -45,9 +57,11 @@
 						<!-- <text style="margin-left: 20rpx;">队伍信息管理</text> -->
 					<!-- </view> -->
 				<!-- </view> -->
-				<view class="cu-item arrow" v-for="(item,index) in list2" :key="index">
-					<navigator class="content" hover-class="none" :url="item.url">
+				<view class="cu-item arrow " v-for="(item,index) in list2" :key="index" 
+				style="background-color: white;border-radius: 30rpx; margin-left: 40rpx; margin-right: 40rpx; margin-bottom: 20rpx;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); ">
+					<navigator class="below-container" hover-class="none" :url="item.url">
 						<!-- <text :class="item.icon"></text> -->
+						<img class="smallIcon" :src="item.iconUrl" alt="Avatar">
 						<text class="text-grey">{{item.text}}</text>
 					</navigator>
 				</view>
@@ -76,11 +90,13 @@
 						icon: 'cuIcon-lock text-red',
 						text: '我的评价',
 						url: '../../../page_school/pages/user/mycomment',
+						iconUrl: 'http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/9.png',
 					},
 					{
 						icon: 'cuIcon-attention text-green',
 						text: '收到评价',
 						url: '../../../page_school/pages/user/becomment',
+						iconUrl: 'http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/8.png',
 					}
 				],
 				list2: [
@@ -88,16 +104,19 @@
 						icon: 'cuIcon-usefull text-cyan',
 						text: '修改密码',
 						url: '../../../page_school/pages/user/password',
+						iconUrl: 'http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/10.png'
 					},
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '队伍资料',
 						url: '../../../page_school/pages/user/teaminfo',
+						iconUrl: 'http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/6.png'
 					},
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '活动收藏',
 						url: '../../../page_school/pages/user/like',
+						iconUrl: 'http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/7.png'
 					},
 				]
 			};
@@ -166,12 +185,26 @@
 <style>
 /* 整个页面 */
 .content{
-	background-color: white;
+	background-color: white ;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	background-attachment: fixed;
 }
-	.user-section {
-		display: flex;
-		align-items: center;
-	}
+.back1{
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/33.png);
+	border-radius: 30rpx;
+	background-size: 100% 47%;
+}
+.user-section {
+	/* display: flex; */
+    align-items: center;
+    background-color: #ffffffcf;
+    border-radius: 30rpx;
+  	justify-content: center;
+	display: flex;
+    flex-direction: column;
+	width: 500rpx;
+}
 
 	/* 灰线 */
 	.custom-container {
@@ -244,5 +277,51 @@
 
 .down-text{
 	margin-bottom: 25rpx;
+}
+.back2{
+	background-color: #f5ededdb;
+	border-radius: 30rpx;
+	padding-top: 22rpx;
+}
+.smallIcon {
+	width: 90rpx;
+    height: 90rpx;
+    border-radius: 50%;
+    margin-right: 44rpx;
+}
+.commIcon {
+	width: 50rpx;
+    height: 50rpx;
+    border-radius: 50%;
+	margin-bottom: -10rpx;
+}
+.usercard{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 300rpx; */
+    /* width: 500rpx; */
+    /* margin: 0rpx 100rpx 0rpx 100rpx; */
+    padding: 108rpx 0rpx 108rpx 0rpx;
+}
+.comment-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.text-xl{
+	font-size: 36rpx;
+    text-align: center;
+	margin-bottom: 5rpx;
+}
+.below-container{
+	display: flex;
+    align-items: center;
+    padding: 30rpx;
+    /* background-color: rgba(255, 255, 255, 0.5); */
+    border-radius: 30rpx;
+    cursor: pointer;
+    /* margin-bottom: 18rpx; */
 }
 </style>
