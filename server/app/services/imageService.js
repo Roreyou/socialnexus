@@ -41,12 +41,12 @@ class ImageService {
     static async getUrl(key) {
         try {
             // 生成获取图片的签名直传 URL
-            console.log('key1:', key);
+            // console.log('key1:', key);
             const getSignedUrl = await client.signatureUrl(key, {
                 method: 'GET',
                 expires: 86400, // 设置 URL 的过期时间为1天
             });
-            console.log('getSignedUrl:', getSignedUrl);
+            // console.log('getSignedUrl:', getSignedUrl);
 
             return getSignedUrl;
         } catch (error) {

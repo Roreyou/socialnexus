@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../models/index');
 const generateToken = require('../utils/jwtUtils');
 const short = require('short-uuid');
+const imageService = require('./imageService');
 
 class AuthService {
     static login = async (loginData) => {
@@ -174,6 +175,7 @@ class AuthService {
         const token = generateToken(loginData);
 
 
+        team.avatar=await imageService.getUrl(team.avatar);
 
         return { token: token,
             verification_status: team.verification_status,

@@ -1,12 +1,13 @@
 const db = require('../models/index');
 const axios = require('axios');
-const {Op} = require('sequelize');
+const { Op } = require('sequelize');
 const sequelize = require('sequelize');
 const fs = require('fs/promises');
 const path = require('path');
 const otherService = require('./otherService');
 const teamService = require('./teamService');
 const CommunityService = require('./communityService');
+const imageService = require('./imageService');
 
 class ActivityService {
   static async getAllActivities() {
@@ -47,6 +48,9 @@ class ActivityService {
       return keyword ? keyword.key_name : ''; // 如果找到了对应的关键词，则返回关键词；否则返回空字符串
     }));
 
+    //key转化为url
+    activity.picture = await imageService.getUrl(activity.picture);
+
     const formattedInfo = {
       ...activity,
       category_name: activity["activity_type.category_name"],
@@ -63,23 +67,23 @@ class ActivityService {
 
   }
 
-  static async getActivityInfoById(activityId){
+  static async getActivityInfoById(activityId) {
     const activity = await db.activity.findOne({
       where: {
         id: activityId
       },
       attributes: {
         include: [
-            [
+          [
             //引用原生mySQL语法，将类型转化
             sequelize.literal("cast(id as char)"),
             'id'
-            ],
-            [
-              //引用原生mySQL语法，将类型转化
-              sequelize.literal("cast(category_id as char)"),
-              'category_id'
-              ],
+          ],
+          [
+            //引用原生mySQL语法，将类型转化
+            sequelize.literal("cast(category_id as char)"),
+            'category_id'
+          ],
         ]
       }
     });
@@ -115,17 +119,23 @@ class ActivityService {
 
     // 建立关联关系
     db.activity.belongsTo(db.community, { foreignKey: 'community_id' });
+    db.activity.belongsTo(db.activity_type, { foreignKey: 'category_id' });
+
     // 查询活动
     const activities = await db.activity.findAll({
       where: whereCondition,
       include: [
-        { model: db.community, attributes: [['tel', 'tel'], ['name', 'community_name']] } // 返回电话号码和社区名称
+        { model: db.community, attributes: [['tel', 'tel'], ['name', 'community_name']] },
+        { model: db.activity_type, attributes: [['type_name', 'category_name']] }
+
       ],
       raw: true
     });
 
     // 处理活动关键词
     activitiesToReturn = await Promise.all(activities.map(async activity => {
+      //key转化为url
+      activity.picture = await imageService.getUrl(activity.picture);
       // 切分关键词
       const keywordsIds = (activity.keywords_id || '').split(',');
       // 查询关键词并映射为关键词名称
@@ -138,16 +148,18 @@ class ActivityService {
         ...activity,
         veri_status: activity.verification_status == 1 ? '未审核' : '已审核',
         community_name: activity["community.community_name"],
+        category_name: activity["activity_type.category_name"],
         tel: activity["community.tel"],
         keywords: keywords.join(','), // 将关键词连接为字符串
         'community.community_name': undefined,
+        'activity_type.category_name': undefined,
         'community.tel': undefined,
       };
     }));
     return activitiesToReturn;
   }
 
-  static async getActivityByStatus(commu_id,status) {
+  static async getActivityByStatus(commu_id, status) {
     // 这里的status是审核状态
     let activitiesToReturn;
     let whereCondition = {};
@@ -156,7 +168,7 @@ class ActivityService {
     // 根据不同的 status 设置不同的查询条件
     if (status != 0) {
       whereCondition = {
-       activity_status: status
+        activity_status: status
       };
     }
 
@@ -166,17 +178,23 @@ class ActivityService {
 
     // 建立关联关系
     db.activity.belongsTo(db.community, { foreignKey: 'community_id' });
+    db.activity.belongsTo(db.activity_type, { foreignKey: 'category_id' });
     // 查询活动
     const activities = await db.activity.findAll({
       where: whereCondition,
       include: [
-        { model: db.community, attributes: [['tel', 'tel'], ['name', 'community_name']] } // 返回电话号码和社区名称
+        { model: db.community, attributes: [['tel', 'tel'], ['name', 'community_name']] },
+        { model: db.activity_type, attributes: [['type_name', 'category_name']] }
+
+
       ],
       raw: true
     });
 
     // 处理活动关键词
     activitiesToReturn = await Promise.all(activities.map(async activity => {
+      //key转化为url
+      activity.picture = await imageService.getUrl(activity.picture);
       // 切分关键词
       const keywordsIds = (activity.keywords_id || '').split(',');
       // 查询关键词并映射为关键词名称
@@ -189,9 +207,11 @@ class ActivityService {
         ...activity,
         veri_status: activity.verification_status == 1 ? '未审核' : '已审核',
         community_name: activity["community.community_name"],
+        category_name: activity["activity_type.category_name"],
         tel: activity["community.tel"],
         keywords: keywords.join(','), // 将关键词连接为字符串
         'community.community_name': undefined,
+        'activity_type.category_name': undefined,
         'community.tel': undefined,
       };
     }));
@@ -252,7 +272,7 @@ class ActivityService {
   }
 
   static async queryActivity2(text, page) {
-    
+
     const whereCondition = {
       [Op.and]: [
         {
@@ -268,11 +288,11 @@ class ActivityService {
       where: whereCondition,
       attributes: {
         include: [
-            [
+          [
             //引用原生mySQL语法，将类型转化
             sequelize.literal("cast(id as char)"),
             'id'
-            ],
+          ],
         ]
       }
     });
@@ -307,18 +327,19 @@ class ActivityService {
     }
 
     // 查询符合条件的活动
-    const activities = await db.activity.findAll({ where: whereCondition,
-        attributes: {
-          include: [
-              [
-              //引用原生mySQL语法，将类型转化
-              sequelize.literal("cast(id as char)"),
-              'id'
-              ],
-              [sequelize.literal("cast(category_id as char)"),'category_id'],
-          ]
+    const activities = await db.activity.findAll({
+      where: whereCondition,
+      attributes: {
+        include: [
+          [
+            //引用原生mySQL语法，将类型转化
+            sequelize.literal("cast(id as char)"),
+            'id'
+          ],
+          [sequelize.literal("cast(category_id as char)"), 'category_id'],
+        ]
       }
-     });
+    });
     const results = await otherService.getCategKeyCommuIdsMap(activities);
     return results;
   }
@@ -414,13 +435,13 @@ class ActivityService {
       } else {
         var mapedActivityList = await otherService.getCategKeyCommuIdsMap(activList);
         const handledActivityList = await Promise.all(mapedActivityList.map(async activity => {
-            // 获取活动状态
-            const status = await this.getActivityStatusMap(activity.activity_status);
-            // 添加 my_state 字段
-            activity.my_state = status;
-            activity = await otherService.IdInt2String("id", activity);
-            activity = await otherService.IdInt2String("category_id", activity);
-            return activity;
+          // 获取活动状态
+          const status = await this.getActivityStatusMap(activity.activity_status);
+          // 添加 my_state 字段
+          activity.my_state = status;
+          activity = await otherService.IdInt2String("id", activity);
+          activity = await otherService.IdInt2String("category_id", activity);
+          return activity;
         }));
         return handledActivityList;
       }

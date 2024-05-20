@@ -96,6 +96,19 @@ class teamController {
     }
   }
 
+  static async queryTeamActByName(req,res){
+    const commu_id=req.query.community_id;
+    const team_name =req.query.team_name;
+    try {
+      const teams = await teamService.queryTeamActByName(commu_id,team_name);
+      if (!teams) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success(teams));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
   static async queryTeamByName(req,res){
     const commu_id=req.query.community_id;
     const team_name =req.query.team_name;
