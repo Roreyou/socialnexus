@@ -8,6 +8,7 @@ const post = require('../models/post');
 const activity = require('../models/activity');
 const teammember = require('../models/teammember');
 const { raw } = require('body-parser');
+const teamactivity = require('../models/teamactivity');
 
 
 class teamService {
@@ -70,6 +71,7 @@ class teamService {
   }
 
 
+  // team是审核状态
   static async getTeamByStatus(status) {
     let teamsToReturn;
     let whereCondition;
@@ -143,16 +145,23 @@ class teamService {
     return teamAvatar;
   }
 
-  //依据社区和状态,这里的status是队伍审核状态
+  //依据社区和状态,这里的status是社区对队伍的录取状态和评价状态
   static async getTeamByCommu(commu_id, status) {
     let whereCondition_commu = {};
     let whereCondition_status = {};
     if (commu_id !== '0') {
       whereCondition_commu.community_id = commu_id;
     }
-    if (status !== 0) {
-      whereCondition_status.status = status;
+    if (status != 0) {
+      if (status == 4||status == 5) {
+        whereCondition_status.comment_status = status-3
+        whereCondition_status.admission_status = 2
+      }
+      if (status == 1||status == 2||status == 3) {
+        whereCondition_status.admission_status = status
+      }
     }
+    console.log(whereCondition_status)
 
     const activities = await db.activity.findAll({
       where: whereCondition_commu,
@@ -245,18 +254,72 @@ class teamService {
   }
 
   static async queryTeamByName(commu_id, team_name) {
-    const teams_by_commu = await this.getTeamByCommu(commu_id, 0)
-    if (!teams_by_commu)
+    const teams_by_commu = await this.getTeamByCommu(commu_id, 0);
+    // console.log(teams_by_commu)
+    let teamsFiltered = [];
+    let idList = [];
+  
+    if (teams_by_commu && teams_by_commu.length > 0) {
+      //继续模糊查询by_teamName
+      const fuzzyTeamName = team_name;
+      teamsFiltered = teams_by_commu.filter(team => team.team_name.includes(fuzzyTeamName));
+      idList = teamsFiltered.map(team => team.id);
+      // console.log(idList)
+    } else {
       return null;
-    //继续模糊查询by_teamName
-    const fuzzyTeamName = team_name;
-    const teamsFiltered = teams_by_commu.filter(team => team.team_name.includes(fuzzyTeamName));
-
+    }
+  
     if (teamsFiltered.length === 0)
       return null;
-    return teamsFiltered;
+  
+    // 建立关联关系
+    db.teamactivity.belongsTo(db.team, { foreignKey: 'team_id' });
+    db.teamactivity.belongsTo(db.activity, { foreignKey: 'activity_id' });
+    db.team.belongsTo(db.school, { foreignKey: 'school_id' });
+  
+    const teamActivities = await db.teamactivity.findAll({
+      where: {
+        team_id: {
+          [Op.in]: idList
+        }
+      },
+      include: [
+        {
+          model: db.team,
+          as: 'schoolteam',
+          attributes: ['team_name',  'school_id']
+        },
+        {
+          model: db.activity,
+          as: 'activity',
+          attributes: [['name', 'activity_name']]
+        },
+      ],
+      raw: true // 返回原始 JSON 对象
+    });
+  
+    // console.log(teamActivities)
+    const teamsToReturn = await Promise.all(teamActivities.map(async team => {
+      // 获取学校名称
+      const school = await db.school.findOne({ where: { id: team['schoolteam.school_id'] } });
+      const schoolName = school ? school.name : null;
+  
+      return {
+        ...team,
+        team_name: team["schoolteam.team_name"],
+        activity_name: team["activity.activity_name"],
+        school_name: schoolName,
+        // 删除原始的字段名
+        // 如果还有其他字段需要删除，也可以在这里添加
+        // 这样返回的对象中将只包含你想要的字段名
+        'activity.activity_name': undefined,
+        'schoolteam.team_name': undefined,
+        'school.school_id': undefined
+      };
+    }));
+  
+    return teamsToReturn;
   }
-
 
   static async queryTeamByAct(commu_id, act_name) {
     let whereCondition_commu = {};
@@ -320,7 +383,7 @@ class teamService {
         {
           model: db.school,
           as: 'school',
-          attributes: [['name', 'school_name']] 
+          attributes: [['name', 'school_name']]
         }
       ],
       raw: true // 返回原始 JSON 对象
@@ -365,7 +428,7 @@ class teamService {
 
     // 更新找到的记录
     const updatedActivity = await teamActivity.update(
-      { admission_status:admit },
+      { admission_status: admit },
       { returning: true }
     );
 
@@ -437,7 +500,7 @@ class teamService {
       return null; // 返回null表示队伍不存在
     }
 
-    await db.team.update({ verification_status: approve+1 }, { where: { id: id } });
+    await db.team.update({ verification_status: approve + 1 }, { where: { id: id } });
     return team;
   }
 
