@@ -1,12 +1,12 @@
 const db = require('../models/index');
 const axios = require('axios');
-const { Op, where } = require('sequelize');
-const teamService = require('./teamService');
-const activity = require('../models/activity');
-const CommunityService = require('./communityService');
+const {Op} = require('sequelize');
+const sequelize = require('sequelize');
 const fs = require('fs/promises');
-const postService = require('./postService');
 const path = require('path');
+const otherService = require('./otherService');
+const teamService = require('./teamService');
+const CommunityService = require('./communityService');
 
 class ActivityService {
   static async getAllActivities() {
@@ -63,13 +63,34 @@ class ActivityService {
 
   }
 
+  static async getActivityInfoById(activityId){
+    const activity = await db.activity.findOne({
+      where: {
+        id: activityId
+      },
+      attributes: {
+        include: [
+            [
+            //引用原生mySQL语法，将类型转化
+            sequelize.literal("cast(id as char)"),
+            'id'
+            ],
+            [
+              //引用原生mySQL语法，将类型转化
+              sequelize.literal("cast(category_id as char)"),
+              'category_id'
+              ],
+        ]
+      }
+    });
+    return activity;
+  }
 
   static async getActivityByCommu(commu_id, status) {
     // 这里的status是审核状态
     let activitiesToReturn;
     let whereCondition = {};
 
-    console.log(status);
     // 根据不同的 status 设置不同的查询条件
     if (status == 0) {
 
@@ -142,8 +163,6 @@ class ActivityService {
     if (commu_id != '0') {
       whereCondition.community_id = commu_id
     }
-
-    // console.log(whereCondition);
 
     // 建立关联关系
     db.activity.belongsTo(db.community, { foreignKey: 'community_id' });
@@ -233,6 +252,7 @@ class ActivityService {
   }
 
   static async queryActivity2(text, page) {
+    
     const whereCondition = {
       [Op.and]: [
         {
@@ -245,13 +265,22 @@ class ActivityService {
       ]
     };
     const activities = await db.activity.findAll({
-      where: whereCondition
+      where: whereCondition,
+      attributes: {
+        include: [
+            [
+            //引用原生mySQL语法，将类型转化
+            sequelize.literal("cast(id as char)"),
+            'id'
+            ],
+        ]
+      }
     });
     if (!activities) {
       return null; // 返回null表示活动不存在
     }
-    const results = await ActivityService.getCategKeyCommuIdsMap(activities);
-    const pageResults = await ActivityService.getPageData(page, results);
+    const results = await otherService.getCategKeyCommuIdsMap(activities);
+    const pageResults = await otherService.getPageData(page, results);
     return pageResults;
   }
 
@@ -278,8 +307,19 @@ class ActivityService {
     }
 
     // 查询符合条件的活动
-    const activities = await db.activity.findAll({ where: whereCondition });
-    const results = await ActivityService.getCategKeyCommuIdsMap(activities);
+    const activities = await db.activity.findAll({ where: whereCondition,
+        attributes: {
+          include: [
+              [
+              //引用原生mySQL语法，将类型转化
+              sequelize.literal("cast(id as char)"),
+              'id'
+              ],
+              [sequelize.literal("cast(category_id as char)"),'category_id'],
+          ]
+      }
+     });
+    const results = await otherService.getCategKeyCommuIdsMap(activities);
     return results;
   }
 
@@ -296,68 +336,6 @@ class ActivityService {
         return "已结束";
       default:
         return "未知状态";
-    }
-  }
-
-  //获取ids->名称的映射
-  static async getCategKeyCommuIdsMap(events) {
-    // 对每个活动进行处理
-    const results = await Promise.all(events.map(async activity => {
-      // 获取活动对应的分类名称
-      const category = await db.activity_type.findOne({
-        where: {
-          id: activity.category_id
-        },
-        attributes: ['type_name']
-      });
-
-      // 获取活动对应的关键词名称
-      const keywords = await db.keywords.findAll({
-        where: {
-          id: { [Op.in]: activity.keywords_id.split(',') } // 根据逗号分隔的关键词 id 查询
-        },
-        attributes: ['key_name']
-      });
-      console.log("debug:", keywords);
-
-      // 获取活动对应的社区名字
-      const community = await db.community.findOne({
-        where: {
-          id: activity.community_id
-        },
-        attributes: ['name']
-      });
-
-      const { ...rest } = activity.toJSON();
-      // 构造处理后的活动信息
-      return {
-        ...rest,
-        category_name: category ? category.type_name : null,
-        keywords: keywords.map(keyword => keyword.key_name).join(','),
-        community_name: community ? community.name : null
-      };
-    }));
-    return results;
-  }
-
-  static async getPageData(pageNumber, list) {
-    console.log("list:", list)
-    const pageSize = 2; // 假设每页有 10 条数据
-
-    if (pageNumber == 0) {
-      // 如果页数等于 0，则表示第一部分，返回第一部分的数据
-      console.log("list2:", list.slice(0, pageSize))
-      return list.slice(0, pageSize);
-    } else if (pageNumber > 0) {
-      const startIndex = pageNumber * pageSize;
-      const endIndex = startIndex + pageSize;
-      if (startIndex >= list.length) {
-        // 如果起始索引超出了数据范围，则返回空的 acti_list
-        return [];
-      } else {
-        // 返回指定页数的数据
-        return list.slice(startIndex, endIndex);
-      }
     }
   }
 
@@ -382,14 +360,16 @@ class ActivityService {
         }
       });
 
-      const handledActivityList = await this.getCategKeyCommuIdsMap(myActivList)
+      const handledActivityList = await otherService.getCategKeyCommuIdsMap(myActivList)
       handledActivityList.forEach(async activity => {
         // 获取活动状态
         const status = await this.getActivityStatusMap(activity.activity_status);
         // 添加 my_state 字段
         activity.my_state = status;
+        activity = await otherService.IdInt2String("id", activity);
+        //activity = await otherService.IdInt2String("category_id", activity);
       });
-      const pageActivityList = this.getPageData(page, handledActivityList);
+      const pageActivityList = otherService.getPageData(page, handledActivityList);
       return pageActivityList;
 
 
@@ -432,13 +412,16 @@ class ActivityService {
       if (!activList) {
         return null; // 返回null表示活动不存在
       } else {
-        const handledActivityList = await this.getCategKeyCommuIdsMap(activList)
-        handledActivityList.forEach(async activity => {
-          // 获取活动状态
-          const status = await this.getActivityStatusMap(activity.activity_status);
-          // 添加 my_state 字段
-          activity.my_state = status;
-        });
+        var mapedActivityList = await otherService.getCategKeyCommuIdsMap(activList);
+        const handledActivityList = await Promise.all(mapedActivityList.map(async activity => {
+            // 获取活动状态
+            const status = await this.getActivityStatusMap(activity.activity_status);
+            // 添加 my_state 字段
+            activity.my_state = status;
+            activity = await otherService.IdInt2String("id", activity);
+            activity = await otherService.IdInt2String("category_id", activity);
+            return activity;
+        }));
         return handledActivityList;
       }
 
@@ -479,7 +462,7 @@ class ActivityService {
     const activity = await db.activity.findByPk(id);
     const community_id = activity.community_id;
     const activityArray = [activity];
-    const handledActicityArray = await this.getCategKeyCommuIdsMap(activityArray);
+    const handledActicityArray = await otherService.getCategKeyCommuIdsMap(activityArray);
     const handledActicity = handledActicityArray[0];
     //查找该活动对应的社区的联系电话
     const community = await db.community.findOne({
@@ -493,9 +476,11 @@ class ActivityService {
       handledActicity.tel = community.tel;
     } else {
       // 没有找到对应的 community 记录
-      console.log("Community not found");
+      console.error("Community not found");
       handledActicity.tel = "-1";
     }
+    var result = await otherService.IdInt2String("id", handledActicity);
+    result = await otherService.IdInt2String("category_id", result);
     return { detail: handledActicity };
   }
 
@@ -529,7 +514,7 @@ class ActivityService {
 
 
   static async getRegisterDetail(teamId, activityId) {
-    const teamInfo = await teamService.getTeamById(teamId);
+    const teamInfo = await teamService.getTeamInfoById(teamId);
     const leader = await teamService.getLeaderById(teamInfo.leader_id);
     const instructor = await teamService.getInstructorById(teamInfo.instructor_id);
     const team_detail = {
@@ -540,7 +525,7 @@ class ActivityService {
       leader_tel: leader.tel
     }
 
-    const acti_detail = await ActivityService.getActivityById(activityId);
+    const acti_detail = await ActivityService.getActivityInfoById(activityId);
     return { team_detail, acti_detail };
   }
 
@@ -564,9 +549,6 @@ class ActivityService {
       const imagePath = path.join(targetPath, folderName, QRCodeName);
       const imageUrl = `/${folderName}/${QRCodeName}`;
 
-      //console.log("debug t:", targetPath);
-      //console.log("debug url:", imageUrl);
-      //console.log("debug path:", imagePath);
       // 将上传的图片保存到本地文件系统
       await fs.writeFile(imagePath, code_picture, 'binary', (err) => {
         if (err) {
@@ -620,8 +602,6 @@ class ActivityService {
 
       const responseToken = await axios.get(getTokenUrl);
       const access_token = responseToken.data.access_token;
-      //console.log("debug-responseToken",responseToken);
-      //console.log("debug-access_token",access_token);
 
       // http调用获取程序码
       const getQRCodeUrl = `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${access_token}`;
@@ -636,8 +616,6 @@ class ActivityService {
       const responseCode = await axios.post(getQRCodeUrl, params, {
         responseType: 'arraybuffer' // 设置响应类型为二进制数组
       });
-      console.log("debug-response", responseCode);
-      console.log('Activity QR code saved successfully');
       return responseCode.data;
 
     } catch (error) {

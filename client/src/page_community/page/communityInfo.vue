@@ -1,334 +1,275 @@
 <!-- 社区基层信息 -->
 <template>
-	<view class="container">
-		<!-- <uni-card :is-shadow="false" is-full>
-			<text class="uni-h6">uni-forms 组件</text>
-		</uni-card> -->
-		<uni-section title="社区基本信息认证" type="line">
-			<view class="example">
-				<!-- 基础用法，不包含校验规则 -->
-				<uni-forms ref="baseForm" :model="baseFormData" labelWidth="80px">
-					<!-- <uni-forms-item label="所属高校" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="中山大学" ref="inputElement" />
-					</uni-forms-item> -->
-					<uni-forms-item label="社区名字" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入社区名字" />
-					</uni-forms-item>
-					<uni-forms-item label="联系方式" required>
-						<uni-easyinput v-model="baseFormData.phone" placeholder="请输入社区联系方式" />
-					</uni-forms-item>
-					<uni-forms-item label="省" required>
-						<uni-easyinput v-model="baseFormData.province" placeholder="请输入社区所在省" />
-					</uni-forms-item>
-					<uni-forms-item label="市" required>
-						<uni-easyinput v-model="baseFormData.city" placeholder="请输入社区所在市" />
-					</uni-forms-item>
-					<uni-forms-item label="详细地址" required>
-						<uni-easyinput v-model="baseFormData.address" placeholder="请输入社区详细地址" />
-					</uni-forms-item>
-					<uni-forms-item label="成立日期" required>
-						<uni-easyinput v-model="baseFormData.foundDate" placeholder="请输入社区成立日期" />
-					</uni-forms-item>
-					<uni-forms-item label="社区介绍">
-						<uni-easyinput type="textarea" v-model="baseFormData.introduction" placeholder="请输入社区介绍" />
-					</uni-forms-item>
-				</uni-forms>
-			</view>
-			<view class="button-group">
-				<button type="primary" size="mini" @click="modifyPassword">修改密码</button>
-				<button type="primary" size="mini" @click="submit('dynamicForm')">提交</button>
-			</view>
-		</uni-section>
-	</view>
+  <view class="container">
+    <uni-section title="社区基本信息认证" type="line">
+      <view class="example">
+        <uni-forms ref="baseForm" :model="baseFormData" :rules="rules" labelWidth="80px">
+          <uni-forms-item label="社区名字" name="name">
+            <uni-easyinput
+              v-model="baseFormData.name"
+              placeholder="请输入社区名字"
+            />
+          </uni-forms-item>
+          <uni-forms-item label="联系方式" name="tel">
+            <uni-easyinput
+              v-model="baseFormData.tel"
+              placeholder="请输入社区联系方式"
+            />
+          </uni-forms-item>
+          <uni-forms-item label="省" name="province">
+            <uni-easyinput
+              v-model="baseFormData.province"
+              placeholder="请输入社区所在省"
+            />
+          </uni-forms-item>
+          <uni-forms-item label="市" name="city">
+            <uni-easyinput
+              v-model="baseFormData.city"
+              placeholder="请输入社区所在市"
+            />
+          </uni-forms-item>
+          <uni-forms-item label="详细地址" name="address">
+            <uni-easyinput
+              v-model="baseFormData.address"
+              placeholder="请输入社区详细地址"
+            />
+          </uni-forms-item>
+          <uni-forms-item label="成立日期" name="setup_date">
+            <uni-easyinput
+              v-model="baseFormData.setup_date"
+              placeholder="请输入社区成立日期"
+            />
+          </uni-forms-item>
+          <uni-forms-item label="社区介绍" name="remark">
+            <uni-easyinput
+              type="textarea"
+              v-model="baseFormData.remark"
+              placeholder="请输入社区介绍"
+            />
+          </uni-forms-item>
+        </uni-forms>
+      </view>
+      <view class="button-group">
+        <button type="primary" size="mini" @click="submit">提交</button>
+      </view>
+    </uni-section>
+  </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				// 基础表单数据
-				baseFormData: {
-					name: '',
-					phone: '',
-					province: '',
-					city: '',
-					address: '',
-					foundDate: '',
-					introduction: '',
-				},
-				// 分段器数据
-				current: 0,
-				items: ['左对齐', '顶部对齐'],
-				// 校验表单数据
-				valiFormData: {
-					name: '',
-					age: '',
-					introduction: '',
-				},
-				// 校验规则
-				rules: {
-					name: {
-						rules: [{
-							required: true,
-							errorMessage: '姓名不能为空'
-						}]
-					},
-					age: {
-						rules: [{
-							required: true,
-							errorMessage: '年龄不能为空'
-						}, {
-							format: 'number',
-							errorMessage: '年龄只能输入数字'
-						}]
-					}
-				},
-				// 自定义表单数据
-				customFormData: {
-					name: '',
-					age: '',
-					hobby: []
-				},
-				// 自定义表单校验规则
-				customRules: {
-					name: {
-						rules: [{
-							required: true,
-							errorMessage: '姓名不能为空'
-						}]
-					},
-					age: {
-						rules: [{
-							required: true,
-							errorMessage: '年龄不能为空'
-						}]
-					},
-					hobby: {
-						rules: [{
-								format: 'array'
-							},
-							{
-								validateFunction: function(rule, value, data, callback) {
-									if (value.length < 2) {
-										callback('请至少勾选两个兴趣爱好')
-									}
-									return true
-								}
-							}
-						]
-					}
-
-				},
-				dynamicFormData: {
-					email: '',
-					domains: []
-				},
-				dynamicLists: [],
-				dynamicRules: {
-					email: {
-						rules: [{
-							required: true,
-							errorMessage: '域名不能为空'
-						}, {
-							format: 'email',
-							errorMessage: '域名格式错误'
-						}]
-					}
-				},
-				addinput : [
-				{
-					label: '新密码',
-					value: '',
-					rules: [{
-						'required': true,
-						errorMessage: '新密码项必填'
-					}],
-					holder: '请输入新密码',
-					id: Math.floor(Math.random() * Date.now())
-				},
-				{
-					label: '确认密码',
-					value: '',
-					rules: [{
-						'required': true,
-						errorMessage: '确认密码项必填'
-					}],
-					holder: '请确认密码',
-					id: Math.floor(Math.random() * Date.now())
-				},
-				]
-			}
-		},
-		computed: {
-			// 处理表单排列切换
-			alignment() {
-				if (this.current === 0) return 'left'
-				if (this.current === 1) return 'top'
-				return 'left'
-			}
-		},
-		mounted() {
-			uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/community/myInfo',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-                	header:{
-						Authorization:uni.getStorageSync("token")
-					},	
-					method: 'GET',
-					data: {
-						community_id: '0',
-					},
-					success: res => {						
-						this.acList = res.data.data;
-						console.log("成功请求-查询社区信息");
-						console.log(this.acList);
-						this.net_error = false;
-					},
-					fail: res => {
-						this.net_error = true;
-					},
-					complete: () => {
-					}
-				})
-		},
-		onLoad() {},
-		onReady() {
-			// 设置自定义表单校验规则，必须在节点渲染完毕后执行
-			// this.$refs.customForm.setRules(this.customRules)
-		},
-		methods: {
-			onClickItem(e) {
-				console.log(e);
-				this.current = e.currentIndex
-			},
-			del(i, id) {
-				// let index = this.dynamicLists.findIndex(v => v.id === id)
-				console.log("del", i)
-				this.dynamicFormData.domains.splice(i, 1)
-				console.log(this.dynamicFormData.domains)
-			},
-			modifyPassword() {
-				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/community/modifyPassword',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-                	header:{
-						Authorization:uni.getStorageSync("token")
-					},	
-					method: 'PUT',
-					data: {
-						community_id: '0',
-						password,
-					},
-					success: res => {						
-						this.acList = res.data.data;
-						console.log("成功请求-修改密码");
-						console.log(this.acList);
-						this.net_error = false;
-					},
-					fail: res => {
-						this.net_error = true;
-					},
-					complete: () => {
-					}
-				})
-			},
-			submit(ref) {
-				console.log(this.baseFormData);
-				this.$refs[ref].validate().then(res => {
-					console.log('success', res);
-					uni.showToast({
-						title: `校验通过`
-					})
-				}).catch(err => {
-					console.log('err', err);
-				});
-				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/community/updateInfo',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-                	header:{
-						Authorization:uni.getStorageSync("token")
-					},	
-					method: 'PUT',
-					data: {
-						community_id: '0',
-						baseFormData,
-					},
-					success: res => {						
-						this.acList = res.data.data;
-						console.log("成功请求-更新社区信息");
-						console.log(this.acList);
-						this.net_error = false;
-					},
-					fail: res => {
-						this.net_error = true;
-					},
-					complete: () => {
-					}
-				})
-			},
-		}
-	}
+export default {
+  data() {
+    return {
+      // 基础表单数据
+      baseFormData: {
+        name: "",
+        tel: "",
+        province: "",
+        city: "",
+        address: "",
+        setup_date: "",
+        remark: "",
+      },
+      rules: {
+        name: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入姓名",
+            },
+          ],
+        },
+        tel: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入联系方式",
+            },
+          ],
+        },
+        province: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入社区所在省",
+            },
+          ],
+        },
+        city: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入社区所在市",
+            },
+          ],
+        },
+        address: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入社区详细地址",
+            },
+          ],
+        },
+        setup_date: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入社区成立日期",
+            },
+          ],
+        },
+        remark: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入社区介绍",
+            },
+          ],
+        },
+      },
+    };
+  },
+  computed: {
+    // 处理表单排列切换
+    alignment() {
+      if (this.current === 0) return "left";
+      if (this.current === 1) return "top";
+      return "left";
+    },
+  },
+  mounted() {
+    uni.request({
+      // url: this.$url.BASE_URL + '/4142061-0-default/community/myInfo',
+      url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
+      header: {
+        Authorization: uni.getStorageSync("token"),
+      },
+      method: "GET",
+      data: {
+        community_id: "0",
+      },
+      success: (res) => {
+        this.baseFormData = res.data.data;
+        console.log("成功请求-查询社区信息");
+        this.net_error = false;
+      },
+      fail: (res) => {
+        this.net_error = true;
+      },
+      complete: () => {},
+    });
+  },
+  onLoad() {},
+  onReady() {
+    // 设置自定义表单校验规则，必须在节点渲染完毕后执行
+    // this.$refs.customForm.setRules(this.customRules)
+  },
+  methods: {
+    onClickItem(e) {
+      console.log(e);
+      this.current = e.currentIndex;
+    },
+    del(i, id) {
+      // let index = this.dynamicLists.findIndex(v => v.id === id)
+      console.log("del", i);
+      this.dynamicFormData.domains.splice(i, 1);
+      console.log(this.dynamicFormData.domains);
+    },
+    submit() {
+      this.$refs.baseForm
+        .validate()
+        .then((res) => {
+          this.updateInfo();
+        })
+        .catch((err) => {
+        });
+    },
+    updateInfo() {
+      uni.request({
+        url: this.$url.BASE_URL + "/4142061-0-default/community/myInfo",
+        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        method: "PUT",
+        data: {
+          community_id: "0",
+          baseFormData: this.baseFormData,
+        },
+        success: (res) => {
+          console.log("成功请求-更新社区信息");
+          console.log(res.data.data.status);
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-		/*每个页面公共css */
-	@import '@/uni_modules/uni-scss/index.scss';
-	/* #ifndef APP-NVUE */
-	@import '@/common/customicons.css';
-	// 设置整个项目的背景色
-	page {
-		background-color: #f5f5f5;
-	}
-	/* #endif */
-	.container {
-    	height: 100vh;
-		overflow-y: auto;
-	}
-	.example-info {
-		font-size: 14px;
-		color: #333;
-		padding: 10px;
-	}
+/*每个页面公共css */
+@import "@/uni_modules/uni-scss/index.scss";
+/* #ifndef APP-NVUE */
+@import "@/common/customicons.css";
+// 设置整个项目的背景色
+page {
+  background-color: #f5f5f5;
+}
+/* #endif */
+.container {
+  height: 100vh;
+  overflow-y: auto;
+}
+.example-info {
+  font-size: 14px;
+  color: #333;
+  padding: 10px;
+}
 
+.example {
+  padding: 15px;
+  background-color: #fff;
+}
 
-	.example {
-		padding: 15px;
-		background-color: #fff;
-	}
+.segmented-control {
+  margin-bottom: 15px;
+}
 
-	.segmented-control {
-		margin-bottom: 15px;
-	}
+.button-group {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-around;
+}
 
-	.button-group {
-		margin-top: 15px;
-		display: flex;
-		justify-content: space-around;
-	}
+.form-item {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
 
-	.form-item {
-		display: flex;
-		align-items: center;
-		flex: 1;
-	}
+.button {
+  display: flex;
+  align-items: center;
+  height: 35px;
+  line-height: 35px;
+  margin-left: 10px;
+}
+.button-del {
+  text-align: center;
+}
 
-	.button {
-		display: flex;
-		align-items: center;
-		height: 35px;
-		line-height: 35px;
-		margin-left: 10px;
-	}
-	.button-del{
-		text-align: center;
-	}
-
-	.button-group{
-		display: flex;
-  		flex-direction: column;
-  		align-items: center;
-	}
-	.button-group button {
-  		margin-bottom: 15px; 
-	}
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.button-group button {
+  margin-bottom: 15px;
+}
 </style>

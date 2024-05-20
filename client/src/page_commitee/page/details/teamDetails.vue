@@ -174,14 +174,7 @@
 
         	},
 			memberList:[
-				// {
-				// 	name: "第一个队员",
-				// 	id: "21311212"
-				// },
-				// {
-				// 	name: "第二个队员",
-				// 	id: "21311988"
-				// },
+
 			],
 		}
 	},
@@ -397,7 +390,7 @@
 
 	.horizontal-line {
 	border: none; /* 移除默认的边框样式 */
-	border-top: 1px solid #ccc; /* 设置上边框为 1px 灰色实线 */
+	border-top: 2rpx solid #ccc; /* 设置上边框为 1px 灰色实线 */
 	width: 100%; /* 设置水平线的宽度为容器的宽度 */
 	}
 

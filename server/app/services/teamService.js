@@ -1,7 +1,8 @@
 //services/teamService.js
 const db = require('../models/index');
 const bcrypt = require('bcrypt');
-const { Op } = require('sequelize');
+const Op= require('sequelize');
+const sequelize = require('sequelize');
 const ActivityService = require('./activityService');
 const CommunityService = require('./communityService');
 const post = require('../models/post');
@@ -557,10 +558,24 @@ class teamService {
           province: province,
           city: city
         },
+        attributes: {
+          include: [
+              [
+              //引用原生mySQL语法，将类型转化
+              sequelize.literal("cast(id as char)"),
+              'id'
+              ],
+              [
+                //引用原生mySQL语法，将类型转化
+                sequelize.literal("cast(category_id as char)"),
+                'category_id'
+                ],
+          ]
+        },
         limit: 10 // 限制返回结果数量为 10 条
       });
-      const recommendations = await ActivityService.getCategKeyCommuIdsMap(activities);
-      const results = await ActivityService.getPageData(page, recommendations);
+      const recommendations = await otherService.getCategKeyCommuIdsMap(activities);
+      const results = await otherService.getPageData(page, recommendations);
       return results;
     } catch (error) {
       throw error;
@@ -650,9 +665,18 @@ class teamService {
     const teamFavorites = await db.activity.findAll({
       where: {
         id: activityIdsArray
-      }
+      },
+      attributes: {
+        include: [
+            [
+            //引用原生mySQL语法，将类型转化
+            sequelize.literal("cast(id as char)"),
+            'id'
+            ],
+        ]
+    }
     });
-    const results = await ActivityService.getCategKeyCommuIdsMap(teamFavorites);
+    const results = await otherService.getCategKeyCommuIdsMap(teamFavorites);
     return results;
   }
 
