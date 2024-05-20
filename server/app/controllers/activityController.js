@@ -14,7 +14,7 @@ class ActivityController {
   static async createActivity(req, res) {
     try {
       await activityService.createActivity(req.body);
-      return res.json(Result.success('活动添加成功'));
+      return res.json(Result.success({status:'活动添加成功'}));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }
@@ -26,7 +26,7 @@ class ActivityController {
     try {
       const activity = await activityService.getActivityById(id);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
       return res.json(Result.success(activity));
     } catch (error) {
@@ -40,7 +40,20 @@ class ActivityController {
     try {
       const activity = await activityService.getActivityByCommu(commu_id,status);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
+      }
+      return res.json(Result.success(activity));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+  static async getActivityByStatus(req, res) {
+    const commu_id = req.query.community_id;
+    const status=req.query.status;
+    try {
+      const activity = await activityService.getActivityByStatus(commu_id,status);
+      if (!activity) {
+        return res.json(Result.fail({status:'活动不存在'}));
       }
       return res.json(Result.success(activity));
     } catch (error) {
@@ -54,9 +67,9 @@ class ActivityController {
     try {
       const activity = await activityService.updateActivity(id, newActivity);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
-      return res.json(Result.success('活动修改成功'));
+      return res.json(Result.success({status:'活动修改成功'}));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }
@@ -67,9 +80,9 @@ class ActivityController {
     try {
       const activity = await activityService.deleteActivity(id);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
-      return res.json(Result.success('活动删除成功'));
+      return res.json(Result.success({status:'活动删除成功'}));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }
@@ -81,7 +94,7 @@ class ActivityController {
     try {
       const activities = await activityService.queryActivity(community_id,name);
       if (!activities) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
       return res.json(Result.success(activities));
     } catch (error) {
@@ -95,7 +108,7 @@ class ActivityController {
     try {
       const activity = await activityService.approveActivity(activity_id,approve);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
       return res.json(Result.success({status:'审核成功'}));
     } catch (error) {

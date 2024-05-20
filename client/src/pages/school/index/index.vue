@@ -19,7 +19,7 @@
 		<!-- <view>
 			<u-swiper :list="swiperList" height="400"></u-swiper>
 		</view>	 -->  
-		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
+		<view class="cu-list menu-avatar bg-gradual-green padding-lg background">
 			<view class="user-section">
 				<image :src="userInfo.avatar" class="cu-avatar xl round"></image>
 				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
@@ -33,19 +33,19 @@
 			<view class="rowClass">
 				<u-row>
 					<u-col span="4" text-align="center" v-for="(item,index) in navList" :key="index">
-						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass">
+						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass" style="background-color: #ffffff; border-radius: 30rpx; margin-right: 10rpx;">
 							<image :src="item.src" style="width: 90rpx;height: 90rpx;" mode="widthFix"></image>
 							<view class="tabName">{{item.name}}</view>
 						</view>
 					</u-col>
 				</u-row>
 			</view>
-			<u-gap height="10"></u-gap>
-			<view @click="notice">
+			<!-- <u-gap height="10"></u-gap> -->
+			<view @click="notice" class="margin-fixed">
 				<u-notice-bar mode="vertical" :list="noticeList" type="primary" more-icon
 				bg-color="#fff" :duration="5000" border-radius="15"></u-notice-bar>
 			</view>
-			<u-gap height="5"></u-gap>
+			<!-- <u-gap height="5"></u-gap> -->
 			<!-- <u-waterfall v-model="flowList" ref="uWaterfall">
 			    <template v-slot:left="{leftList}">
 			        <view class="demo-warter" v-for="(item, index) in leftList" :key="index">
@@ -69,7 +69,7 @@
 		</view> 
 		
 		<!-- 活动推荐列表 -->
-		<view class="board">
+		<view class="board margin-fixed">
 			<view class="cu-bar" style="background-color: transparent">
 				<view class="action">
 					<text class="text-xl text-bold" style="color: #ffffff; font-size: 52rpx; font-weight: 600; font-family: 'pangmen'; font-style: italic; background-color: transparent">活动推荐</text>
@@ -523,9 +523,14 @@ import picker from '../../../page_school/components/picker/picker.vue'
 	}
 	
 	.rowClass{
-		border-radius: 8px;
-		background-color: rgb(255, 255, 255);
-		margin-top: 10rpx;
+		// border-radius: 8px;
+		// background-color: rgb(255, 255, 255);
+		// margin-top: 10rpx;
+		border-radius: 30rpx;
+    	margin-top: 20rpx;
+    	margin-left: 20rpx;
+    	margin-right: 20rpx;
+		// background-color: #ffffff; 
 	}
 	
 	.hoverClass{
@@ -647,11 +652,33 @@ import picker from '../../../page_school/components/picker/picker.vue'
 .text-xl text-bold{
 	font-size: 52rpx;
 	font-weight: 600;
-	font-family: 'pangmen';
-	font-style: italic;
-	font-size: 34rpx;
+	// font-family: 'pangmen';
+	// font-style: italic;
+	// font-size: 34rpx;
+	color: #ffffff; 
+	font-family: 'Arial'; 
+	font-style: normal; 
+	background-color: transparent;
 }
 .more-btn{
 	font-size: small;
+}
+.background{
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+    // background-size: 730rpx 350rpx;
+    height: 350rpx;
+    border-radius: 30rpx;
+    margin-top: 20rpx;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
+    background-position: right;
+    background-size: 122.666% 100%;
+}
+.margin-fixed{
+	border-radius: 30rpx;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	margin-top:20rpx;
+	// margin-bottom: 20rpx;
 }
 </style>
