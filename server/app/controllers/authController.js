@@ -24,6 +24,27 @@ class AuthController {
         }
     
     }
+
+    static async registerTeam(req, res) {
+        const teamData = req.body;
+    
+        try {
+            await AuthService.registerTeam(teamData);
+            res.json(Result.success('注册成功'));
+        } catch (error) {
+            res.json(Result.fail(error.message));
+        }
+    }
+    
+    static async loginTeam(req, res) {
+        const teamData = req.body;
+        try {
+            const result=await AuthService.loginTeam(teamData);
+            res.json(Result.success(result));
+        } catch (error) {
+            res.json(Result.fail(error.message));
+        }
+    }
 }
 
 module.exports = AuthController;

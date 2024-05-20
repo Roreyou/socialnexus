@@ -14,3 +14,4 @@ only for the SSE Project
 数据库导入-更新models文件命令：sequelize-auto -o "./app/models" -d socialnexus -h localhost -u root -p 3306 -x 《密码》
 
 npm install ali-oss
+npm install short-uuid
