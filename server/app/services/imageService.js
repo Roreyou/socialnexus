@@ -22,16 +22,16 @@ class ImageService {
                 expires: 600, // 设置 URL 的过期时间
             });
 
-            // // 生成获取图片的签名直传 URL
-            // const getSignedUrl = await client.signatureUrl(key, {
-            //     method: 'GET',
-            //     expires: 86400, // 设置 URL 的过期时间
-            // });
+            // 生成获取图片的签名直传 URL
+            const getSignedUrl = await client.signatureUrl(key, {
+                method: 'GET',
+                expires: 86400, // 设置 URL 的过期时间
+            });
             // console.log('putSignedUrl:', putSignedUrl);
             // console.log('getSignedUrl:', getSignedUrl);
 
 
-            return { key: key, putSignedUrl: putSignedUrl };
+            return { key: key, putSignedUrl: putSignedUrl , getSignedUrl: getSignedUrl};
         } catch (error) {
             // console.error('Error:', error);
 
