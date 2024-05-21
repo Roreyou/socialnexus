@@ -581,31 +581,53 @@ class teamService {
   }
 
   // 存储队伍中指导老师和学生成员的信息
-  static async saveInstructorAndMembers(instructorData, membersData) {
+  static async saveInstructOrMembers(id, status,instructorData, leader, membersData) {
     try {
-      const existingInstructor = await db.teacher.findOne({ where: { id: instructorData.id } });
-      // 如果存在该指导教师，则删除其信息
-      if (existingInstructor) {
-        await existingInstructor.destroy();
-      }
-      // 保存指导老师信息
-      const instructor = await db.teacher.create(instructorData);
+      if(status == 1 || status == 3){
+          // 指导老师
+          const existingInstructor = await db.teacher.findOne({ where: { id: instructorData.id } });
+          // 如果存在该指导教师，则删除其信息
+          if (existingInstructor) {
+            await existingInstructor.destroy();
+          }
+          // 创建新的指导老师信息
+          await db.teacher.create(instructorData);
 
-      // 保存队伍成员信息
-      const members = await Promise.all(membersData.map(async memberData => {
-        // 查询数据库中是否存在该成员
-        const existingMember = await db.teammember.findOne({ where: { id: memberData.id } });
 
-        // 如果存在该成员，则删除该成员的信息
-        if (existingMember) {
-          await existingMember.destroy();
+          // 队长信息
+          const existingLeader = await db.teammember.findOne({ where: { id: leader.id } });
+          // 如果存在该队长，则删除其信息
+          if (existingLeader) {
+            await existingLeader.destroy();
+          }
+          // 创建新的队长信息
+          await db.teammember.create(leader);
+
+          // 队伍成员信息
+          await Promise.all(membersData.map(async memberData => {
+            console.log(memberData);
+          // 查询数据库中是否存在该成员
+          const existingMember = await db.teammember.findOne({ where: { id: memberData.id, team_id: id} });
+            console.log("debug:",existingMember);
+          // 如果存在该成员，则删除该成员的信息
+          if (existingMember) {
+            await existingMember.destroy();
+          }
+            // 创建新的成员信息
+            await db.teammember.create(memberData);
+          }));
+
+          await db.team.update(
+            { verification_status: 4 },
+            { where: {id:id} } 
+          );
+          const updateStatus = await db.team.findOne({where:{id:id},attributes: ['verification_status']});
+          return {verification_status:updateStatus};
         }
-
-        // 创建新的成员信息
-        return db.teammember.create(memberData);
-      }));
-
-      return { instructor, members };
+      else{
+        return {error:"the verification_status occur error! "};
+      }
+      
     } catch (error) {
       throw error;
     }
