@@ -13,7 +13,7 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-
+router.get('/getMyTeams', TeamController.getMyTeams);
 router.get('/getRecommend', TeamController.getRecommend);
 router.get('/activsquare/filter', ActivityController.filterActivity);
 router.get('/activsquare/search', ActivityController.searchActivities);

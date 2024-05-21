@@ -150,7 +150,7 @@ class AuthService {
             }
         });
         let isleader = false;
-        if (team.leader_id===loginData.id) {
+        if (team.leader_id==loginData.id) {
             isleader = true;
         }
 
