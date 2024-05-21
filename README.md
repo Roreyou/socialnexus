@@ -15,3 +15,4 @@ only for the SSE Project
 
 npm install ali-oss
 npm install short-uuid
+npm install morgan
