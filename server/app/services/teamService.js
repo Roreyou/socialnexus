@@ -11,6 +11,7 @@ const { raw } = require('body-parser');
 const teamactivity = require('../models/teamactivity');
 const ImageService = require('./imageService');
 const { Op } = require('sequelize');
+const { commentOnPost } = require('./commentService');
 
 
 
@@ -22,6 +23,61 @@ class teamService {
 
   static async createTeam(teamData) {
     return await db.team.create(teamData);
+  }
+
+  static async getMyTeams(id, identity) {
+    db.teammember.belongsTo(db.team, { foreignKey: 'team_id' });
+    //队员
+    if (identity == 0) {
+      const teams = await db.teammember.findAll({
+        where: { id: id },
+        include: [
+          {
+            model: db.team,
+            attributes: ['id', 'team_name', 'avatar']
+          },
+        ],
+        attributes: ['id', 'team_id'], // 在teammember表中指定要返回的字段
+        raw: true
+      });
+
+      if (!teams || teams.length === 0) return null;
+
+      console.log(teams);
+
+      // 使用map方法改变字段名
+      const modifiedTeams = teams.map(team => {
+        return {
+          team_id: team.team_id,
+          team_name: team['schoolteam.team_name'],
+          avatarUrl: team['schoolteam.avatar']
+        };
+      });
+
+      return modifiedTeams;
+    }
+
+    else if (identity == 1) {
+      //指导老师
+      const teams = await db.team.findAll({
+        where: { instructor_id: id }
+      });
+
+      console.log(teams);
+      if (!teams || teams.length === 0) return null;
+
+      // 使用map方法改变字段名
+      const modifiedTeams = teams.map(team => {
+        return {
+          team_id: team.id,
+          team_name: team.team_name,
+          avatarUrl: team.avatar
+        };
+      });
+
+      return modifiedTeams;
+
+    }
   }
 
   static async getTeamById(id) {
@@ -359,7 +415,7 @@ class teamService {
     const fuzzyTeamName = name;
     const teamsFiltered = teams_by_commu
       .filter(team => team.team_name.includes(fuzzyTeamName))
-      // .map(({ tel, ...rest }) => rest); // 去除 tel 字段
+    // .map(({ tel, ...rest }) => rest); // 去除 tel 字段
 
     if (teamsFiltered.length === 0)
       return null;

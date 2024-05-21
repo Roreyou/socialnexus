@@ -95,94 +95,106 @@ class AuthService {
     };
 
     static async registerTeam(registerData) {
-        const team = { ...registerData };
-        delete team.identity;
+        const t = await db.sequelize.transaction();
 
-
-        const user = await db.teammember.findOne({
-            where: {
-                id: team.leader_id // 匹配用户ID
-            }
-        });
-
-        if (!user) {
-            throw new Error('队长不存在');
-        }
-
-        // loginData.pwd是用户输入的密码，user.password是从数据库中获取的哈希密码
-        const passwordMatch = await bcrypt.compare(team.pwd, user.pwd);
-
-
-        if (!passwordMatch) {
-            throw new Error('密码错误');
-        }
-
-
-
-        // 创建 short-uuid 实例
-        const uuid = short();
-        
-        // 自动生成id，生成短UUID
-        const shortId = uuid.new();
-        
-
-        // 加密密码
-        team.pwd = await bcrypt.hash(team.pwd, 10);
-        team.id = shortId;
-
-        let model;
-        model = db.team;
         try {
-            await model.create(team);
-            return model;
+            const team = { ...registerData };
+            delete team.identity;
+
+            // 创建 short-uuid 实例
+            const uuid = short();
+
+            // 自动生成id，生成短UUID
+            const shortId = uuid.new();
+
+            // 加密密码
+            team.pwd = await bcrypt.hash(team.pwd, 10);
+            team.id = shortId;
+            team.verification_status = 1;
+
+            const newTeam = { ...team };
+            delete newTeam.pwd;
+
+            const leader = await db.teammember.create({
+                id: team.leader_id,
+                team_id: team.id,
+                pwd: team.pwd,
+                transaction: t,
+            });
+
+            const createdTeam = await db.team.create(newTeam, { transaction: t });
+
+            await t.commit();
+
+            return createdTeam;
         } catch (error) {
+            if (t) {
+                await t.rollback();
+            }
             throw new Error(error.message);
         }
     }
 
     static loginTeam = async (loginData) => {
-
-        const user = await db.teammember.findOne({
-            where: {
-                id: loginData.id, // 匹配用户ID
-                team_id: loginData.team_id, // 匹配队伍ID
-            }
-        });
-
+        const is_teacher = loginData.is_teacher;
         const team = await db.team.findOne({
             where: {
                 id: loginData.team_id, // 匹配队伍ID
             }
         });
         let isleader = false;
-        if (team.leader_id===loginData.id) {
-            isleader = true;
+        if (is_teacher == 0) {
+            const user = await db.teammember.findOne({
+                where: {
+                    id: loginData.id, // 匹配用户ID
+                    team_id: loginData.team_id, // 匹配队伍ID
+                }
+            });
+
+
+            if (team.leader_id == loginData.id) {
+                isleader = true;
+            }
+
+            if (!user) {
+                throw new Error('用户不存在');
+            }
+
+
+        }
+        else if (is_teacher == 1) {
+            const user = await db.teacher.findOne({
+                where: {
+                    id: loginData.id, // 匹配用户ID
+                }
+            });
+
+            if (!user) {
+                throw new Error('用户不存在');
+            }
+                        // loginData.pwd是用户输入的密码，user.password是从数据库中获取的哈希密码
+                        const passwordMatch = await bcrypt.compare(loginData.pwd, user.pwd);
+
+
+                        if (!passwordMatch) {
+                            throw new Error('密码错误');
+                        }
+            
+                        // 在这里可以生成 JWT 
+                        const token = generateToken(loginData);
+            
+
+                        return {
+                            token: token,
+                            verification_status: team.verification_status,
+                            team_name: team.team_name,
+                            avatar: team.avatar,
+                            isleader: isleader
+                        };
         }
 
-        if (!user) {
-            throw new Error('用户不存在');
-        }
+    }
 
-        // loginData.pwd是用户输入的密码，user.password是从数据库中获取的哈希密码
-        const passwordMatch = await bcrypt.compare(loginData.pwd, user.pwd);
-
-
-        if (!passwordMatch) {
-            throw new Error('密码错误');
-        }
-
-        // 在这里可以生成 JWT 
-        const token = generateToken(loginData);
-
-
-
-        return { token: token,
-            verification_status: team.verification_status,
-            team_name: team.team_name,
-            avatar: team.avatar,
-            isleader: isleader
-         };
-    };
 
 }
 

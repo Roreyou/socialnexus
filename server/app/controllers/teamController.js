@@ -27,6 +27,17 @@ class teamController {
     }
   }
 
+  static async getMyTeams(req, res) {
+    try {
+      const id = req.query.id;
+      const identity=req.query.identity;
+      const teams = await teamService.getMyTeams(id,identity);
+      return res.json(Result.success({team_list:teams}));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
   static async getTeamById(req, res) {
     // console.log('req.query:',req.query);
     const { id } = req.query;
