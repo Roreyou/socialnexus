@@ -6,7 +6,7 @@ const ImageController = require('../controllers/imageController.js');
 const router = express.Router();
 
 
-router.put('/', ImageController.uploadImage);
+router.post('/', ImageController.uploadImage);
 
 
 
