@@ -16,22 +16,25 @@ class ImageService {
             const key = `upload/images/${uuidv4()}.${ext}`; // 构造文件在 OSS 上的路径和文件名
             // console.log('key:', key);
 
-            // 生成上传图片的签名直传 URL
+            // 生成上传图片的签名直传 putURL
             const putSignedUrl = await client.signatureUrl(key, {
                 method: 'PUT',
                 expires: 600, // 设置 URL 的过期时间
             });
 
-            // 生成获取图片的签名直传 URL
-            const getSignedUrl = await client.signatureUrl(key, {
-                method: 'GET',
-                expires: 86400, // 设置 URL 的过期时间
-            });
+            // // 生成获取图片的签名直传 URL
+            // const getSignedUrl = await client.signatureUrl(key, {
+            //     method: 'GET',
+            //     // expires: 0, // 设置 URL 的过期时间
+            // });
             // console.log('putSignedUrl:', putSignedUrl);
             // console.log('getSignedUrl:', getSignedUrl);
+            
+            // 不带签名的永久有效的getURL
+            const getUrl = await ImageService.getUrl(key);
 
 
-            return { key: key, putSignedUrl: putSignedUrl , getSignedUrl: getSignedUrl};
+            return { key: key, putSignedUrl: putSignedUrl, getUrl: getUrl };
         } catch (error) {
             // console.error('Error:', error);
 
@@ -40,22 +43,15 @@ class ImageService {
 
     static async getUrl(key) {
         try {
-            // 生成获取图片的签名直传 URL
-            // console.log('key1:', key);
-            const getSignedUrl = await client.signatureUrl(key, {
-                method: 'GET',
-                expires: 86400, // 设置 URL 的过期时间为1天
-            });
-            // console.log('getSignedUrl:', getSignedUrl);
-
-            return getSignedUrl;
+            // 获取对象的URL，不带签名
+            const bucket='socialnexus' // 替换为你的 OSS Bucket 名称
+            const imageUrl = `https://${bucket}.oss-cn-shenzhen.aliyuncs.com/${key}`;
+            return imageUrl;
         } catch (error) {
-
+            console.error('Error:', error);
+            throw error;
         }
     }
-
-
-
 }
 
 module.exports = ImageService;
