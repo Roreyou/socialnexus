@@ -46,7 +46,7 @@ app.use('/schoolteam', teamRouter);
 app.use('/uploadImage', imageRouter);
 
 // 设置监听端口
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
   console.log(`服务器运行端口： ${PORT}.`);
 });
