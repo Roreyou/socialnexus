@@ -48,8 +48,7 @@ class ActivityService {
       return keyword ? keyword.key_name : ''; // 如果找到了对应的关键词，则返回关键词；否则返回空字符串
     }));
 
-    //key转化为url
-    activity.picture = await imageService.getUrl(activity.picture);
+
 
     const formattedInfo = {
       ...activity,
@@ -134,8 +133,7 @@ class ActivityService {
 
     // 处理活动关键词
     activitiesToReturn = await Promise.all(activities.map(async activity => {
-      //key转化为url
-      activity.picture = await imageService.getUrl(activity.picture);
+
       // 切分关键词
       const keywordsIds = (activity.keywords_id || '').split(',');
       // 查询关键词并映射为关键词名称
@@ -193,8 +191,7 @@ class ActivityService {
 
     // 处理活动关键词
     activitiesToReturn = await Promise.all(activities.map(async activity => {
-      //key转化为url
-      activity.picture = await imageService.getUrl(activity.picture);
+
       // 切分关键词
       const keywordsIds = (activity.keywords_id || '').split(',');
       // 查询关键词并映射为关键词名称
