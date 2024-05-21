@@ -54,7 +54,7 @@
 		methods: {
 			getAllUnreviewed(){
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/teams',
+					url: this.$url.BASE_URL + '/school/teams',
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
                 	header:{
 						Authorization:uni.getStorageSync("token")
@@ -96,7 +96,7 @@
 			handlePass(item){
 				console.log("审核：通过");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -145,7 +145,7 @@
 			handleReject(item){
 				console.log("审核：驳回");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	

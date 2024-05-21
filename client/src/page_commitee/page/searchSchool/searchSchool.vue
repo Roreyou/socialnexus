@@ -123,7 +123,7 @@
         },
         searchByTeam(){
 				  uni.request({
-				  	url: this.$url.BASE_URL + '/4142061-0-default/school/queryTeamByName',
+				  	url: this.$url.BASE_URL + '/school/queryTeamByName',
 				  	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
                   	header:{
 				  		Authorization:uni.getStorageSync("token")
@@ -160,7 +160,7 @@
 			  },
         searchByActiv(){
 				  uni.request({
-				  	url: this.$url.BASE_URL + '/4142061-0-default/school/queryTeamByAct',
+				  	url: this.$url.BASE_URL + '/school/queryTeamByAct',
 				  	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
                   	header:{
 				  		Authorization:uni.getStorageSync("token")

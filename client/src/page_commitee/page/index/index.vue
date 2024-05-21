@@ -80,7 +80,15 @@
 			<text class="cuIcon-titles text-green"></text>
 			<text class="roseTitle text-bold">活动类型比例分析</text>
 		</view>
-		<rose :chartData="activityChartData"></rose>
+		<!-- <rose :chartData="activityChartData"></rose> -->
+		<view class="charts-box">
+      		<qiun-data-charts 
+      		  type="rose"
+      		  :opts="opts"
+      		  :chartData="activityChartData"
+      		  background="rgba(255,255,255,0)"
+      		/>
+    	</view>
 	</view>
 
 
@@ -236,7 +244,7 @@
     		          position: "right",
     		          lineHeight: 25,
     		          float: "center",
-    		          padding: 4,
+    		          padding: 2,
     		          margin: 0,
     		          backgroundColor: "rgba(0,0,0,0)",
     		          borderColor: "rgba(0,0,0,0)",
@@ -253,7 +261,7 @@
     		            activeOpacity: 0.5,
     		            activeRadius: 10,
     		            offsetAngle: 0,
-    		            labelWidth: 1,
+    		            labelWidth: 0.00000000000000000000000000000001,
     		            border: true,
     		            borderWidth: 2,
     		            borderColor: "#FFFFFF",
@@ -334,7 +342,8 @@
 			getChartData(){
 				// 同时请求数据
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_team',
+					// url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_team',
+					url: this.$url.BASE_URL + '/school/datawall_team',
                 	header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -357,7 +366,8 @@
 
 				// 活动类型
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_act',
+					// url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_act',
+					url: this.$url.BASE_URL + '/school/datawall_act',
                 	header:{
 						Authorization:uni.getStorageSync("token")
 					},	
