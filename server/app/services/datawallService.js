@@ -1,5 +1,6 @@
 //services/datawallService.js
 const db = require('../models/index');
+const sequelize = require('sequelize');
 
 class DatawallService {
     static async getActivityTypeCounts() {
@@ -34,28 +35,28 @@ class DatawallService {
       
         return result;
     }
-    static async  getMajorTypeCounts() {
-        const majorCounts = await db.teammember.count({
-          attributes: ['major'],
-          group: ['major'],
-          raw: true
-        });
-      
-        // 对专业数量进行排序
-        const sortedMajorCounts = majorCounts.sort((a, b) => b.count - a.count);
-      
-        // 获取前四种专业和其他专业的数量总和
-        const topFour = sortedMajorCounts.slice(0, 4);
-        const otherCount = sortedMajorCounts.slice(4).reduce((sum, major) => sum + major.count, 0);
-      
-        // 构建返回结果数组
-        const result = topFour.map(major => ({ name: major.major, value: major.count }));
-        if (otherCount > 0) {
-          result.push({ name: '其他', value: otherCount });
-        }
-      
-        return result;
+static async getMajorTypeCounts() {
+    const majorCounts = await db.teammember.findAll({
+        attributes: ['major', [sequelize.fn('COUNT', 'major'), 'count']],
+        group: ['major'],
+        raw: true
+    });
+
+    // 对专业数量进行排序
+    const sortedMajorCounts = majorCounts.sort((a, b) => b.count - a.count);
+
+    // 获取前四种专业和其他专业的数量总和
+    const topFour = sortedMajorCounts.slice(0, 4);
+    const otherCount = sortedMajorCounts.slice(4).reduce((sum, major) => sum + parseInt(major.count), 0);
+
+    // 构建返回结果数组
+    const result = topFour.map(major => ({ name: major.major, value: major.count }));
+    if (otherCount > 0) {
+        result.push({ name: '其他', value: otherCount });
     }
+
+    return result;
+}
 
 }
 
