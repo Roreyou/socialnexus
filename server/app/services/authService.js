@@ -175,7 +175,6 @@ class AuthService {
         const token = generateToken(loginData);
 
 
-        team.avatar=await imageService.getUrl(team.avatar);
 
         return { token: token,
             verification_status: team.verification_status,

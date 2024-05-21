@@ -59,7 +59,7 @@ class teamService {
 
     });
 
-    team.avatar = await ImageService.getUrl(team.avatar)
+
     const school = await db.school.findOne({ where: { id: team.school_id } });
     const schoolName = school ? school.name : null;
     const formattedTeamInfo = {
@@ -131,7 +131,6 @@ class teamService {
 
     // 根据 status 设置不同的状态值
     teamsToReturn = await Promise.all(teams.map(async team => {
-      team.avatar = await ImageService.getUrl(team.avatar)
       const school = await db.school.findOne({ where: { id: team.school_id } });
       const schoolName = school ? school.name : null;
       return {
@@ -251,7 +250,6 @@ class teamService {
     teamsToReturn = await Promise.all(teams.map(async team => {
       const school = await db.school.findOne({ where: { id: team.school_id } });
       const schoolName = school ? school.name : null;
-      team.avatar = await ImageService.getUrl(team.avatar)
       return {
         ...team,
         veri_status: team.verification_status == 4 ? '未审核' : '已审核',
@@ -333,7 +331,6 @@ class teamService {
     // console.log(teamActivities)
     const teamsToReturn = await Promise.all(teamActivities.map(async team => {
       // 获取学校名称
-      team.avatar = await ImageService.getUrl(team.avatar)
       const school = await db.school.findOne({ where: { id: team['schoolteam.school_id'] } });
       const schoolName = school ? school.name : null;
 
@@ -454,7 +451,6 @@ class teamService {
     // }));
     const teamsToReturn = await Promise.all(teams.map(async team => {
 
-      team.avatar = await ImageService.getUrl(team.avatar)
       return {
         ...team,
         veri_status: team.verification_status === 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status

@@ -7,7 +7,6 @@ class CommunityService{
     static async getCommunityById(id) {
         let community= await db.community.findByPk(id);
         if(community){
-            community.avatar=await ImageService.getUrl(community.avatar);
             return community;
         }else{
             return null;
