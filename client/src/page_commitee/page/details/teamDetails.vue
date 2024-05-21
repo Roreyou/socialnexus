@@ -142,6 +142,7 @@
 
     <view class="button-container" v-if="team_info.verification_status === 4">
       <button class="status-label passed" @click="handlePass()">通过</button>
+	  <view style="width:20rpx;"></view>
       <button class="status-label rejected" @click="handleReject()" >驳回</button>
     </view>
     <view class="done-container passed" v-else-if="team_info.verification_status === 2">
@@ -460,16 +461,15 @@ margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
   background-color: red;
 }
 .button-container {
-    display: flex;
-    justify-content: center;
+	display: flex;
+    justify-content: space-between;
     align-items: center;
     position: fixed;
     bottom: 0;
-    left: 46rpx;
     height: 130rpx;
-    margin-top: 20rpx;
-	width: inherit;
-	background-color: white;
+    width: inherit;
+    background-color: white;
+    padding: 0 20rpx;
 }
 .status-label {
   display: inline-block;
@@ -478,7 +478,7 @@ margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
   color: #fff;
   font-size: 32rpx;
   font-weight: bold;
-  margin-right: 16rpx;
+  width: 50%;
 }
 .done-container{
 	display: flex;
@@ -488,7 +488,6 @@ margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
   	bottom: 0;
   	left: 0;
 	width: inherit;
-	background-color: white;
 }
 .status{
 	color: #fff;

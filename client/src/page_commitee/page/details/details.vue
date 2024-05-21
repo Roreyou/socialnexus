@@ -172,8 +172,9 @@
 
 			<!-- <bttab v-if="hasactiid" :team_id="user_id" :acti_id="acti_id"></bttab> -->
       <view class="button-container" v-if="detail.verification_status === 1">
-        <button class="status-label passed" @click="handlePass()">通过</button>
-        <button class="status-label rejected" @click="handleReject()" >驳回</button>
+        	<button class="status-label passed" @click="handlePass()">通过</button>
+			<view style="width:20rpx;"></view>
+        	<button class="status-label rejected" @click="handleReject()" >驳回</button>
       </view>
       <view class="done-container passed" v-else-if="detail.verification_status === 2">
         <text class="status "  >已通过</text>
@@ -462,15 +463,15 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
   background-color: red;
 }
 .button-container {
-    display: flex;
-    justify-content: center;
+	display: flex;
+    justify-content: space-between;
     align-items: center;
     position: fixed;
     bottom: 0;
-    left: -14rpx;
     height: 130rpx;
-	width: inherit;
-	background-color: white;
+    width: inherit;
+    background-color: white;
+    padding: 0 20rpx;
 }
 .status-label {
   display: inline-block;
@@ -479,7 +480,8 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
   color: #fff;
   font-size: 32rpx;
   font-weight: bold;
-  margin-right: 16rpx;
+  /* margin-right: 16rpx; */
+  width: 50%;
 }
 .done-container{
 	display: flex;
