@@ -48,10 +48,10 @@ router.post('/pyq/likeCom', postController.likeCom);
 router.post('/pyq/likereply', postController.likeReply);
 router.post('/pyq/reply', postController.Reply);
 router.post('/pyq/delcomment', postController.delcomment);
-router.post('/pyq/createpost/uploadpics', upload.single('image'), postController.savePostImg);
 router.post('/pyq/delnotice', postController.delNotice);
 router.post('/modifyinfo', TeamController.modifyInfo);
 router.post('/modifypwd', TeamController.modifyPwd);
+router.post('/uploadImage', upload.single('image'), postController.savePostImg);
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 

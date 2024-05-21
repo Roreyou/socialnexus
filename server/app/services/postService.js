@@ -1,6 +1,5 @@
 // services/postService.js
 const db = require('../models/index');
-const axios = require('axios');
 
 const replyService = require('./replyService');
 const commentService = require('./commentService');
@@ -596,26 +595,6 @@ class postService{
             });
 
             return deletedComment;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    //准备弃用：换成imageService里的saveImg(image)
-    static async savePostImg(image){
-        try {
-            //const imageUrl = `/${folderName}/${image.filename}`;
-            //console.log("debug path:", imageUrl);
-            console.log("debug image.originalname:", image.originalname);
-          
-            //获取putSignedUrl
-            const filename = image.originalname;
-            const {putSignedUrl} = await imageService.upload(filename);
-
-            //将image存储到云服务器
-            const result = await client.put('path/in/oss/your-image.png', fileContent);
-
-            return image.originalname;
         } catch (error) {
             throw error;
         }
