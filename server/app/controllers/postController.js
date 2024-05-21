@@ -3,6 +3,7 @@
 const postService = require('../services/postService');
 const commentService = require('../services/commentService');
 const Result = require('../common/Result');
+const ImageService = require('../services/imageService');
 
 
 class postController{
@@ -176,7 +177,7 @@ class postController{
             // 在这里获取上传的图片
             const image = req.file;
             console.log(image);
-            const imageUrl = await postService.savePostImg(image);
+            const imageUrl = await ImageService.saveImg(image);
     
             return res.json(Result.success(imageUrl));
         } catch (error) {

@@ -1,4 +1,6 @@
 const OSS = require('ali-oss');
+const { default: axios } = require("axios");
+const fetch = require('node-fetch');
 const { v4: uuidv4 } = require('uuid');
 // 初始化阿里云 OSS 客户端
 const client = new OSS({
@@ -52,6 +54,45 @@ class ImageService {
             throw error;
         }
     }
+
+    static async saveImg(image){
+        try{
+            console.log("debug image.originalname:",image.originalname)
+            //获取putsignedurl
+            const filename = image.originalname;
+            const {putSignedUrl: putSignedUrl, getUrl: getUrl } = await ImageService.upload(filename);
+            
+            //用签名URL上传文件。
+/*            await axios({
+                url: putSignedUrl,
+                method: "PUT",
+                data: image.buffer
+              })
+                .then((r) => console.log(r))
+                .catch((e) => console.log(e));
+*/
+
+            //console.log(image.buffer);
+            const response = await fetch(putSignedUrl, {
+                method: 'PUT',
+                body: image.buffer
+            });
+
+            if (response.ok) {
+                console.log('File uploaded successfully!');
+            } else {
+                console.error('Failed to upload file:', response.statusText);
+            }
+
+            return getUrl;
+
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+
+
 }
 
 module.exports = ImageService;
