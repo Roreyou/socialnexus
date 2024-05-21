@@ -142,13 +142,14 @@
 
     <view class="button-container" v-if="team_info.verification_status === 4">
       <button class="status-label passed" @click="handlePass()">通过</button>
-      <button class="status-label rejected bg-grey" @click="handleReject()" >驳回</button>
+	  <view style="width:20rpx;"></view>
+      <button class="status-label rejected" @click="handleReject()" >驳回</button>
     </view>
-    <view class="button-container" v-else-if="team_info.verification_status === 2">
-      <button class="status-label passed"  >已通过</button>
+    <view class="done-container passed" v-else-if="team_info.verification_status === 2">
+      <text class="status"  >已通过</text>
     </view>
-    <view class="button-container" v-else-if="team_info.verification_status === 3">
-      <button class="status-label rejected">已驳回</button>
+    <view class="done-container rejected" v-else-if="team_info.verification_status === 3">
+      <text class="status">已驳回</text>
     </view>
   </view>
 
@@ -183,8 +184,10 @@
 		},
 		mounted() {
       		console.log("发出请求");
+			  console.log("id",this.team_id);
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/school/teamInfo',
+				// url: this.$url.BASE_URL + '/4142061-0-default/school/teamInfo',
+				url: this.$url.BASE_URL + '/school/teamInfo',
 				header:{
 						Authorization:uni.getStorageSync("token")
 					},
@@ -216,6 +219,10 @@
 					}
 				})
     	},
+		onLoad(options) {
+			const team_id = options.team_id;
+			this.team_id = team_id;
+		},
 		methods:{
 			phoneOn() {
 				wx.makePhoneCall({
@@ -232,7 +239,8 @@
 			handlePass(){
 				console.log("审核：通过");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					// url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -281,7 +289,8 @@
 			handleReject(){
 				console.log("审核：驳回");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					// url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -331,135 +340,117 @@
 </script>
  
 <style>
-	page {
-		background: #f8f8f8;
-		padding-bottom: 160rpx;
-	}
- 
-	.container {
-		width: 100%;
-		height: 100%;
-		margin: 0 auto;
-	}
+.page {
+	background: #f8f8f8;
+	padding-bottom: 160rpx;
+}
 
-	.part{
-		padding-left: 25rpx;
-		padding-right: 25rpx;
-	}
+.container {
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+}
+.part{
+	padding-left: 25rpx;
+	padding-right: 25rpx;
+}
+.de_total_title {
+	font-size: 42rpx;
+	font-weight: 900;
+	color: #333333;
+	margin-top: 30rpx;
+	margin-bottom: 20rpx;
+}
+.sub_title{
+	font-size: 36rpx;
+	font-weight: 600;
+	display: inline-block;
+}
+.de_key_value{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin-bottom: 20rpx;
+	color: gray;
+	line-height: 20rpx;
+}
+.de_content{
+	display: flex;
+	line-height: 60rpx;
+   	font-size: larger;
+	/* justify-content: space-between;  */
+}
+.keywords{
+	display: inline-block; 
+  	margin-right: 10px; /* 可根据需求调整按钮之间的间距 */
+	margin-bottom: 10px;
+	padding: 0 8px; /* 调整内边距来控制块的大小 */
+}
 
-	.de_total_title {
-		font-size: 42rpx;
-		font-weight: 900;
-		color: #333333;
-		margin-top: 30rpx;
-		margin-bottom: 20rpx;
-	}
+/* 灰线 */
+.custom-container {
+text-align: center; /* 可根据需要调整水平对齐方式 */
+margin: 0 25rpx;
+}
+.horizontal-line {
+border: none; /* 移除默认的边框样式 */
+border-top: 2rpx solid #ccc; /* 设置上边框为 1px 灰色实线 */
+width: 100%; /* 设置水平线的宽度为容器的宽度 */
+}
+.key{
+	display: inline-block;
+	width: 600rpx;
+}
+.value{
+	display: inline-block;
+	/* margin-left: 30rpx; */
+	color: black;
+	/* flex-grow: 1; */
+	padding-right: 25rpx;
+	width: 1200rpx;
+}
+/* 活动简介的样式，比较特殊 */
+.last-key{   
+	display: inline-block;
+	width: 600rpx;
+}
+/* 队员列表 */
+.content {
+  display: flex;
+  flex-direction: column;
+}
 
-	.sub_title{
-		font-size: 36rpx;
-		font-weight: 600;
-		display: inline-block;
-	}
-
-	.de_key_value{
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		margin-bottom: 20rpx;
-		color: gray;
-		line-height: 20rpx;
-	}
-	.de_content{
-		display: flex;
-		line-height: 60rpx;
-    	font-size: larger;
-		/* justify-content: space-between;  */
-	}
-	.keywords{
-		display: inline-block; 
-  		margin-right: 10px; /* 可根据需求调整按钮之间的间距 */
-		margin-bottom: 10px;
-		padding: 0 8px; /* 调整内边距来控制块的大小 */
-	}
-	
-	/* 灰线 */
-	.custom-container {
-	text-align: center; /* 可根据需要调整水平对齐方式 */
-	margin: 0 25rpx;
-	}
-
-	.horizontal-line {
-	border: none; /* 移除默认的边框样式 */
-	border-top: 2rpx solid #ccc; /* 设置上边框为 1px 灰色实线 */
-	width: 100%; /* 设置水平线的宽度为容器的宽度 */
-	}
-
-	.key{
-		display: inline-block;
-		width: 600rpx;
-	}
-	.value{
-		display: inline-block;
-		/* margin-left: 30rpx; */
-		color: black;
-		/* flex-grow: 1; */
-		padding-right: 25rpx;
-		width: 1200rpx;
-	}
-
-	/* 活动简介的样式，比较特殊 */
-	.last-key{   
-		display: inline-block;
-		width: 600rpx;
-	}
-
-	/* 队员列表 */
-	.content {
-	  display: flex;
-	  flex-direction: column;
-	}
-
-	.cu-item{
-	margin: 0;
-	margin-top: 10rpx;
-	background-color: #ffffff;
+.cu-item{
+  margin: 0;
+  margin-top: 10rpx;
+  background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
-	}
-
-	.cu-bar .action:first-child{
+}
+.cu-bar .action:first-child{
 	margin-left: 24rpx;
-	}
+}
 
-	/* tag */
-	.wordcont{
-	margin-top: 10rpx;
-	}
-	.wordcont .ackeywords {
-		display: inline-block;
-	margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
-	}
-
-	/*修改入口*/
-	.margin-left-sm{
-		margin-left: auto;
-	}
-	.cu-btn{
-		border-radius: 10px;
-    	background-color: rgb(43 41 41 / 30%);
-    	backdrop-filter: blur(10px);
-	}
-	.modify{
-		display: inline-block;
-		margin-left: 300rpx;
-	}
-  .status-label {
-  display: inline-block;
-  padding: 4px 8px;
-  color: #fff;
-  font-size: 36rpx;
-  font-weight: bold;
-  width: 320rpx;
+/* tag */
+.wordcont{
+margin-top: 10rpx;
+}
+.wordcont .ackeywords {
+	display: inline-block;
+margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
+}
+/*修改入口*/
+.margin-left-sm{
+	margin-left: auto;
+}
+.cu-btn{
+	border-radius: 10px;
+   	background-color: rgb(43 41 41 / 30%);
+   	backdrop-filter: blur(10px);
+}
+.modify{
+	display: inline-block;
+	margin-left: 300rpx;
 }
 
 .passed {
@@ -470,14 +461,15 @@
   background-color: red;
 }
 .button-container {
-    display: flex;
-    justify-content: center;
+	display: flex;
+    justify-content: space-between;
     align-items: center;
     position: fixed;
     bottom: 0;
-    left: 46rpx;
     height: 130rpx;
-    margin-top: 20rpx;
+    width: inherit;
+    background-color: white;
+    padding: 0 20rpx;
 }
 .status-label {
   display: inline-block;
@@ -486,6 +478,22 @@
   color: #fff;
   font-size: 32rpx;
   font-weight: bold;
-  margin-right: 16rpx;
+  width: 50%;
+}
+.done-container{
+	display: flex;
+  	flex-direction: column;
+  	justify-content: center;
+  	position: fixed;
+  	bottom: 0;
+  	left: 0;
+	width: inherit;
+}
+.status{
+	color: #fff;
+    font-size: 34rpx;
+    font-weight: bold;
+    height: 50rpx;
+    margin: 20rpx auto;
 }
 </style>

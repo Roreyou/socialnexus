@@ -1,11 +1,10 @@
 // services/postService.js
 const db = require('../models/index');
-const fs = require('fs/promises');
-const path = require('path');
+const axios = require('axios');
 
 const replyService = require('./replyService');
 const commentService = require('./commentService');
-const activityService = require('./activityService');
+const imageService = require('./imageService');
 const teamService = require('./teamService');
 const otherService = require('./otherService');
 
@@ -602,16 +601,21 @@ class postService{
         }
     }
 
-    static async savePostImg(image, folderName){
+    //准备弃用：换成imageService里的saveImg(image)
+    static async savePostImg(image){
         try {
-            const imagePath = path.join(__dirname, folderName);
-            const imageUrl = `/${folderName}/${image.filename}`;
+            //const imageUrl = `/${folderName}/${image.filename}`;
+            //console.log("debug path:", imageUrl);
+            console.log("debug image.originalname:", image.originalname);
+          
+            //获取putSignedUrl
+            const filename = image.originalname;
+            const {putSignedUrl} = await imageService.upload(filename);
 
-            console.log("debug path:", imageUrl);
-            // 将上传的图片保存到本地文件系统
-            await fs.writeFile(imagePath, image.originalname);
-            
-            return imageUrl;
+            //将image存储到云服务器
+            const result = await client.put('path/in/oss/your-image.png', fileContent);
+
+            return image.originalname;
         } catch (error) {
             throw error;
         }
