@@ -5,13 +5,9 @@ const TeamController = require('../controllers/teamController.js');
 const ActivityController = require('../controllers/activityController.js');
 const PostController = require('../controllers/postController.js');
 const postController = require('../controllers/postController.js');
-const multer = require('multer');
 const router = express.Router();
 
-// 使用内存临时存储传的图片
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 
 router.get('/getRecommend', TeamController.getRecommend);
@@ -51,7 +47,6 @@ router.post('/pyq/delcomment', postController.delcomment);
 router.post('/pyq/delnotice', postController.delNotice);
 router.post('/modifyinfo', TeamController.modifyInfo);
 router.post('/modifypwd', TeamController.modifyPwd);
-router.post('/uploadImage', upload.single('image'), postController.savePostImg);
 
 router.delete('/cancelRegisterEvent', TeamController.cancelRegisterEvent);
 
