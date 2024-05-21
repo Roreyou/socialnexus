@@ -54,7 +54,30 @@ class ImageService {
         }
     }
 
+    static async saveImg(image){
+        //输入是图片文件，返回是该文件的getUrl
+        try {
+            console.log("debug image.originalname:", image.originalname);
+            //获取putSignedUrl
+            const filename = image.originalname;
+            const {putSignedUrl: putSignedUrl , getSignedUrl: getSignedUrl} = await ImageService.upload(filename);
 
+            // 使用签名URL上传文件。
+            axios({
+                putSignedUrl,
+                method: "PUT",
+                data: image,
+            })
+                .then((r) => console.log(r))
+                .catch((e) => console.log(e));
+
+            // 返回获取图片的url
+            return getSignedUrl;
+
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
 

@@ -6,9 +6,12 @@ const ActivityController = require('../controllers/activityController.js');
 const PostController = require('../controllers/postController.js');
 const postController = require('../controllers/postController.js');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-
 const router = express.Router();
+
+// 使用内存临时存储传的图片
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 
 router.get('/getRecommend', TeamController.getRecommend);
