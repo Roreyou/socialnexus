@@ -23,6 +23,12 @@ class ImageService {
                 method: 'PUT',
                 expires: 600, // 设置 URL 的过期时间
             });
+            
+            /*const putSignedUrl = await client.signatureUrl(key,
+            {
+                method: "PUT",
+                "Content-Type": "application/x-www-form-urlencoded",
+              });*/
 
             // // 生成获取图片的签名直传 URL
             // const getSignedUrl = await client.signatureUrl(key, {
@@ -56,23 +62,25 @@ class ImageService {
     }
 
     static async saveImg(image){
+        console.log("debug image:",image)
         try{
             console.log("debug image.originalname:",image.originalname)
             //获取putsignedurl
             const filename = image.originalname;
-            const {putSignedUrl: putSignedUrl, getUrl: getUrl } = await ImageService.upload(filename);
+            const {key, putSignedUrl: putSignedUrl, getUrl: getUrl } = await ImageService.upload(filename);
             
             //用签名URL上传文件。
-/*            await axios({
+ /*         const axiosRes = await axios({
                 url: putSignedUrl,
                 method: "PUT",
-                data: image.buffer
+                data: image.buffer,
               })
                 .then((r) => console.log(r))
-                .catch((e) => console.log(e));
+                .catch((e) => console.log("debug axios error",e));
+            
+            console.log('debug axiosRes:', axiosRes);
 */
 
-            //console.log(image.buffer);
             const response = await fetch(putSignedUrl, {
                 method: 'PUT',
                 body: image.buffer
