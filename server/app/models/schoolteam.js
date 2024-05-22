@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('schoolteam', {
     id: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(45),
       allowNull: false,
       primaryKey: true
     },
