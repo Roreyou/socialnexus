@@ -105,7 +105,7 @@ class  otherService{
     }
 
     static async getPageData(pageNumber, list) {
-        const pageSize = 10; // 假设每页有 10 条数据
+        const pageSize = 1; // 假设每页有 10 条数据
     
         if (pageNumber == 0) {
           // 如果页数等于 0，则表示第一部分，返回第一部分的数据

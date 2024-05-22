@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const sequelize = require('sequelize');
 const ActivityService = require('./activityService');
 const CommunityService = require('./communityService');
+const otherService = require('./otherService');
 const post = require('../models/post');
 const activity = require('../models/activity');
 const teammember = require('../models/teammember');

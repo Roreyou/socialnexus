@@ -171,10 +171,11 @@ class AuthService {
             const token = generateToken(loginData);
 
 
-            return {
+            return {                
                 token: token,
                 verification_status: team.verification_status,
                 team_name: team.team_name,
+                team_id: team.id,
                 avatar: team.avatar,
                 isleader: isleader
             };
@@ -206,6 +207,7 @@ class AuthService {
                 token: token,
                 verification_status: team.verification_status,
                 team_name: team.team_name,
+                team_id: team.id,
                 avatar: team.avatar,
                 isleader: isleader
             };

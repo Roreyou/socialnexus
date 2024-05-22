@@ -75,7 +75,7 @@ class postController{
             const posts = await postService.getLatestPosts(page);
             
             // 返回帖子列表
-            return res.json(Result.success(posts));
+            return res.json(Result.success({post_list:posts}));
         } catch (error) {
             console.error('Error fetching latest posts:', error);
             return res.json(Result.fail(error.message));
