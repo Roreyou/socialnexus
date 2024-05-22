@@ -85,7 +85,7 @@
 				success: res => {
 					if(res.data.code==200){
 						this.acList = res.data.data.acti_list;
-					this.acList[0].keywords = "服务,实践"
+					// this.acList[0].keywords = "服务,实践"
 					this.net_error = false;
 					}else if(res.data.code == 401){
 										console.log("token过期");

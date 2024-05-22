@@ -105,7 +105,7 @@
 		},
 
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id'])
+			...mapState(['hasLogin', 'forcedLogin','user_id', 'userInfo'])
 		},
 
 		onReachBottom() {
@@ -139,6 +139,8 @@
 								team_id: this.user_id,  
 								content: this.comModal.comInfo,
 								picture: this.comModal.submitImgs,
+								provice: this.userInfo.provice,
+								city: this.userInfo.city
 							},
 							success: res => {
 								if(res.data.code==200){

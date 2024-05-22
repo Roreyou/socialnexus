@@ -26,8 +26,8 @@
 					<block v-if="leng > 0">
 						<!-- 单张 -->
 						<block v-if="leng == 1">
-							<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
-								v-for="(img,index1) in dyInfo.picture" class="img1" mode="aspectFill" :key="index1">
+							<image class="iconLevel img1" @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
+								v-for="(img,index1) in dyInfo.picture" mode="aspectFill" :key="index1">
 							</image>
 						</block>
 						<!-- 2张 -->
@@ -112,6 +112,9 @@
 					paddingTop: "0",
 					marginTop: "20rpx",
 				},
+				dyInfo:{
+					picture:['']
+				}
 			};
 		},
 		onReady() {

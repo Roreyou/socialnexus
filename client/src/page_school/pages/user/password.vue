@@ -62,6 +62,7 @@
 					this.error_flag = true;
 					return
 				}
+				console.log("this.userInfo.identity:", this.userInfo.identity)
 				uni.request({
 						url: this.$url.BASE_URL + '/schoolteam/modifypwd',
 						header:{
@@ -69,7 +70,7 @@
 						},
 						method: 'POST',
 						data: {
-							person_id: this.userInfo.person_id,
+							user_id: this.userInfo.person_id,
 							identity: this.userInfo.identity,
 							old_pwd:  this.curpassword,
 							new_pwd:  this.newpassword1,

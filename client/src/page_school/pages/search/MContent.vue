@@ -195,7 +195,7 @@ export default {
 							return
 						}
 						this.acList = this.acList.concat(res.data.data.myactiv_list)
-						this.acList[0].keywords = "服务,实践"
+						// this.acList[0].keywords = "服务,实践"
 						// console.log(this.acList)
 						this.net_error = false;
 					}else if(res.data.code == 401){
