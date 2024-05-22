@@ -159,7 +159,25 @@ class AuthService {
             if (!user) {
                 throw new Error('用户不存在');
             }
+            // loginData.pwd是用户输入的密码，user.password是从数据库中获取的哈希密码
+            const passwordMatch = await bcrypt.compare(loginData.pwd, user.pwd);
 
+
+            if (!passwordMatch) {
+                throw new Error('密码错误');
+            }
+
+            // 在这里可以生成 JWT 
+            const token = generateToken(loginData);
+
+
+            return {
+                token: token,
+                verification_status: team.verification_status,
+                team_name: team.team_name,
+                avatar: team.avatar,
+                isleader: isleader
+            };
 
         }
         else if (is_teacher == 1) {
@@ -172,25 +190,25 @@ class AuthService {
             if (!user) {
                 throw new Error('用户不存在');
             }
-                        // loginData.pwd是用户输入的密码，user.password是从数据库中获取的哈希密码
-                        const passwordMatch = await bcrypt.compare(loginData.pwd, user.pwd);
+            // loginData.pwd是用户输入的密码，user.password是从数据库中获取的哈希密码
+            const passwordMatch = await bcrypt.compare(loginData.pwd, user.pwd);
 
 
-                        if (!passwordMatch) {
-                            throw new Error('密码错误');
-                        }
-            
-                        // 在这里可以生成 JWT 
-                        const token = generateToken(loginData);
-            
+            if (!passwordMatch) {
+                throw new Error('密码错误');
+            }
 
-                        return {
-                            token: token,
-                            verification_status: team.verification_status,
-                            team_name: team.team_name,
-                            avatar: team.avatar,
-                            isleader: isleader
-                        };
+            // 在这里可以生成 JWT 
+            const token = generateToken(loginData);
+
+
+            return {
+                token: token,
+                verification_status: team.verification_status,
+                team_name: team.team_name,
+                avatar: team.avatar,
+                isleader: isleader
+            };
         }
 
     }
