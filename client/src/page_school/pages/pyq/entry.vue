@@ -96,7 +96,7 @@
 
 				//上传路径？
 				// action: 'http://127.0.0.1:4523/m1/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
-				action: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
+				action: this.$url.BASE_URL + '/4142061-0-default/uploadImage',
 				//应该是后端返回的图片路径列表？
 				filesArr: [],
 				notice_num: '' //通知数量
