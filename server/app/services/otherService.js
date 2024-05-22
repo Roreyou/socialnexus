@@ -3,11 +3,15 @@ const db = require('../models/index');
 const Op = require('sequelize');
 
 class  otherService{
-    static async getCurrentTime(){
+    static async getCurrentTime() {
         const currentTime = new Date();
-        const formattedTime = currentTime.toISOString();
+        const year = currentTime.getFullYear();
+        const month = String(currentTime.getMonth() + 1).padStart(2, '0'); // getMonth() returns 0-based month
+        const day = String(currentTime.getDate()).padStart(2, '0');
+        const formattedTime = `${year}/${month}/${day}`;
         return formattedTime;
     }
+    
 
     static async IdInt2String(IdName, event){
          // 检查事件对象是否存在
@@ -105,7 +109,7 @@ class  otherService{
     }
 
     static async getPageData(pageNumber, list) {
-        const pageSize = 1; // 假设每页有 10 条数据
+        const pageSize = 2; // 假设每页有 10 条数据
     
         if (pageNumber == 0) {
           // 如果页数等于 0，则表示第一部分，返回第一部分的数据

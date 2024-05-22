@@ -198,10 +198,10 @@ class teamController {
       const { id, status, instructor, leader,members } = req.body;
   
       // 保存指导老师和队伍成员的信息到数据库
-      const { instructor: savedInstructor, members: savedMembers } = await teamService.saveInstructOrMembers(id, status,instructor,leader, members);
+      const {verification_status:updateStatus} = await teamService.saveInstructOrMembers(id, status,instructor,leader, members);
   
       // 返回响应告诉前端该信息正在被团委审核
-      return res.json(Result.success({status: 3}));
+      return res.json(Result.success({verification_status:updateStatus}));
     } catch (error) {
       console.error(error);
       return res.json(Result.fail(error));
