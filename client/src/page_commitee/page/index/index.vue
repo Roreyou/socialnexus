@@ -177,8 +177,8 @@
 					'行万里路，知中国情',
 				],
 				navList:[
-				   {name:"高校队伍",src:"https://bpic.588ku.com/element_origin_min_pic/19/04/09/0a8d87aefebd3ae13f63d01348d6cd29.jpg",type:"1"},
-				   {name:"社区需求",src:"https://img.tukuppt.com/png_preview/00/10/08/SSXIUHKBqJ.jpg!/fw/780",type:"2"},
+				   {name:"高校队伍",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/111.png",type:"1"},
+				   {name:"社区需求",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/222.png",type:"2"},
 				],
 				loadStatus: 'loadmore',
 				flowList: [],

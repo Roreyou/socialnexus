@@ -62,7 +62,7 @@
 				<!-- 返回 -->
 				<view class="back-button" @tap="back"></view>
 			</view>
-			<!-- 2.2 -->
+			<!-- 2.2 选择登入队伍-->
 			<view v-else-if="step === 2.2">
     			<view  class="team-box"  :class="selectedTeam == item.team_id ? 'selected' : 'team-box'" v-for="item in teamList" :key="item.team_id" @click="selectTeam(item.team_id)">
 					<img class="avatar" :src="item.avatarUrl" alt="Avatar">
@@ -139,18 +139,12 @@
 					},
 				],
 
-				index1: 0,
-
-				providerList: [],
-				hasProvider: false,
 				account: '', // 团委/社区的账号，高校队伍成员的个人id
 				password: '',
 				member_iden: null,// 0为队员/队长，1为指导老师
-				positionTop: 0,
-				isDevtools: false,
 				teamList:[
 
-				],
+					],
 				selectedTeam: '',
 				chooseTeam: false,
 				selectedRole: null,
@@ -163,12 +157,6 @@
 		},
 		methods: {
 			...mapMutations(['login1','login2']),
-			
-			gotoIndex(){
-				uni.reLaunch({
-						url: '../school/index/index',   /*进入高校首页*/
-					});
-			},
 			teamNext(){
 				console.log("this.member_iden",this.member_iden);
 				if(this.account.length === 0){
@@ -230,6 +218,16 @@
 			// 我是xxx
 			selectRole(roleID){
 				console.log("选择的角色", roleID);
+				// 记得清空数据
+				this.account= '', // 团委/社区的账号，高校队伍成员的个人id
+				this.password= '',
+				this.member_iden= null,// 0为队员/队长，1为指导老师
+				this.teamList=[],
+				this.selectedTeam= '',
+				this.chooseTeam = false,
+				this.selectedRole= null,
+				this.step= 0,
+				
 				this.selectedRole = roleID;
 				if(this.selectedRole === 1){
 					// 校团委
@@ -293,7 +291,7 @@
 				}
 				else if(Math.floor(this.step) === 2){
 					identity = 'team';
-					this.account = this.selectedTeam;
+					// this.account = this.selectedTeam;
 				}
 				else{
 					identity = 'community';
@@ -358,7 +356,9 @@
 						id: this.account,  //个人ID
 						pwd: this.password,
 						team_id: this.selectedTeam, //队伍id，用来判断是否是队长
+						is_teacher: this.member_iden, //身份，0为队员/队长，1为指导老师
 					}
+					console.log('登录发送参数',data2)
 					uni.request({
 						// 高校
 						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login/schoolteam',
@@ -366,6 +366,7 @@
 						method: 'POST',
 						data: data2,
 						success: res => {
+							console.log('登录返回',res.data)
 							if(res.data.code == 200){
 								console.log("登录成功-高校队伍",res.data.data);
 								// 保存 token

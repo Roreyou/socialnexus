@@ -195,10 +195,10 @@ class teamController {
 
   static async authentification(req,res){
     try {
-      const { id, status, instructor, members } = req.body;
+      const { id, status, instructor, leader,members } = req.body;
   
       // 保存指导老师和队伍成员的信息到数据库
-      const { instructor: savedInstructor, members: savedMembers } = await teamService.saveInstructorAndMembers(instructor, members);
+      const { instructor: savedInstructor, members: savedMembers } = await teamService.saveInstructOrMembers(id, status,instructor,leader, members);
   
       // 返回响应告诉前端该信息正在被团委审核
       return res.json(Result.success({status: 3}));
