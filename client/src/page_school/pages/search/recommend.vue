@@ -59,7 +59,7 @@ export default {
 			},
 			getRecommend(data){
 				uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
 				method: 'GET',
 				// data: {
 				// 	province: '1',

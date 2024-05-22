@@ -390,8 +390,8 @@
 								const isleader = res.data.data.isleader;
 								this.login2({user_id, user_name, person_identity, person_id, avatar, verification_status, isleader});
 								uni.reLaunch({
-										url:'../school/index/index'
-									});
+									url:'../school/index/index'
+								});
 							}
 							else{
 								uni.showToast({

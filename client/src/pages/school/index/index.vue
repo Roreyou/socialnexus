@@ -216,7 +216,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 				city: this.city,
 				page: 0
 			}
-			this.loadActilist(data)
+
 		},
 		onPageScroll(e) {
 		    this.scrollTop = e.scrollTop;
@@ -267,6 +267,12 @@ import picker from '../../../page_school/components/picker/picker.vue'
 					// console.log("p=", p)
 					// console.log("c=", c)
 					this.setAddress({province, city, })
+					const data = {
+						province: province,
+						city: city,
+						page: this.page
+					}
+					this.loadActilist(data)
 				}
 				})
 
@@ -288,7 +294,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 
 			loadActilist(data){  //加载活动列表
 				uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
 				method: 'GET',
