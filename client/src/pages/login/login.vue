@@ -293,7 +293,7 @@
 				}
 				else if(Math.floor(this.step) === 2){
 					identity = 'team';
-					this.account = this.selectedTeam;
+					// this.account = this.selectedTeam;
 				}
 				else{
 					identity = 'community';
@@ -358,7 +358,9 @@
 						id: this.account,  //个人ID
 						pwd: this.password,
 						team_id: this.selectedTeam, //队伍id，用来判断是否是队长
+						is_teacher: this.member_iden, //身份，0为队员/队长，1为指导老师
 					}
+					console.log('登录发送参数',data2)
 					uni.request({
 						// 高校
 						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login/schoolteam',
@@ -366,6 +368,7 @@
 						method: 'POST',
 						data: data2,
 						success: res => {
+							console.log('登录返回',res.data)
 							if(res.data.code == 200){
 								console.log("登录成功-高校队伍",res.data.data);
 								// 保存 token

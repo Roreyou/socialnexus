@@ -148,7 +148,7 @@
 				},
 
 				// 传给后端，拿到地址
-				action: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
+				action: this.$url.BASE_URL + '/uploadImage',
 			}
 		},
 		computed: {
@@ -166,7 +166,7 @@
 		methods: {
 			register() {
 				console.log('注册');
-				/**
+				/*
 				 * 客户端对账号信息进行一些必要的校验。
 				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
 				 */
@@ -202,7 +202,7 @@
 						avatar: this.avatar,
 						setup_date: this.setup_date,
 					}
-					console.log('data',data)
+					console.log('query data：',data)
 					uni.request({
 						// 高校
 						// url: this.$url.BASE_URL + '/4142061-0-default/auth/register/schoolteam',
@@ -221,6 +221,7 @@
 								});
 							}
 							else if(res.data.code == 500){
+								console.log("注册失败-用户已存在",res.data);
 								uni.showModal({
 								    title: '提示',
 								    content: '用户已存在，是否直接去登录？',
