@@ -223,7 +223,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				},
 				success: res => {
 					this.detail = res.data.data.detail;
-					this.detail.keywords = "服务,实践"
+					// this.detail.keywords = "服务,实践"
 					this.net_error = false;
 				},
 				fail: res => {

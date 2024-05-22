@@ -8,20 +8,20 @@
 					<!-- <uni-forms-item label="所属高校" required>
 						<uni-easyinput v-model="baseFormData.name" placeholder="中山大学" ref="inputElement" />
 					</uni-forms-item> -->
-					<uni-forms-item label="负责人所属学院" :rules="[{ required: true, errorMessage: '所属学院项必填', trigger: 'blur' }]" name="major">
-						<uni-easyinput v-model="baseFormData.major" placeholder="请输入所属学院" />
+					<uni-forms-item label="所属学院" :rules="[{ required: true, errorMessage: '所属学院项必填', trigger: 'blur' }]" name="major">
+						<uni-easyinput v-model="baseFormData.major" placeholder="请输入指导老师所属学院" />
 					</uni-forms-item>
-					<uni-forms-item label="负责人姓名" :rules="[{ required: true, errorMessage: '姓名项必填', trigger: 'blur' }]" name="name">
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入队伍负责人姓名" />
+					<uni-forms-item label="姓名" :rules="[{ required: true, errorMessage: '姓名项必填', trigger: 'blur' }]" name="name">
+						<uni-easyinput v-model="baseFormData.name" placeholder="请输入指导老师负责人姓名" />
 					</uni-forms-item>
-					<uni-forms-item label="负责人联系电话" :rules="[{ required: true, errorMessage: '联系电话项必填', trigger: 'blur' }]" name="tel">
-						<uni-easyinput v-model="baseFormData.tel" placeholder="请输入负责人联系电话" />
+					<uni-forms-item label="联系电话" :rules="[{ required: true, errorMessage: '联系电话项必填', trigger: 'blur' }]" name="tel">
+						<uni-easyinput v-model="baseFormData.tel" placeholder="请输入指导老师联系电话" />
 					</uni-forms-item>
 					<!-- <uni-forms-item label="负责人邮箱" required>
 						<uni-easyinput v-model="baseFormData.name" placeholder="请输入负责人邮箱" />
 					</uni-forms-item> -->
-					<uni-forms-item label="负责人工号" :rules="[{ required: true, errorMessage: '工号项必填', trigger: 'blur' }]" name="netid">
-						<uni-easyinput v-model="baseFormData.netid" placeholder="请输入负责人工号" />
+					<uni-forms-item label="工号" :rules="[{ required: true, errorMessage: '工号项必填', trigger: 'blur' }]" name="netid">
+						<uni-easyinput v-model="baseFormData.netid" placeholder="请输入指导老师工号" />
 					</uni-forms-item>
 					<!-- <uni-forms-item label="性别" required>
 						<uni-data-checkbox v-model="baseFormData.sex" :localdata="sexs" />
