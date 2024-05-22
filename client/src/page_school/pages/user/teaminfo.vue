@@ -182,7 +182,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 							this.baselist[2].value = basedata.leader_name;
 							this.baselist[3].value = basedata.relevant_faculties;						
 							this.baselist[4].value = basedata.mem_num;
-							this.baselist[4].value = basedata.remark;
+							this.baselist[5].value = basedata.remark;
 							
 							//队员信息
 							this.memberList = res.data.data.member_info;

@@ -209,6 +209,9 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			// 	complete: () => {
 			// 	}
 			// })
+			if(this.userInfo.province !== ''){
+				return
+			}
 			this.getlocation()
 
 			const data = {
