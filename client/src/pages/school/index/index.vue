@@ -232,7 +232,8 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			++ this.page
 			if(this.loadmore){
 				const data = {
-					province: '1',
+					province: this.userInfo.province,
+					city: this.userInfo.city,
 					page: this.page
 				}
 				this.loadActilist(data)

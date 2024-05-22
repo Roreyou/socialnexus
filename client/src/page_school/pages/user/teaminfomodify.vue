@@ -229,7 +229,7 @@
 		},
         mounted() {
 			uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getteamInfo',
+					url: this.$url.BASE_URL + '/schoolteam/getteamInfo',
 					header:{
 							Authorization:uni.getStorageSync("token")
 						},
@@ -357,7 +357,7 @@
 									'Content-Type': 'application/json', 
 									Authorization:uni.getStorageSync("token")
 								}, 
-							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/modifyinfo',
+							url: this.$url.BASE_URL + '/schoolteam/modifyinfo',
 							method: 'POST',
 								data: {
 									id:this.user_id,

@@ -186,7 +186,7 @@
       		console.log("发出请求");
 			  console.log("id",this.team_id);
 			uni.request({
-				// url: this.$url.BASE_URL + '/4142061-0-default/school/teamInfo',
+				// url: this.$url.BASE_URL + '/school/teamInfo',
 				url: this.$url.BASE_URL + '/school/teamInfo',
 				header:{
 						Authorization:uni.getStorageSync("token")
@@ -239,7 +239,7 @@
 			handlePass(){
 				console.log("审核：通过");
 				uni.request({
-					// url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					// url: this.$url.BASE_URL + '/school/approveTeam',
 					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")
@@ -289,7 +289,7 @@
 			handleReject(){
 				console.log("审核：驳回");
 				uni.request({
-					// url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					// url: this.$url.BASE_URL + '/school/approveTeam',
 					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")

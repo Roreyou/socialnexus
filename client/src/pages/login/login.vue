@@ -175,7 +175,7 @@
 				}
 				// 请求所参与的队伍列表
 				uni.request({
-					// url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getMyTeams',
+					// url: this.$url.BASE_URL + '/schoolteam/getMyTeams',
 					url: this.$url.BASE_URL + '/schoolteam/getMyTeams',
                 	header:{
 						
@@ -307,10 +307,10 @@
 					//团委/社区登录
 					uni.request({
 						// 团委登录接口
-						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154755970',
+						// url: this.$url.BASE_URL + '/auth/login?apifoxApiId=154755970',
 						url: this.$url.BASE_URL + '/auth/login',
 						// 社区基层
-						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154447878',
+						// url: this.$url.BASE_URL + '/auth/login?apifoxApiId=154447878',
 						method: 'POST',
 						data: data,
 						success: res => {
@@ -361,7 +361,7 @@
 					console.log('登录发送参数',data2)
 					uni.request({
 						// 高校
-						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login/schoolteam',
+						// url: this.$url.BASE_URL + '/auth/login/schoolteam',
 						url: this.$url.BASE_URL + '/auth/login/schoolteam',
 						method: 'POST',
 						data: data2,

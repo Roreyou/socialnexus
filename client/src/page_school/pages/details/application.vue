@@ -139,7 +139,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			this.activity_id = acti_id;
 			// console.log(id)
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/register_details',
+				url: this.$url.BASE_URL + '/schoolteam/activsquare/register_details',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				header:{
 					Authorization:uni.getStorageSync("token")
@@ -181,7 +181,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				}
 			}),
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getisregister',
+				url: this.$url.BASE_URL + '/schoolteam/getisregister',
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},				
@@ -260,7 +260,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 		}
         if(!this.isActive){
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/register_event',	
+				url: this.$url.BASE_URL + '/schoolteam/activsquare/register_event',	
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},								
@@ -305,7 +305,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
         }
         else{
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',	
+				url: this.$url.BASE_URL + '/schoolteam/cancelRegisterEvent',	
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},								

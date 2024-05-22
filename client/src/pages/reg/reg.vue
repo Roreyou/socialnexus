@@ -205,7 +205,7 @@
 					console.log('query data：',data)
 					uni.request({
 						// 高校
-						// url: this.$url.BASE_URL + '/4142061-0-default/auth/register/schoolteam',
+						// url: this.$url.BASE_URL + '/auth/register/schoolteam',
 						url: this.$url.BASE_URL + '/auth/register/schoolteam',
 						method: 'POST',
 						data: data,
@@ -286,7 +286,7 @@
 					console.log('data',data)
 					uni.request({
 						// 社区
-						// url: this.$url.BASE_URL + '/4142061-0-default/auth/register/community',
+						// url: this.$url.BASE_URL + '/auth/register/community',
 						url: this.$url.BASE_URL + '/auth/register/community',
 						method: 'POST',
 						data: data,

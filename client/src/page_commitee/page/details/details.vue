@@ -223,7 +223,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			// this.hasactiid = true;
 			// 获取活动详情api
 			uni.request({
-				// url: this.$url.BASE_URL + '/4142061-0-default/school/activityInfo',
+				// url: this.$url.BASE_URL + '/school/activityInfo',
 				url: this.$url.BASE_URL + '/school/activityInfo',
 				header:{
 					Authorization:uni.getStorageSync("token")
@@ -261,7 +261,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			handlePass(item){
 				console.log("详情页面审核：通过");
 				uni.request({
-					// url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					// url: this.$url.BASE_URL + '/school/approveActivity',
 					url: this.$url.BASE_URL + '/school/approveActivity',
 					header:{
 						Authorization:uni.getStorageSync("token")
@@ -311,7 +311,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			handleReject(item){
 				console.log("详情页面审核：驳回");
 				uni.request({
-					// url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					// url: this.$url.BASE_URL + '/school/approveActivity',
 					url: this.$url.BASE_URL + '/school/approveActivity',
 					header:{
 						Authorization:uni.getStorageSync("token")

@@ -72,7 +72,7 @@
 		},
 		onLoad() {
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getteamfavor',
+				url: this.$url.BASE_URL + '/schoolteam/getteamfavor',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				header:{
 					Authorization:uni.getStorageSync("token")
@@ -127,7 +127,7 @@
     			        // 用户点击了确认按钮
 
 						uni.request({
-							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
+							url: this.$url.BASE_URL + '/schoolteam/favor',
 							header:{
 								Authorization:uni.getStorageSync("token")
 							},	

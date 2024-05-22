@@ -63,7 +63,7 @@
 					return
 				}
 				uni.request({
-						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/modifypwd',
+						url: this.$url.BASE_URL + '/schoolteam/modifypwd',
 						header:{
 							Authorization:uni.getStorageSync("token")
 						},

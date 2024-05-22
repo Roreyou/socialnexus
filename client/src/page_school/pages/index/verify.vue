@@ -869,7 +869,7 @@
 									'Content-Type': 'application/json', 
 									Authorization:uni.getStorageSync("token")
 								}, 
-							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/authentification',
+							url: this.$url.BASE_URL + '/schoolteam/authentification',
 							method: 'POST',
 								data: {
 									id:this.user_id,

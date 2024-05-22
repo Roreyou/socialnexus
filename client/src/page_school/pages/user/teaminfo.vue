@@ -163,7 +163,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 		},
 		mounted() {
 			uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getteamInfo',
+					url: this.$url.BASE_URL + '/schoolteam/getteamInfo',
 					header:{
 							Authorization:uni.getStorageSync("token")
 						},

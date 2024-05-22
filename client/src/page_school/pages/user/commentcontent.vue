@@ -76,9 +76,9 @@ export default {
 		},
     mounted() {
         // console.log("list_type",this.list_type)
-        let com_url = this.$url.BASE_URL + '/4142061-0-default/schoolteam/team2activ_finished'
+        let com_url = this.$url.BASE_URL + '/schoolteam/team2activ_finished'
         if(this.list_type == '1'){
-            com_url = this.$url.BASE_URL + '/4142061-0-default/schoolteam/team2activ_unfinished'
+            com_url = this.$url.BASE_URL + '/schoolteam/team2activ_unfinished'
         }
         uni.request({
 				url: com_url,
@@ -142,7 +142,7 @@ export default {
         postComInfo(){
             //发表评价
             uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/commentactivity',
+				url: this.$url.BASE_URL + '/schoolteam/commentactivity',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				header:{
 					Authorization:uni.getStorageSync("token")

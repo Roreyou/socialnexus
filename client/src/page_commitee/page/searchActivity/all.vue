@@ -72,7 +72,7 @@
 			handlePass(item){
 				console.log("审核：通过");
 				uni.request({
-					// url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					// url: this.$url.BASE_URL + '/school/approveActivity',
 					url: this.$url.BASE_URL + '/school/approveActivity',
 					header:{
 						Authorization:uni.getStorageSync("token")

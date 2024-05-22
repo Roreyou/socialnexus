@@ -145,7 +145,7 @@ export default {
                 return
             }
 			uni.request({
-			url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/search',
+			url: this.$url.BASE_URL + '/schoolteam/activsquare/search',
 			header:{
 				Authorization:uni.getStorageSync("token")
 			},	

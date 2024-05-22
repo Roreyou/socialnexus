@@ -70,7 +70,6 @@ export default {
 					if(res.data.data.acti_list.length){
 						this.acList = this.acList.concat(res.data.data.acti_list);
 						// this.acList[0].keywords = "服务,实践"
-						this.acList = [...this.acList, ...this.acList];
 						// this.loadmore = false
 					}else{  //空了
 						this.loadmore = false 

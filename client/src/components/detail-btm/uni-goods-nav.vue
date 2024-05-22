@@ -164,7 +164,7 @@
 				}else{
 					let favor = this.isActive ? 1 : 0;  //1就是要取消收藏，0就是要收藏
 					uni.request({
-						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
+						url: this.$url.BASE_URL + '/schoolteam/favor',
 						header:{
 							Authorization:uni.getStorageSync("token")
 						},
@@ -261,7 +261,7 @@
 			},
 			cancelacti(){  //取消报名
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',
+				url: this.$url.BASE_URL + '/schoolteam/cancelRegisterEvent',
 				header:
 				{
 					Authorization:uni.getStorageSync("token")
@@ -316,7 +316,7 @@
 		},
 		mounted(){
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getisregister',
+				url: this.$url.BASE_URL + '/schoolteam/getisregister',
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},				

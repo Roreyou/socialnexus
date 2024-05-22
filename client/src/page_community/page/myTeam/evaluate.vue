@@ -122,7 +122,7 @@ export default {
     const teamId = query.teamId;
     this.teamId = teamId;
     uni.request({
-      url: this.$url.BASE_URL + "/4142061-0-default/community/admit",
+      url: this.$url.BASE_URL + "/community/admit",
       // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
       header: {
         Authorization: uni.getStorageSync("token"),
@@ -147,7 +147,7 @@ export default {
     console.log("onload");
     const id = option.id;
     // uni.request({
-    // 	url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
+    // 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
     // 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 
     // 	method: 'GET',
