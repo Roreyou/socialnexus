@@ -200,8 +200,14 @@ class teamService {
         'teacher.instructor_name': undefined,
       };
     }));
+    // 假设 teams 是从数据库查询得到的结果数组
+    const uniqueTeams = teamsToReturn.filter((team, index, self) =>
+      index === self.findIndex(t => (
+        t.id === team.id // 根据唯一标识属性去重，假设这里使用 id
+      ))
+    );
 
-    return teamsToReturn;
+    return uniqueTeams;
   }
 
   static async getTeamAvatar(teamId) {
