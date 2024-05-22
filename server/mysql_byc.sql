@@ -11,7 +11,7 @@
  Target Server Version : 50740
  File Encoding         : 65001
 
- Date: 22/05/2024 15:23:14
+ Date: 22/05/2024 16:04:32
 */
 
 SET NAMES utf8mb4;
@@ -115,22 +115,24 @@ CREATE TABLE `community`  (
   `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `setup_date` date NULL DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of community
 -- ----------------------------
-INSERT INTO `community` VALUES ('1', '华满子厂水工外', '18139827734', '江西省', '景德镇市', '香港特别行政区贵港市隆昌县', 'Excepteur proident adipisicing mollit Ut', '1973-10-23', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
-INSERT INTO `community` VALUES ('100', '共十治', '18133334146', '湖北省', '咸阳市', '广西壮族自治区泉州市深水埗区', 'velit tempor sint', '1983-01-24', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
-INSERT INTO `community` VALUES ('101', '共十治', '18133334146', '湖北省', '咸阳市', '广西壮族自治区泉州市深水埗区', 'velit tempor sint', '1983-01-24', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
-INSERT INTO `community` VALUES ('120', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
-INSERT INTO `community` VALUES ('121', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
-INSERT INTO `community` VALUES ('122', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
-INSERT INTO `community` VALUES ('123', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
-INSERT INTO `community` VALUES ('59', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
-INSERT INTO `community` VALUES ('666', '666', '666', '湖北省', '武汉市', '666', '666', '2024-05-21', NULL);
-INSERT INTO `community` VALUES ('99', '共十治', '18133334146', '湖北省', '咸阳市', '广西壮族自治区泉州市深水埗区', 'velit tempor sint', '1983-01-24', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
+INSERT INTO `community` VALUES ('1', '华满子厂水工外', '18139827734', '江西省', '景德镇市', '香港特别行政区贵港市隆昌县', 'Excepteur proident adipisicing mollit Ut', '1973-10-23', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg', '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('100', '共十治', '18133334146', '湖北省', '咸阳市', '广西壮族自治区泉州市深水埗区', 'velit tempor sint', '1983-01-24', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg', '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('101', '共十治', '18133334146', '湖北省', '咸阳市', '广西壮族自治区泉州市深水埗区', 'velit tempor sint', '1983-01-24', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg', '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('120', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg', '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('121', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg', '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('122', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg', '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('123', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg', '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('59', '政查角办', '18652198388', '甘肃省', '北京市', '宁夏回族自治区衢州市阿拉善右旗', 'amet eiusmod et id', '1978-08-27', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg', '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('666', '666', '666', '湖北省', '武汉市', '666', '666', '2024-05-21', NULL, '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('99', '共十治', '18133334146', '湖北省', '咸阳市', '广西壮族自治区泉州市深水埗区', 'velit tempor sint', '1983-01-24', 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg', '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
+INSERT INTO `community` VALUES ('999', '999', '999', '湖北省', '武汉市', '999', '999', '2024-05-22', NULL, '$2b$10$RfsWN.aofrgaRN6rgpEL3.7Qe/sHuY38Yw4cTIBkI68Kbi3rOB4d.');
 
 -- ----------------------------
 -- Table structure for datawall_act
@@ -421,6 +423,7 @@ INSERT INTO `schoolteam` VALUES ('c9hTNzGax42f9wQqgNGX6x', NULL, '4442', NULL, '
 INSERT INTO `schoolteam` VALUES ('co6SEzku9yTvo8kQGH4639', NULL, '没备称细接时决2', NULL, NULL, 'Lorem in', '19', '99', NULL, NULL, 4, NULL, 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
 INSERT INTO `schoolteam` VALUES ('di6FUj5KZDn9VVe1J3wuSg', NULL, '人来要满', NULL, NULL, 'ad id ut', '19', '99', NULL, NULL, 4, NULL, 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
 INSERT INTO `schoolteam` VALUES ('iGafV26sXoPPjyWfaJDpGC', '$2b$10$x7HRXNAxeq9EnmlNzFGT5.mm5UK1cIPiAzzdxXTlxq1iPL8cOZfC2', '长命技花立2', '1', NULL, 'irure est proident reprehenderit', '100', '99', NULL, NULL, 4, NULL, 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
+INSERT INTO `schoolteam` VALUES ('kn5u6NuyUjMCzX9kFN4sSY', NULL, '001', NULL, '2024-05-22', '001', '001', NULL, NULL, NULL, 1, NULL, 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/d98f2db4-74cf-44fb-80ac-5de45af0d2ab.jpg');
 INSERT INTO `schoolteam` VALUES ('m9Xw3QS8dLzH9JWqzeshWb', NULL, '123的另外一支队伍', NULL, '2024-05-21', '无', '123', '99', NULL, NULL, 4, NULL, 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
 INSERT INTO `schoolteam` VALUES ('mFYVKtfiRnCVsxHk8atihj', NULL, '333', NULL, '2024-05-21', '333', '333', NULL, NULL, NULL, 4, NULL, 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
 INSERT INTO `schoolteam` VALUES ('mGe2aDDj7ZsbJbHkdpbkw2', '$2b$10$YJ27oejH3PrTWmR/5t7vU.cSx/CB4C77JlfJiwwZq2Csu455oBdsS', '没备称细接时决1', NULL, NULL, 'Lorem in', '19', '99', NULL, NULL, 4, NULL, 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/6197672f30f9e9907.jpg');
@@ -491,6 +494,7 @@ CREATE TABLE `teammember`  (
 -- ----------------------------
 -- Records of teammember
 -- ----------------------------
+INSERT INTO `teammember` VALUES ('001', 'kn5u6NuyUjMCzX9kFN4sSY', NULL, NULL, NULL, NULL, NULL, '$2b$10$S7H7VoumA1yYEM6X54Xdd.QLoJs2bx41nSm.JtSwKyAe4615GPuni');
 INSERT INTO `teammember` VALUES ('100', '3h71YodfGKXVspCu8ofdbX', 'zzz', 'zz', '软件工程学院', 'xxx', '1', '$2b$10$h5TnP7TgP/yGXgT/JOkPT.hkd4ckHLSjgsX6g7p0wSSQBphc/qnP2');
 INSERT INTO `teammember` VALUES ('101', '3h71YodfGKXVspCu8ofdbX', 'xxx', 'xxx', '人工智能学院', 'xxx', '1', '$2b$10$I9VKKgjTpxJ/NjvSiC9SaOYRtDY4EvJJUoy64iKvAaTKOeXeP5HI.');
 INSERT INTO `teammember` VALUES ('123', 'm9Xw3QS8dLzH9JWqzeshWb', NULL, NULL, '人工智能学院', NULL, NULL, '$2b$10$wrYAfI2oEB0gUnosrU1n8.AjElMaLsDzSLEeAAC70tab5mNwAVkuK');
