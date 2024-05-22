@@ -75,7 +75,7 @@
 		},
 		mounted() {
         uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/getnotice',
+				url: this.$url.BASE_URL + '/schoolteam/pyq/getnotice',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				header:{
 					Authorization:uni.getStorageSync("token")
@@ -121,7 +121,7 @@
 		methods: {
 			gotopost(id){
 				uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/delnotice',				
+				url: this.$url.BASE_URL + '/schoolteam/pyq/delnotice',				
 				method: 'POST',
 				data: {
 					team_id: this.user_id,

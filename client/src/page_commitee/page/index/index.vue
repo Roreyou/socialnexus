@@ -342,7 +342,7 @@
 			getChartData(){
 				// 同时请求数据
 				uni.request({
-					// url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_team',
+					// url: this.$url.BASE_URL + '/school/datawall_team',
 					url: this.$url.BASE_URL + '/school/datawall_team',
                 	header:{
 						Authorization:uni.getStorageSync("token")
@@ -366,7 +366,7 @@
 
 				// 活动类型
 				uni.request({
-					// url: this.$url.BASE_URL + '/4142061-0-default/school/datawall_act',
+					// url: this.$url.BASE_URL + '/school/datawall_act',
 					url: this.$url.BASE_URL + '/school/datawall_act',
                 	header:{
 						Authorization:uni.getStorageSync("token")

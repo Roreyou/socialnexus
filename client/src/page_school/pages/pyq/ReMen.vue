@@ -60,7 +60,7 @@
 			},
 			getHot(data){
 				uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/hit',
+				url: this.$url.BASE_URL + '/schoolteam/pyq/hit',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
 				method: 'GET',

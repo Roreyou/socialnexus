@@ -59,7 +59,7 @@ export default {
 			},
 			getRecommend(data){
 				uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
 				method: 'GET',
 				// data: {
 				// 	province: '1',
@@ -70,7 +70,6 @@ export default {
 					if(res.data.data.acti_list.length){
 						this.acList = this.acList.concat(res.data.data.acti_list);
 						// this.acList[0].keywords = "服务,实践"
-						this.acList = [...this.acList, ...this.acList];
 						// this.loadmore = false
 					}else{  //空了
 						this.loadmore = false 

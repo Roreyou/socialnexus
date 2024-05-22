@@ -31,7 +31,7 @@ export default {
 		},
     mounted() {
         // console.log("list_type",this.list_type)
-        let com_url = this.$url.BASE_URL + '/4142061-0-default/schoolteam/commu2team'
+        let com_url = this.$url.BASE_URL + '/schoolteam/commu2team'
         uni.request({
 				url: com_url,
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',

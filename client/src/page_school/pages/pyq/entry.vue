@@ -95,8 +95,8 @@
 				},
 
 				//上传路径？
-				// action: 'http://127.0.0.1:4523/m1/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
-				action: this.$url.BASE_URL + '/4142061-0-default/uploadImage',
+				// action: 'http://127.0.0.1:4523/m1/schoolteam/pyq/createpost/uploadpics',
+				action: this.$url.BASE_URL + '/uploadImage',
 				//应该是后端返回的图片路径列表？
 				filesArr: [],
 				notice_num: '' //通知数量
@@ -105,7 +105,7 @@
 		},
 
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id'])
+			...mapState(['hasLogin', 'forcedLogin','user_id', 'userInfo'])
 		},
 
 		onReachBottom() {
@@ -130,7 +130,7 @@
 			},
 			postAll(){
 				uni.request({
-							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost',
+							url: this.$url.BASE_URL + '/schoolteam/pyq/createpost',
 							header:{
 					Authorization:uni.getStorageSync("token")
 				},	
@@ -139,6 +139,8 @@
 								team_id: this.user_id,  
 								content: this.comModal.comInfo,
 								picture: this.comModal.submitImgs,
+								provice: this.userInfo.provice,
+								city: this.userInfo.city
 							},
 							success: res => {
 								if(res.data.code==200){
@@ -192,7 +194,7 @@
 
 		mounted(){
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/noticenum',
+				url: this.$url.BASE_URL + '/schoolteam/pyq/noticenum',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',	
 			
 				method: 'GET',

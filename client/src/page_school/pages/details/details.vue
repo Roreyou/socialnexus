@@ -211,7 +211,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			this.hasactiid = true;
 			// 获取活动详情
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
+				url: this.$url.BASE_URL + '/schoolteam/getactidetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				// header:{
 				// 	Authorization:uni.getStorageSync("token")
@@ -223,7 +223,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				},
 				success: res => {
 					this.detail = res.data.data.detail;
-					this.detail.keywords = "服务,实践"
+					// this.detail.keywords = "服务,实践"
 					this.net_error = false;
 				},
 				fail: res => {
@@ -237,7 +237,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			console.log("onload")
 			const id = option.id;
 			// uni.request({
-			// 	url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
+			// 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
 			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
 			// 	method: 'GET',

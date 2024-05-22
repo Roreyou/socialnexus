@@ -175,7 +175,7 @@
 				}
 				// 请求所参与的队伍列表
 				uni.request({
-					// url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getMyTeams',
+					// url: this.$url.BASE_URL + '/schoolteam/getMyTeams',
 					url: this.$url.BASE_URL + '/schoolteam/getMyTeams',
                 	header:{
 						
@@ -307,10 +307,10 @@
 					//团委/社区登录
 					uni.request({
 						// 团委登录接口
-						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154755970',
+						// url: this.$url.BASE_URL + '/auth/login?apifoxApiId=154755970',
 						url: this.$url.BASE_URL + '/auth/login',
 						// 社区基层
-						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login?apifoxApiId=154447878',
+						// url: this.$url.BASE_URL + '/auth/login?apifoxApiId=154447878',
 						method: 'POST',
 						data: data,
 						success: res => {
@@ -361,7 +361,7 @@
 					console.log('登录发送参数',data2)
 					uni.request({
 						// 高校
-						// url: this.$url.BASE_URL + '/4142061-0-default/auth/login/schoolteam',
+						// url: this.$url.BASE_URL + '/auth/login/schoolteam',
 						url: this.$url.BASE_URL + '/auth/login/schoolteam',
 						method: 'POST',
 						data: data2,
@@ -375,21 +375,25 @@
 								const user_id = this.selectedTeam; //队伍id
 								const user_name =  res.data.data.team_name; // 即username
 								let person_identity = '队员';
+								person_identity = '2'
 								// 下面信息是只有高校队伍有的，存在store的userInfo
 								if(this.member_iden == 0 && res.data.data.isleader){
 									person_identity = '队长'
+									person_identity = '1'
 								}
 								else if(this.member_iden == 1){
 									person_identity = '老师'
+									person_identity = '3'
 								}
 								const person_id = this.account;
 								const verification_status = res.data.data.verification_status;
 								const avatar = res.data.data.avatar;
 								const isleader = res.data.data.isleader;
+								console.log("person_identity:", person_identity)
 								this.login2({user_id, user_name, person_identity, person_id, avatar, verification_status, isleader});
 								uni.reLaunch({
-										url:'../school/index/index'
-									});
+									url:'../school/index/index'
+								});
 							}
 							else{
 								uni.showToast({

@@ -22,7 +22,7 @@
 		<view class="cu-list menu-avatar bg-gradual-green padding-lg background">
 			<view class="user-section">
 				<image :src="userInfo.avatar" class="cu-avatar xl round"></image>
-				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
+				<view class="text-white text-xl padding">{{userName}}</view>
 				<!-- <view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view> -->
 				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="(userInfo.verification_status == 1 || userInfo.verification_status == 3)&&(userInfo.isleader)">认证信息</view>
 				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="userInfo.verification_status == 2">已认证</view>
@@ -209,6 +209,9 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			// 	complete: () => {
 			// 	}
 			// })
+			if(this.userInfo.province !== ''){
+				return
+			}
 			this.getlocation()
 
 			const data = {
@@ -216,7 +219,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 				city: this.city,
 				page: 0
 			}
-			this.loadActilist(data)
+
 		},
 		onPageScroll(e) {
 		    this.scrollTop = e.scrollTop;
@@ -232,7 +235,8 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			++ this.page
 			if(this.loadmore){
 				const data = {
-					province: '1',
+					province: this.userInfo.province,
+					city: this.userInfo.city,
 					page: this.page
 				}
 				this.loadActilist(data)
@@ -267,6 +271,12 @@ import picker from '../../../page_school/components/picker/picker.vue'
 					// console.log("p=", p)
 					// console.log("c=", c)
 					this.setAddress({province, city, })
+					const data = {
+						province: province,
+						city: city,
+						page: this.page
+					}
+					this.loadActilist(data)
 				}
 				})
 
@@ -288,7 +298,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 
 			loadActilist(data){  //加载活动列表
 				uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				
 				method: 'GET',
@@ -297,7 +307,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 					// this.acList = res.data.data.acti_list;
 					if(res.data.data.acti_list.length){
 						this.acList = this.acList.concat(res.data.data.acti_list)
-						this.acList[0].keywords = "服务,实践"
+						// this.acList[0].keywords = "服务,实践"
 						// this.loadmore = false
 					}else{  //空了
 						this.loadmore = false 

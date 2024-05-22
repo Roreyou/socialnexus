@@ -138,7 +138,7 @@
 			const id = options.id;
 			//发送获取这条帖子详情的请求
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/getdetail',
+				url: this.$url.BASE_URL + '/schoolteam/pyq/getdetail',
 				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 				header:{
 							Authorization:uni.getStorageSync("token")
@@ -185,7 +185,7 @@
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
 					uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/reply',
+					url: this.$url.BASE_URL + '/schoolteam/pyq/reply',
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 					header:{
 							Authorization:uni.getStorageSync("token")
@@ -245,7 +245,7 @@
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
 					uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/comment',
+					url: this.$url.BASE_URL + '/schoolteam/pyq/comment',
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 					header:{
 					Authorization:uni.getStorageSync("token")
@@ -300,7 +300,7 @@
 				if(true){
 
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/like',  //点赞和取消点赞会发请求，后端决定怎么处理
+					url: this.$url.BASE_URL + '/schoolteam/pyq/like',  //点赞和取消点赞会发请求，后端决定怎么处理
 					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
 					header:{
 					Authorization:uni.getStorageSync("token")
@@ -357,7 +357,7 @@
 			replyLike(id){   //评论的点赞（但不是评论的回复的点赞, 回复的点赞还要另外加函数）
 
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/likecom', //点赞和取消点赞 评论
+					url: this.$url.BASE_URL + '/schoolteam/pyq/likecom', //点赞和取消点赞 评论
 					header:{
 					Authorization:uni.getStorageSync("token")
 				},					
@@ -424,7 +424,7 @@
 			//回复的点赞和取消点赞
 			replyLike2(com_index, index2){
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/likereply', //点赞和取消点赞 评论
+				url: this.$url.BASE_URL + '/schoolteam/pyq/likereply', //点赞和取消点赞 评论
 				header:{
 				Authorization:uni.getStorageSync("token")
 			},					
@@ -491,7 +491,7 @@
 			// 删除评论
 			delCom(comId){   
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/delcomment', //删除评论
+					url: this.$url.BASE_URL + '/schoolteam/pyq/delcomment', //删除评论
 					header:{
 					Authorization:uni.getStorageSync("token")
 				},				
