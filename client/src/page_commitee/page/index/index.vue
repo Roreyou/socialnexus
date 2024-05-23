@@ -291,10 +291,7 @@
 			getChartData(){
 				// 同时请求数据
 				uni.request({
-<<<<<<< HEAD
-=======
 					// url: this.$url.BASE_URL + '/school/datawall_team',
->>>>>>> c3ecc569855e9915e5878b45814c2dfff9b3240d
 					url: this.$url.BASE_URL + '/school/datawall_team',
                 	header:{
 						Authorization:uni.getStorageSync("token")

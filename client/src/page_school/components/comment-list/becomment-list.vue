@@ -119,6 +119,26 @@ font-size: larger;
     color: gray;
 }
 
+.acti_card{
+    border-radius: 20rpx;
+    background-color: #13603e;
+    margin: 15rpx 25rpx;
+    padding-bottom: 15rpx;
+}
+.whitecard{
+    background-color: white;
+}
+.acti_name{
+    font-size: larger;
+    color: white;
+}
+
+.ac_time{
+    margin: auto;
+    /* margin-bottom: 15rpx; */
+    color: white;
+}
+
 /* 评价按钮 */
 .custom-button {
     background: linear-gradient(to right, #ff4e50, #f9d423);
