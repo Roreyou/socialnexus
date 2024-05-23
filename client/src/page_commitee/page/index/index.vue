@@ -6,7 +6,6 @@
 			<view class="user-section">
 				<image :src="avatar" class="cu-avatar xl round"></image>
 				<view class="text-white text-xl padding">中大校团委</view>
-				<!-- <view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view> -->
 			</view>
 		</view>
 
@@ -89,42 +88,7 @@
       		  background="rgba(255,255,255,0)"
       		/>
     	</view>
-	</view>
-
-
-
-
-	<view style="background-color: rgb(234, 231, 231);" class="margin-fixed" v-show="false">
-		
-		<!-- 标题 -->
-		<view class="cu-bar" style="background-color: transparent">
-			<view class="action">
-				<text class="text-xl text-bold" style="color: #000000; font-size: 40rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent">数据墙</text>
-			</view>
-		</view>
-
-		<!-- 内容 -->
-		<view >
-			<view class="board" :class="isCard?'no-card':''">
-				<view class="wallContent">
-					<text class="text-xl text-bold" style="margin-top: 40px; color: rgb(195, 193, 197); font-size: 20rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 现有队伍 </text>
-					<text class="text-xl text-bold wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 234个 </text>
-				</view>
-				<view class="wallContent">
-					<text class="text-xl text-bold" style="margin-top: 40px; color: rgb(195, 193, 197); font-size: 20rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 现有活动 </text>
-					<text class="text-xl text-bold wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 2824个 </text>
-				</view>
-				<view class="wallContent">
-					<text class="text-xl text-bold" style="margin-top: 40px; color: rgb(195, 193, 197); font-size: 20rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 现有成员 </text>
-					<text class="text-xl text-bold wallData" style="color: rgb(120,118,221); font-size: 52rpx; font-weight: 600; font-family: 'Arial'; font-style: normal; background-color: transparent;"> 28240名 </text>
-				</view>
-			</view>
-
-		</view>
-
-	</view>
-
-	
+	</view>	
 
     <!-- 当用户滚动页面时，提供一个快速返回页面顶部的按钮。 -->
     <!-- 当页面滚动到或超过指定的 top 值时，返回顶部按钮将显示出来。 -->
@@ -204,10 +168,10 @@
 
 				// 图表数据
 				teamChartData:{
-            	  series: [
+					series: [
             	    {
             	        data: [
-            	            {"name":"其他","value":50},{"name":"软件工程学院","value":30},{"name":"中法核","value":20},{"name":"商学院","value":18},{"name":"历史学系","value":8}              
+            	            {"name":"22","value":50},{"name":"11","value":30},{"name":"33","value":20},{"name":"商学院","value":18},{"name":"历史学系","value":8}              
             	        ]
             	    }
             	  ]
@@ -301,48 +265,36 @@
 			}
 		},
 		onReady() {
-   		  this.getChartData();
+   		//   this.getChartData();
    		},
 
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin'])
 		},
 
-		// onLoad() {
-		// 	uni.$on('findIndexHouseList', (obj) => {
-		// 		// 获取数据
-		// 		this.findHouseList(1);
-		// 	})
-		// 	// 获取数据
-		// 	this.findHouseList();
-		// },
+		onLoad() {
+			this.getChartData();
+		},
 		onUnload() {
-			// 移除监听事件  
-			uni.$off('findIndexHouseList');
+
 		},
 		onShow(){
-			this.getChartData();
+			// this.getChartData();
 		},
 		onPageScroll(e) {
 		    this.scrollTop = e.scrollTop;
 		},
-		// onReachBottom() {
-		//     this.loadStatus = 'loading';
-		//     // 获取数据
-		// 	this.findHouseList()
-		// },
-		// 下拉刷新
-		// onPullDownRefresh() {
-		// 	// 获取数据
-		// 	this.findHouseList(1);
-		// 	// 关闭刷新
-		// 	uni.stopPullDownRefresh();
-		// },
+		mounted(){
+			
+		},
 		methods: {
 			getChartData(){
 				// 同时请求数据
 				uni.request({
+<<<<<<< HEAD
+=======
 					// url: this.$url.BASE_URL + '/school/datawall_team',
+>>>>>>> c3ecc569855e9915e5878b45814c2dfff9b3240d
 					url: this.$url.BASE_URL + '/school/datawall_team',
                 	header:{
 						Authorization:uni.getStorageSync("token")
@@ -352,7 +304,7 @@
 						
 					},
 					success: res => {	
-						console.log("成功请求-数据墙-院系人数比例");
+						console.log("成功请求-数据墙-队伍类型比例");
 						console.log(res.data.data);					
 						this.teamChartData.series[0].data = res.data.data;
 						this.net_error = false;
@@ -363,7 +315,6 @@
 					complete: () => {
 					}
 				});
-
 				// 活动类型
 				uni.request({
 					// url: this.$url.BASE_URL + '/school/datawall_act',
@@ -386,53 +337,15 @@
 					},
 					complete: () => {
 					}
-				})
-			},
-			handleAuthentication(){
-				this.$u.route({
-					url: 'pages/school/index/verify',
-				  })
-			},
-			location(){
-				  this.$u.route({
-					url: 'pages/location/location',
-				  })
-			},
-			search(){
-				this.$u.route({
-					url: 'pages/search/search',
-				})
+				});
 			},
 			notice(){
-				this.$u.route({
-					url: 'pages/notice/notice'
-				})
-			},
-			checkUpdate(){
-				uni.getSystemInfo({
-					success:(res) => {
-						//检测当前平台，如果是安卓则启动安卓更新  
-						if(res.platform=="android"){  
-							console.log('is android');
-						}
-					}  
-				})
-			},
-			clickSearch() {
-			    this.$u.route('/pages/school/search/search');
-			},
-			clickImage(houseId) {
-				this.$u.route({
-					url: '/pages/school/detail/detail',
-					params: {
-						houseId: houseId
-					}
-				})
+				// this.$u.route({
+				// 	url: 'pages/notice/notice'
+				// })
 			},
 			clickNav(type){
 				if(type === "1"){
-					// this.$u.route('/pages/search/searchList');
-					// this.$u.route('/pages/committee/searchSchool/searchSchool');
 						uni.navigateTo({
 							url:'../searchSchool/searchSchool'
 						});
@@ -454,20 +367,6 @@
 						url:'../searchActivity/searchActivity'
 					});
 				}
-			},
-			code(){
-				this.$mytip.toast('请咨询作者')
-			},
-			appSysFlowInfo(){
-				let url = "web/appSysFlowInfo";
-				this.$u.post(url,{
-					uvCode:this.uvCode,
-				}).then(code => {
-					this.uvCode = code
-				});
-			},
-			server(){
-				// window.open('https://sourcebyte.cn')
 			},
 		}
 	}
