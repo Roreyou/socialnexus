@@ -293,6 +293,7 @@ class teamController {
         if(flag){
           // 调用服务方法获取已报名活动列表
           const myActivList = await activityService.getMyActiv(team_id, activity_status, page);
+          console.log("debug 03:",myActivList);
           // 返回成功响应
           return res.json(Result.success(myActivList));
         }

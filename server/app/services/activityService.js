@@ -367,10 +367,10 @@ class ActivityService {
           team_id: team_id
         }
       });
-
+      console.log("debug:",activityIds);
       // 将查询到的活动 ID 转换为数组
       const activityIdsArray = activityIds.map(activity => activity.activity_id);
-
+      console.log("debug:",activityIdsArray);
       // 在团队活动表中根据活动 ID 和活动开展状态返回对应记录
       const myActivList = await db.activity.findAll({
         where: {
@@ -378,18 +378,26 @@ class ActivityService {
           activity_status: activity_status
         }
       });
-
+      console.log("debug:",myActivList);
       const handledActivityList = await otherService.getCategKeyCommuIdsMap(myActivList)
-      handledActivityList.forEach(async activity => {
+      
+      const ResultActivityList = await Promise.all(handledActivityList.map(async activity => {
         // 获取活动状态
         const status = await this.getActivityStatusMap(activity.activity_status);
         // 添加 my_state 字段
         activity.my_state = status;
         activity = await otherService.IdInt2String("id", activity);
         //activity = await otherService.IdInt2String("category_id", activity);
-      });
-      const pageActivityList = otherService.getPageData(page, handledActivityList);
-      return pageActivityList;
+        
+        // 调用服务来改变时间格式
+        const newStartTimeFormat =await  otherService.changeTimeFormat(activity.start_time);
+        const newEndTimeFormat =await  otherService.changeTimeFormat(activity.end_time);
+        activity.start_time = newStartTimeFormat;
+        activity.end_time = newEndTimeFormat;
+        return activity;
+      }));
+      const pageActivityList = await otherService.getPageData(page, ResultActivityList);
+      return {myactiv_list:pageActivityList};
 
 
     } catch (error) {
