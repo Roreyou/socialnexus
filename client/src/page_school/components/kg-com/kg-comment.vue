@@ -244,7 +244,7 @@
 		margin-left: -15rpx;
 	}
 	.cot_content{
-		margin-top: 15rpx;
+		margin-top: 22rpx;
 		margin-left: 40rpx
 	}
 
