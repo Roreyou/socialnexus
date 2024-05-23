@@ -64,7 +64,8 @@
 						job: "志愿者",
 						keywords: "支教,教育"
 					}
-				]
+				],
+				click_but: false
 			}
 		},
 		computed: {
@@ -119,6 +120,7 @@
 		},
 		methods: {
 			cancelFavorite(likeid){
+				this.click_but = true
 				uni.showModal({
     			    title: '确认取消收藏',
     			    content: '确定取消收藏吗？',
@@ -175,6 +177,10 @@
     			});
 			},
 			todetail(id){
+				if(this.click_but){
+					this.click_but = false;
+					return
+				}
 				console.log("id:", id)
 				// uni.navigateTo({
 				// 	//注意用这个的话page前面有一个斜杠，不然会说找不到这个组件
