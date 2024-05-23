@@ -166,7 +166,7 @@ export default {
     const id = option.id;
     // uni.request({
     // 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
-    // 	// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+    // 	
 
     // 	method: 'GET',
     // 	data: {

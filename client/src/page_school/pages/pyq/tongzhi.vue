@@ -76,7 +76,7 @@
 		mounted() {
         uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/pyq/getnotice',
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},	

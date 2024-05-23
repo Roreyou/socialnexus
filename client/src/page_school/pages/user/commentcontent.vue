@@ -82,7 +82,7 @@ export default {
         }
         uni.request({
 				url: com_url,
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
                 header:{
 					Authorization:uni.getStorageSync("token")
 				},	
@@ -143,7 +143,7 @@ export default {
             //发表评价
             uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/commentactivity',
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},					

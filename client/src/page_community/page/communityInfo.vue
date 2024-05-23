@@ -188,7 +188,7 @@ export default {
     updateInfo() {
       uni.request({
         url: this.$url.BASE_URL + "/community/myInfo",
-        // url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+        
         header: {
           Authorization: uni.getStorageSync("token"),
         },

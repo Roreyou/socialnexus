@@ -196,7 +196,7 @@
 		mounted(){
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/pyq/noticenum',
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',	
+					
 			
 				method: 'GET',
 				data: {

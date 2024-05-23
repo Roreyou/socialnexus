@@ -34,7 +34,7 @@ export default {
         let com_url = this.$url.BASE_URL + '/schoolteam/commu2team'
         uni.request({
 				url: com_url,
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
                 header:{
 					Authorization:uni.getStorageSync("token")
 				},	

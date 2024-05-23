@@ -65,7 +65,7 @@
 			getAllUnreviewed(){
 				uni.request({
 					url: this.$url.BASE_URL + '/school/activities',
-					// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+					
                 	header:{
 						Authorization:uni.getStorageSync("token")
 					},	

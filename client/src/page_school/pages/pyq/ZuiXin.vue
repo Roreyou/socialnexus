@@ -62,7 +62,7 @@
 			getHot(data){
 				uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/pyq/latest',
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
 				
 				method: 'GET',
 				data: data,

@@ -69,7 +69,7 @@
 			//发请求
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/activsquare/posterinfo',
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},					
@@ -229,7 +229,7 @@
 			//发请求
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/activsquare/posterinfo',
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},					

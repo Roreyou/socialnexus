@@ -243,7 +243,7 @@ export default {
         url:
           this.$url.BASE_URL +
           "/schoolteam/getRecommend",
-        // url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+        
         method: "GET",
         data: data,
         success: (res) => {
@@ -272,7 +272,7 @@ export default {
     search() {
       // 	uni.request({
       // 	url: this.$url.BASE_URL + '/schoolteam/activsquare/search',
-      // 	// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+      // 	
       // 	header:{
       // 		Authorization:uni.getStorageSync("token")
       // 	},

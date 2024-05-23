@@ -191,7 +191,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			// console.log(this.$url.BASE_URL + '/m1/schoolteam/getRecommend')
 			// uni.request({
 			// 	url: this.$url.BASE_URL + '/schoolteam/getRecommend',
-			// 	// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+			// 	
 				
 			// 	method: 'GET',
 			// 	data: {
@@ -299,7 +299,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			loadActilist(data){  //加载活动列表
 				uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
 				
 				method: 'GET',
 				data: data,

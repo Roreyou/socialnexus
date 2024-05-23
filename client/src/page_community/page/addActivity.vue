@@ -285,7 +285,7 @@ export default {
 	addActivity() {
 		uni.request({
         url: this.$url.BASE_URL + "/community/activityinfo",
-        // url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+        
         header: {
           Authorization: uni.getStorageSync("token"),
         },

@@ -131,7 +131,7 @@
 			search(){
 				uni.request({
 					url: this.$url.BASE_URL + '/school/queryActivity',
-					// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+					
                 	header:{
 						Authorization:uni.getStorageSync("token")
 					},	

@@ -139,7 +139,7 @@
 			//发送获取这条帖子详情的请求
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/pyq/getdetail',
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
 				header:{
 							Authorization:uni.getStorageSync("token")
 						},
@@ -186,7 +186,7 @@
 					//在这里得到回复内容，发请求
 					uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/reply',
-					// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+					
 					header:{
 							Authorization:uni.getStorageSync("token")
 						},
@@ -246,7 +246,7 @@
 					//在这里得到回复内容，发请求
 					uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/comment',
-					// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+					
 					header:{
 					Authorization:uni.getStorageSync("token")
 				},	
@@ -303,7 +303,7 @@
 
 				uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/likepost',  //点赞和取消点赞会发请求，后端决定怎么处理
-					// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+					
 					header:{
 					Authorization:uni.getStorageSync("token")
 				},	

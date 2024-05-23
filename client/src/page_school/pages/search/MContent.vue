@@ -181,7 +181,7 @@ export default {
 			console.log("searchlist:", this.searchlist)
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getmyactiv',
-				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				
                 header:{
 					Authorization:uni.getStorageSync("token")
 				},	
