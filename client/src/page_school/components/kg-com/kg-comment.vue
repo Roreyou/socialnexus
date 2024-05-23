@@ -240,4 +240,10 @@
 	.like_icon{
 		margin-left: 5px;
 	}
+	.cot_flirt_name{
+		margin-left: -15rpx;
+	}
+	.cot_content{
+		margin-top: 30rpx;
+	}
 </style>
