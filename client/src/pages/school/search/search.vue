@@ -100,9 +100,6 @@ export default {
   components: {
     // indexTabbar,
     scontent,
-    actipickers,
-    invite,
-    picker,
     pcaPicker,
     datePicker,
     typePicker,

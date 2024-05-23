@@ -87,7 +87,6 @@
 </template>
 
 <script>
-import picker from '../../../page_school/components/picker/picker.vue'
 	import {
 		mapState,
 		mapMutations
@@ -97,7 +96,6 @@ import picker from '../../../page_school/components/picker/picker.vue'
 	export default {
 		components: {
 			actilist,
-			picker
 		},
 
 		data() {
