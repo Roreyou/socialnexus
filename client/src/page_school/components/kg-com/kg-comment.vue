@@ -244,6 +244,12 @@
 		margin-left: -15rpx;
 	}
 	.cot_content{
-		margin-top: 30rpx;
+		margin-top: 40rpx;
+	}
+
+	// 回复内容
+	.reply_content {
+		margin-left: 95rpx;
+		margin-top: 25rpx
 	}
 </style>

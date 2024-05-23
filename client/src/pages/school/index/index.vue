@@ -6,7 +6,7 @@
 			<u-navbar :is-back="false">
 				<view style="display: flex;justify-content: center;align-items: center;">
 					<view class="u-p-30">
-						当前位置：{{ province }} {{ city }}
+						你的位置：{{ province }} {{ city }}
 						<u-icon name="arrow-down-fill" class="u-p-l-20" color="#515356"></u-icon>
 					</view>
 				</view>

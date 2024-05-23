@@ -427,7 +427,7 @@ export default {
 				formData: this.formData,
 				// header: this.header,
 				header: {
-					Authorization :token
+					// Authorization :token
 				},
 				success: res => {
 					// 判断是否json字符串，将其转为json格式
