@@ -3,11 +3,22 @@ const db = require('../models/index');
 const Op = require('sequelize');
 
 class  otherService{
-    static async getCurrentTime(){
+    static async getCurrentTime() {
         const currentTime = new Date();
-        const formattedTime = currentTime.toISOString();
-        return formattedTime;
+        return currentTime; //包含了年、月、日、小时、分钟、秒和毫秒等信息
     }
+
+    static async changeTimeFormat(date){
+        const year = date.getFullYear(); // 获取年份
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 获取月份，月份从0开始计数，所以需要+1
+        const day = date.getDate().toString().padStart(2, '0'); // 获取日期
+        const hours = date.getHours().toString().padStart(2, '0'); // 获取小时
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // 获取分钟
+        const seconds = date.getSeconds().toString().padStart(2, '0'); // 获取秒
+      
+        return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+    }
+    
 
     static async IdInt2String(IdName, event){
          // 检查事件对象是否存在
@@ -17,14 +28,11 @@ class  otherService{
         // 遍历事件对象的每个属性
         for (const key in event) {
             // 如果属性名等于指定的 IdName，则将其值转换为字符串类型
-            console.log("debug key:",key);
             if (key === IdName && typeof event[key] === 'number') {
                 event[key] = event[key].toString();
                 break;
             }        
         }
-        console.log("debug 01:",IdName);
-        console.log("debug 02", event);
         return event;
     }
 
@@ -105,7 +113,7 @@ class  otherService{
     }
 
     static async getPageData(pageNumber, list) {
-        const pageSize = 10; // 假设每页有 10 条数据
+        const pageSize = 2; // 假设每页有 10 条数据
     
         if (pageNumber == 0) {
           // 如果页数等于 0，则表示第一部分，返回第一部分的数据

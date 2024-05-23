@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 const db = require('../models/index');
-const generateToken = require('../utils/jwtUtils');
+const {generateToken:generateToken} = require('../utils/jwtUtils');
 const short = require('short-uuid');
 const imageService = require('./imageService');
+const school = require('../models/school');
 
 class AuthService {
     static login = async (loginData) => {
@@ -119,6 +120,7 @@ class AuthService {
                 id: team.leader_id,
                 team_id: team.id,
                 pwd: team.pwd,
+                school_id:"1",
                 transaction: t,
             });
 
@@ -171,10 +173,11 @@ class AuthService {
             const token = generateToken(loginData);
 
 
-            return {
+            return {                
                 token: token,
                 verification_status: team.verification_status,
                 team_name: team.team_name,
+                team_id: team.id,
                 avatar: team.avatar,
                 isleader: isleader
             };
@@ -206,6 +209,7 @@ class AuthService {
                 token: token,
                 verification_status: team.verification_status,
                 team_name: team.team_name,
+                team_id: team.id,
                 avatar: team.avatar,
                 isleader: isleader
             };

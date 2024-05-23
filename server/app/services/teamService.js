@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const sequelize = require('sequelize');
 const ActivityService = require('./activityService');
 const CommunityService = require('./communityService');
+const otherService = require('./otherService');
 const post = require('../models/post');
 const activity = require('../models/activity');
 const teammember = require('../models/teammember');
@@ -12,6 +13,7 @@ const teamactivity = require('../models/teamactivity');
 const ImageService = require('./imageService');
 const { Op } = require('sequelize');
 const { commentOnPost } = require('./commentService');
+const shortUUID = require('short-uuid');
 
 
 
@@ -590,6 +592,8 @@ class teamService {
   static async saveInstructOrMembers(id, status,instructorData, leader, membersData) {
     try {
       if(status == 1 || status == 3){
+        // 初始化一个集合来存储唯一的 major 值
+          var uniqueMajors = new Set();
           // 指导老师
           const existingInstructor = await db.teacher.findOne({ where: { id: instructorData.id } });
           // 如果存在该指导教师，则删除其信息
@@ -597,37 +601,62 @@ class teamService {
             await existingInstructor.destroy();
           }
           // 创建新的指导老师信息
+          instructorData.pwd = await bcrypt.hash("123", 10);
           await db.teacher.create(instructorData);
+          if (instructorData.major && !uniqueMajors.has(instructorData.major)) {
+            uniqueMajors.add(instructorData.major);
+          }
+          
 
-
+          const leaderId = await teamService.getLeaderIdByTeamId(id);
           // 队长信息
-          const existingLeader = await db.teammember.findOne({ where: { id: leader.id } });
+          const existingLeader = await db.teammember.findOne({ where: { id: leaderId } });
           // 如果存在该队长，则删除其信息
+          var leaderPwd;
           if (existingLeader) {
+            leaderPwd = existingLeader.pwd;
             await existingLeader.destroy();
           }
           // 创建新的队长信息
+          leader.id = leaderId;
+          leader.pwd = leaderPwd;
           await db.teammember.create(leader);
+          if (leader.major && !uniqueMajors.has(leader.major)) {
+            uniqueMajors.add(leader.major);
+          }
 
           // 队伍成员信息
           await Promise.all(membersData.map(async memberData => {
-            console.log(memberData);
-          // 查询数据库中是否存在该成员
-          const existingMember = await db.teammember.findOne({ where: { id: memberData.id, team_id: id} });
+              console.log(memberData);
+            // 查询数据库中是否存在该成员
+            const existingMember = await db.teammember.findOne({ where: { id: memberData.id, team_id: id} });
             console.log("debug:",existingMember);
-          // 如果存在该成员，则删除该成员的信息
-          if (existingMember) {
-            await existingMember.destroy();
-          }
+            // 如果存在该成员，则删除该成员的信息
+            if (existingMember) {
+              console.log("debug 05");
+              await existingMember.destroy();
+            }
+            // 为每个成员对象添加密码字段，并设置默认值
+            memberData.pwd = await bcrypt.hash("123", 10);
             // 创建新的成员信息
             await db.teammember.create(memberData);
+            if (memberData.major && !uniqueMajors.has(memberData.major)) {
+              uniqueMajors.add(memberData.major);
+            }
           }));
+          // 将集合转换为字符串，使用逗号分隔每个 major 值
+          const relevant_faculties = Array.from(uniqueMajors).join('， ');
+          console.log("debuggg:",relevant_faculties);
 
           await db.team.update(
-            { verification_status: 4 },
+            { verification_status: 4 ,
+              instructor_id:instructorData.id,
+              relevant_faculties:relevant_faculties
+            },
             { where: {id:id} } 
           );
           const updateStatus = await db.team.findOne({where:{id:id},attributes: ['verification_status']});
+          console.log("debug verification_status:updateStatus",updateStatus);
           return {verification_status:updateStatus};
         }
       else{
@@ -769,6 +798,7 @@ class teamService {
       const instructor = await db.teacher.findByPk(teamInfo.instructor_id);
       const menNum = await db.teammember.count({ where: { team_id: teamInfo.id } });
       console.log(teamInfo);
+      console.log(school);
       const updateTeamInfo = {
         ...teamInfo.dataValues,
         school_name: school.name,
@@ -794,7 +824,6 @@ class teamService {
       return responseData;
     } catch (error) {
       console.error('Failed to get team info:', error);
-      return { code: '500', msg: 'Failed to get team info', data: null };
     }
 
   }
@@ -1088,7 +1117,6 @@ class teamService {
     try {
       // 根据身份（如teacher、student等）和用户ID检查用户是否存在
       const user = await teamService.getUserByIdentityAndId(identity, user_id);
-
       // 验证旧密码是否正确
       const passwordMatch = await bcrypt.compare(old_pwd, user.pwd);
 
@@ -1158,6 +1186,11 @@ class teamService {
       }
     });
     return leader;
+  }
+
+  static async getLeaderIdByTeamId(teamId) {
+    const team = await db.team.findOne({ where: { id: teamId } });
+    return team.leader_id;
   }
 
   static async getInstructorById(instructorId) {

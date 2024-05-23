@@ -16,9 +16,7 @@ class postService{
             postData.picture = pictureString;
             const newPost = await db.post.create(postData); // 在数据库中创建新的帖子
             // 补充 postTime 字段
-            const currentTime = new Date().toISOString();
-            newPost.post_time = currentTime;
-
+            newPost.post_time = await otherService.getCurrentTime();
             // 将 like 字段设置为 0
             newPost.like = 0;
             await newPost.save();
@@ -34,6 +32,7 @@ class postService{
             const post = await db.post.findByPk(postId);
             post.picture = post.picture.split(','); // 将逗号分隔的图片链接字符串转换为数组
             const tmp = await postService.getPostsHandled([post]);
+            
 
             //查看有无点赞
             const flag = await db.likepost.findOne({
@@ -90,18 +89,36 @@ class postService{
     static async getSameAreaPosts(province, city, page) {
         
         try {
+            // 假设 province 和 city 是从某个地方获取的变量
+            let whereConditions = {};
+            
+            // 如果 province 不是 null，则添加 province 条件
+            if (province !== null) {
+                whereConditions.province = province;
+            }
+            // 如果 city不是 null，则添加 city 条件
+            if (city !== null) {
+                whereConditions.city = city;
+            }
             // 调用数据库查询方法获取同区域帖子
-            const posts = await db.post.findAll({
-                where: {
-                    province:province,
-                    city: city
-                }
-            });
+            const posts = await db.post.findAll(
+               { where: whereConditions});
+
+            // 处理每个 post 的 picture 字段，将其转换为数组
+            const processedPosts = await Promise.all(posts.map(async post => {
+                // 将逗号分隔的图片链接字符串转换为数组
+                post.picture = await post.picture.split(',');
+                // 调用服务来改变时间格式
+                const newTimeFormat =await  otherService.changeTimeFormat(post.post_time);
+                post.dataValues.post_time = newTimeFormat;
+                return post;
+            }));
+            
             //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
-            const results = await this.getPostsHandled(posts);  
+            const results = await this.getPostsHandled(processedPosts);  
             // 分页
             const pageResults = await otherService.getPageData(page, results);
-            return pageResults;
+            return {location_post_list:pageResults};
         } catch (error) {
             console.log(error);
             throw new Error('Error fetching same area posts');
@@ -116,12 +133,21 @@ class postService{
                 order: [['like', 'DESC']],
                 limit: 100
             });
-
+            // 处理每个 post 的 picture 字段，将其转换为数组
+            const processedPosts = await Promise.all(posts.map(async post => {
+                // 将逗号分隔的图片链接字符串转换为数组
+                post.picture = await post.picture.split(',');
+                // 调用服务来改变时间格式
+                const newTimeFormat =await  otherService.changeTimeFormat(post.post_time);
+                post.dataValues.post_time = newTimeFormat;
+                return post;
+            }));
+            
             //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
-            const results = await this.getPostsHandled(posts);
+            const results = await this.getPostsHandled(processedPosts);
             // 分页
             const pageResults = await otherService.getPageData(page, results);
-            return pageResults;
+            return {hot_post_list:pageResults};
         } catch (error) {
             throw new Error('Error fetching hot posts');
         }
@@ -136,8 +162,19 @@ class postService{
                 order: [['post_time', 'DESC']],
                 limit: 100
             });
+
+            // 处理每个 post 的 picture 字段，将其转换为数组
+            const processedPosts = await Promise.all(posts.map(async post => {
+                // 将逗号分隔的图片链接字符串转换为数组
+                post.picture = await post.picture.split(',');
+                // 调用服务来改变时间格式
+                const newTimeFormat =await  otherService.changeTimeFormat(post.post_time);
+                post.dataValues.post_time = newTimeFormat;
+                return post;
+            }));
+
             //处理：队伍名映射、获取评论条数、获取队伍头像的统一接口
-            const results = await this.getPostsHandled(posts);
+            const results = await this.getPostsHandled(processedPosts);
             //分页
             const pageResults = await otherService.getPageData(page, results);
             return pageResults;
