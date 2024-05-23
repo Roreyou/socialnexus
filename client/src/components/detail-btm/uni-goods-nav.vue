@@ -68,6 +68,7 @@
 
 			team_id: String,
 			acti_id: String,
+			isfavor: Boolean, //已经收藏了就是true
 
 			options: {
 				type: Array,
@@ -126,7 +127,9 @@
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin','user_id','userInfo'])
 		},
-
+		mounted() {
+			this.isActive = this.isfavor
+		},
 		methods: {
 			onClick(index, item) {
 				//生成海报

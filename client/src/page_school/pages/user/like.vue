@@ -2,7 +2,7 @@
 <template>
 	<view class="content">
 		<view class="cu-item" v-for="(item,index) in acList" :key="index" @click="todetail(item.id)">
-			<view class="cu-card article" :class="isCard?'no-card':''">
+			<view class="cu-card article others" :class="isCard?'no-card':''">
 					<view class="cu-item shadow">
 						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
@@ -226,5 +226,12 @@
 }
 .cancel-favorite{
 	font-size: small;
+}
+
+/* 卡片样式 */
+.others{
+	background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 </style>

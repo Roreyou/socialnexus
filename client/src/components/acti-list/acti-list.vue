@@ -187,6 +187,6 @@
  	/* border-radius: 50%; */
 	object-fit: cover; 
  	background-color: #ffffff;
- 	margin-right: 30rpx;
+ 	margin-right: 40rpx;
 	}
 </style>

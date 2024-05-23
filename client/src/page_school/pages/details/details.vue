@@ -169,7 +169,7 @@
 		</view>
 
 		<view style="position: fixed; bottom: 0; width: 100%;">
-			<bttab v-if="hasactiid" :team_id="user_id" :acti_id="acti_id"></bttab>
+			<bttab v-if="hasactiid" :team_id="user_id" :acti_id="acti_id" :isfavor="isfavor"></bttab>
 		</view>
 
 		<!-- 以下是尝试把海报迁移到这个页面 -->
@@ -195,7 +195,8 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				detail:{
 					keywords: ""
 				},
-				hasactiid:false
+				hasactiid:false,
+				isfavor:false
 			}
 		},
 		computed: {
@@ -219,10 +220,12 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				method: 'GET',
 				data: {
 					acti_id: id,
+					team_id: this.user_id,
 					// token: this.$userinfo.token
 				},
 				success: res => {
 					this.detail = res.data.data.detail;
+					this.isfavor = res.data.data.detail.isfavor;
 					// this.detail.keywords = "服务,实践"
 					this.net_error = false;
 				},
