@@ -88,7 +88,7 @@ class postController{
             // 调用评论服务层方法
             const { comment_list } = await commentService.commentOnPost(post_id, team_id, text);
     
-            return res.json(Result.success(comment_list));
+            return res.json(Result.success({comment_list:comment_list}));
         } catch (error) {
             console.error('Error commenting on post:', error);
             return res.json(Result.fail(error.message));
@@ -148,7 +148,7 @@ class postController{
         const { comment_id, reply_content, team_id } = req.body;
         try {
             const reply = await postService.createReply(comment_id, reply_content, team_id);
-            return res.json(Result.success(reply));
+            return res.json(Result.success({reply_list:reply}));
         } catch (error) {
             console.error('Error:', error);
             return res.json(Result.fail(error.message));
@@ -199,7 +199,7 @@ class postController{
 
     static async delNotice(req, res){
         try {
-            const { team_id, post_id } = req.body;
+            const { post_id,team_id } = req.body;
             const noticeNum = await postService.delNotice(team_id, post_id);
             return res.json(Result.success("delete successfully!"));
         } catch (error) {

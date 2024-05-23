@@ -151,7 +151,7 @@ class ActivityController {
   
   
       // 返回成功响应
-      res.json(Result.success(activities));
+      res.json(Result.success({activ_list:activities}));
     } catch (error) {
       console.error(error);
       res.status(500).json(Result.fail('Internal Server Error'));
@@ -161,12 +161,12 @@ class ActivityController {
   // 获取某一活动详情
   static async getactiDetail(req, res){
     // console.log('req.query:',req.query);
-    const { acti_id:id } = req.query;
+    const { acti_id:id, team_id:team_id } = req.query;
     console.log(id);
     try {
       const flag = await activityService.FindActivity(id);
       if(flag){
-        const activity = await activityService.getactidetail(id);
+        const activity = await activityService.getactidetail(id,team_id);
         return res.json(Result.success(activity));
       }
       else{

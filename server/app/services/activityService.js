@@ -86,6 +86,7 @@ class ActivityService {
         ]
       }
     });
+    
     return activity;
   }
 
@@ -476,7 +477,7 @@ class ActivityService {
   }
 
   // 获取活动详情的方法
-  static async getactidetail(id) {
+  static async getactidetail(id,team_id) {
     const activity = await db.activity.findByPk(id);
     const community_id = activity.community_id;
     const activityArray = [activity];
@@ -499,6 +500,19 @@ class ActivityService {
     }
     var result = await otherService.IdInt2String("id", handledActicity);
     result = await otherService.IdInt2String("category_id", result);
+    //是否被收藏
+    const favor = await db.favorate.findOne({where:{team_id:team_id, activity_id:id}});
+    var isfavor = true;
+    if(!favor){
+      isfavor = false;
+    }
+    handledActicity.isfavor = isfavor;
+    // 调用服务来改变时间格式
+    console.log("debug 01:",handledActicity);
+    const newStartTimeFormat =await  otherService.changeTimeFormat(handledActicity.start_time);
+    const newEndTimeFormat =await  otherService.changeTimeFormat(handledActicity.end_time);
+    handledActicity.start_time = newStartTimeFormat;
+    handledActicity.end_time = newEndTimeFormat;
     return { detail: handledActicity };
   }
 
@@ -532,7 +546,7 @@ class ActivityService {
 
 
   static async getRegisterDetail(teamId, activityId) {
-    const teamInfo = await teamService.getTeamInfoById(teamId);
+    const teamInfo = await db.team.findOne({where:{id:teamId}});
     const leader = await teamService.getLeaderById(teamInfo.leader_id);
     const instructor = await teamService.getInstructorById(teamInfo.instructor_id);
     const team_detail = {
@@ -544,6 +558,12 @@ class ActivityService {
     }
 
     const acti_detail = await ActivityService.getActivityInfoById(activityId);
+      // 调用服务来改变时间格式
+      const newStartTimeFormat =await  otherService.changeTimeFormat(acti_detail.start_time);
+      const newEndTimeFormat =await  otherService.changeTimeFormat(acti_detail.end_time);
+      acti_detail.dataValues.start_time = newStartTimeFormat;
+      acti_detail.dataValues.end_time = newEndTimeFormat;
+      
     return { team_detail, acti_detail };
   }
 

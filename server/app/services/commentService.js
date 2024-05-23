@@ -74,11 +74,13 @@ class commentService{
                 }));
                 
                 const Commentteam = await db.team.findByPk(comment.team_id);
-                
+                //获取队伍头像
+                const team_avatar = await otherService.getTeamAvatar(comment.team_id);
                 const commentDetail = {
                     ...comment.dataValues,
                     my_name: Commentteam ? Commentteam.team_name : null,
-                    reply_list_length: replyDetailList.length // 添加回复列表长度字段
+                    reply_list_length: replyDetailList.length, // 添加回复列表长度字段
+                    team_avatar:team_avatar.avatar
                 };
                 
                 return { comment_detail: commentDetail, reply_list: replyDetailList };
@@ -108,7 +110,7 @@ class commentService{
             });
 
             //获取队伍头像
-            const team_avatar = await teamService.getTeamAvatar(comment_detail.team_id);
+            const team_avatar = await otherService.getTeamAvatar(comment_detail.team_id);
                 
             // 增加评论详情字段
             const comment_result= {

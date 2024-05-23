@@ -211,7 +211,7 @@ class teamController {
   static async favoriteActivity(req, res) {
     try {
         // 获取前端传来的队伍ID和活动ID
-        const { team_id, activity_id, favor } = req.query;
+        const { team_id:team_id, acti_id:activity_id, favor:favor } = req.body;
         console.log("favor:",favor)
         if(favor==0){
           //收藏功能
@@ -219,7 +219,7 @@ class teamController {
           // 检查记录是否存在
           const existingFavorite = await teamService.getFavorite(team_id, activity_id);
           if (existingFavorite) {
-              return res.status(400).json({ code: 400, msg: 'Activity already favorited' });
+              return res.json(Result.fail('Activity already favorited'));
           }
           // 创建新记录
           await teamService.createFavorite(team_id, activity_id);
@@ -232,16 +232,16 @@ class teamController {
           // 检查记录是否存在
           const existingFavorite = await teamService.getFavorite(team_id, activity_id);
           if (!existingFavorite) {
-              return res.status(400).json({ code: 400, msg: 'Activity not favorited yet' });
+              return res.json(Result.fail('Activity not favorited yet'));
           }
           // 删除收藏记录
           await teamService.deleteFavorite(team_id, activity_id);
           // 返回成功响应
-          return res.json(Result.success('Activity favorited Unsuccessfully!'));
+          return res.json(Result.success('Activity favorited successfully!'));
         }
     } catch (error) {
         console.error('Error favoriting activity:', error);
-        return res.status(500).json({ code: 500, msg: 'Internal server error' });
+        return res.json(Result.fail('Internal server error'));
     }
   }
 
@@ -268,7 +268,7 @@ class teamController {
 
   static async getRecommend(req, res){
     try {
-      const { city, province, page } = req.query;
+      const { province:province,city:city,page:page } = req.query;
   
       // 调用服务方法获取活动推荐列表
       const recommendations = await teamService.getRecommend(city, province, page);
@@ -332,7 +332,7 @@ class teamController {
   // 取消报名活动的控制器方法
   static async cancelRegisterEvent(req, res) {
       try {
-        const { team_id, activ_id } = req.query;
+        const { activ_id, team_id } = req.body;
 
         const existingEvent = await teamService.findEvent(activ_id, team_id);
         

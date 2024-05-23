@@ -212,15 +212,6 @@ class teamService {
     return uniqueTeams;
   }
 
-  static async getTeamAvatar(teamId) {
-    const teamAvatar = await db.team.findOne({
-      where: {
-        id: teamId
-      },
-      attributes: ['avatar']
-    });
-    return teamAvatar;
-  }
 
   //依据社区和状态,这里的status是社区对队伍的录取状态和评价状态
   static async getTeamByCommu(commu_id, status) {
@@ -698,6 +689,7 @@ class teamService {
   }
 
   static async findEvent(activ_id, team_id) {
+    console.log("debug:",activ_id,team_id);
     // 检查数据库中是否存在相同的记录
     const existingEvent = await db.teamactivity.findOne({
       where: {
@@ -727,11 +719,24 @@ class teamService {
     try {
       // 在这里编写获取活动推荐列表的逻辑
       // 假设根据省份和城市查询数据库中的活动信息
+
+      // 假设 province 和 city 是从某个地方获取的变量
+      let whereConditions = {};
+            
+      // 如果 province 不是 null，则添加 province 条件
+      if (province !== null) {
+          whereConditions.province = province;
+      }
+      // 如果 city不是 null，则添加 city 条件
+      if (city !== null) {
+          whereConditions.city = city;
+      }
+      if(province == '中国区域'){
+        whereConditions={};
+      }
+      console.log(whereConditions);
       const activities = await db.activity.findAll({
-        where: {
-          province: province,
-          city: city
-        },
+        where: whereConditions,
         attributes: {
           include: [
             [
@@ -851,7 +856,15 @@ class teamService {
       }
     });
     const results = await otherService.getCategKeyCommuIdsMap(teamFavorites);
-    return results;
+     // 处理每个 post 的 picture 字段，将其转换为数组
+     const processedResults = await Promise.all(results.map(async result => {
+      const newStartTimeFormat =await  otherService.changeTimeFormat(result.start_time);
+      const newEndTimeFormat =await  otherService.changeTimeFormat(result.end_time);
+      result.start_time = newStartTimeFormat;
+      result.end_time = newEndTimeFormat;
+      return result;
+      }));
+    return processedResults;
   }
 
   static async commentActivity(teamId, activityId, comment) {
@@ -1062,7 +1075,7 @@ class teamService {
         acti_status: 0
       };
     }
-    const activity = await ActivityService.getActivityById(teamActivity.activity_id);
+    const activity = await db.activity.findOne({where:{id: teamActivity.activity_id}});
     console.log(activity);
     return {
       flag: "1",

@@ -85,12 +85,33 @@ class  otherService{
         });
 
         // 获取活动对应的关键词名称
-        const keywords = await db.keywords.findAll({
-            where: {
-            id: { [Op.in]: activity.keywords_id.split(',') } // 根据逗号分隔的关键词 id 查询
-            },
-            attributes: ['key_name']
-        });
+        let keywordNames = ''; 
+        const keywordIds = activity.keywords_id.split(',');  // 将关键词 ID 字符串转换为数组
+        // 遍历所有关键词 ID
+        for (let i = 0; i < keywordIds.length; i++) {
+            const keywordId = keywordIds[i].trim();  // 去除可能的空格
+
+            // 检查 ID 是否有效
+            if (keywordId) {
+            // 使用单个 ID 进行查询
+            const keyword = await db.keywords.findOne({
+                where: {
+                id: keywordId
+                },
+                attributes: ['key_name']
+            });
+
+            // 检查查询结果是否存在
+            if (keyword) {
+                // 如果不是第一个关键词，则在前面加上逗号
+                if (i !== 0) {
+                keywordNames += ', ';
+                }
+                // 添加关键词名称到结果字符串
+                keywordNames += keyword.key_name;
+            }
+            }
+        }
 
         // 获取活动对应的社区名字
         const community = await db.community.findOne({
@@ -105,7 +126,7 @@ class  otherService{
         return {
             ...rest,
             category_name: category ? category.type_name : null,
-            keywords: keywords.map(keyword => keyword.key_name).join(','),
+            keywords: keywordNames,
             community_name: community ? community.name : null
         };
         }));
@@ -130,6 +151,16 @@ class  otherService{
           }
         }
       }
+    
+    static async getTeamAvatar(teamId) {
+        const teamAvatar = await db.team.findOne({
+        where: {
+            id: teamId
+        },
+        attributes: ['avatar']
+        });
+        return teamAvatar;
+    }
 }
 
 module.exports = otherService;

@@ -74,7 +74,7 @@ class postService{
             });
 
             //获取队伍头像
-            const team_avatar = await teamService.getTeamAvatar(post.team_id);
+            const team_avatar = await otherService.getTeamAvatar(post.team_id);
             return {
                 ...post,
                 team_name: team_name.team_name ? team_name.team_name : null,
@@ -222,6 +222,7 @@ class postService{
                     ifread: 1,
                     liketime: await otherService.getCurrentTime()
                 });
+                
                 console.log("debug post_id00:",post_id);
                 // 更新帖子点赞数
                 const post = await db.post.findByPk(post_id);
@@ -412,6 +413,7 @@ class postService{
     static async getAllPostsByTeamId(team_id){
         // 返回结构：[{team},...,{team}]
         try {
+            console.log("debug teamid:",team_id);
             const posts = await db.post.findAll({ where: { team_id: team_id } });
             return posts;
         } catch (error) {
@@ -424,32 +426,37 @@ class postService{
         try {
             //获取该队伍的所有帖子
             const allPosts = await postService.getAllPostsByTeamId(team_id);
-            //console.log(allPosts);
             //获取所有帖子下的所有ifread为1的评论（即未读的评论）
             const commentsOfAllPosts = await commentService.getCommentsofAllPosts(allPosts, false);
+            console.log("debug 01");
             const ReturnComments = [];
             for(const commentsOfAPost of commentsOfAllPosts){
                 for(const comment of commentsOfAPost){
+                    console.log("debug 02");
                     const teamName = await teamService.getTeamName(comment.team_id);
-                    const teamAvatar = await teamService.getTeamAvatar(comment.team_id);
+                    const teamAvatar = await otherService.getTeamAvatar(comment.team_id);
+                    console.log("debug 03");
                     // 创建一个新的对象，将原始评论对象和团队信息合并
                     const updatedComment = {
                         ...comment.dataValues,
                         team_name: teamName.team_name,
                         team_avatar: teamAvatar.avatar
                     };
+                    console.log("debug 04");
                     ReturnComments.push(updatedComment);
+                    console.log("debug 05");
                 }
             }
-   
+            console.log("debug 06");
             // 查询点赞列表
             const likeList = [];
             //帖子的点赞
             const postLikes = await postService.getPostLikesByPosts(allPosts);
             for(const onePostLikes of postLikes){
+                console.log("debug 07");
                 for(const like of onePostLikes){
                     const teamName = await teamService.getTeamName(like.team_id);
-                    const teamAvatar = await teamService.getTeamAvatar(like.team_id);
+                    const teamAvatar = await otherService.getTeamAvatar(like.team_id);
                     const updateLike = {
                         team_name : teamName.team_name,
                         time: like.liketime,
@@ -457,8 +464,10 @@ class postService{
                         team_avatar: teamAvatar.avatar
                     };
                     likeList.push(updateLike);
+                    console.log("debug 08");
                 }
             }
+            console.log("debug 09");
             return { comment_list: ReturnComments, like_list: likeList };
         } catch (error) {
             throw new Error('Error fetching notifications');
@@ -497,7 +506,33 @@ class postService{
             await otherService.updateNotification(post_id, ownerTeam_id, true);
             // 获取该评论的新的回复列表
             const newReply = await replyService.getReplyOfAComment(comment_id);
-            return newReply;
+            // 遍历回复列表
+            const reply_result = await Promise.all(newReply.map(async reply => {
+            //获取队伍信息
+            const team = await db.team.findOne({
+                where: {
+                id: reply.reply_id
+                } 
+            });
+
+            //查看有没有点赞回复
+            const flag = await db.likereply.findOne({
+                where: {
+                    team_id: reply.reply_id,
+                    reply_id: reply.id
+                }
+            });
+
+            // 增加回复字段
+            return {
+                ...reply.dataValues,
+                team_avatar: team ? team.avatar : null, 
+                reply_name:team ? team.team_name : null,
+                fabulous: flag ? true : false, 
+            }; 
+        }));
+
+            return reply_result;
         } catch (error) {
             throw error;
         }
@@ -659,7 +694,7 @@ class postService{
                 post_id : post_id
             }
         });
-        //console.log(notification.dataValues);
+        console.log("debug 通知数量:",notification.num);
         if(notification.num == 0){
             return;
         }
