@@ -6,7 +6,7 @@
 		<view class="cu-bar search bg-white">
 			<view class="search-form round">
 				<text class="cuIcon-search"></text>
-				<input v-model="searchcontent" :adjust-position="false" type="text" placeholder="搜索活动"
+				<input v-model="searchcontent" :adjust-position="false" type="text" placeholder="搜索我的活动"
 					confirm-type="search">
 			</view>
 			<view class="action">
