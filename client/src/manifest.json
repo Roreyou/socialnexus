@@ -62,7 +62,11 @@
 		"setting": {
 			"urlCheck": false,
 			"es6": true,
-			"minified": true
+			"minified": true,
+			//下面两行是为了去掉“以下文件已被配置忽略...”
+			"ignoreUploadUnusedFiles": false,
+			"ignoreDevUnusedFiles": false
+
 		},
 		"usingComponents": true,
 		"lazyCodeLoading": "requiredComponents",  //组件按需注入
