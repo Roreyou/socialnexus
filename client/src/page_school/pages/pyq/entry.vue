@@ -126,10 +126,31 @@
 			//发布帖子
 			//先上传图片，拿到路径再发送发表请求
 			saveComInfo(){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后发布帖子。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
 				this.$refs.uUpload.upload();
 			},
 			postAll(){
-				console.log("provice: this.userInfo.provice:", this.userInfo.provice)
+				console.log("province: this.userInfo.province:", this.userInfo.province)
 				uni.request({
 							url: this.$url.BASE_URL + '/schoolteam/pyq/createpost',
 							header:{

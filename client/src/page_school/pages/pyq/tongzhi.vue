@@ -82,7 +82,7 @@
 				},	
 				method: 'GET',
 				data: {
-					team_id: this.user_id,
+					my_id: this.user_id,
 				},
 				success: res => {
 					if(res.data.code == 200){

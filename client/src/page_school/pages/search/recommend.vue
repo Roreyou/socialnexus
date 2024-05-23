@@ -51,7 +51,7 @@ export default {
 			getmore(){
 				this.page ++
 				const data = {
-					province: this.userInfo.provice,
+					province: this.userInfo.province,
 					city: this.userInfo.city,
 					page: this.page
 				}

@@ -129,7 +129,7 @@
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id']),
+			...mapState(['hasLogin', 'forcedLogin','user_id','userInfo']),
 			leng() {
 				return this.comList.length;
 			},
@@ -146,11 +146,12 @@
 				method: 'GET',
 				data: {
 					post_id: id,
+					team_id: this.user_id,
 					// token: this.$userinfo.token
 				},
 				success: res => {
 					this.dyInfo = res.data.data.post_detail;
-					this.dyInfo.fabulous = false;  
+					this.dyInfo.fabulous = res.data.data.post_detail.fabulous;  
 					this.comList = res.data.data.comment_list;
 					// this.dyInfo.keywords = "服务,实践"
 					// console.log(this.acList)
@@ -181,6 +182,27 @@
 				this.repModal.comId = id
 			},
 			saveReplyInfo(){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后发表回复。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
 				const id = this.repModal.comId
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
@@ -193,7 +215,8 @@
 					method: 'POST',
 					data: {
 						comment_id: id,
-						reply_content: this.repModal.replyInfo
+						reply_content: this.repModal.replyInfo,
+						team_id: this.user_id,
 					},
 					success: res => {
 						let code = res.data.code;
@@ -241,6 +264,27 @@
 				})
 			},
 			saveComInfo(){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后发表评论。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
 				const id = this.comModal.dyId
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
@@ -299,7 +343,27 @@
 
 			//喜欢数
 			comLikes(id){   //id是帖子id
-				if(true){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后点赞帖子。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+				}
+				else{
 
 				uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/likepost',  //点赞和取消点赞会发请求，后端决定怎么处理
@@ -357,7 +421,27 @@
 				}
 			},
 			replyLike(id){   //评论的点赞（但不是评论的回复的点赞, 回复的点赞还要另外加函数）
-
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后点赞评论。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
 				uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/likecom', //点赞和取消点赞 评论
 					header:{
@@ -425,6 +509,27 @@
 
 			//回复的点赞和取消点赞
 			replyLike2(com_index, index2){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后点赞回复。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/pyq/likereply', //点赞和取消点赞 评论
 				header:{

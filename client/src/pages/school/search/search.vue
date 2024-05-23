@@ -181,7 +181,7 @@ export default {
   },
   mounted() {
     const data = {
-      provice: "",
+      province: "",
       page: 0,
     };
     //刚打开时出现的是推荐的活动

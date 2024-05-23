@@ -4,6 +4,9 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 import actilist from '../../../components/acti-list/acti-list.vue';
 
 export default {
@@ -35,6 +38,7 @@ export default {
         }
     },
     computed:{
+		...mapState(['userInfo']),
         content() {
             return this.searchcontent 
         }
@@ -56,7 +60,8 @@ export default {
                 this.search(data)  //加载搜索列表（第一批
             }else{
                 const data = {
-                    provice: '',
+                    province: this.userInfo.province,
+                    city: this.userInfo.city,
                     page:0
                 }
                 this.getRelist(data)
@@ -72,7 +77,8 @@ export default {
     mounted(){
         if(this.content === ''){
             const data = {
-                provice: '',
+                province: this.userInfo.province,
+                city: this.userInfo.city,
                 page:0
             }
             this.getRelist(data)
@@ -107,6 +113,11 @@ export default {
                 page: this.page
             }
             if(this.content === ''){
+                const data = {
+                    province: this.userInfo.province,
+                    city: this.userInfo.city,
+                    page:this.page
+                }
                 this.getRelist(data)
             }
             else{

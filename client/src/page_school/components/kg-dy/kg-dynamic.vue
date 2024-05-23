@@ -65,7 +65,7 @@
 				<view class="operate_icon">
 					<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/address.png" mode=""></image>
 					<view class="operate_text">
-						{{ dyInfo.province }}
+						{{ dyInfo.province }} {{ dyInfo.city }}
 					</view>
 				</view>
 				<view class="operate_icon">

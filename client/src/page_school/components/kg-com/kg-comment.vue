@@ -39,7 +39,7 @@
 					</view>
 				</view>
 			</view>
-
+		
 			<view class="reply" v-for="(rep,index2) in item.reply_list" :key="index2">
 				<view class="reply_user">
 					<view class="reply_user_info">
