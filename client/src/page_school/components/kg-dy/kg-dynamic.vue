@@ -294,4 +294,9 @@
 	.like_icon{
 		margin-left: 5px;
 	}
+
+	//地址的字
+	.operate_text{
+		margin-left: 10rpx;
+	}
 </style>
