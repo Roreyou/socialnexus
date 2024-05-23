@@ -297,8 +297,32 @@ class ActivityService {
     if (!activities) {
       return null; // 返回null表示活动不存在
     }
-    const results = await otherService.getCategKeyCommuIdsMap(activities);
+
+    const handledActivityList = await Promise.all(activities.map(async activity => {
+      // 获取活动状态
+      const status = await this.getActivityStatusMap(activity.activity_status);
+      // 添加 my_state 字段
+      activity.my_state = status;
+      activity = await otherService.IdInt2String("id", activity);
+      activity = await otherService.IdInt2String("category_id", activity);
+
+      const actiStatus = await db.teamactivity.findOne({where:{activity_id:activity.id, team_id:team_id}});
+      if(actiStatus == 1){
+        activity.admission_status = "待录取";
+      }else if(actiStatus == 2){
+        activity.admission_status = "已录取";
+      }else if(actiStatus == 3){
+        activity.admission_status = "已驳回";
+      }
+      
+      return activity;
+    }));
+    console.log(handledActivityList);
+
+    const results = await otherService.getCategKeyCommuIdsMap(handledActivityList);
     const pageResults = await otherService.getPageData(page, results);
+
+
     return pageResults;
   }
 
@@ -371,12 +395,16 @@ class ActivityService {
       // 将查询到的活动 ID 转换为数组
       const activityIdsArray = activityIds.map(activity => activity.activity_id);
       console.log("debug:",activityIdsArray);
+      var whereCondition = {
+        id: activityIdsArray,
+        activity_status: activity_status
+      };
+      if( activity_status == 0){
+        whereCondition = {id: activityIdsArray};
+      }
       // 在团队活动表中根据活动 ID 和活动开展状态返回对应记录
       const myActivList = await db.activity.findAll({
-        where: {
-          id: activityIdsArray,
-          activity_status: activity_status
-        }
+        where: whereCondition
       });
       console.log("debug:",myActivList);
       const handledActivityList = await otherService.getCategKeyCommuIdsMap(myActivList)
@@ -389,11 +417,21 @@ class ActivityService {
         activity = await otherService.IdInt2String("id", activity);
         //activity = await otherService.IdInt2String("category_id", activity);
         
+        const actiStatus = await db.teamactivity.findOne({where:{activity_id:activity.id, team_id:team_id}});
+        if(actiStatus == 1){
+          activity.admission_status = "待录取";
+        }else if(actiStatus == 2){
+          activity.admission_status = "已录取";
+        }else if(actiStatus == 3){
+          activity.admission_status = "已驳回";
+        }
         // 调用服务来改变时间格式
         const newStartTimeFormat =await  otherService.changeTimeFormat(activity.start_time);
         const newEndTimeFormat =await  otherService.changeTimeFormat(activity.end_time);
         activity.start_time = newStartTimeFormat;
         activity.end_time = newEndTimeFormat;
+
+
         return activity;
       }));
       const pageActivityList = await otherService.getPageData(page, ResultActivityList);
@@ -447,6 +485,15 @@ class ActivityService {
           activity.my_state = status;
           activity = await otherService.IdInt2String("id", activity);
           activity = await otherService.IdInt2String("category_id", activity);
+
+          const actiStatus = await db.teamactivity.findOne({where:{activity_id:activity.id, team_id:team_id}});
+          if(actiStatus == 1){
+            activity.admission_status = "待录取";
+          }else if(actiStatus == 2){
+            activity.admission_status = "已录取";
+          }else if(actiStatus == 3){
+            activity.admission_status = "已驳回";
+          }
           return activity;
         }));
         return handledActivityList;
