@@ -58,10 +58,67 @@
 			}
 		},
 		onLoad(options) {
+
 			const activityId = options.acti_id;
+			console.log("activityId:",activityId);
 			this.acti_id = activityId;
+
+			//尝试把created里面的内容挪过来
+			// const activityId = this.acti_id;	
+
+			//发请求
+			uni.request({
+				url: this.$url.BASE_URL + '/schoolteam/activsquare/posterinfo',
+				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},					
+				method: 'GET',
+				data: {
+					acti_id: activityId,
+				},
+				success: res => {
+					if(res.data.code == 200){
+						this.detail = res.data.data;	
+						this.setData()	
+					}else if(res.data.code == 401){
+						console.log("token过期");
+						uni.showModal({
+						title: '',
+						content: '登录已过期。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '../../../pages/login/login',
+							})
+						} else if (res.cancel) {
+							// uni.navigateBack()
+							return;							
+						}
+						}
+					});
+					}
+								
+									
+					this.net_error = false;
+
+				},
+				fail: res => {
+					this.net_error = true;
+					uni.showToast({
+						icon: 'none',
+						title: '网络较差，请重试'
+					});
+				},
+				complete: () => {
+				}
+			})
 		},
 		created() {
+			console.log("this.acti_id:",this.acti_id)
+			// const { acti_id } = this.$mp.query;
+			// this.acti_id = acti_id
 			const activityId = this.acti_id;	
 			// 模拟异步请求获得到的数据 （模拟后端返回数据？
 			// setTimeout(() => {
@@ -172,7 +229,7 @@
 			//发请求
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/activsquare/posterinfo',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},					

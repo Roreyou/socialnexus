@@ -8,7 +8,7 @@
 						<u-avatar :src="dyInfo.team_avatar" size="60"></u-avatar>
 					</view>
 					<view class="dynamic_header_user_info">
-						<view class="dynamic_header_user_info_name">{{dyInfo.my_name}}</view>
+						<view class="dynamic_header_user_info_name">{{dyInfo.team_name}}</view>
 						<view class="dynamic_header_user_info_time">{{dyInfo.post_time}}</view>
 					</view>
 				</view>

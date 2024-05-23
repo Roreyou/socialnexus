@@ -228,7 +228,7 @@ import bttab from '../../components/detail-btm/uni-goods-nav.vue';
       this.mode = mode;
 			uni.request({
 				url: this.$url.BASE_URL + '/community/getActivityDetail',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/getActivityDetail',
+				// url: 'https://mock.apifox.coml/m1/community/getActivityDetail',
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},					
@@ -254,7 +254,7 @@ import bttab from '../../components/detail-btm/uni-goods-nav.vue';
 			const id = option.id;
 			// uni.request({
 			// 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
-			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+			// 	// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
 				
 			// 	method: 'GET',
 			// 	data: {

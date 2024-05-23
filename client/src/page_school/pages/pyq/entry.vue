@@ -129,6 +129,7 @@
 				this.$refs.uUpload.upload();
 			},
 			postAll(){
+				console.log("provice: this.userInfo.provice:", this.userInfo.provice)
 				uni.request({
 							url: this.$url.BASE_URL + '/schoolteam/pyq/createpost',
 							header:{
@@ -139,7 +140,7 @@
 								team_id: this.user_id,  
 								content: this.comModal.comInfo,
 								picture: this.comModal.submitImgs,
-								provice: this.userInfo.provice,
+								province: this.userInfo.province,
 								city: this.userInfo.city
 							},
 							success: res => {
@@ -195,7 +196,7 @@
 		mounted(){
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/pyq/noticenum',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',	
+				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',	
 			
 				method: 'GET',
 				data: {

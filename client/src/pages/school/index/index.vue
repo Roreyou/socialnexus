@@ -188,10 +188,10 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			// })
 			// console.log("userInfo.verification_status,", this.userInfo)
 			// console.log(typeof this.$url)
-			// console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
+			// console.log(this.$url.BASE_URL + '/m1/schoolteam/getRecommend')
 			// uni.request({
-			// 	url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
-			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+			// 	url: this.$url.BASE_URL + '/schoolteam/getRecommend',
+			// 	// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
 				
 			// 	method: 'GET',
 			// 	data: {
@@ -299,7 +299,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			loadActilist(data){  //加载活动列表
 				uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
 				
 				method: 'GET',
 				data: data,

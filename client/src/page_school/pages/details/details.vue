@@ -37,7 +37,7 @@
 							活动类别
 						</view>
 						<view class="value">
-							{{ detail.category }}
+							{{ detail.category_name }}
 						</view>
 					</view>
 
@@ -212,7 +212,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			// 获取活动详情
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getactidetail',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
 				// header:{
 				// 	Authorization:uni.getStorageSync("token")
 				// },					
@@ -238,7 +238,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			const id = option.id;
 			// uni.request({
 			// 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
-			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+			// 	// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
 				
 			// 	method: 'GET',
 			// 	data: {

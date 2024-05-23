@@ -215,8 +215,8 @@ export default {
       uni.request({
         url:
           this.$url.BASE_URL +
-          "/4142061-3780993-default/schoolteam/activsquare/filter",
-        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/activsquare/filter,
+          "/schoolteam/activsquare/filter",
+        // url: 'https://mock.apifox.coml/m1/schoolteam/activsquare/filter,
         method: "GET",
         data: {
           location: {
@@ -242,8 +242,8 @@ export default {
       uni.request({
         url:
           this.$url.BASE_URL +
-          "/4142061-3780993-default/schoolteam/getRecommend",
-        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+          "/schoolteam/getRecommend",
+        // url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
         method: "GET",
         data: data,
         success: (res) => {
@@ -272,7 +272,7 @@ export default {
     search() {
       // 	uni.request({
       // 	url: this.$url.BASE_URL + '/schoolteam/activsquare/search',
-      // 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+      // 	// url: 'https://mock.apifox.coml/m1/schoolteam/getRecommend',
       // 	header:{
       // 		Authorization:uni.getStorageSync("token")
       // 	},

@@ -48,6 +48,9 @@ const store = new Vuex.Store({
 			state.userInfo.isleader = isleader;
 			
 		},
+		setStatu(state,{verification_status}){
+			state.userInfo.verification_status = verification_status;
+		},
 		setAddress(state, {province, city}) {
 			console.log("setAddress", province, city)
 			state.userInfo.province = province;
