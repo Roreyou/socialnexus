@@ -92,9 +92,6 @@
 	} from 'vuex'
 // import indexTabbar from '../../../components/search-tabbar/search-tabbar.vue';
 import scontent from "../../../page_school/pages/search/searchcontent.vue";
-import actipickers from "../../../page_school/components/acti-pickers/acti-pickers.vue";
-import invite from "../../../page_school/components/invite/invite.vue";
-import picker from "../../../page_school/components/picker/picker.vue";
 import pcaPicker from "@/components/pcaPicker/pcaPicker.vue";
 import datePicker from "@/components/datePicker/datePicker.vue";
 import typePicker from "@/components/typePicker/typePicker.vue";

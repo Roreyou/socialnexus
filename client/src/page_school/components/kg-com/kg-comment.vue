@@ -244,7 +244,8 @@
 		margin-left: -15rpx;
 	}
 	.cot_content{
-		margin-top: 40rpx;
+		margin-top: 15rpx;
+		margin-left: 40rpx
 	}
 
 	// 回复内容
