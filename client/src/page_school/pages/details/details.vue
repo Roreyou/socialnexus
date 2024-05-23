@@ -209,7 +209,6 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			const id = query.acti_id;
 			// console.log("id:",id)
 			this.acti_id = id;
-			this.hasactiid = true;
 			// 获取活动详情
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getactidetail',
@@ -227,6 +226,8 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 					this.detail = res.data.data.detail;
 					this.isfavor = res.data.data.detail.isfavor;
 					// this.detail.keywords = "服务,实践"
+					this.hasactiid = true;
+					console.log("this.isfavor:",this.isfavor)
 					this.net_error = false;
 				},
 				fail: res => {
