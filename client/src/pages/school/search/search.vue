@@ -87,6 +87,9 @@
 </template>
 
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 // import indexTabbar from '../../../components/search-tabbar/search-tabbar.vue';
 import scontent from "../../../page_school/pages/search/searchcontent.vue";
 import actipickers from "../../../page_school/components/acti-pickers/acti-pickers.vue";
@@ -179,9 +182,13 @@ export default {
       page: 0,
     };
   },
+  computed: {
+			...mapState(['userInfo'])
+		},
   mounted() {
     const data = {
-      province: "",
+      province: this.userInfo.province,
+      city: this.userInfo.city,
       page: 0,
     };
     //刚打开时出现的是推荐的活动
