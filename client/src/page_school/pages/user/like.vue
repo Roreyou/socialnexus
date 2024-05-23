@@ -233,6 +233,16 @@
 .cancel-favorite{
 	font-size: small;
 }
+.cancel-favorite {
+    background: linear-gradient(to right, #ff4e50, #f9d423);
+    color: white;
+    border: none;
+    padding: 0px 10px;
+    text-align: center;
+    font-size: 11px;
+    border-radius: 20px;
+    margin-top: 100rpx;
+}
 
 /* 卡片样式 */
 .others{
