@@ -233,5 +233,8 @@
 	background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+  margin-left: 25rpx;
+  margin-right: 25rpx;
+    margin-top: 10rpx;
 }
 </style>
