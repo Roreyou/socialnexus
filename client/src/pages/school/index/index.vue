@@ -34,9 +34,9 @@
 				</u-row>
 			</view>
 			<!-- <u-gap height="10"></u-gap> -->
-			<view @click="notice" class="margin-fixed">
+			<view @click="notice" class="margin-fixed xuanchuan">
 				<u-notice-bar mode="vertical" :list="noticeList" type="primary" more-icon
-				bg-color="#fff" :duration="5000" border-radius="15"></u-notice-bar>
+				bg-color="#fff" :duration="5000" border-radius="15" font-size="35"></u-notice-bar>
 			</view>
 			<!-- <u-gap height="5"></u-gap> -->
 			<!-- <u-waterfall v-model="flowList" ref="uWaterfall">
@@ -119,8 +119,9 @@
 					},
                 ],
 				noticeList: [
-					'强国有我，青春有为',
-					'行万里路，知中国情',
+					'开社会风气之先，做青年志愿者',
+					'构筑和谐企业，弘扬志愿精神，创建文明社区',
+					'予人玫瑰，手有余香'
 				],
 				navList:[
 				   {name:"我的活动",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover1.png",type:"1"},
