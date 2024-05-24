@@ -301,4 +301,10 @@
 	.dynamic_cont{
 		margin-left: 25rpx;
 	}
+
+	//帖子时间
+	.dynamic_header_user_info_time{
+		line-height: 1.6;
+		font-size: 10px;
+	}
 </style>

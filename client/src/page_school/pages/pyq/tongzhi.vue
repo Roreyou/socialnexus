@@ -183,7 +183,10 @@
 				success: res => {
 					if(res.data.code == 200){
 						this.comment_list = this.comment_list.filter(item => item.post_id !== id);
-						this.like_list = this.like_list.filter(item => item.post_id !== id);
+						this.likePost_list = this.likePost_list.filter(item => item.post_id !== id);
+						this.likeComment_list = this.likeComment_list.filter(item => item.post_id !== id);
+						this.likeReply_list = this.likeReply_list.filter(item => item.post_id !== id);
+						this.reply_list = this.reply_list.filter(item => item.post_id !== id);
 						uni.navigateTo({
 							url: "/page_school/pages/pyq/dynamicInfo?id=" + id
 						})
