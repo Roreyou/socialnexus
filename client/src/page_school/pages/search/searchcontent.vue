@@ -2,7 +2,7 @@
 <template>
     <view>
         <actilist v-if="isshow" :acList="modifiedSearchList"></actilist>		
-        <u-empty v-if="modifiedSearchList.length == 0" text="暂无符合条件的活动" mode="search" margin-top="30" font-size="35"></u-empty>
+        <u-empty v-if="modifiedSearchList.length == 0" text="暂无符合条件的活动" mode="search" margin-top="390" font-size="35"></u-empty>
     </view>
 </template>
 

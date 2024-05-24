@@ -2,7 +2,7 @@
 <template>
     <view>
         <commentlist :v-model="showlist" :list="com_list" :list_type="list_type" @gotocomment="toComment"></commentlist>
-		<u-empty v-if="com_list.length == 0" text="暂无内容" mode="history" margin-top="30" font-size="35"></u-empty>
+		<u-empty v-if="com_list.length == 0" text="暂无内容" mode="history" margin-top="90" font-size="35"></u-empty>
         <u-popup v-model="tocom" mode="bottom" border-radius="14">
 				<view class="bodys">
 					<u-form :model="comModal" :rules="rules" ref="comForm" :errorType="errorType">
