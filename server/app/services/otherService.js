@@ -76,7 +76,15 @@ class  otherService{
     static async getCategKeyCommuIdsMap(events) {
         // 对每个活动进行处理
         const results = await Promise.all(events.map(async activity => {
-        // 获取活动对应的分类名称
+        
+            // 调用服务来改变时间格式
+            console.log("debug:",activity);
+            const newStartTimeFormat = await  otherService.changeTimeFormat(activity.dataValues.start_time);
+            const newEndTimeFormat = await  otherService.changeTimeFormat(activity.dataValues.end_time);
+            activity.dataValues.start_time = newStartTimeFormat;
+            activity.dataValues.end_time = newEndTimeFormat;
+        
+            // 获取活动对应的分类名称
         const category = await db.activity_type.findOne({
             where: {
             id: activity.category_id
@@ -85,12 +93,33 @@ class  otherService{
         });
 
         // 获取活动对应的关键词名称
-        const keywords = await db.keywords.findAll({
-            where: {
-            id: { [Op.in]: activity.keywords_id.split(',') } // 根据逗号分隔的关键词 id 查询
-            },
-            attributes: ['key_name']
-        });
+        let keywordNames = ''; 
+        const keywordIds = activity.keywords_id.split(',');  // 将关键词 ID 字符串转换为数组
+        // 遍历所有关键词 ID
+        for (let i = 0; i < keywordIds.length; i++) {
+            const keywordId = keywordIds[i].trim();  // 去除可能的空格
+
+            // 检查 ID 是否有效
+            if (keywordId) {
+            // 使用单个 ID 进行查询
+            const keyword = await db.keywords.findOne({
+                where: {
+                id: keywordId
+                },
+                attributes: ['key_name']
+            });
+
+            // 检查查询结果是否存在
+            if (keyword) {
+                // 如果不是第一个关键词，则在前面加上逗号
+                if (i !== 0) {
+                keywordNames += ', ';
+                }
+                // 添加关键词名称到结果字符串
+                keywordNames += keyword.key_name;
+            }
+            }
+        }
 
         // 获取活动对应的社区名字
         const community = await db.community.findOne({
@@ -101,11 +130,12 @@ class  otherService{
         });
 
         const { ...rest } = activity.toJSON();
+
         // 构造处理后的活动信息
         return {
             ...rest,
             category_name: category ? category.type_name : null,
-            keywords: keywords.map(keyword => keyword.key_name).join(','),
+            keywords: keywordNames,
             community_name: community ? community.name : null
         };
         }));
@@ -113,7 +143,7 @@ class  otherService{
     }
 
     static async getPageData(pageNumber, list) {
-        const pageSize = 2; // 假设每页有 10 条数据
+        const pageSize = 3; // 假设每页有 10 条数据
     
         if (pageNumber == 0) {
           // 如果页数等于 0，则表示第一部分，返回第一部分的数据
@@ -129,6 +159,22 @@ class  otherService{
             return list.slice(startIndex, endIndex);
           }
         }
+      }
+    
+    static async getTeamAvatar(teamId) {
+        const teamAvatar = await db.team.findOne({
+        where: {
+            id: teamId
+        },
+        attributes: ['avatar']
+        });
+        return teamAvatar;
+    }
+
+    static async generateRandomFileName(ext) {
+        const timestamp = Date.now();
+        const random = Math.floor(Math.random() * 10000);
+        return `${timestamp}-${random}.${ext}`;
       }
 }
 

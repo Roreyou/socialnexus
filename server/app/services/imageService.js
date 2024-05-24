@@ -62,9 +62,9 @@ class ImageService {
     }
 
     static async saveImg(image){
-        console.log("debug image:",image)
+        //console.log("debug image:",image)
         try{
-            console.log("debug image.originalname:",image.originalname)
+            //console.log("debug image.originalname:",image.originalname)
             //获取putsignedurl
             const filename = image.originalname;
             const {key, putSignedUrl: putSignedUrl, getUrl: getUrl } = await ImageService.upload(filename);
