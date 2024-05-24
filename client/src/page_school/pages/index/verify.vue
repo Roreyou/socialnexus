@@ -605,7 +605,6 @@
 										email:this.baseFormData.email
 									},
 									leader:{
-										// id: this.baseFormData2.id,
 										name:this.baseFormData2.name,
 										tel:this.baseFormData2.tel,
 										major:this.baseFormData2.major,
@@ -619,7 +618,6 @@
 								},
 							dataType:'json',
 							success: (res) => {
-									// var result = JSON.parse(res.data.projectList);
 									if(res.data.code == 200){
 										uni.showToast({
 											title: '已提交审核',
@@ -653,8 +651,6 @@
 							}); 
 						}
 				}, 200);
-				//提交表单
-
 			},
 		}
 	}
