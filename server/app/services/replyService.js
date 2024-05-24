@@ -35,13 +35,18 @@ class replyService{
         return Replies; 
     }
 
-    static async getReplyLikesFromReplies(allReplies){
+    static async getReplyLikesFromReplies(allReplies,flag=true){
         //返回结构：[[{likereply},...,{}],...,[{likereply},...,{}]]
         //最外层的元素是不同的reply，内层数组是同一个reply下的所有点赞信息
         var replyLikes = [];
+
         for (const repliesOfAComment of allReplies) {
             for(const reply of repliesOfAComment){
-                const replyLike = await db.likereply.findAll({ where: { reply_id: reply.id } });
+                var whereCondition={ reply_id: reply.id };
+                if(!flag){
+                    whereCondition={ reply_id: reply.id, ifread:1 };
+                }
+                const replyLike = await db.likereply.findAll({ where: whereCondition});
                 replyLikes.push(replyLike);
             }
         }
