@@ -118,7 +118,8 @@
 				})
 				return
 			}
-			console.log(this.userInfo.personName)
+			console.log('this.userInfo.personName=', this.userInfo.personName)
+			console.log('this.userInfo.identity=', this.userInfo.identity)
 			if(this.userInfo.identity == '1'){
 				this.identity = '队长'
 				if(this.userInfo.personName !== ''){
@@ -284,19 +285,21 @@
 
 /* 身份标签 */
 .cu-btn2{
-		border-radius: 15px;
-    	background-color: rgba(255, 255, 255, 0.3);
-    	backdrop-filter: blur(10px);
-
-		font-family: pmkaiti;
-		border: 1.0px solid red;
-		color: red;
-		margin-left: 0;
-		line-height: 1.2;
-		font-size: 25rpx;
-		height: 50rpx;
-		margin-top: 10rpx;
-		margin-bottom: 10rpx
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.3);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    font-family: pmkaiti;
+    border: 1.0px solid red;
+    color: red;
+    margin-left: 0;
+    font-size: 25rpx;
+    height: 50rpx;
+    margin-top: 10rpx;
+    margin-bottom: 10rpx;
+    line-height: 1.5;
+    /* width: 50rpx; */
+    padding: 10rpx 25rpx;
 	}
 
 	/* 底部按钮 */
