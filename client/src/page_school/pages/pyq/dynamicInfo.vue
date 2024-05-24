@@ -203,6 +203,10 @@
 					});
 					return
 				}
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能回复评论！`);
+					return;
+				}
 				const id = this.repModal.comId
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
