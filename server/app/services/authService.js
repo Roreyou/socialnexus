@@ -174,7 +174,18 @@ class AuthService {
 
             //生成用户姓名
             const person = await db.teammember.findOne({where:{id:loginData.id}});
-            const personName = person.name;
+            var personName;
+            if(person){
+                if(!person.name){
+                    personName = '';
+                }else{
+                    personName = person.name;
+                }
+            }else{
+                throw new Error('用户不存在');                
+            }
+            
+            
             return {                
                 token: token,
                 verification_status: team.verification_status,
