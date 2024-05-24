@@ -157,6 +157,8 @@
 		},
 		onShow(){
 			if(this.userInfo.province !== ''){
+				this.city = this.userInfo.city
+				this.province = this.userInfo.province
 				return
 			}
 			this.getlocation()
