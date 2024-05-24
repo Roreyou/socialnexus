@@ -23,9 +23,7 @@
 					</view>
 			</view>
 		</view>
-		<view v-if="acList.length === 0" class="no-activities">
-    		没有收藏的活动
-  		</view>
+		<u-empty v-if="acList.length == 0" text="暂无收藏，快去浏览活动吧" mode="favor" margin-top="30rpx" font-size="35"></u-empty>
 	</view>
 </template>
 
