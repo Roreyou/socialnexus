@@ -119,52 +119,78 @@
 import { mapState } from "vuex";
 import bttab from "../../components/detail-btm/uni-goods-nav.vue";
 
-export default {
-  components: {
-    bttab,
-  },
-  data() {
-    return {
-      activityId: "",
-      mode: "",
-      detail: {
-		keywords: '',
-	  },
-    };
-  },
-  computed: {
-    ...mapState(["hasLogin", "forcedLogin", "user_id"]),
-  },
-  mounted() {
-    // 获取query对象
-    const query = this.$mp.query;
-    // const query = this.$route.query;
-    const activityId = query.activityId;
-    this.activityId = activityId;
-    const mode = query.mode;
-    this.mode = mode;
-    uni.request({
-      url: this.$url.BASE_URL + "/4142061-0-default/community/activityInfo",
-      // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/getActivityDetail',
-      header: {
-        Authorization: uni.getStorageSync("token"),
-      },
-      method: "GET",
-      data: {
-        id: activityId,
-      },
-      success: (res) => {
-        this.detail = res.data.data;
-        this.net_error = false;
-      },
-      fail: (res) => {
-        this.net_error = true;
-      },
-      complete: () => {},
-    });
-  },
-  onload() {},
-};
+	export default {
+    	components: {
+			bttab,
+		},
+		data(){
+			return{
+				activityId:'',
+        mode:'',
+				detail:{
+					keywords: ""
+				},
+			}
+		},
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
+		mounted(){
+			// 获取query对象
+			const query = this.$mp.query;
+			// const query = this.$route.query;
+			const activityId = query.activityId;
+			this.activityId = activityId;
+      const mode = query.mode;
+      this.mode = mode;
+			uni.request({
+				url: this.$url.BASE_URL + '/community/getActivityDetail',
+				// url: 'https://mock.apifox.coml/m1/community/getActivityDetail',
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},					
+				method: 'GET',
+				data: {
+					activityId: activityId,
+					// token: this.$userinfo.token
+				},
+				success: res => {
+					this.detail = res.data.data.detail;
+					// this.detail.keywords = "服务,实践"
+					this.net_error = false;
+				},
+				fail: res => {
+					this.net_error = true;
+				},
+				complete: () => {
+				}
+			})
+		},
+		onload(option){
+			console.log("onload")
+			const id = option.id;
+			// uni.request({
+			// 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
+			// 	
+				
+			// 	method: 'GET',
+			// 	data: {
+			// 		acti_id: id,
+			// 		// token: this.$userinfo.token
+			// 	},
+			// 	success: res => {
+			// 		this.detail = res.data.data.detail;
+			// 		this.detail.keywords = "服务,实践"
+			// 		this.net_error = false;
+			// 	},
+			// 	fail: res => {
+			// 		this.net_error = true;
+			// 	},
+			// 	complete: () => {
+			// 	}
+			// })
+		}
+	}
 </script>
 
 <style>

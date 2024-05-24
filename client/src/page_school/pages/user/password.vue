@@ -62,14 +62,15 @@
 					this.error_flag = true;
 					return
 				}
+				console.log("this.userInfo.identity:", this.userInfo.identity)
 				uni.request({
-						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/modifypwd',
+						url: this.$url.BASE_URL + '/schoolteam/modifypwd',
 						header:{
 							Authorization:uni.getStorageSync("token")
 						},
 						method: 'POST',
 						data: {
-							person_id: this.userInfo.person_id,
+							user_id: this.userInfo.person_id,
 							identity: this.userInfo.identity,
 							old_pwd:  this.curpassword,
 							new_pwd:  this.newpassword1,

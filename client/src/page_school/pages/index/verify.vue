@@ -8,43 +8,25 @@
 					<!-- <uni-forms-item label="所属高校" required>
 						<uni-easyinput v-model="baseFormData.name" placeholder="中山大学" ref="inputElement" />
 					</uni-forms-item> -->
-					<uni-forms-item label="负责人所属学院" :rules="[{ required: true, errorMessage: '所属学院项必填', trigger: 'blur' }]" name="major">
-						<uni-easyinput v-model="baseFormData.major" placeholder="请输入所属学院" />
+					<uni-forms-item label="所属学院" :rules="[{ required: true, errorMessage: '所属学院项必填', trigger: 'blur' }]" name="major">
+						<uni-easyinput v-model="baseFormData.major" placeholder="请输入指导老师所属学院" />
 					</uni-forms-item>
-					<uni-forms-item label="负责人姓名" :rules="[{ required: true, errorMessage: '姓名项必填', trigger: 'blur' }]" name="name">
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入队伍负责人姓名" />
+					<uni-forms-item label="姓名" :rules="[{ required: true, errorMessage: '姓名项必填', trigger: 'blur' }]" name="name">
+						<uni-easyinput v-model="baseFormData.name" placeholder="请输入指导老师负责人姓名" />
 					</uni-forms-item>
-					<uni-forms-item label="负责人联系电话" :rules="[{ required: true, errorMessage: '联系电话项必填', trigger: 'blur' }]" name="tel">
-						<uni-easyinput v-model="baseFormData.tel" placeholder="请输入负责人联系电话" />
+					<uni-forms-item label="联系电话" :rules="[{ required: true, errorMessage: '联系电话项必填', trigger: 'blur' }]" name="tel">
+						<uni-easyinput v-model="baseFormData.tel" placeholder="请输入指导老师联系电话" />
 					</uni-forms-item>
 					<!-- <uni-forms-item label="负责人邮箱" required>
 						<uni-easyinput v-model="baseFormData.name" placeholder="请输入负责人邮箱" />
 					</uni-forms-item> -->
-					<uni-forms-item label="负责人工号" :rules="[{ required: true, errorMessage: '工号项必填', trigger: 'blur' }]" name="netid">
-						<uni-easyinput v-model="baseFormData.netid" placeholder="请输入负责人工号" />
+					<uni-forms-item label="工号" :rules="[{ required: true, errorMessage: '工号项必填', trigger: 'blur' }]" name="id">
+						<uni-easyinput v-model="baseFormData.id" placeholder="请输入指导老师工号" />
 					</uni-forms-item>
-					<!-- <uni-forms-item label="性别" required>
-						<uni-data-checkbox v-model="baseFormData.sex" :localdata="sexs" />
-					</uni-forms-item> -->
-					<!-- <uni-forms-item label="兴趣爱好" required>
-						<uni-data-checkbox v-model="baseFormData.hobby" multiple :localdata="hobbys" />
-					</uni-forms-item> -->
-					<!-- <uni-forms-item label="队伍介绍">
-						<uni-easyinput type="textarea" v-model="baseFormData.introduction" placeholder="请输入队伍介绍" />
-					</uni-forms-item> -->
-					<!-- <uni-forms-item label="日期时间">
-						<uni-datetime-picker type="datetime" return-type="timestamp"
-							v-model="baseFormData.datetimesingle" />
-					</uni-forms-item> -->
-					<!-- <uni-forms-item label="选择队伍所在城市">
-						<uni-data-picker v-model="baseFormData.city" :localdata="cityData" popup-title="选择队伍所在城市">
-						</uni-data-picker>
-					</uni-forms-item> -->
+					<uni-forms-item label="邮箱" :rules="[{ required: true, errorMessage: '邮箱项必填', trigger: 'blur' }]" name="email">
+						<uni-easyinput v-model="baseFormData.email" placeholder="请输入指导老师邮箱" />
+					</uni-forms-item>
 
-					<!-- <uni-forms-item label="选择队伍人数">
-						<uni-data-select v-model="baseFormData.skills" :localdata="skillsRange" >
-						</uni-data-select>
-					</uni-forms-item> -->
 				</uni-forms>
 			</view>
 		</uni-section>
@@ -55,8 +37,8 @@
 					<uni-forms-item label="姓名" :rules="[{ required: true, errorMessage: '姓名项必填', trigger: 'blur' }]" name="name">
 						<uni-easyinput v-model="baseFormData2.name" placeholder="请输入姓名" />
 					</uni-forms-item>
-					<uni-forms-item label="学号" :rules="[{ required: true, errorMessage: '学号项必填', trigger: 'blur' }]" name="netid">
-						<uni-easyinput v-model="baseFormData2.netid" placeholder="请输入学号" disabled="true" />
+					<uni-forms-item label="联系电话" :rules="[{ required: true, errorMessage: '联系电话项必填', trigger: 'blur' }]" name="tel">
+						<uni-easyinput v-model="baseFormData2.tel" placeholder="请输入联系电话" />
 					</uni-forms-item>
 					<uni-forms-item label="所属院系" :rules="[{ required: true, errorMessage: '所属院系项必填', trigger: 'blur' }]" name="major">
 						<uni-easyinput v-model="baseFormData2.major" placeholder="请输入院系名称" />
@@ -142,9 +124,9 @@
 							</view>
 						</view>
 						<uni-forms-item :rules="[{ required: true, errorMessage: '队员学号项必填', trigger: 'blur' }]"
-						:label="'学号'+' '" name="netid">
+						:label="'学号'+' '" name="id">
 							<view class="form-item">
-								<uni-easyinput v-model="dynamicFormData2.domains[index].netid" placeholder="请输入队员学号"/>
+								<uni-easyinput v-model="dynamicFormData2.domains[index].id" placeholder="请输入队员学号"/>
 							</view>
 						</uni-forms-item>
 						<uni-forms-item v-model="dynamicFormData2.domains[index].name" :rules="[{ required: true, errorMessage: '队员姓名项必填', trigger: 'blur' }]"
@@ -159,10 +141,10 @@
 								<uni-easyinput v-model="dynamicFormData2.domains[index].major" placeholder="请输入队员所属院系"/>
 							</view>
 						</uni-forms-item>
-						<uni-forms-item v-model="dynamicFormData2.domains[index].level" :rules="[{ required: true, errorMessage: '队员所属年级项必填', trigger: 'blur' }]"
-						:label="'所属年级'+' '" name="level">
+						<uni-forms-item v-model="dynamicFormData2.domains[index].grade" :rules="[{ required: true, errorMessage: '队员所属年级项必填', trigger: 'blur' }]"
+						:label="'所属年级'+' '" name="grade">
 							<view class="form-item">
-								<uni-easyinput v-model="dynamicFormData2.domains[index].level" placeholder="请输入队员所属年级"/>
+								<uni-easyinput v-model="dynamicFormData2.domains[index].grade" placeholder="请输入队员所属年级"/>
 							</view>
 						</uni-forms-item>
 						<uni-forms-item v-model="dynamicFormData2.domains[index].tel" :rules="[{ required: true, errorMessage: '队员联系电话项必填', trigger: 'blur' }]"
@@ -198,19 +180,20 @@
 <script>
 	import {
 		mapState,
+		mapMutations
 	} from 'vuex'
 	export default {
 		data() {
 			return {
 				// 基础表单数据
 				baseFormData: {
-					netid:"",
+					id:"",
 					name:"",
 					major:"",
 					tel:""
 				},
 				baseFormData2: {
-					netid:"",
+					id:"",
 					name:"",
 					major:"",
 					level:"",
@@ -218,267 +201,7 @@
 					email:"",
 					team_id:""   //之后再改
 				}, //队长信息
-				//机场数据
-				'list': [{
-		'letter': 'A',
-		'data': [
-			'阿克苏机场',
-			'阿拉山口机场',
-			'阿勒泰机场',
-			'阿里昆莎机场',
-			'安庆天柱山机场',
-			'澳门国际机场'
-		]
-	}, {
-		'letter': 'B',
-		'data': [
-			'保山机场',
-			'包头机场',
-			'北海福成机场',
-			'北京南苑机场',
-			'北京首都国际机场'
-		]
-	}, {
-		'letter': 'C',
-		'data': [
-			'长白山机场',
-			'长春龙嘉国际机场',
-			'常德桃花源机场',
-			'昌都邦达机场',
-			'长沙黄花国际机场',
-			'长治王村机场',
-			'常州奔牛机场',
-			'成都双流国际机场',
-			'赤峰机场'
-		]
-	}, {
-		'letter': 'D',
-		'data': [
-			'大理机场',
-			'大连周水子国际机场',
-			'大庆萨尔图机场',
-			'大同东王庄机场',
-			'达州河市机场',
-			'丹东浪头机场',
-			'德宏芒市机场',
-			'迪庆香格里拉机场',
-			'东营机场',
-			'敦煌机场'
-		]
-	}, {
-		'letter': 'E',
-		'data': [
-			'鄂尔多斯机场',
-			'恩施许家坪机场',
-			'二连浩特赛乌苏国际机场'
-		]
-	}, {
-		'letter': 'F',
-		'data': [
-			'阜阳西关机场',
-			'福州长乐国际机场'
-		]
-	}, {
-		'letter': 'G',
-		'data': [
-			'赣州黄金机场',
-			'格尔木机场',
-			'固原六盘山机场',
-			'广元盘龙机场',
-			'广州白云国际机场',
-			'桂林两江国际机场',
-			'贵阳龙洞堡国际机场'
-		]
-	}, {
-		'letter': 'H',
-		'data': [
-			'哈尔滨太平国际机场',
-			'哈密机场',
-			'海口美兰国际机场',
-			'海拉尔东山国际机场',
-			'邯郸机场',
-			'汉中机场',
-			'杭州萧山国际机场',
-			'合肥骆岗国际机场',
-			'和田机场',
-			'黑河机场',
-			'呼和浩特白塔国际机场',
-			'淮安涟水机场',
-			'黄山屯溪国际机场'
-		]
-	}, {
-		'letter': 'I',
-		'data': []
-	}, {
-		'letter': 'J',
-		'data': [
-			'济南遥墙国际机场',
-			'济宁曲阜机场',
-			'鸡西兴凯湖机场',
-			'佳木斯东郊机场',
-			'嘉峪关机场',
-			'锦州小岭子机场',
-			'景德镇机场',
-			'井冈山机场',
-			'九江庐山机场',
-			'九寨黄龙机场'
-		]
-	}, {
-		'letter': 'K',
-		'data': [
-			'喀什机场',
-			'克拉玛依机场',
-			'库车龟兹机场',
-			'库尔勒机场',
-			'昆明巫家坝国际机场'
-		]
-	}, {
-		'letter': 'L',
-		'data': [
-			'拉萨贡嘎机场',
-			'兰州中川机场',
-			'丽江三义机场',
-			'黎平机场',
-			'连云港白塔埠机场',
-			'临沧机场',
-			'临沂机场',
-			'林芝米林机场',
-			'柳州白莲机场',
-			'龙岩冠豸山机场',
-			'泸州蓝田机场',
-			'洛阳北郊机场'
-		]
-	}, {
-		'letter': 'M',
-		'data': [
-			'满洲里西郊机场',
-			'绵阳南郊机场',
-			'漠河古莲机场',
-			'牡丹江海浪机场'
-		]
-	}, {
-		'letter': 'N',
-		'data': [
-			'南昌昌北国际机场',
-			'南充高坪机场',
-			'南京禄口国际机场',
-			'南宁吴圩机场',
-			'南通兴东机场',
-			'南阳姜营机场',
-			'宁波栎社国际机场'
-		]
-	}, {
-		'letter': 'O',
-		'data': []
-	}, {
-		'letter': 'P',
-		'data': [
-			'普洱思茅机场'
-		]
-	}, {
-		'letter': 'Q',
-		'data': [
-			'齐齐哈尔三家子机场',
-			'秦皇岛山海关机场',
-			'青岛流亭国际机场',
-			'衢州机场',
-			'泉州晋江机场'
-		]
-	}, {
-		'letter': 'R',
-		'data': [
-			'日喀则和平机场'
-		]
-	}, {
-		'letter': 'S',
-		'data': [
-			'三亚凤凰国际机场',
-			'汕头外砂机场',
-			'上海虹桥国际机场',
-			'上海浦东国际机场',
-			'深圳宝安国际机场',
-			'沈阳桃仙国际机场',
-			'石家庄正定国际机场',
-			'苏南硕放国际机场'
-		]
-	}, {
-		'letter': 'T',
-		'data': [
-			'塔城机场',
-			'太原武宿国际机场',
-			'台州路桥机场 (黄岩机场)',
-			'唐山三女河机场',
-			'腾冲驼峰机场',
-			'天津滨海国际机场',
-			'通辽机场',
-			'铜仁凤凰机场'
-		]
-	}, {
-		'letter': 'U',
-		'data': []
-	}, {
-		'letter': 'V',
-		'data': []
-	}, {
-		'letter': 'W',
-		'data': [
-			'万州五桥机场',
-			'潍坊机场',
-			'威海大水泊机场',
-			'文山普者黑机场',
-			'温州永强国际机场',
-			'乌海机场',
-			'武汉天河国际机场',
-			'乌兰浩特机场',
-			'乌鲁木齐地窝堡国际机场',
-			'武夷山机场',
-			'梧州长洲岛机场'
-		]
-	}, {
-		'letter': 'X',
-		'data': [
-			'西安咸阳国际机场',
-			'西昌青山机场',
-			'锡林浩特机场',
-			'西宁曹家堡机场',
-			'西双版纳嘎洒机场',
-			'厦门高崎国际机场',
-			'香港国际机场',
-			'襄阳刘集机场',
-			'兴义机场',
-			'徐州观音机场'
-		]
-	}, {
-		'letter': 'Y',
-		'data': [
-			'延安二十里堡机场',
-			'盐城机场',
-			'延吉朝阳川机场',
-			'烟台莱山国际机场',
-			'宜宾菜坝机场',
-			'宜昌三峡机场',
-			'伊春林都机场',
-			'伊宁机场',
-			'义乌机场',
-			'银川河东机场',
-			'永州零陵机场',
-			'榆林榆阳机场',
-			'玉树巴塘机场',
-			'运城张孝机场'
-		]
-	}, {
-		'letter': 'Z',
-		'data': [
-			'湛江机场',
-			'昭通机场',
-			'郑州新郑国际机场',
-			'芷江机场',
-			'重庆江北国际机场',
-			'中卫香山机场',
-			'舟山朱家尖机场',
-			'珠海三灶机场'
-		]
-	}],
+
 
 
 				// 城市数据
@@ -700,9 +423,7 @@
 				// ]
 			}
 		},
-		computed: {
 
-		},
 		// mounted() {
 		// 	this.$refs.inputElement.placeholder = "中山大学";
 		// 	this.$refs.inputElement.readOnly = true;
@@ -714,8 +435,10 @@
 		},
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin','user_id','userInfo'])
+
 		},
 		methods: {
+			...mapMutations(['setStatu']),
 			onClickItem(e) {
 				console.log(e);
 				this.current = e.currentIndex
@@ -807,10 +530,10 @@
 				// ]
 
 				const addinput = {
-					netid: '',
+					id: '',
 					name: '',
 					major: '',
-					level:'',
+					grade:'',
 					tel:'',
 					email:'',
 					
@@ -869,24 +592,25 @@
 									'Content-Type': 'application/json', 
 									Authorization:uni.getStorageSync("token")
 								}, 
-							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/authentification',
+							url: this.$url.BASE_URL + '/schoolteam/authentification',
 							method: 'POST',
 								data: {
 									id:this.user_id,
 									status:this.userInfo.verification_status,
 									instructor:{
-										id: this.baseFormData.netid,
+										id: this.baseFormData.id,
 										name:this.baseFormData.name,
 										tel:this.baseFormData.tel,
-										major:this.baseFormData.major
+										major:this.baseFormData.major,
+										email:this.baseFormData.email
 									},
 									leader:{
-										id: this.baseFormData2.netid,
 										name:this.baseFormData2.name,
 										tel:this.baseFormData2.tel,
 										major:this.baseFormData2.major,
 										grade:this.baseFormData2.level,
 										email:this.baseFormData2.email,
+										team_id:this.user_id
 									},
 									members:this.dynamicFormData2.domains									
 			
@@ -894,9 +618,13 @@
 								},
 							dataType:'json',
 							success: (res) => {
-									// var result = JSON.parse(res.data.projectList);
 									if(res.data.code == 200){
-
+										uni.showToast({
+											title: '已提交审核',
+											icon: 'none',
+											duration: 2000
+										});
+										this.setStatu(res.data.status)
 									}else if(res.data.code == 401){
 										console.log("token过期");
 										uni.showModal({
@@ -923,8 +651,6 @@
 							}); 
 						}
 				}, 200);
-				//提交表单
-
 			},
 		}
 	}

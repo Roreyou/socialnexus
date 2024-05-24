@@ -1,9 +1,15 @@
 <!-- 高校 搜索活动内容 -->
 <template>
-    <actilist v-if="isshow" :acList="modifiedSearchList"></actilist>
+    <view>
+        <actilist v-if="isshow" :acList="modifiedSearchList"></actilist>		
+        <u-empty v-if="modifiedSearchList.length == 0" text="暂无符合条件的活动" mode="search" margin-top="390" font-size="35"></u-empty>
+    </view>
 </template>
 
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 import actilist from '../../../components/acti-list/acti-list.vue';
 
 export default {
@@ -35,6 +41,7 @@ export default {
         }
     },
     computed:{
+		...mapState(['userInfo']),
         content() {
             return this.searchcontent 
         }
@@ -56,7 +63,8 @@ export default {
                 this.search(data)  //加载搜索列表（第一批
             }else{
                 const data = {
-                    provice: '',
+                    province: this.userInfo.province,
+                    city: this.userInfo.city,
                     page:0
                 }
                 this.getRelist(data)
@@ -72,7 +80,8 @@ export default {
     mounted(){
         if(this.content === ''){
             const data = {
-                provice: '',
+                province: this.userInfo.province,
+                city: this.userInfo.city,
                 page:0
             }
             this.getRelist(data)
@@ -107,6 +116,11 @@ export default {
                 page: this.page
             }
             if(this.content === ''){
+                const data = {
+                    province: this.userInfo.province,
+                    city: this.userInfo.city,
+                    page:this.page
+                }
                 this.getRelist(data)
             }
             else{
@@ -115,8 +129,8 @@ export default {
         },
         getRelist(data){
             uni.request({
-						url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
-						// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+						url: this.$url.BASE_URL + '/schoolteam/getRecommend',
+						
 						method: 'GET',
 						data: data,
 						success: res => {
@@ -145,7 +159,7 @@ export default {
                 return
             }
 			uni.request({
-			url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/activsquare/search',
+			url: this.$url.BASE_URL + '/schoolteam/activsquare/search',
 			header:{
 				Authorization:uni.getStorageSync("token")
 			},	

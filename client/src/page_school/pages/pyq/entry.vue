@@ -95,8 +95,8 @@
 				},
 
 				//上传路径？
-				// action: 'http://127.0.0.1:4523/m1/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
-				action: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost/uploadpics',
+				// action: 'http://127.0.0.1:4523/m1/schoolteam/pyq/createpost/uploadpics',
+				action: this.$url.BASE_URL + '/uploadImage',
 				//应该是后端返回的图片路径列表？
 				filesArr: [],
 				notice_num: '' //通知数量
@@ -105,7 +105,7 @@
 		},
 
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id'])
+			...mapState(['hasLogin', 'forcedLogin','user_id', 'userInfo'])
 		},
 
 		onReachBottom() {
@@ -126,11 +126,37 @@
 			//发布帖子
 			//先上传图片，拿到路径再发送发表请求
 			saveComInfo(){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后发布帖子。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能发布帖子！`);
+					return;
+				}
 				this.$refs.uUpload.upload();
 			},
 			postAll(){
+				console.log("province: this.userInfo.province:", this.userInfo.province)
 				uni.request({
-							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/createpost',
+							url: this.$url.BASE_URL + '/schoolteam/pyq/createpost',
 							header:{
 					Authorization:uni.getStorageSync("token")
 				},	
@@ -139,6 +165,8 @@
 								team_id: this.user_id,  
 								content: this.comModal.comInfo,
 								picture: this.comModal.submitImgs,
+								province: this.userInfo.province,
+								city: this.userInfo.city
 							},
 							success: res => {
 								if(res.data.code==200){
@@ -192,15 +220,19 @@
 
 		mounted(){
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/noticenum',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',	
+				url: this.$url.BASE_URL + '/schoolteam/pyq/noticenum',
+					
 			
 				method: 'GET',
 				data: {
 					team_id: this.user_id
 				},
 				success: res => {
-					this.notice_num = res.data.data.notice_num;
+					if(res.data.data.notice_num == '0'){
+						this.notice_num = '';
+					}else{
+						this.notice_num = res.data.data.notice_num;
+					}
 					this.net_error = false;
 				},
 				fail: res => {

@@ -17,8 +17,8 @@
 									<button class="cu-btn bg-grey shadow-blur" @click="handleReject(item)">驳回</button>
 							</view>
 							<view class="action right-buttons" v-if="item.veri_status === '已审核'" >
-								<span class="status-label passed" v-if="item.verification_status === 1">已通过</span>
-    							<span class="status-label rejected" v-if="item.verification_status === 2">已驳回</span>
+								<span class="status-label passed" v-if="item.verification_status === 2">已通过</span>
+    							<span class="status-label rejected" v-if="item.verification_status === 3">已驳回</span>
 							</view>
 
 						</view>
@@ -72,7 +72,8 @@
 			handlePass(item){
 				console.log("审核：通过");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					// url: this.$url.BASE_URL + '/school/approveActivity',
+					url: this.$url.BASE_URL + '/school/approveActivity',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -121,7 +122,7 @@
 			handleReject(item){
 				console.log("审核：驳回");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					url: this.$url.BASE_URL + '/school/approveActivity',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -170,8 +171,8 @@
 			getAll(){
 				console.log("获取全部this.isSearch="+this.isSearch);
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/activities',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+					url: this.$url.BASE_URL + '/school/activities',
+					
                 	header:{
 						Authorization:uni.getStorageSync("token")
 					},	

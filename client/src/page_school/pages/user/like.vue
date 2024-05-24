@@ -2,7 +2,7 @@
 <template>
 	<view class="content">
 		<view class="cu-item" v-for="(item,index) in acList" :key="index" @click="todetail(item.id)">
-			<view class="cu-card article" :class="isCard?'no-card':''">
+			<view class="cu-card article others" :class="isCard?'no-card':''">
 					<view class="cu-item shadow">
 						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
@@ -23,9 +23,7 @@
 					</view>
 			</view>
 		</view>
-		<view v-if="acList.length === 0" class="no-activities">
-    		没有收藏的活动
-  		</view>
+		<u-empty v-if="acList.length == 0" text="暂无收藏，快去浏览活动吧" mode="favor" margin-top="60" font-size="35"></u-empty>
 	</view>
 </template>
 
@@ -36,35 +34,8 @@
 	export default {
 		data() {
 			return {
-				acList:[
-					{
-						id: 0,
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						id: 1,
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{	
-						id: 2,
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					}
-				]
+				acList: [],
+				click_but: false
 			}
 		},
 		computed: {
@@ -72,8 +43,8 @@
 		},
 		onLoad() {
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getteamfavor',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/getteamfavor',
+				
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},	
@@ -85,7 +56,7 @@
 				success: res => {
 					if(res.data.code==200){
 						this.acList = res.data.data.acti_list;
-					this.acList[0].keywords = "服务,实践"
+					// this.acList[0].keywords = "服务,实践"
 					this.net_error = false;
 					}else if(res.data.code == 401){
 										console.log("token过期");
@@ -119,6 +90,7 @@
 		},
 		methods: {
 			cancelFavorite(likeid){
+				this.click_but = true
 				uni.showModal({
     			    title: '确认取消收藏',
     			    content: '确定取消收藏吗？',
@@ -127,7 +99,7 @@
     			        // 用户点击了确认按钮
 
 						uni.request({
-							url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
+							url: this.$url.BASE_URL + '/schoolteam/favor',
 							header:{
 								Authorization:uni.getStorageSync("token")
 							},	
@@ -175,6 +147,10 @@
     			});
 			},
 			todetail(id){
+				if(this.click_but){
+					this.click_but = false;
+					return
+				}
 				console.log("id:", id)
 				// uni.navigateTo({
 				// 	//注意用这个的话page前面有一个斜杠，不然会说找不到这个组件
@@ -226,5 +202,25 @@
 }
 .cancel-favorite{
 	font-size: small;
+}
+.cancel-favorite {
+    background: linear-gradient(to right, #ff4e50, #f9d423);
+    color: white;
+    border: none;
+    padding: 0px 10px;
+    text-align: center;
+    font-size: 11px;
+    border-radius: 20px;
+    margin-top: 100rpx;
+}
+
+/* 卡片样式 */
+.others{
+	background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+  margin-left: 25rpx;
+  margin-right: 25rpx;
+    margin-top: 10rpx;
 }
 </style>

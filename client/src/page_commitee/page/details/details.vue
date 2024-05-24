@@ -172,14 +172,15 @@
 
 			<!-- <bttab v-if="hasactiid" :team_id="user_id" :acti_id="acti_id"></bttab> -->
       <view class="button-container" v-if="detail.verification_status === 1">
-        <button class="status-label passed" @click="handlePass()">通过</button>
-        <button class="status-label rejected" @click="handleReject()" >驳回</button>
+        	<button class="status-label passed" @click="handlePass()">通过</button>
+			<view style="width:20rpx;"></view>
+        	<button class="status-label rejected" @click="handleReject()" >驳回</button>
       </view>
-      <view class="button-container" v-else-if="detail.verification_status === 2">
-        <button class="status-label passed"  >已通过</button>
+      <view class="done-container passed" v-else-if="detail.verification_status === 2">
+        <text class="status "  >已通过</text>
       </view>
-      <view class="button-container" v-else-if="detail.verification_status === 3">
-        <button class="status-label rejected">已驳回</button>
+      <view class="done-container rejected " v-else-if="detail.verification_status === 3">
+        <text class="status ">已驳回</text>
       </view>
 
 	</view> 
@@ -200,13 +201,17 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				acti_id:'',
 				detail:{
 					keywords: "",
-          verification_status: 0
+          			verification_status: 0
 				},
-				hasactiid:false
+				// hasactiid:false
 			}
 		},
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin','user_id'])
+		},
+		onLoad(options) {
+			console.log('activity details options.acti_id=',options.acti_id);
+			this.acti_id = options.acti_id;
 		},
 		mounted(){
 			// 获取query对象，传递过来的参数
@@ -215,24 +220,22 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			const id = query.acti_id;
 			// console.log("id:",id)
 			this.acti_id = id;
-			this.hasactiid = true;
+			// this.hasactiid = true;
 			// 获取活动详情api
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/school/activityInfo',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				// header:{
-				// 	Authorization:uni.getStorageSync("token")
-				// },					
+				// url: this.$url.BASE_URL + '/school/activityInfo',
+				url: this.$url.BASE_URL + '/school/activityInfo',
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},					
 				method: 'GET',
 				data: {
-					acti_id: id,
+					id: id,
 					// token: this.$userinfo.token
 				},
 				success: res => {
 					this.detail = res.data.data;
-          console.log(this.detail)
-					this.detail.keywords = "服务,实践"
-          this.detail.verification_status = 1;
+          			console.log(this.detail)
 					this.net_error = false;
 				},
 				fail: res => {
@@ -241,30 +244,6 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				complete: () => {
 				}
 			})
-		},
-		onload(option){
-			console.log("onload")
-			const id = option.id;
-			// uni.request({
-			// 	url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
-			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
-			// 	method: 'GET',
-			// 	data: {
-			// 		acti_id: id,
-			// 		// token: this.$userinfo.token
-			// 	},
-			// 	success: res => {
-			// 		this.detail = res.data.data.detail;
-			// 		this.detail.keywords = "服务,实践"
-			// 		this.net_error = false;
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
 		},
 		methods:{
 			phoneOn() {
@@ -278,11 +257,12 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 					}
 				})
 			},
-      // 审核：通过
+      		// 审核：通过
 			handlePass(item){
 				console.log("详情页面审核：通过");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					// url: this.$url.BASE_URL + '/school/approveActivity',
+					url: this.$url.BASE_URL + '/school/approveActivity',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -295,7 +275,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						if(res.data.code==200){
 							this.$u.toast(`审核成功！已通过申请。`);
 							// 重新显示
-							this.detail.verification_status = 1;
+							this.detail.verification_status = 2;
 						}
 						else if(res.data.code == 401){
 							console.log("token过期");
@@ -331,7 +311,8 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			handleReject(item){
 				console.log("详情页面审核：驳回");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveActivity',
+					// url: this.$url.BASE_URL + '/school/approveActivity',
+					url: this.$url.BASE_URL + '/school/approveActivity',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -344,7 +325,7 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 						if(res.data.code==200){
 							this.$u.toast(`审核成功！已驳回申请。`);
 							// 重新显示
-							this.detail.verification_status = 2;
+							this.detail.verification_status = 3;
 						}
 						else if(res.data.code == 401){
 							console.log("token过期");
@@ -474,30 +455,6 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 	.phone{
 		color: red
 	}
-
-  .button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 130rpx;
-    /* background-color: #ffffff; */
-    margin-top: 20rpx;
-    /* border-top: 5rpx solid #ccc; */
-}
-
-.status-label {
-  display: inline-block;
-  padding: 4px 8px;
-  color: #fff;
-  font-size: 36rpx;
-  font-weight: bold;
-  width: 320rpx;
-}
-
 .passed {
   background-color: green;
 }
@@ -506,14 +463,15 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
   background-color: red;
 }
 .button-container {
-    display: flex;
-    justify-content: center;
+	display: flex;
+    justify-content: space-between;
     align-items: center;
     position: fixed;
     bottom: 0;
-    left: -14rpx;
     height: 130rpx;
-    margin-top: 20rpx;
+    width: inherit;
+    background-color: white;
+    padding: 0 20rpx;
 }
 .status-label {
   display: inline-block;
@@ -522,6 +480,23 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
   color: #fff;
   font-size: 32rpx;
   font-weight: bold;
-  margin-right: 16rpx;
+  /* margin-right: 16rpx; */
+  width: 50%;
+}
+.done-container{
+	display: flex;
+  	flex-direction: column;
+  	justify-content: center;
+  	position: fixed;
+  	bottom: 0;
+  	left: 0;
+	width: inherit;
+}
+.status{
+	color: #fff;
+    font-size: 34rpx;
+    font-weight: bold;
+    height: 50rpx;
+    margin: 20rpx auto;
 }
 </style>

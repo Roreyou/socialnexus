@@ -2,7 +2,7 @@
  * @Author: happy 2630391116@qq.com
  * @Date: 2024-04-29 16:32:53
  * @LastEditors: happy 2630391116@qq.com
- * @LastEditTime: 2024-05-14 20:13:21
+ * @LastEditTime: 2024-05-21 10:35:18
  * @FilePath: \socialnexus\client\src\pages\committee\searchSchool\all.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -76,7 +76,7 @@
 			handlePass(item){
 				console.log("审核：通过");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -125,7 +125,7 @@
 			handleReject(item){
 				console.log("审核：驳回");
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/approveTeam',
+					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
@@ -170,12 +170,12 @@
 					}
 				})
 			},
-			// 获取全部活动
+			// 获取全部队伍
 			getAll(){
 				console.log("获取全部this.isSearch="+this.isSearch);
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/teams',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+					url: this.$url.BASE_URL + '/school/teams',
+					
                 	header:{
 						Authorization:uni.getStorageSync("token")
 					},	

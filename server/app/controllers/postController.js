@@ -3,6 +3,7 @@
 const postService = require('../services/postService');
 const commentService = require('../services/commentService');
 const Result = require('../common/Result');
+const ImageService = require('../services/imageService');
 
 
 class postController{
@@ -28,7 +29,7 @@ class postController{
             // 调用服务层方法获取帖子详情和评论列表
             const post = await postService.getPostDetails(post_id);
             const comments = await commentService.getDetailedCommentsForPost(post_id,team_id);
-
+            
             // 构造响应对象
             const result =  {
                 post_detail: post,
@@ -74,7 +75,7 @@ class postController{
             const posts = await postService.getLatestPosts(page);
             
             // 返回帖子列表
-            return res.json(Result.success(posts));
+            return res.json(Result.success({post_list:posts}));
         } catch (error) {
             console.error('Error fetching latest posts:', error);
             return res.json(Result.fail(error.message));
@@ -87,7 +88,7 @@ class postController{
             // 调用评论服务层方法
             const { comment_list } = await commentService.commentOnPost(post_id, team_id, text);
     
-            return res.json(Result.success(comment_list));
+            return res.json(Result.success({comment_list:comment_list}));
         } catch (error) {
             console.error('Error commenting on post:', error);
             return res.json(Result.fail(error.message));
@@ -108,7 +109,7 @@ class postController{
 
     //点赞/取消点赞评论
     static async likeCom(req, res){
-        const { comment_id, team_id } = req.body;
+        const { comment_id:comment_id, team_id:team_id } = req.body;
         try {
             const updatedCom = await postService.likeCom(comment_id, team_id);
             return res.json(Result.success(updatedCom));
@@ -147,7 +148,7 @@ class postController{
         const { comment_id, reply_content, team_id } = req.body;
         try {
             const reply = await postService.createReply(comment_id, reply_content, team_id);
-            return res.json(Result.success(reply));
+            return res.json(Result.success({reply_list:reply}));
         } catch (error) {
             console.error('Error:', error);
             return res.json(Result.fail(error.message));
@@ -175,11 +176,8 @@ class postController{
         try {
             // 在这里获取上传的图片
             const image = req.file;
-
-            // 调用服务层创建帖子
-            const imageUrl = await postService.savePostImg(image, "uploads");
-    
-            // 做其他操作，比如保存帖子到数据库
+            console.log(image);
+            const imageUrl = await ImageService.saveImg(image);
     
             return res.json(Result.success(imageUrl));
         } catch (error) {
@@ -201,7 +199,7 @@ class postController{
 
     static async delNotice(req, res){
         try {
-            const { team_id, post_id } = req.body;
+            const { post_id,team_id } = req.body;
             const noticeNum = await postService.delNotice(team_id, post_id);
             return res.json(Result.success("delete successfully!"));
         } catch (error) {

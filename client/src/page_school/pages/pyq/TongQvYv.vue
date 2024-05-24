@@ -21,6 +21,9 @@
 
 </template>
 <script>
+	import {
+		mapState,
+	} from 'vuex'
 	import kgDynamics from "../../../page_school/components/kg-dy/kg-dynamic.vue"
 	
 	export default {
@@ -34,7 +37,9 @@
 				loadmore: true,
 			};
 		},
-
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin','userName', 'userInfo']),
+		},
 		mounted() {
 			uni.$off('pyqTongQvYv');
 			let that = this;
@@ -52,14 +57,16 @@
         	});
 			// uni.$off('pyqReMen');
 			const data = {
-				page: 0
+				page: 0,
+				province: this.userInfo.province,
+				city: this.userInfo.city
 			}
 			this.getHot(data)
 		},
 
 		// mounted() {
 		// 	uni.request({
-		// 		url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/samearea',
+		// 		url: this.$url.BASE_URL + '/schoolteam/pyq/samearea',
 		// 		method: 'GET',
 		// 		data: {
 		// 		},
@@ -82,13 +89,15 @@
 				this.page ++;
 				const data = {
 					page: this.page,
+					province: this.userInfo.province,
+					city: this.userInfo.city
 				}
 				this.getHot(data)
 			},
 			getHot(data){
 				uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/samearea',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/pyq/samearea',
+				
 				method: 'GET',
 				data: data,
 				success: res => {

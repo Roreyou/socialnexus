@@ -27,6 +27,17 @@ class teamController {
     }
   }
 
+  static async getMyTeams(req, res) {
+    try {
+      const id = req.query.id;
+      const identity=req.query.identity;
+      const teams = await teamService.getMyTeams(id,identity);
+      return res.json(Result.success({team_list:teams}));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
   static async getTeamById(req, res) {
     // console.log('req.query:',req.query);
     const { id } = req.query;
@@ -96,6 +107,19 @@ class teamController {
     }
   }
 
+  static async queryTeamActByName(req,res){
+    const commu_id=req.query.community_id;
+    const team_name =req.query.team_name;
+    try {
+      const teams = await teamService.queryTeamActByName(commu_id,team_name);
+      if (!teams) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success(teams));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
   static async queryTeamByName(req,res){
     const commu_id=req.query.community_id;
     const team_name =req.query.team_name;
@@ -171,13 +195,13 @@ class teamController {
 
   static async authentification(req,res){
     try {
-      const { id, status, instructor, members } = req.body;
+      const { id, status, instructor, leader,members } = req.body;
   
       // 保存指导老师和队伍成员的信息到数据库
-      const { instructor: savedInstructor, members: savedMembers } = await teamService.saveInstructorAndMembers(instructor, members);
+      const {verification_status:updateStatus} = await teamService.saveInstructOrMembers(id, status,instructor,leader, members);
   
       // 返回响应告诉前端该信息正在被团委审核
-      return res.json(Result.success({status: 3}));
+      return res.json(Result.success({verification_status:updateStatus}));
     } catch (error) {
       console.error(error);
       return res.json(Result.fail(error));
@@ -187,7 +211,7 @@ class teamController {
   static async favoriteActivity(req, res) {
     try {
         // 获取前端传来的队伍ID和活动ID
-        const { team_id, activity_id, favor } = req.query;
+        const { team_id:team_id, acti_id:activity_id, favor:favor } = req.body;
         console.log("favor:",favor)
         if(favor==0){
           //收藏功能
@@ -195,7 +219,7 @@ class teamController {
           // 检查记录是否存在
           const existingFavorite = await teamService.getFavorite(team_id, activity_id);
           if (existingFavorite) {
-              return res.status(400).json({ code: 400, msg: 'Activity already favorited' });
+              return res.json(Result.fail('Activity already favorited'));
           }
           // 创建新记录
           await teamService.createFavorite(team_id, activity_id);
@@ -208,16 +232,16 @@ class teamController {
           // 检查记录是否存在
           const existingFavorite = await teamService.getFavorite(team_id, activity_id);
           if (!existingFavorite) {
-              return res.status(400).json({ code: 400, msg: 'Activity not favorited yet' });
+              return res.json(Result.fail('Activity not favorited yet'));
           }
           // 删除收藏记录
           await teamService.deleteFavorite(team_id, activity_id);
           // 返回成功响应
-          return res.json(Result.success('Activity favorited Unsuccessfully!'));
+          return res.json(Result.success('Activity favorited successfully!'));
         }
     } catch (error) {
         console.error('Error favoriting activity:', error);
-        return res.status(500).json({ code: 500, msg: 'Internal server error' });
+        return res.json(Result.fail('Internal server error'));
     }
   }
 
@@ -244,7 +268,7 @@ class teamController {
 
   static async getRecommend(req, res){
     try {
-      const { city, province, page } = req.query;
+      const { province:province,city:city,page:page } = req.query;
   
       // 调用服务方法获取活动推荐列表
       const recommendations = await teamService.getRecommend(city, province, page);
@@ -269,6 +293,7 @@ class teamController {
         if(flag){
           // 调用服务方法获取已报名活动列表
           const myActivList = await activityService.getMyActiv(team_id, activity_status, page);
+          console.log("debug 03:",myActivList);
           // 返回成功响应
           return res.json(Result.success(myActivList));
         }
@@ -308,7 +333,7 @@ class teamController {
   // 取消报名活动的控制器方法
   static async cancelRegisterEvent(req, res) {
       try {
-        const { team_id, activ_id } = req.query;
+        const { activ_id, team_id } = req.body;
 
         const existingEvent = await teamService.findEvent(activ_id, team_id);
         
@@ -425,7 +450,7 @@ class teamController {
 
   static async modifyInfo(req, res){
     try {
-      const { team_id, instrData, leaderData, membersData } = req.body;
+      const { id:team_id, instrData:instrData, leaderData:leaderData, membersData:membersData } = req.body;
 
       // 调用服务层方法更新队伍信息
       const result = await teamService.modifyInfo(team_id, instrData, leaderData, membersData);

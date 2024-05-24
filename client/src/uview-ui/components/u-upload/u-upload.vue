@@ -140,7 +140,7 @@ export default {
 		// 上传的文件字段名
 		name: {
 			type: String,
-			default: 'file'
+			default: 'image'
 		},
 		// 所选的图片的尺寸, 可选值为original compressed
 		sizeType: {
@@ -419,6 +419,7 @@ export default {
 			// 先强制跳过检查token试一下
 			// let token = lifeData.vuex_token
 			let token = "1111"
+			console.log('upload 上传图片接口');
 			const task = uni.uploadFile({
 				url: this.action,
 				filePath: this.lists[index].url,
@@ -426,7 +427,7 @@ export default {
 				formData: this.formData,
 				// header: this.header,
 				header: {
-					Authorization :token
+					// Authorization :token
 				},
 				success: res => {
 					// 判断是否json字符串，将其转为json格式
@@ -473,25 +474,26 @@ export default {
 		},
 		// 上传失败
 		uploadError(index, err) {
+
 			this.lists[index].progress = 0;
 			this.lists[index].error = true;
 			this.lists[index].response = null;
 			this.$emit('on-error', err, index, this.lists, this.index);
-			// this.showToast('上传失败，请重试');
-			uni.showModal({
-				title: '认证失效，请重新登录',
-				showCancel: false,   
-				 success: (res) => {  
-					if(res.confirm) {
-						// 没有token 则跳转到登录
-						return uni.reLaunch({
-							// url:'../login/login'
-							//这里有一个检查token强制跳转登录页面的逻辑，别的地方也都可以用
-							url:'../../../pages/login/login'
-						})
-					}
-				}  
-			});
+			this.showToast('上传失败，请重试');
+			// uni.showModal({
+			// 	title: '认证失效，请重新登录',
+			// 	showCancel: false,   
+			// 	 success: (res) => {  
+			// 		if(res.confirm) {
+			// 			// 没有token 则跳转到登录
+			// 			return uni.reLaunch({
+			// 				// url:'../login/login'
+			// 				//这里有一个检查token强制跳转登录页面的逻辑，别的地方也都可以用
+			// 				url:'../../../pages/login/login'
+			// 			})
+			// 		}
+			// 	}  
+			// });
 		},
 		// 删除一个图片
 		deleteItem(index) {

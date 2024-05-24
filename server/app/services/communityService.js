@@ -1,10 +1,16 @@
 //services/communityService.js
 const db = require('../models/index');
 const bcrypt = require('bcrypt');
+const ImageService = require('./imageService');
 
 class CommunityService{
     static async getCommunityById(id) {
-        return await db.community.findByPk(id);
+        let community= await db.community.findByPk(id);
+        if(community){
+            return community;
+        }else{
+            return null;
+        }
     }
 
     static async updateCommunity(id, communityData) {

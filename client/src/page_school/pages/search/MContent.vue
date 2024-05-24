@@ -2,6 +2,7 @@
 <template>
     <view>
         <actilist :acList="acList" :ismyac="true"></actilist>
+		<u-empty v-if="acList.length == 0" text="暂无符合条件的活动" mode="search" margin-top="390" font-size="35"></u-empty>
     </view>
 </template>
 
@@ -180,8 +181,8 @@ export default {
 			// }
 			console.log("searchlist:", this.searchlist)
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getmyactiv',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/getmyactiv',
+				
                 header:{
 					Authorization:uni.getStorageSync("token")
 				},	
@@ -195,7 +196,7 @@ export default {
 							return
 						}
 						this.acList = this.acList.concat(res.data.data.myactiv_list)
-						this.acList[0].keywords = "服务,实践"
+						// this.acList[0].keywords = "服务,实践"
 						// console.log(this.acList)
 						this.net_error = false;
 					}else if(res.data.code == 401){

@@ -68,6 +68,7 @@
 
 			team_id: String,
 			acti_id: String,
+			isfavor: Boolean, //已经收藏了就是true
 
 			options: {
 				type: Array,
@@ -116,7 +117,7 @@
 		data() {
 			return {
 				ismyacti: false,
-				isActive: false,
+				isActive: this.isfavor,
 				// shareIcon: require('../../static/icon/fenxiangmian.png'),
 				shareIcon: '',
 				acti_status: 1
@@ -126,7 +127,10 @@
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin','user_id','userInfo'])
 		},
-
+		mounted() {
+			console.log("mounted-this.isfavor:",this.isfavor)
+			this.isActive = this.isfavor
+		},
 		methods: {
 			onClick(index, item) {
 				//生成海报
@@ -163,8 +167,12 @@
 					});
 				}else{
 					let favor = this.isActive ? 1 : 0;  //1就是要取消收藏，0就是要收藏
+					if(!this.userInfo.isleader){
+							this.$u.toast(`只有队长能收藏/取消收藏活动！`);
+							return;
+					}
 					uni.request({
-						url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/favor',
+						url: this.$url.BASE_URL + '/schoolteam/favor',
 						header:{
 							Authorization:uni.getStorageSync("token")
 						},
@@ -261,7 +269,7 @@
 			},
 			cancelacti(){  //取消报名
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/cancelRegisterEvent',
+				url: this.$url.BASE_URL + '/schoolteam/cancelRegisterEvent',
 				header:
 				{
 					Authorization:uni.getStorageSync("token")
@@ -316,7 +324,7 @@
 		},
 		mounted(){
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getisregister',
+				url: this.$url.BASE_URL + '/schoolteam/getisregister',
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},				

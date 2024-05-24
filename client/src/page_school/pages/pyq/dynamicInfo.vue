@@ -39,7 +39,7 @@
 				<view class="bodys">
 					<u-form :model="repModal" :rules="rules" ref="repForm" :errorType="errorType">
 						<u-form-item :border-bottom="false"  prop="replyInfo">
-							<u-input v-model="repModal.replyInfo" type="textarea" placeholder="请输入回复内容~" :border="border"
+							<u-input :style="{ fontSize: '25rpx' }" v-model="repModal.replyInfo" type="textarea" placeholder="请输入回复内容" :border="border"
 								:border-color="borderColor" :height="height" :auto-height="autoHeight" />
 						</u-form-item>
 					</u-form>
@@ -129,7 +129,7 @@
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id']),
+			...mapState(['hasLogin', 'forcedLogin','user_id','userInfo']),
 			leng() {
 				return this.comList.length;
 			},
@@ -138,19 +138,20 @@
 			const id = options.id;
 			//发送获取这条帖子详情的请求
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/getdetail',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/pyq/getdetail',
+				
 				header:{
 							Authorization:uni.getStorageSync("token")
 						},
 				method: 'GET',
 				data: {
 					post_id: id,
+					team_id: this.user_id,
 					// token: this.$userinfo.token
 				},
 				success: res => {
 					this.dyInfo = res.data.data.post_detail;
-					this.dyInfo.fabulous = false;  
+					this.dyInfo.fabulous = res.data.data.post_detail.fabulous;  
 					this.comList = res.data.data.comment_list;
 					// this.dyInfo.keywords = "服务,实践"
 					// console.log(this.acList)
@@ -181,19 +182,41 @@
 				this.repModal.comId = id
 			},
 			saveReplyInfo(){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后发表回复。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
 				const id = this.repModal.comId
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
 					uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/reply',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+					url: this.$url.BASE_URL + '/schoolteam/pyq/reply',
+					
 					header:{
 							Authorization:uni.getStorageSync("token")
 						},
 					method: 'POST',
 					data: {
 						comment_id: id,
-						reply_content: this.repModal.replyInfo
+						reply_content: this.repModal.replyInfo,
+						team_id: this.user_id,
 					},
 					success: res => {
 						let code = res.data.code;
@@ -241,12 +264,33 @@
 				})
 			},
 			saveComInfo(){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后发表评论。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
 				const id = this.comModal.dyId
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
 					uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/comment',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+					url: this.$url.BASE_URL + '/schoolteam/pyq/comment',
+					
 					header:{
 					Authorization:uni.getStorageSync("token")
 				},	
@@ -263,9 +307,11 @@
 							uni.showToast({
 								title: `评论成功`
 							})
+							// console.log("评论成功")
 							this.comShow = false //关掉回复窗口
 							
 							let newlist = res.data.data.comment_list;
+							// console.log("newlist:", newlist)
 							this.comList = newlist;
 						}else if(res.data.code == 401){
 										console.log("token过期");
@@ -297,11 +343,31 @@
 
 			//喜欢数
 			comLikes(id){   //id是帖子id
-				if(true){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后点赞帖子。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+				}
+				else{
 
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/like',  //点赞和取消点赞会发请求，后端决定怎么处理
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+					url: this.$url.BASE_URL + '/schoolteam/pyq/likepost',  //点赞和取消点赞会发请求，后端决定怎么处理
+					
 					header:{
 					Authorization:uni.getStorageSync("token")
 				},	
@@ -355,9 +421,29 @@
 				}
 			},
 			replyLike(id){   //评论的点赞（但不是评论的回复的点赞, 回复的点赞还要另外加函数）
-
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后点赞评论。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/likecom', //点赞和取消点赞 评论
+					url: this.$url.BASE_URL + '/schoolteam/pyq/likecom', //点赞和取消点赞 评论
 					header:{
 					Authorization:uni.getStorageSync("token")
 				},					
@@ -423,8 +509,29 @@
 
 			//回复的点赞和取消点赞
 			replyLike2(com_index, index2){
+				if(!this.userInfo.isUser){
+				const _this = this;
+				uni.showModal({
+						title: '',
+						content: '请登录后点赞回复。是否前去登录？',
+						success: function(res) {
+						if (res.confirm) {
+							// 用户点击了确定
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+							// 在这里可以编写用户点击确定后的逻辑
+						} else if (res.cancel) {
+							// 用户点击了取消
+							return;
+							// 在这里可以编写用户点击取消后的逻辑
+						}
+						}
+					});
+					return
+				}
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/likereply', //点赞和取消点赞 评论
+				url: this.$url.BASE_URL + '/schoolteam/pyq/likereply', //点赞和取消点赞 评论
 				header:{
 				Authorization:uni.getStorageSync("token")
 			},					
@@ -491,7 +598,7 @@
 			// 删除评论
 			delCom(comId){   
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/pyq/delcomment', //删除评论
+					url: this.$url.BASE_URL + '/schoolteam/pyq/delcomment', //删除评论
 					header:{
 					Authorization:uni.getStorageSync("token")
 				},				

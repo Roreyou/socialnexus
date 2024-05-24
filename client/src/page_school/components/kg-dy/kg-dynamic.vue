@@ -8,7 +8,7 @@
 						<u-avatar :src="dyInfo.team_avatar" size="60"></u-avatar>
 					</view>
 					<view class="dynamic_header_user_info">
-						<view class="dynamic_header_user_info_name">{{dyInfo.my_name}}</view>
+						<view class="dynamic_header_user_info_name">{{dyInfo.team_name}}</view>
 						<view class="dynamic_header_user_info_time">{{dyInfo.post_time}}</view>
 					</view>
 				</view>
@@ -26,8 +26,8 @@
 					<block v-if="leng > 0">
 						<!-- 单张 -->
 						<block v-if="leng == 1">
-							<image @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
-								v-for="(img,index1) in dyInfo.picture" class="img1" mode="aspectFill" :key="index1">
+							<image class="iconLevel img1" @tap.stop="previewImage(img, dyInfo.picture)" :src="img"
+								v-for="(img,index1) in dyInfo.picture" mode="aspectFill" :key="index1">
 							</image>
 						</block>
 						<!-- 2张 -->
@@ -65,7 +65,7 @@
 				<view class="operate_icon">
 					<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/address.png" mode=""></image>
 					<view class="operate_text">
-						{{ dyInfo.province }}
+						{{ dyInfo.province }} {{ dyInfo.city }}
 					</view>
 				</view>
 				<view class="operate_icon">
@@ -290,5 +290,21 @@
 	}
 	.like_icon{
 		margin-left: 5px;
+	}
+
+	//地址的字
+	.operate_text{
+		margin-left: 10rpx;
+	}
+
+	//帖子内容
+	.dynamic_cont{
+		margin-left: 25rpx;
+	}
+
+	//帖子时间
+	.dynamic_header_user_info_time{
+		line-height: 1.6;
+		font-size: 10px;
 	}
 </style>

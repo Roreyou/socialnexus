@@ -140,8 +140,8 @@ export default {
   },
   mounted() {
     uni.request({
-      url: this.$url.BASE_URL + '/4142061-0-default/community/myInfo',
-      // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
+      // url: this.$url.BASE_URL + '/community/myInfo',
+      url: "https://mock.apifox.com/m1/community/myInfo",
       header: {
         Authorization: uni.getStorageSync("token"),
       },
@@ -187,8 +187,8 @@ export default {
     },
     updateInfo() {
       uni.request({
-        url: this.$url.BASE_URL + "/4142061-0-default/community/myInfo",
-        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+        url: this.$url.BASE_URL + "/community/myInfo",
+        
         header: {
           Authorization: uni.getStorageSync("token"),
         },

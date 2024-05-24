@@ -40,13 +40,16 @@ const store = new Vuex.Store({
 			// console.log("login-avatar", avatar)
 			state.user_id = user_id      // user_id根据情况可能是社区的id，高校的id...
 			state.userName = user_name || '新用户';
-			state.identity = person_identity;
+			state.userInfo.identity = person_identity;
 			state.userInfo.person_id = person_id;
 			const a = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7';  // 游客的默认头像
 			state.userInfo.avatar = avatar || a;
 			state.userInfo.verification_status = verification_status;
 			state.userInfo.isleader = isleader;
 			
+		},
+		setStatu(state,{verification_status}){
+			state.userInfo.verification_status = verification_status;
 		},
 		setAddress(state, {province, city}) {
 			console.log("setAddress", province, city)
@@ -61,7 +64,9 @@ const store = new Vuex.Store({
 				isUser: false,
 				avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
 				verification_status: 5,
-				isleader: false
+				isleader: false,
+				province: '广东省',
+				city: '珠海市'
 			};
 			state.hasLogin = false;
 		}

@@ -1,11 +1,22 @@
 //services/teamService.js
 const db = require('../models/index');
 const bcrypt = require('bcrypt');
-const Op= require('sequelize');
 const sequelize = require('sequelize');
 const ActivityService = require('./activityService');
 const CommunityService = require('./communityService');
 const otherService = require('./otherService');
+const post = require('../models/post');
+const activity = require('../models/activity');
+const teammember = require('../models/teammember');
+const { raw } = require('body-parser');
+const teamactivity = require('../models/teamactivity');
+const ImageService = require('./imageService');
+const { Op } = require('sequelize');
+const { commentOnPost } = require('./commentService');
+const shortUUID = require('short-uuid');
+const Result = require('../common/Result');
+
+
 
 
 class teamService {
@@ -17,10 +28,66 @@ class teamService {
     return await db.team.create(teamData);
   }
 
+  static async getMyTeams(id, identity) {
+    db.teammember.belongsTo(db.team, { foreignKey: 'team_id' });
+    //队员
+    if (identity == 0) {
+      const teams = await db.teammember.findAll({
+        where: { id: id },
+        include: [
+          {
+            model: db.team,
+            attributes: ['id', 'team_name', 'avatar']
+          },
+        ],
+        attributes: ['id', 'team_id'], // 在teammember表中指定要返回的字段
+        raw: true
+      });
+
+      if (!teams || teams.length === 0) return null;
+
+      console.log(teams);
+
+      // 使用map方法改变字段名
+      const modifiedTeams = teams.map(team => {
+        return {
+          team_id: team.team_id,
+          team_name: team['schoolteam.team_name'],
+          avatarUrl: team['schoolteam.avatar']
+        };
+      });
+
+      return modifiedTeams;
+    }
+
+    else if (identity == 1) {
+      //指导老师
+      const teams = await db.team.findAll({
+        where: { instructor_id: id }
+      });
+
+      console.log(teams);
+      if (!teams || teams.length === 0) return null;
+
+      // 使用map方法改变字段名
+      const modifiedTeams = teams.map(team => {
+        return {
+          team_id: team.id,
+          team_name: team.team_name,
+          avatarUrl: team.avatar
+        };
+      });
+
+      return modifiedTeams;
+
+    }
+  }
+
   static async getTeamById(id) {
     // 建立关联关系
     db.team.belongsTo(db.teammember, { foreignKey: 'leader_id' });
     db.team.belongsTo(db.teacher, { foreignKey: 'instructor_id' });
+    db.team.belongsTo(db.school, { foreignKey: 'school_id' });
 
     const team = await db.team.findOne({
       where: { id: id },
@@ -51,11 +118,15 @@ class teamService {
 
     });
 
+
+    const school = await db.school.findOne({ where: { id: team.school_id } });
+    const schoolName = school ? school.name : null;
     const formattedTeamInfo = {
       ...team,
       leader_name: team["teammember.leader_name"],
       instructor_name: team["teacher.instructor_name"],
       mem_num: members ? members.length.toString() : '0',
+      school_name: schoolName,
       'teammember.leader_name': undefined,
       'teacher.instructor_name': undefined,
     };
@@ -66,16 +137,9 @@ class teamService {
       "members_list": members,
     };
   }
- 
-  static async getTeamInfoById(teamId){
-    const teamInfo = await db.team.findOne({
-      where: {
-        id: teamId
-      }
-    });
-    return teamInfo;
-  }
 
+
+  // team是审核状态
   static async getTeamByStatus(status) {
     let teamsToReturn;
     let whereCondition;
@@ -104,6 +168,7 @@ class teamService {
     // 建立关联关系
     db.team.belongsTo(db.teammember, { foreignKey: 'leader_id' });
     db.team.belongsTo(db.teacher, { foreignKey: 'instructor_id' });
+    db.team.belongsTo(db.school, { foreignKey: 'school_id' });
 
     // 查询团队信息及关联的团队成员和老师，修改字段命名
     const teams = await db.team.findAll({
@@ -118,47 +183,54 @@ class teamService {
           model: db.teacher,
           as: 'teacher',
           attributes: [['name', 'instructor_name']] // 可以同样对老师的 name 字段进行命名
-        }
+        },
       ],
       raw: true // 返回原始 JSON 对象
     });
 
     // 根据 status 设置不同的状态值
-    teamsToReturn = teams.map(team => ({
-      ...team,
-      veri_status: team.verification_status == 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
-      leader_name: team["teammember.leader_name"], // 将 "teammember.leader_name" 改为 "leader_name"
-      instructor_name: team["teacher.instructor_name"],
-      // 删除原始的字段名
-      // 如果还有其他字段需要删除，也可以在这里添加
-      // 这样返回的对象中将只包含你想要的字段名
-      'teammember.leader_name': undefined,
-      'teacher.instructor_name': undefined,
+    teamsToReturn = await Promise.all(teams.map(async team => {
+      const school = await db.school.findOne({ where: { id: team.school_id } });
+      const schoolName = school ? school.name : null;
+      return {
+        ...team,
+        veri_status: team.verification_status == 4 ? '未审核' : '已审核',
+        leader_name: team["teammember.leader_name"],
+        instructor_name: team["teacher.instructor_name"],
+        school_name: schoolName,
+
+        'teammember.leader_name': undefined,
+        'teacher.instructor_name': undefined,
+      };
     }));
+    // 假设 teams 是从数据库查询得到的结果数组
+    const uniqueTeams = teamsToReturn.filter((team, index, self) =>
+      index === self.findIndex(t => (
+        t.id === team.id // 根据唯一标识属性去重，假设这里使用 id
+      ))
+    );
 
-    return teamsToReturn;
+    return uniqueTeams;
   }
 
-  static async getTeamAvatar(teamId) {
-    const teamAvatar = await db.team.findOne({
-      where: {
-        id: teamId
-      },
-      attributes: ['avatar']
-    });
-    return teamAvatar;
-  }
 
-  //依据社区和状态
+  //依据社区和状态,这里的status是社区对队伍的录取状态和评价状态
   static async getTeamByCommu(commu_id, status) {
     let whereCondition_commu = {};
     let whereCondition_status = {};
     if (commu_id !== '0') {
       whereCondition_commu.community_id = commu_id;
     }
-    if (status !== 0) {
-      whereCondition_status.status = status;
+    if (status != 0) {
+      if (status == 4 || status == 5) {
+        whereCondition_status.comment_status = status - 3
+        whereCondition_status.admission_status = 2
+      }
+      if (status == 1 || status == 2 || status == 3) {
+        whereCondition_status.admission_status = status
+      }
     }
+
 
     const activities = await db.activity.findAll({
       where: whereCondition_commu,
@@ -166,25 +238,26 @@ class teamService {
     });
 
     const activityIds = activities.map(activity => activity.id);
+    // console.log(activityIds)
 
     if (activityIds.length === 0) {
       return null;
     }
 
-    whereCondition_status.activity_id = {
-      [Op.in]: activityIds
-    }
+    // 创建一个新的对象来保存拼接后的 whereCondition_status
+    const updatedWhereCondition_status = { ...whereCondition_status, activity_id: { [Op.in]: activityIds } };
 
-    // console.log(whereCondition_status)
+
+    console.log(updatedWhereCondition_status)
 
     const teamActivities = await db.teamactivity.findAll({
-      where: whereCondition_status,
+      where: updatedWhereCondition_status,
       attributes: ['team_id']
     });
 
     const teamIds = teamActivities.map(teamActivity => teamActivity.team_id);
 
-    // console.log(teamIds)
+    console.log(teamIds)
 
     if (teamIds.length === 0) {
       return null;
@@ -193,6 +266,7 @@ class teamService {
     // 建立关联关系
     db.team.belongsTo(db.teammember, { foreignKey: 'leader_id' });
     db.team.belongsTo(db.teacher, { foreignKey: 'instructor_id' });
+    db.team.belongsTo(db.school, { foreignKey: 'school_id' });
 
     const teams = await db.team.findAll({
       where: {
@@ -214,20 +288,35 @@ class teamService {
       ],
       raw: true // 返回原始 JSON 对象
     });
+    console.log(teams)
 
     let teamsToReturn
-    teamsToReturn = teams.map(team => ({
-      ...team,
-      veri_status: team.verification_status === 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
-      leader_name: team["teammember.leader_name"], // 将 "teammember.leader_name" 改为 "leader_name"
-      instructor_name: team["teacher.instructor_name"],
-      // 删除原始的字段名
-      // 如果还有其他字段需要删除，也可以在这里添加
-      // 这样返回的对象中将只包含你想要的字段名
-      'teammember.leader_name': undefined,
-      'teacher.instructor_name': undefined,
-    }));
+    // teamsToReturn = teams.map(team => ({
+    //   ...team,
+    //   veri_status: team.verification_status === 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
+    //   leader_name: team["teammember.leader_name"], // 将 "teammember.leader_name" 改为 "leader_name"
+    //   instructor_name: team["teacher.instructor_name"],
+    //   // 删除原始的字段名
+    //   // 如果还有其他字段需要删除，也可以在这里添加
+    //   // 这样返回的对象中将只包含你想要的字段名
+    //   'teammember.leader_name': undefined,
+    //   'teacher.instructor_name': undefined,
+    // }));
+    // // 根据 status 设置不同的状态值
+    teamsToReturn = await Promise.all(teams.map(async team => {
+      const school = await db.school.findOne({ where: { id: team.school_id } });
+      const schoolName = school ? school.name : null;
+      return {
+        ...team,
+        veri_status: team.verification_status == 4 ? '未审核' : '已审核',
+        leader_name: team["teammember.leader_name"],
+        instructor_name: team["teacher.instructor_name"],
+        school_name: schoolName,
 
+        'teammember.leader_name': undefined,
+        'teacher.instructor_name': undefined,
+      };
+    }));
 
     return teamsToReturn;
   }
@@ -250,19 +339,89 @@ class teamService {
     return team;
   }
 
-  static async queryTeamByName(commu_id, team_name) {
-    const teams_by_commu = await this.getTeamByCommu(commu_id, 0)
-    if (!teams_by_commu)
+  static async queryTeamActByName(commu_id, team_name) {
+    const teams_by_commu = await this.getTeamByCommu(commu_id, 0);
+    // console.log(teams_by_commu)
+    let teamsFiltered = [];
+    let idList = [];
+
+    if (teams_by_commu && teams_by_commu.length > 0) {
+      //继续模糊查询by_teamName
+      const fuzzyTeamName = team_name;
+      teamsFiltered = teams_by_commu.filter(team => team.team_name.includes(fuzzyTeamName));
+      idList = teamsFiltered.map(team => team.id);
+      // console.log(idList)
+    } else {
       return null;
-    //继续模糊查询by_teamName
-    const fuzzyTeamName = team_name;
-    const teamsFiltered = teams_by_commu.filter(team => team.team_name.includes(fuzzyTeamName));
+    }
 
     if (teamsFiltered.length === 0)
       return null;
+
+    // 建立关联关系
+    db.teamactivity.belongsTo(db.team, { foreignKey: 'team_id' });
+    db.teamactivity.belongsTo(db.activity, { foreignKey: 'activity_id' });
+    db.team.belongsTo(db.school, { foreignKey: 'school_id' });
+
+    const teamActivities = await db.teamactivity.findAll({
+      where: {
+        team_id: {
+          [Op.in]: idList
+        }
+      },
+      include: [
+        {
+          model: db.team,
+          as: 'schoolteam',
+          attributes: ['team_name', 'school_id']
+        },
+        {
+          model: db.activity,
+          as: 'activity',
+          attributes: [['name', 'activity_name']]
+        },
+      ],
+      raw: true // 返回原始 JSON 对象
+    });
+
+    // console.log(teamActivities)
+    const teamsToReturn = await Promise.all(teamActivities.map(async team => {
+      // 获取学校名称
+      const school = await db.school.findOne({ where: { id: team['schoolteam.school_id'] } });
+      const schoolName = school ? school.name : null;
+
+      return {
+        ...team,
+        team_name: team["schoolteam.team_name"],
+        activity_name: team["activity.activity_name"],
+        school_name: schoolName,
+        // 删除原始的字段名
+        // 如果还有其他字段需要删除，也可以在这里添加
+        // 这样返回的对象中将只包含你想要的字段名
+        'activity.activity_name': undefined,
+        'schoolteam.team_name': undefined,
+        'school.school_id': undefined
+      };
+    }));
+
+    return teamsToReturn;
+  }
+  static async queryTeamByName(community_id, name) {
+    const teams_by_commu = await this.getTeamByCommu(community_id, 0);
+    if (!teams_by_commu)
+      return null;
+
+    // 继续模糊查询 by_teamName
+    const fuzzyTeamName = name;
+    const teamsFiltered = teams_by_commu
+      .filter(team => team.team_name.includes(fuzzyTeamName))
+    // .map(({ tel, ...rest }) => rest); // 去除 tel 字段
+
+    if (teamsFiltered.length === 0)
+      return null;
+
     return teamsFiltered;
   }
-
 
   static async queryTeamByAct(commu_id, act_name) {
     let whereCondition_commu = {};
@@ -304,6 +463,7 @@ class teamService {
     // 建立关联关系
     db.team.belongsTo(db.teammember, { foreignKey: 'leader_id' });
     db.team.belongsTo(db.teacher, { foreignKey: 'instructor_id' });
+    db.team.belongsTo(db.school, { foreignKey: 'school_id' });
 
     const teams = await db.team.findAll({
       where: {
@@ -321,22 +481,45 @@ class teamService {
           model: db.teacher,
           as: 'teacher',
           attributes: [['name', 'instructor_name']] // 可以同样对老师的 name 字段进行命名
+        },
+        {
+          model: db.school,
+          as: 'school',
+          attributes: [['name', 'school_name']]
         }
       ],
       raw: true // 返回原始 JSON 对象
     });
 
-    let teamsToReturn
-    teamsToReturn = teams.map(team => ({
-      ...team,
-      veri_status: team.verification_status === 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
-      leader_name: team["teammember.leader_name"], // 将 "teammember.leader_name" 改为 "leader_name"
-      instructor_name: team["teacher.instructor_name"],
-      // 删除原始的字段名
-      // 如果还有其他字段需要删除，也可以在这里添加
-      // 这样返回的对象中将只包含你想要的字段名
-      'teammember.leader_name': undefined,
-      'teacher.instructor_name': undefined,
+    // let teamsToReturn
+    // teamsToReturn = teams.map(team => ({
+    //   ...team,
+    //   veri_status: team.verification_status === 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
+    //   leader_name: team["teammember.leader_name"], // 将 "teammember.leader_name" 改为 "leader_name"
+    //   instructor_name: team["teacher.instructor_name"],
+    //   school_name: team["school.school_name"],
+    //   // 删除原始的字段名
+    //   // 如果还有其他字段需要删除，也可以在这里添加
+    //   // 这样返回的对象中将只包含你想要的字段名
+    //   'teammember.leader_name': undefined,
+    //   'teacher.instructor_name': undefined,
+    //   'school.school_name': undefined
+    // }));
+    const teamsToReturn = await Promise.all(teams.map(async team => {
+
+      return {
+        ...team,
+        veri_status: team.verification_status === 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
+        leader_name: team["teammember.leader_name"], // 将 "teammember.leader_name" 改为 "leader_name"
+        instructor_name: team["teacher.instructor_name"],
+        school_name: team["school.school_name"],
+        // 删除原始的字段名
+        // 如果还有其他字段需要删除，也可以在这里添加
+        // 这样返回的对象中将只包含你想要的字段名
+        'teammember.leader_name': undefined,
+        'teacher.instructor_name': undefined,
+        'school.school_name': undefined
+      };
     }));
 
 
@@ -363,7 +546,7 @@ class teamService {
 
     // 更新找到的记录
     const updatedActivity = await teamActivity.update(
-      { status: admit },
+      { admission_status: admit },
       { returning: true }
     );
 
@@ -398,31 +581,80 @@ class teamService {
   }
 
   // 存储队伍中指导老师和学生成员的信息
-  static async saveInstructorAndMembers(instructorData, membersData) {
+  static async saveInstructOrMembers(id, status,instructorData, leader, membersData) {
     try {
-      const existingInstructor = await db.teacher.findOne({ where: { id: instructorData.id } });
-      // 如果存在该指导教师，则删除其信息
-      if (existingInstructor) {
-        await existingInstructor.destroy();
-      }
-      // 保存指导老师信息
-      const instructor = await db.teacher.create(instructorData);
+      if(status == 1 || status == 3){
+        // 初始化一个集合来存储唯一的 major 值
+          var uniqueMajors = new Set();
+          // 指导老师
+          const existingInstructor = await db.teacher.findOne({ where: { id: instructorData.id } });
+          // 如果存在该指导教师，则删除其信息
+          if (existingInstructor) {
+            await existingInstructor.destroy();
+          }
+          // 创建新的指导老师信息
+          instructorData.pwd = await bcrypt.hash("123", 10);
+          await db.teacher.create(instructorData);
+          if (instructorData.major && !uniqueMajors.has(instructorData.major)) {
+            uniqueMajors.add(instructorData.major);
+          }
+          
 
-      // 保存队伍成员信息
-      const members = await Promise.all(membersData.map(async memberData => {
-        // 查询数据库中是否存在该成员
-        const existingMember = await db.teammember.findOne({ where: { id: memberData.id } });
+          const leaderId = await teamService.getLeaderIdByTeamId(id);
+          // 队长信息
+          const existingLeader = await db.teammember.findOne({ where: { id: leaderId } });
+          // 如果存在该队长，则删除其信息
+          var leaderPwd;
+          if (existingLeader) {
+            leaderPwd = existingLeader.pwd;
+            await existingLeader.destroy();
+          }
+          // 创建新的队长信息
+          leader.id = leaderId;
+          leader.pwd = leaderPwd;
+          await db.teammember.create(leader);
+          if (leader.major && !uniqueMajors.has(leader.major)) {
+            uniqueMajors.add(leader.major);
+          }
 
-        // 如果存在该成员，则删除该成员的信息
-        if (existingMember) {
-          await existingMember.destroy();
+          // 队伍成员信息
+          await Promise.all(membersData.map(async memberData => {
+              console.log(memberData);
+            // 查询数据库中是否存在该成员
+            const existingMember = await db.teammember.findOne({ where: { id: memberData.id, team_id: id} });
+            console.log("debug:",existingMember);
+            // 如果存在该成员，则删除该成员的信息
+            if (existingMember) {
+              console.log("debug 05");
+              await existingMember.destroy();
+            }
+            // 为每个成员对象添加密码字段，并设置默认值
+            memberData.pwd = await bcrypt.hash("123", 10);
+            // 创建新的成员信息
+            await db.teammember.create(memberData);
+            if (memberData.major && !uniqueMajors.has(memberData.major)) {
+              uniqueMajors.add(memberData.major);
+            }
+          }));
+          // 将集合转换为字符串，使用逗号分隔每个 major 值
+          const relevant_faculties = Array.from(uniqueMajors).join('， ');
+          console.log("debuggg:",relevant_faculties);
+
+          await db.team.update(
+            { verification_status: 4 ,
+              instructor_id:instructorData.id,
+              relevant_faculties:relevant_faculties
+            },
+            { where: {id:id} } 
+          );
+          const updateStatus = await db.team.findOne({where:{id:id},attributes: ['verification_status']});
+          console.log("debug verification_status:updateStatus",updateStatus);
+          return {verification_status:updateStatus};
         }
-
-        // 创建新的成员信息
-        return db.teammember.create(memberData);
-      }));
-
-      return { instructor, members };
+      else{
+        return {error:"the verification_status occur error! "};
+      }
+      
     } catch (error) {
       throw error;
     }
@@ -435,7 +667,7 @@ class teamService {
       return null; // 返回null表示队伍不存在
     }
 
-    await db.team.update({ verification_status: approve+1 }, { where: { id: id } });
+    await db.team.update({ verification_status: approve + 1 }, { where: { id: id } });
     return team;
   }
 
@@ -458,6 +690,7 @@ class teamService {
   }
 
   static async findEvent(activ_id, team_id) {
+    console.log("debug:",activ_id,team_id);
     // 检查数据库中是否存在相同的记录
     const existingEvent = await db.teamactivity.findOne({
       where: {
@@ -474,7 +707,8 @@ class teamService {
       const result = await db.teamactivity.create({
         activity_id: activ_id,
         team_id: team_id,
-        admission_status: 1 // 默认为待录取状态
+        admission_status: 1, // 默认为待录取状态
+        comment_status: 1
       });
       return { admission_status: result.admission_status };
     } catch (error) {
@@ -487,23 +721,36 @@ class teamService {
     try {
       // 在这里编写获取活动推荐列表的逻辑
       // 假设根据省份和城市查询数据库中的活动信息
+
+      // 假设 province 和 city 是从某个地方获取的变量
+      let whereConditions = {};
+            
+      // 如果 province 不是 null，则添加 province 条件
+      if (province !== '') {
+          whereConditions.province = province;
+      }
+      // 如果 city不是 null，则添加 city 条件
+      if (city !== '') {
+          whereConditions.city = city;
+      }
+      if(province == '中国区域'){
+        whereConditions={};
+      }
+      console.log(whereConditions);
       const activities = await db.activity.findAll({
-        where: {
-          province: province,
-          city: city
-        },
+        where: whereConditions,
         attributes: {
           include: [
-              [
+            [
               //引用原生mySQL语法，将类型转化
               sequelize.literal("cast(id as char)"),
               'id'
-              ],
-              [
-                //引用原生mySQL语法，将类型转化
-                sequelize.literal("cast(category_id as char)"),
-                'category_id'
-                ],
+            ],
+            [
+              //引用原生mySQL语法，将类型转化
+              sequelize.literal("cast(category_id as char)"),
+              'category_id'
+            ],
           ]
         },
         limit: 10 // 限制返回结果数量为 10 条
@@ -558,6 +805,7 @@ class teamService {
       const instructor = await db.teacher.findByPk(teamInfo.instructor_id);
       const menNum = await db.teammember.count({ where: { team_id: teamInfo.id } });
       console.log(teamInfo);
+      console.log(school);
       const updateTeamInfo = {
         ...teamInfo.dataValues,
         school_name: school.name,
@@ -583,7 +831,6 @@ class teamService {
       return responseData;
     } catch (error) {
       console.error('Failed to get team info:', error);
-      return { code: '500', msg: 'Failed to get team info', data: null };
     }
 
   }
@@ -602,13 +849,13 @@ class teamService {
       },
       attributes: {
         include: [
-            [
+          [
             //引用原生mySQL语法，将类型转化
             sequelize.literal("cast(id as char)"),
             'id'
-            ],
+          ],
         ]
-    }
+      }
     });
     const results = await otherService.getCategKeyCommuIdsMap(teamFavorites);
     return results;
@@ -625,33 +872,23 @@ class teamService {
 
       if (teamActivity) {
         if (teamActivity.comment_status == '2') {
-          return {
-            code: 200,
-            msg: 'Activity have already been commented!'
-          };
+
+          return 'Activity have already been commented!';
         } else {
-          console.log("debug:", comment);
           await teamActivity.update({
             comment_status: '2',
             team_to_activity: comment,
+            team_to_activity_time: await otherService.getCurrentTime()
           });
-          return {
-            code: 200,
-            msg: 'comment activity successfully!',
-            data: {
-              comment_status: '2'
-            }
+          return {comment_status: '2'}
           };
         }
-      } else {
-        return {
-          code: -1,
-          msg: 'Can not find any activity!'
-        };
+       else {
+        return 'Can not find any activity!';
       }
     } catch (error) {
       console.error('Error:', error);
-      return res.status(500).json({ code: 500, msg: 'Failed to comment activity' });
+      return 'Failed to comment activity';
     }
 
   }
@@ -680,7 +917,7 @@ class teamService {
           activity_name: activity ? activity.name : null,
           team_to_activity: teamActivity.team_to_activity,
           comment_status: teamActivity.comment_status,
-          time: teamActivity.team_to_activity_time
+          time: await otherService.changeTimeFormat(teamActivity.team_to_activity_time)
         });
       }
       return comments;
@@ -720,7 +957,7 @@ class teamService {
         results.push({
           activity_name: activity ? activity.name : null,
           com_to_team: teamActivity.com_to_team,
-          acti_time: activity.start_time,
+          acti_time: await otherService.changeTimeFormat(activity.start_time),
           community_name: communityName,
         });
       }
@@ -758,8 +995,8 @@ class teamService {
         comments.push({
           activity_name: activity ? activity.name : null,
           team_to_activity: teamActivity.team_to_activity,
-          com_time: teamActivity.team_to_activity_time,
-          acti_time: activity.start_time
+          com_time: await otherService.changeTimeFormat(teamActivity.team_to_activity_time),
+          acti_time: await otherService.changeTimeFormat(activity.start_time)
         });
       }
       return comments;
@@ -795,7 +1032,7 @@ class teamService {
         comments.push({
           activity_name: activity ? activity.name : null,
           acti_content: activity ? activity.remark : null,
-          acti_time: activity.start_time,
+          acti_time: await otherService.changeTimeFormat(activity.start_time),
           acti_id: activity.id.toString()
         });
       }
@@ -822,7 +1059,7 @@ class teamService {
         acti_status: 0
       };
     }
-    const activity = await ActivityService.getActivityById(teamActivity.activity_id);
+    const activity = await db.activity.findOne({where:{id: teamActivity.activity_id}});
     console.log(activity);
     return {
       flag: "1",
@@ -833,20 +1070,31 @@ class teamService {
   // 修改队伍信息，送去团委审核
   static async modifyInfo(team_id, instrData, leaderData, membersData) {
     try {
+      console.log(team_id);
       // 存入指导员信息
+      delete instrData.pwd;
+      console.log("debug 01:",instrData);
       const modifyInstructor = {
         ...instrData,
         team_id: team_id
       };
+      console.log("debug 02:",modifyInstructor);
       await teamService.insertInstructor(modifyInstructor);
+      console.log("debug 03");
       // 存入队长信息
+      delete leaderData.pwd;
+      delete leaderData.team_id;
+      console.log("debug 04");
+      
       const modifyLeader = {
         ...leaderData,
         team_id: team_id
       };
+      console.log("debug 05:",modifyLeader);
       await teamService.insertLeader(modifyLeader);
-
+      console.log("debug 066");
       // 存入队伍成员
+      console.log("debug 077:",membersData);
       await teamService.addTeamMembers(team_id, membersData);
 
       // 将修改审核字段设置为1
@@ -859,25 +1107,52 @@ class teamService {
   }
 
   static async insertInstructor(instrData) {
+    const ifexist = await db.modify_teacher.findOne({where:{id:instrData.id, team_id:instrData.team_id}});
+    console.log(ifexist);
+    if(ifexist){
+      ifexist.destroy();
+    }
     await db.modify_teacher.create(instrData);
   }
 
   static async insertLeader(leaderData) {
-    await db.modify_teammember.create(leaderData);
+    try {
+      const ifexist = await db.modify_teammember.findOne({where:{id:leaderData.id, team_id:leaderData.team_id}});
+      console.log(ifexist);
+      if(ifexist){
+        ifexist.destroy();
+      }
+      await db.modify_teammember.create(leaderData);
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   static async addTeamMembers(team_id, membersData) {
-    await Promise.all(membersData.map(memberData => db.modify_teammember.create({
-      team_id: team_id,
-      ...memberData
-    })));
+    try {
+      await Promise.all(
+        membersData.map(async memberData => {
+          // 创建一个新对象，不包含 pwd 字段
+          const modifiedMemberData = { ...memberData };
+          console.log("debug 88",modifiedMemberData);
+          delete modifiedMemberData.pwd;
+          console.log("debug 99",modifiedMemberData);
+          // 返回一个 Promise，该 Promise 由 db.modify_teammember.create 方法创建
+          await db.modify_teammember.create(
+            modifiedMemberData
+          );
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   static async modifyPwd(identity, old_pwd, new_pwd, user_id) {
     try {
       // 根据身份（如teacher、student等）和用户ID检查用户是否存在
       const user = await teamService.getUserByIdentityAndId(identity, user_id);
-
       // 验证旧密码是否正确
       const passwordMatch = await bcrypt.compare(old_pwd, user.pwd);
 
@@ -947,6 +1222,11 @@ class teamService {
       }
     });
     return leader;
+  }
+
+  static async getLeaderIdByTeamId(teamId) {
+    const team = await db.team.findOne({ where: { id: teamId } });
+    return team.leader_id;
   }
 
   static async getInstructorById(instructorId) {

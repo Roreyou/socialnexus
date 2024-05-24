@@ -5,12 +5,11 @@ const TeamController = require('../controllers/teamController.js');
 const ActivityController = require('../controllers/activityController.js');
 const PostController = require('../controllers/postController.js');
 const postController = require('../controllers/postController.js');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-
 const router = express.Router();
 
 
+
+router.get('/getMyTeams', TeamController.getMyTeams);
 router.get('/getRecommend', TeamController.getRecommend);
 router.get('/activsquare/filter', ActivityController.filterActivity);
 router.get('/activsquare/search', ActivityController.searchActivities);
@@ -45,7 +44,6 @@ router.post('/pyq/likeCom', postController.likeCom);
 router.post('/pyq/likereply', postController.likeReply);
 router.post('/pyq/reply', postController.Reply);
 router.post('/pyq/delcomment', postController.delcomment);
-router.post('/pyq/createpost/uploadpics', upload.single('image'), postController.savePostImg);
 router.post('/pyq/delnotice', postController.delNotice);
 router.post('/modifyinfo', TeamController.modifyInfo);
 router.post('/modifypwd', TeamController.modifyPwd);

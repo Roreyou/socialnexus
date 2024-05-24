@@ -37,7 +37,7 @@
 							活动类别
 						</view>
 						<view class="value">
-							{{ detail.category }}
+							{{ detail.category_name }}
 						</view>
 					</view>
 
@@ -169,7 +169,7 @@
 		</view>
 
 		<view style="position: fixed; bottom: 0; width: 100%;">
-			<bttab v-if="hasactiid" :team_id="user_id" :acti_id="acti_id"></bttab>
+			<bttab v-if="hasactiid" :team_id="user_id" :acti_id="acti_id" :isfavor="isfavor"></bttab>
 		</view>
 
 		<!-- 以下是尝试把海报迁移到这个页面 -->
@@ -195,7 +195,8 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				detail:{
 					keywords: ""
 				},
-				hasactiid:false
+				hasactiid:false,
+				isfavor:false
 			}
 		},
 		computed: {
@@ -208,22 +209,19 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			const id = query.acti_id;
 			// console.log("id:",id)
 			this.acti_id = id;
-			this.hasactiid = true;
 			// 获取活动详情
 			uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				// header:{
-				// 	Authorization:uni.getStorageSync("token")
-				// },					
+				url: this.$url.BASE_URL + '/schoolteam/getactidetail',				
 				method: 'GET',
 				data: {
 					acti_id: id,
-					// token: this.$userinfo.token
+					team_id: this.user_id,
 				},
 				success: res => {
 					this.detail = res.data.data.detail;
-					this.detail.keywords = "服务,实践"
+					this.isfavor = res.data.data.detail.isfavor;
+					this.hasactiid = true;
+					console.log("this.isfavor:",this.isfavor)
 					this.net_error = false;
 				},
 				fail: res => {
@@ -237,8 +235,8 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			console.log("onload")
 			const id = option.id;
 			// uni.request({
-			// 	url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
-			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+			// 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
+			// 	
 				
 			// 	method: 'GET',
 			// 	data: {

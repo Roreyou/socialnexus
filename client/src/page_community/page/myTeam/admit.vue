@@ -135,38 +135,19 @@ export default {
     const teamId = query.teamId;
     this.teamId = teamId;
     uni.request({
-      url: this.$url.BASE_URL + "/4142061-0-default/community/activityInfo",
-      // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+      url: this.$url.BASE_URL + "/community/admit",
+      // url: 'https://mock.apifox.coml/m1/community/admit',
       header: {
         Authorization: uni.getStorageSync("token"),
       },
       method: "GET",
       data: {
-        id: activityId,
+        activityId: activityId,
         // token: this.$userinfo.token
       },
       success: (res) => {
-        this.detail.activity = res.data.data;
-        this.net_error = false;
-      },
-      fail: (res) => {
-        this.net_error = true;
-      },
-      complete: () => {},
-    });
-    uni.request({
-      url: this.$url.BASE_URL + "/4142061-0-default/community/teamInfo",
-      // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
-      header: {
-        Authorization: uni.getStorageSync("token"),
-      },
-      method: "GET",
-      data: {
-        id: teamId,
-        // token: this.$userinfo.token
-      },
-      success: (res) => {
-        this.detail.team = res.data.data;
+        this.detail = res.data.data.detail;
+        this.detail.keywords = "服务,实践";
         this.net_error = false;
       },
       fail: (res) => {
@@ -179,8 +160,8 @@ export default {
     console.log("onload");
     const id = option.id;
     // uni.request({
-    // 	url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/getactidetail',
-    // 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+    // 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
+    // 	
 
     // 	method: 'GET',
     // 	data: {

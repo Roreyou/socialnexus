@@ -20,8 +20,8 @@
 							</view>
 							
 							<view class="action right-buttons" v-if="item.veri_status === '已审核'" >
-								<span class="status-label passed" v-if="item.verification_status === 1">已通过</span>
-    							<span class="status-label rejected" v-if="item.verification_status === 2">已驳回</span>
+								<span class="status-label passed" v-if="item.verification_status === 2">已通过</span>
+    							<span class="status-label rejected" v-if="item.verification_status === 3">已驳回</span>
 							</view>
 							
 						</view>
@@ -67,8 +67,8 @@
 		methods: {
 			getAllReviewed(){
 				uni.request({
-					url: this.$url.BASE_URL + '/4142061-0-default/school/activities',
-					// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+					url: this.$url.BASE_URL + '/school/activities',
+					
                 	header:{
 						Authorization:uni.getStorageSync("token")
 					},	

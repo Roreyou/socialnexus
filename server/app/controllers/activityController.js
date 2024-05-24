@@ -14,7 +14,7 @@ class ActivityController {
   static async createActivity(req, res) {
     try {
       await activityService.createActivity(req.body);
-      return res.json(Result.success('活动添加成功'));
+      return res.json(Result.success({status:'活动添加成功'}));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }
@@ -26,7 +26,7 @@ class ActivityController {
     try {
       const activity = await activityService.getActivityById(id);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
       return res.json(Result.success(activity));
     } catch (error) {
@@ -40,7 +40,20 @@ class ActivityController {
     try {
       const activity = await activityService.getActivityByCommu(commu_id,status);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
+      }
+      return res.json(Result.success(activity));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+  static async getActivityByStatus(req, res) {
+    const commu_id = req.query.community_id;
+    const status=req.query.status;
+    try {
+      const activity = await activityService.getActivityByStatus(commu_id,status);
+      if (!activity) {
+        return res.json(Result.fail({status:'活动不存在'}));
       }
       return res.json(Result.success(activity));
     } catch (error) {
@@ -54,9 +67,9 @@ class ActivityController {
     try {
       const activity = await activityService.updateActivity(id, newActivity);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
-      return res.json(Result.success('活动修改成功'));
+      return res.json(Result.success({status:'活动修改成功'}));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }
@@ -67,9 +80,9 @@ class ActivityController {
     try {
       const activity = await activityService.deleteActivity(id);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
-      return res.json(Result.success('活动删除成功'));
+      return res.json(Result.success({status:'活动删除成功'}));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }
@@ -81,7 +94,7 @@ class ActivityController {
     try {
       const activities = await activityService.queryActivity(community_id,name);
       if (!activities) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
       return res.json(Result.success(activities));
     } catch (error) {
@@ -95,7 +108,7 @@ class ActivityController {
     try {
       const activity = await activityService.approveActivity(activity_id,approve);
       if (!activity) {
-        return res.json(Result.fail('活动不存在'));
+        return res.json(Result.fail({status:'活动不存在'}));
       }
       return res.json(Result.success({status:'审核成功'}));
     } catch (error) {
@@ -107,7 +120,7 @@ class ActivityController {
   static async filterActivity(req,res){
     
     try {
-      const { location, category_id, activity_time } = req.body;
+      const { location:location, category_id:category_id, activity_time:activity_time } = req.body;
 
       // 调用服务层方法进行活动筛选
       const activities = await activityService.filterActivities(location, category_id, activity_time);
@@ -138,7 +151,7 @@ class ActivityController {
   
   
       // 返回成功响应
-      res.json(Result.success(activities));
+      res.json(Result.success({activ_list:activities}));
     } catch (error) {
       console.error(error);
       res.status(500).json(Result.fail('Internal Server Error'));
@@ -148,12 +161,12 @@ class ActivityController {
   // 获取某一活动详情
   static async getactiDetail(req, res){
     // console.log('req.query:',req.query);
-    const { acti_id:id } = req.query;
+    const { acti_id:id, team_id:team_id } = req.query;
     console.log(id);
     try {
       const flag = await activityService.FindActivity(id);
       if(flag){
-        const activity = await activityService.getactidetail(id);
+        const activity = await activityService.getactidetail(id,team_id);
         return res.json(Result.success(activity));
       }
       else{

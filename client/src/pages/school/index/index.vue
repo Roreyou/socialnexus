@@ -2,27 +2,20 @@
 <!-- 因为是tab页所以必须放在主包 -->
 <template>
 	<view class="u-p-l-10 u-p-r-10">
-		<u-navbar :is-back="false">
-			<view style="display: flex;justify-content: center;align-items: center;">
-				<!-- <view class="u-p-30"  @click="location">
-					杭州
-					<u-icon name="arrow-down-fill" class="u-p-l-20" color="#515356"></u-icon>
+		<view>
+			<u-navbar :is-back="false">
+				<view style="display: flex;justify-content: center;align-items: center;">
+					<view class="u-p-30">
+						你的位置：{{ province }} {{ city }}
+						<u-icon name="arrow-down-fill" class="u-p-l-20" color="#515356"></u-icon>
+					</view>
 				</view>
-				<u-search placeholder="搜索实践活动" v-model="keyword" input-align="center"  :show-action="false" :clearabled="true"
-:disabled="true" style="width: 565rpx;" @click="search"></u-search> -->
-			</view>
-		</u-navbar>
-		<!-- <view>
-			<picker></picker>
-		</view> -->
-		<!-- 轮播图 -->
-		<!-- <view>
-			<u-swiper :list="swiperList" height="400"></u-swiper>
-		</view>	 -->  
-		<view class="cu-list menu-avatar bg-gradual-green padding-lg">
+			</u-navbar>
+		</view> 
+		<view class="cu-list menu-avatar bg-gradual-green padding-lg background">
 			<view class="user-section">
 				<image :src="userInfo.avatar" class="cu-avatar xl round"></image>
-				<view class="text-white text-xl padding">高校队伍: {{userName}}</view>
+				<view class="text-white text-xl padding">{{userName}}</view>
 				<!-- <view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view> -->
 				<view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="(userInfo.verification_status == 1 || userInfo.verification_status == 3)&&(userInfo.isleader)">认证信息</view>
 				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="userInfo.verification_status == 2">已认证</view>
@@ -33,19 +26,19 @@
 			<view class="rowClass">
 				<u-row>
 					<u-col span="4" text-align="center" v-for="(item,index) in navList" :key="index">
-						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass">
+						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass" style="background-color: #ffffff; border-radius: 30rpx; margin-right: 10rpx;">
 							<image :src="item.src" style="width: 90rpx;height: 90rpx;" mode="widthFix"></image>
 							<view class="tabName">{{item.name}}</view>
 						</view>
 					</u-col>
 				</u-row>
 			</view>
-			<u-gap height="10"></u-gap>
-			<view @click="notice">
-				<u-notice-bar mode="vertical" :list="noticeList" type="primary" more-icon
-				bg-color="#fff" :duration="5000" border-radius="15"></u-notice-bar>
+			<!-- <u-gap height="10"></u-gap> -->
+			<view @click="notice" class="margin-fixed xuanchuan">
+				<u-notice-bar mode="vertical" :list="noticeList" type="primary"
+				bg-color="#fff" :duration="3000" border-radius="15" font-size="30" volume-size="40"></u-notice-bar>
 			</view>
-			<u-gap height="5"></u-gap>
+			<!-- <u-gap height="5"></u-gap> -->
 			<!-- <u-waterfall v-model="flowList" ref="uWaterfall">
 			    <template v-slot:left="{leftList}">
 			        <view class="demo-warter" v-for="(item, index) in leftList" :key="index">
@@ -69,7 +62,7 @@
 		</view> 
 		
 		<!-- 活动推荐列表 -->
-		<view class="board">
+		<view class="board margin-fixed">
 			<view class="cu-bar" style="background-color: transparent">
 				<view class="action">
 					<text class="text-xl text-bold" style="color: #ffffff; font-size: 52rpx; font-weight: 600; font-family: 'pangmen'; font-style: italic; background-color: transparent">活动推荐</text>
@@ -94,7 +87,6 @@
 </template>
 
 <script>
-import picker from '../../../page_school/components/picker/picker.vue'
 	import {
 		mapState,
 		mapMutations
@@ -104,7 +96,6 @@ import picker from '../../../page_school/components/picker/picker.vue'
 	export default {
 		components: {
 			actilist,
-			picker
 		},
 
 		data() {
@@ -128,8 +119,9 @@ import picker from '../../../page_school/components/picker/picker.vue'
 					},
                 ],
 				noticeList: [
-					'强国有我，青春有为',
-					'行万里路，知中国情',
+					'开社会风气之先，做青年志愿者',
+					'构筑和谐企业，弘扬志愿精神，创建文明社区',
+					'予人玫瑰，手有余香'
 				],
 				navList:[
 				   {name:"我的活动",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover1.png",type:"1"},
@@ -164,51 +156,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			uni.$off('findIndexHouseList');
 		},
 		onShow(){
-			// 检测升级
-			// this.checkUpdate();
-			// 流量统计
-			// this.appSysFlowInfo()
 
-			// uni.request({
-			// 	url: this.$url + '/__api.php',
-			// 	method: 'GET',
-			// 	data: {
-			// 		'a': 'list-card',
-			// 		token: this.$userinfo.token
-			// 	},
-			// 	success: res => {
-			// 		this.list = res.data.list;
-			// 		this.net_error = false;
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
-			// console.log("userInfo.verification_status,", this.userInfo)
-			// console.log(typeof this.$url)
-			// console.log(this.$url.BASE_URL + '/m1/4142061-3780993-default/schoolteam/getRecommend')
-			// uni.request({
-			// 	url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
-			// 	// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
-			// 	method: 'GET',
-			// 	data: {
-			// 		province: '1',
-			// 		// token: this.$userinfo.token
-			// 	},
-			// 	success: res => {
-			// 		this.acList = res.data.data.acti_list;
-			// 		this.acList[0].keywords = "服务,实践"
-			// 		this.net_error = false;
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
 			this.getlocation()
 
 			const data = {
@@ -216,7 +164,7 @@ import picker from '../../../page_school/components/picker/picker.vue'
 				city: this.city,
 				page: 0
 			}
-			this.loadActilist(data)
+
 		},
 		onPageScroll(e) {
 		    this.scrollTop = e.scrollTop;
@@ -232,7 +180,8 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			++ this.page
 			if(this.loadmore){
 				const data = {
-					province: '1',
+					province: this.userInfo.province,
+					city: this.userInfo.city,
 					page: this.page
 				}
 				this.loadActilist(data)
@@ -267,6 +216,12 @@ import picker from '../../../page_school/components/picker/picker.vue'
 					// console.log("p=", p)
 					// console.log("c=", c)
 					this.setAddress({province, city, })
+					const data = {
+						province: province,
+						city: city,
+						page: this.page
+					}
+					this.loadActilist(data)
 				}
 				})
 
@@ -276,28 +231,38 @@ import picker from '../../../page_school/components/picker/picker.vue'
 			getlocation() {
 				var that=this
 				const _this = this
-				uni.getFuzzyLocation({
-				success: function(res) {
-					_this.longitude=res.longitude
-					_this.latitude=res.latitude
-					console.log(res)
-					_this.locationn()
-				},
-				});
+				if(this.userInfo.province !== ''){
+					this.city = this.userInfo.city
+					this.province = this.userInfo.province
+					const data = {
+						province: this.province,
+						city: this.city,
+						page: 0
+					}
+					this.loadActilist(data)
+					return
+				}else{
+					uni.getFuzzyLocation({
+					success: function(res) {
+						_this.longitude=res.longitude
+						_this.latitude=res.latitude
+						console.log(res)
+						_this.locationn()
+					},
+					});
+				}
 			},
 
 			loadActilist(data){  //加载活动列表
 				uni.request({
-				url: this.$url.BASE_URL + '/4142061-3780993-default/schoolteam/getRecommend',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
-				
+				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
 				method: 'GET',
 				data: data,
 				success: res => {
 					// this.acList = res.data.data.acti_list;
 					if(res.data.data.acti_list.length){
 						this.acList = this.acList.concat(res.data.data.acti_list)
-						this.acList[0].keywords = "服务,实践"
+						// this.acList[0].keywords = "服务,实践"
 						// this.loadmore = false
 					}else{  //空了
 						this.loadmore = false 
@@ -523,9 +488,14 @@ import picker from '../../../page_school/components/picker/picker.vue'
 	}
 	
 	.rowClass{
-		border-radius: 8px;
-		background-color: rgb(255, 255, 255);
-		margin-top: 10rpx;
+		// border-radius: 8px;
+		// background-color: rgb(255, 255, 255);
+		// margin-top: 10rpx;
+		border-radius: 30rpx;
+    	margin-top: 20rpx;
+    	margin-left: 20rpx;
+    	margin-right: 20rpx;
+		// background-color: #ffffff; 
 	}
 	
 	.hoverClass{
@@ -647,11 +617,33 @@ import picker from '../../../page_school/components/picker/picker.vue'
 .text-xl text-bold{
 	font-size: 52rpx;
 	font-weight: 600;
-	font-family: 'pangmen';
-	font-style: italic;
-	font-size: 34rpx;
+	// font-family: 'pangmen';
+	// font-style: italic;
+	// font-size: 34rpx;
+	color: #ffffff; 
+	font-family: 'Arial'; 
+	font-style: normal; 
+	background-color: transparent;
 }
 .more-btn{
 	font-size: small;
+}
+.background{
+	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+    // background-size: 730rpx 350rpx;
+    height: 350rpx;
+    border-radius: 30rpx;
+    margin-top: 20rpx;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
+    background-position: right;
+    background-size: 122.666% 100%;
+}
+.margin-fixed{
+	border-radius: 30rpx;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	margin-top:20rpx;
+	// margin-bottom: 20rpx;
 }
 </style>

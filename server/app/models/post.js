@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     picture: {
-      type: DataTypes.STRING(256),
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     start_date: {

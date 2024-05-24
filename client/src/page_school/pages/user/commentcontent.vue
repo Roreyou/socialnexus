@@ -2,6 +2,7 @@
 <template>
     <view>
         <commentlist :v-model="showlist" :list="com_list" :list_type="list_type" @gotocomment="toComment"></commentlist>
+		<u-empty v-if="com_list.length == 0" text="暂无内容" mode="history" margin-top="90" font-size="35"></u-empty>
         <u-popup v-model="tocom" mode="bottom" border-radius="14">
 				<view class="bodys">
 					<u-form :model="comModal" :rules="rules" ref="comForm" :errorType="errorType">
@@ -53,6 +54,9 @@ export default {
 					color: '#fff'
 				},
 
+			//评价框
+			borderColor: '#000000',
+			border: true,
             tocom: false,
             com_list: [],
             comModal: {
@@ -76,13 +80,13 @@ export default {
 		},
     mounted() {
         // console.log("list_type",this.list_type)
-        let com_url = this.$url.BASE_URL + '/4142061-0-default/schoolteam/team2activ_finished'
+        let com_url = this.$url.BASE_URL + '/schoolteam/team2activ_finished'
         if(this.list_type == '1'){
-            com_url = this.$url.BASE_URL + '/4142061-0-default/schoolteam/team2activ_unfinished'
+            com_url = this.$url.BASE_URL + '/schoolteam/team2activ_unfinished'
         }
         uni.request({
 				url: com_url,
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
                 header:{
 					Authorization:uni.getStorageSync("token")
 				},	
@@ -142,8 +146,8 @@ export default {
         postComInfo(){
             //发表评价
             uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/commentactivity',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/commentactivity',
+				
 				header:{
 					Authorization:uni.getStorageSync("token")
 				},					

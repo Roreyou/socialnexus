@@ -2,6 +2,7 @@
 <template>
     <view>
         <commentlist :list="com_list"></commentlist>
+        <u-empty v-if="com_list.length == 0" text="暂无评价" mode="history" margin-top="90" font-size="35"></u-empty>
     </view>
 </template>
 
@@ -31,10 +32,10 @@ export default {
 		},
     mounted() {
         // console.log("list_type",this.list_type)
-        let com_url = this.$url.BASE_URL + '/4142061-0-default/schoolteam/commu2team'
+        let com_url = this.$url.BASE_URL + '/schoolteam/commu2team'
         uni.request({
 				url: com_url,
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				
                 header:{
 					Authorization:uni.getStorageSync("token")
 				},	

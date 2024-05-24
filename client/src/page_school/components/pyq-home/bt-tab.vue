@@ -24,7 +24,7 @@
                 data-cur="message" @click="NavChange" @tap="tarTap(tabBars[2])">
                 <view class="cuIcon-message" @click="badgeChange2">
                     <!-- 数字角标 -->
-                    <view v-if="badge2" class="cu-tag badge">{{notice_num}}</view>
+                    <view v-if="badge2 && notice_num != ''" class="cu-tag badge">{{notice_num}}</view>
                 </view>
                 通知
             </view>
@@ -47,6 +47,11 @@
                 badge2: true
 			}
 		},
+        mounted(){
+            if(this.notice_num === '0'){
+                this.badgeChange1()
+            }
+        },
 		methods: {
 			tarTap(item){
 				this.$emit("TarTap",item)

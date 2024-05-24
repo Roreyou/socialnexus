@@ -6,7 +6,7 @@
 		<view class="cu-bar search bg-white">
 			<view class="search-form round">
 				<text class="cuIcon-search"></text>
-				<input v-model="searchcontent" :adjust-position="false" type="text" placeholder="搜索活动"
+				<input v-model="searchcontent" :adjust-position="false" type="text" placeholder="搜索我的活动"
 					confirm-type="search">
 			</view>
 			<view class="action">
@@ -176,8 +176,8 @@
             },
 			search(){
 				uni.request({
-				url: this.$url.BASE_URL + '/4142061-0-default/schoolteam/searchmyactiv',
-				// url: 'https://mock.apifox.coml/m1/4142061-3780993-default/schoolteam/getRecommend',
+				url: this.$url.BASE_URL + '/schoolteam/searchmyactiv',
+				
                 header:{
 					Authorization:uni.getStorageSync("token")
 				},	
