@@ -5,14 +5,10 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		/**
-		 * 是否需要强制登录
-		 */
 		forcedLogin: false,
 		hasLogin: false,
 		user_id: "",
 		userName: "游客",
-		
 		//高校队伍的其它附加信息
 		userInfo: {
 			identity: '',  //身份，队长、队员、老师
@@ -21,8 +17,9 @@ const store = new Vuex.Store({
 			avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
 			verification_status: 5,  //认证状态，5是游客视角的
 			isleader: false, // 是否是队长（也就是有全部权限）
-			province: '',
-			city: ''
+			province: '',  //定位
+			city: '',
+			personName: '', //这个人的姓名
 		}
 	},
 	mutations: {
@@ -33,7 +30,7 @@ const store = new Vuex.Store({
 			state.userName = userName;
 		},
 		// 高校队伍
-		login2(state, {user_id, user_name, person_identity, person_id, avatar, verification_status, isleader}) {
+		login2(state, {user_id, user_name, person_identity, person_id, avatar, verification_status, isleader, personName}) {
 			// 登录
 			state.hasLogin = true;
 			state.userInfo.isUser = true;
@@ -46,6 +43,7 @@ const store = new Vuex.Store({
 			state.userInfo.avatar = avatar || a;
 			state.userInfo.verification_status = verification_status;
 			state.userInfo.isleader = isleader;
+			state.userInfo.personName = personName;
 			
 		},
 		setStatu(state,{verification_status}){

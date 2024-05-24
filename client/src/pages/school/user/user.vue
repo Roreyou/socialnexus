@@ -6,6 +6,7 @@
 				<image :src="userInfo.avatar" class="cu-avatar xl round" style="margin-top: -26px;align-items: center; "></image>
 				<view class="text-balck text-xl" style="font-weight: bold;">{{userName}}</view>
 				<!-- <view class="text-balck text-xl" style="font-size: 30rpx;">高校队伍</view> -->
+				<view class="cu-btn2 bg-blue margin-left-sm" v-if="true">{{ identity }}</view>
 				<view class="text-balck comment-container">
 					<navigator class="" hover-class="none" :url="list1[0].url" style="align-items: flex-start;    margin-right: 74rpx; ">
 						<img class="commIcon" style="margin-right: 6rpx;" :src="list1[0].iconUrl" alt="Avatar">
@@ -44,6 +45,7 @@
 	export default {
     data() {
       return {
+		identity:'',
 				menuArrow: true,
 				userinfo: {},
 				index: 0,
@@ -87,6 +89,9 @@
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin','userName','user_id','userInfo'])
 		},
+		onload(){
+
+		},
 		methods: {
 			...mapMutations(['logout']),
 			bindLogin() {
@@ -111,6 +116,25 @@
 				wx.redirectTo({
 					url: '/pages/login/login'
 				})
+				return
+			}
+			console.log('this.userInfo.personName=', this.userInfo.personName)
+			console.log('this.userInfo.identity=', this.userInfo.identity)
+			if(this.userInfo.identity == '1'){
+				this.identity = '队长'
+				if(this.userInfo.personName !== ''){
+					this.identity = this.identity + ': ' + this.userInfo.personName
+				}
+			}else if(this.userInfo.identity == '2'){
+				this.identity = '队员'
+				if(this.userInfo.personName !== ''){
+					this.identity = this.identity + ': ' + this.userInfo.personName
+				}
+			}else{
+				this.identity = '指导老师'
+				if(this.userInfo.personName !== ''){
+					this.identity = this.identity + ': ' + this.userInfo.personName
+				}
 			}
 		}
 	}
@@ -258,4 +282,30 @@
     cursor: pointer;
     /* margin-bottom: 18rpx; */
 }
+
+/* 身份标签 */
+.cu-btn2{
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.3);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    font-family: pmkaiti;
+    border: 1.0px solid red;
+    color: red;
+    margin-left: 0;
+    font-size: 25rpx;
+    height: 50rpx;
+    margin-top: 10rpx;
+    margin-bottom: 10rpx;
+    line-height: 1.5;
+    /* width: 50rpx; */
+    padding: 10rpx 25rpx;
+	}
+
+	/* 底部按钮 */
+	.cu-btn{
+		border-radius: 15px;
+    	background-color: rgba(255, 255, 255, 0.3);
+    	backdrop-filter: blur(10px);
+	}
 </style>
