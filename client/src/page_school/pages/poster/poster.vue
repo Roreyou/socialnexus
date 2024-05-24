@@ -338,7 +338,6 @@
 							// y: 60,
 							y:300,
 							color: '#000000',
-							// font: 'normal bold 16px 仿宋',
 							font: 'bold 16px 黑体',
 							textAlign: 'center'
 						}
