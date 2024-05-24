@@ -266,5 +266,15 @@
 		border-radius: 15px;
     	background-color: rgba(255, 255, 255, 0.3);
     	backdrop-filter: blur(10px);
+
+		font-family: pmkaiti;
+		border: 1.0px solid red;
+		color: red;
+		margin-left: 0;
+		line-height: 1.2;
+		font-size: 25rpx;
+		height: 50rpx;
+		margin-top: 10rpx;
+		margin-bottom: 10rpx
 	}
 </style>
