@@ -35,8 +35,8 @@
 			</view>
 			<!-- <u-gap height="10"></u-gap> -->
 			<view @click="notice" class="margin-fixed xuanchuan">
-				<u-notice-bar mode="vertical" :list="noticeList" type="primary" more-icon
-				bg-color="#fff" :duration="5000" border-radius="15" font-size="35"></u-notice-bar>
+				<u-notice-bar mode="vertical" :list="noticeList" type="primary"
+				bg-color="#fff" :duration="3000" border-radius="15" font-size="30" volume-size="40"></u-notice-bar>
 			</view>
 			<!-- <u-gap height="5"></u-gap> -->
 			<!-- <u-waterfall v-model="flowList" ref="uWaterfall">
