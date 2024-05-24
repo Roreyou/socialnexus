@@ -3,7 +3,7 @@
 <view class="main">
 	<view class="cu-bar bg-white solid-bottom margin-top">
 		<view class="action">
-			<text class="cuIcon-title text-green "></text> 新消息
+			<text class="cuIcon-title text-green "></text> 您有以下新消息：
 		</view>
 	</view>
 	<view class="cu-list menu-avatar">
