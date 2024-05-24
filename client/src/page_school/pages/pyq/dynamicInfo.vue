@@ -454,6 +454,10 @@
 					});
 					return
 				}
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能点赞评论！`);
+					return;
+				}
 				uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/likecom', //点赞和取消点赞 评论
 					header:{
