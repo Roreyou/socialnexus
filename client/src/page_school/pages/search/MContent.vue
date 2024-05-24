@@ -2,6 +2,7 @@
 <template>
     <view>
         <actilist :acList="acList" :ismyac="true"></actilist>
+		<u-empty v-if="acList.length == 0" text="暂无符合条件的活动" mode="search" margin-top="30rpx" font-size="35"></u-empty>
     </view>
 </template>
 
