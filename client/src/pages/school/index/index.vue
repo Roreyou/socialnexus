@@ -292,61 +292,6 @@
 					url: 'pages/notice/notice'
 				})
 			},
-			// findHouseList(type = 0) {
-			// 	if(type == 1){
-			// 		this.pageNum = 1
-			// 		this.flowList = []
-			// 		this.$refs.uWaterfall.clear();
-			// 	}
-			// 	let url = "/api/houseApi/findHouseRoomList";
-			// 	// this.$u.get(url, {
-			// 	// 	pageNum: this.pageNum,
-			// 	// 	pageSize: this.pageSize,
-			// 	// 	orderByColumn: 'update_time,create_time',
-			// 	// 	isAsc: 'desc'
-			// 	// }).then(result => {
-			// 	// 	const data = result.rows;
-			// 	// 	if(this.pageNum>1 && data.length < this.pageSize){
-			// 	// 		return this.loadStatus = 'nomore';
-			// 	// 	}
-			// 	// 	this.houseList = data;
-			// 	// 	for (let i = 0; i < this.houseList.length; i++) {
-			// 	// 	    // 先转成字符串再转成对象，避免数组对象引用导致数据混乱
-			// 	// 	    let item = this.houseList[i]
-			// 	// 		item.image = item.faceUrl
-			// 	// 		if(item.type == 0){
-			// 	// 			item.type = '整租'
-			// 	// 		}else if(item.type == 1){
-			// 	// 			item.type = '合租'
-			// 	// 		}
-			// 	// 		if(item.roomType == 1){
-			// 	// 			item.roomType = '主卧'
-			// 	// 		}else if(item.roomType == 2){
-			// 	// 			item.roomType = '次卧'
-			// 	// 		}else{
-			// 	// 			item.roomType = '未知'
-			// 	// 		}
-						
-			// 	// 		if(this.$u.test.isEmpty(item.houseNum)){
-			// 	// 			item.houseNum = ''
-			// 	// 		}
-			// 	// 		if(this.$u.test.isEmpty(item.houseHall)){
-			// 	// 			item.houseHall = ''
-			// 	// 		}
-			// 	// 		if(this.$u.test.isEmpty(item.toiletNum)){
-			// 	// 			item.toiletNum = ''
-			// 	// 		}
-			// 	// 		if(this.$u.test.isEmpty(item.floor)){
-			// 	// 			item.floor = ''
-			// 	// 		}else{
-			// 	// 			item.floor = item.floor + '层'
-			// 	// 		}
-			// 	// 	    this.flowList.push(item);
-			// 	// 	}
-			// 	// 	++ this.pageNum 
-			// 	// 	this.loadStatus = 'loadmore';
-			// 	// });
-			// },
 			checkUpdate(){
 				uni.getSystemInfo({
 					success:(res) => {
@@ -399,25 +344,11 @@
 					}
 				}
 				if(type === "2"){
-					// 判断Token是否有效   这个逻辑最后再来加  在这里主页加一下就好了
-					// let lifeData = uni.getStorageSync('lifeData');
-					// let token = lifeData.vuex_token
-					// if(!token){
-					// 	// 没有token 则跳转到登录
-					// 	return uni.reLaunch({
-					// 		url:'../login/login'
-					// 	})
-					// }else{
-					// 	this.$u.route('/pages/detail/preHouse');
-					// }
-					// this.$u.route('/pages/school/pyq/entry');
 					uni.navigateTo({
 						url:'../../../page_school/pages/pyq/entry'
 					});
 				}
 				if(type === "3"){
-					// this.$u.route('/pages/search/searchList');
-					// this.$u.route('/pages/school/search/recommend');
 					uni.navigateTo({
 						url:'../../../page_school/pages/search/recommend'
 					});
@@ -439,18 +370,12 @@
 			},
 			//点击加载更多活动
 			torec(){
-				// this.$u.route({
-				// 	url: 'pages/school/search/recommend',
-				//   })
 				  uni.navigateTo({
 					url:'../../../page_school/pages/search/recommend'
 				});
 			},
 			//前往详情页
 			todetail(){
-				// this.$u.route({
-				// 	url: 'pages/school/details/details',
-				//   })
 				  uni.navigateTo({
 						url:'../../../page_school/pages/details/details'
 					});  
