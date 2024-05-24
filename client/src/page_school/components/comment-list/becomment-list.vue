@@ -95,8 +95,9 @@ line-height: 60rpx;
 }
 
 .text-content{
-margin: 0 25rpx;
+margin: 0 35rpx;
 height: auto;
+font-size: larger;
 }
 
 .com_time{
@@ -110,13 +111,17 @@ font-size: larger;
     padding-bottom: 15rpx;
 }
 .acti_name{
-    font-size: larger;
+    font-size: 30rpx;
+    line-height: 2.6;
+    margin-bottom: -10rpx;
 }
 
 .ac_time{
     margin: auto;
     /* margin-bottom: 15rpx; */
     color: gray;
+    font-size: 30rpx;
+    line-height: 2.6;
 }
 
 .acti_card{
@@ -132,7 +137,7 @@ font-size: larger;
     background-color: white;
 }
 .acti_name{
-    font-size: larger;
+    font-size: 30rpx;
     color: white;
 }
 
@@ -140,6 +145,7 @@ font-size: larger;
     margin: auto;
     /* margin-bottom: 15rpx; */
     color: white;
+    line-height: 1.8;
 }
 
 /* 评价按钮 */
@@ -157,5 +163,9 @@ font-size: larger;
 .button-container {
   text-align: right;
   margin: 0rpx 25rpx 0 480rpx;
+}
+
+.title{
+
 }
 </style>
