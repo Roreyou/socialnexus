@@ -119,7 +119,10 @@ font-size: larger;
 }
 .acti_card{
     border-radius: 20rpx;
-    background-color: #13603e;
+    /* background-color: #13603e; */
+    /* background-image: linear-gradient(to right top, #86a8e7, #69bff8, #4ad5ff, #41e9fd, #5ffbf1); */
+    /* background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12); */
+    background-image: linear-gradient(to right bottom, #13603e, #258344, #47a642, #73c936, #a8eb12);
     margin: 15rpx 25rpx;
     padding-bottom: 15rpx;
 }
