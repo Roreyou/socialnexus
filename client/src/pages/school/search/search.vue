@@ -271,45 +271,12 @@ export default {
       });
     },
     search() {
-      // 	uni.request({
-      // 	url: this.$url.BASE_URL + '/schoolteam/activsquare/search',
-      // 	
-      // 	header:{
-      // 		Authorization:uni.getStorageSync("token")
-      // 	},
-      // 	method: 'GET',
-      // 	data: {
-      // 		// team_id: this.user_id,
-      // 		// token: this.$userinfo.token
-      // 		// activity_status: this.index
-      // 		text: this.searchcontent
-      // 	},
-      // 	success: res => {
-      // 		this.searchlist = res.data.data.activ_list;
-      // 		// console.log("searchlist:",this.searchlist)
-      // 		this.TabCur = 0
-      // 		// console.log(this.acList)
-      // 		this.net_error = false;
-      // 	},
-      // 	fail: res => {
-      // 		this.net_error = true;
-      // 	},
-      // 	complete: () => {
-      // 	}
-      // })
       this.newontent = this.searchcontent;
       this.TabCur = 0;
     },
   },
   onReachBottom() {
     uni.$emit("search--onReachBottom");
-    // console.log('search -- onReachBottom')
-    // ++ this.page
-    // const data = {
-    // 	province: '1',
-    // 	page: this.page
-    // }
-    // this.getRelist(data)
   },
 };
 </script>

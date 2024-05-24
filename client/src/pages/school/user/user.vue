@@ -20,43 +20,6 @@
 			</view>
 		</view>
 		<view class="cu-list menu back2" style="margin-top: -36rpx;">
-			<!-- 评价 -->
-				<!-- <view class="custom-container"> -->
-					<!-- <hr class="horizontal-line"> -->
-					<!-- <view class="title" style="text-align: left;"> -->
-						<!-- <uni-icons type="email" color="gray" size="20" style="vertical-align: middle;"></uni-icons> -->
-						<!-- <text style="margin-left: 20rpx;">评价</text> -->
-					<!-- </view> -->
-				<!-- </view> -->
-				<!-- <view class="cu-item arrow com_item" v-for="(item,index) in list1" :key="index">
-					<navigator class="content" hover-class="none" :url="item.url">
-
-						
-						<text class="text-grey">{{item.text}}</text>
-					</navigator>
-				</view> -->
-			<!-- <view class="cu-item com_item">
-				<view class="navigator-wrapper">
-					<navigator class="wrapper-content" hover-class="none" :url="list1[0].url">
-						<text class="text-grey com">{{list1[0].text}}</text>
-						<text class="text-grey down-text">我对活动的评价</text>
-					</navigator>
-				</view>
-				<view class="navigator-wrapper">
-					<navigator class="wrapper-content" hover-class="none" :url="list1[1].url">
-						<text class="text-grey com">{{list1[1].text}}</text>
-						<text class="text-grey down-text">社区基层对我的评价</text>
-					</navigator>
-				</view>
-			</view> -->
-			<!-- 队伍信息管理 -->
-				<!-- <view class="custom-container"> -->
-					<!-- <hr class="horizontal-line"> -->
-					<!-- <view class="title" style="text-align: center;"> -->
-						<!-- <uni-icons type="map-pin-ellipse" color="gray" size="20" style="vertical-align: middle;"></uni-icons> -->
-						<!-- <text style="margin-left: 20rpx;">队伍信息管理</text> -->
-					<!-- </view> -->
-				<!-- </view> -->
 				<view class="cu-item arrow " v-for="(item,index) in list2" :key="index" 
 				style="background-color: white;border-radius: 30rpx; margin-left: 40rpx; margin-right: 40rpx; margin-bottom: 20rpx;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); ">
 					<navigator class="below-container" hover-class="none" :url="item.url">
@@ -133,15 +96,6 @@
 				});
 			},
 			bindLogout() {
-				// this.logout();	
-				/**
-				 * 如果需要强制登录跳转回登录页面
-				 */
-				// if (this.forcedLogin) {
-				// 	uni.reLaunch({
-				// 		url: '../../login/login',
-				// 	});
-				// }
 				this.logout();
 				uni.reLaunch({
 						url: '../../login/login',
@@ -154,26 +108,6 @@
 		mounted(){
 			if(!this.userInfo.isUser){
 				const _this = this;
-				// uni.showModal({
-				// 		title: '',
-				// 		content: '请登录后查看。是否前去登录？',
-				// 		success: function(res) {
-				// 		if (res.confirm) {
-				// 			// 用户点击了确定
-				// 			// console.log('用户点击了确定');
-				// 			_this.$u.route({
-				// 				url: 'pages/login/login',
-				// 			})
-				// 			// 在这里可以编写用户点击确定后的逻辑
-				// 		} else if (res.cancel) {
-				// 			// 用户点击了取消
-				// 			// console.log('用户点击了取消');
-				// 			wx.switchTab({
-				// 				url: '/pages/tabbar-page/tabbar-page'
-				// 			})
-				// 		}
-				// 		}
-				// 	});
 				wx.redirectTo({
 					url: '/pages/login/login'
 				})
