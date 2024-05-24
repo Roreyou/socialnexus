@@ -289,6 +289,10 @@
 					});
 					return
 				}
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能评论帖子！`);
+					return;
+				}
 				const id = this.comModal.dyId
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
