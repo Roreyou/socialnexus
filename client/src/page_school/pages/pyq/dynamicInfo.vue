@@ -544,18 +544,6 @@
 				success: res => {
 					let code = res.data.code;
 					if(code == 200){
-						// let index = 0;
-						// let list = this.comList;
-
-						// for (let i = 0; i < this.comList[com_index].reply_list.length; i++) {
-						// 	console.log("this.comList[com_index]:",com_index, this.comList[com_index])
-						// 	if (this.comList[com_index].reply_list[i].id === id) {
-						// 		index = i 
-						// 		// console.log("this.comList[index]: ", this.comList[index])
-						// 		break; 
-						// 	}
-						// }
-						// console.log("this.comList[com_index].reply_list[index].fabulous:", this.comList[com_index].reply_list[index].fabulous)
 						if(this.comList[com_index].reply_list[index2].fabulous){
 							this.$u.toast(`成功取消点赞`);
 							this.comList[com_index].reply_list[index2].like = this.comList[com_index].reply_list[index2].like - 1
@@ -605,8 +593,6 @@
 					method: 'POST',
 					data: {
 						comment_id: comId,
-						// team_id: "1"
-						// reply_content: this.repModal.replyInfo
 					},
 					success: res => {
 						let code = res.data.code;
