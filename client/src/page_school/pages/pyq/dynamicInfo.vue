@@ -604,7 +604,11 @@
 
 
 			// 删除评论
-			delCom(comId){   
+			delCom(comId){
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能删除帖子！`);
+					return;
+				}   
 				uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/delcomment', //删除评论
 					header:{
