@@ -93,11 +93,11 @@ class postService{
             let whereConditions = {};
             
             // 如果 province 不是 null，则添加 province 条件
-            if (province !== null) {
+            if (province !== '') {
                 whereConditions.province = province;
             }
             // 如果 city不是 null，则添加 city 条件
-            if (city !== null) {
+            if (city !== '') {
                 whereConditions.city = city;
             }
             // 调用数据库查询方法获取同区域帖子

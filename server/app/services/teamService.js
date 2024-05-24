@@ -14,6 +14,7 @@ const ImageService = require('./imageService');
 const { Op } = require('sequelize');
 const { commentOnPost } = require('./commentService');
 const shortUUID = require('short-uuid');
+const Result = require('../common/Result');
 
 
 
@@ -706,7 +707,8 @@ class teamService {
       const result = await db.teamactivity.create({
         activity_id: activ_id,
         team_id: team_id,
-        admission_status: 1 // 默认为待录取状态
+        admission_status: 1, // 默认为待录取状态
+        comment_status: 1
       });
       return { admission_status: result.admission_status };
     } catch (error) {
@@ -724,11 +726,11 @@ class teamService {
       let whereConditions = {};
             
       // 如果 province 不是 null，则添加 province 条件
-      if (province !== null) {
+      if (province !== '') {
           whereConditions.province = province;
       }
       // 如果 city不是 null，则添加 city 条件
-      if (city !== null) {
+      if (city !== '') {
           whereConditions.city = city;
       }
       if(province == '中国区域'){
@@ -878,33 +880,23 @@ class teamService {
 
       if (teamActivity) {
         if (teamActivity.comment_status == '2') {
-          return {
-            code: 200,
-            msg: 'Activity have already been commented!'
-          };
+
+          return 'Activity have already been commented!';
         } else {
-          console.log("debug:", comment);
           await teamActivity.update({
             comment_status: '2',
             team_to_activity: comment,
+            team_to_activity_time: await otherService.getCurrentTime()
           });
-          return {
-            code: 200,
-            msg: 'comment activity successfully!',
-            data: {
-              comment_status: '2'
-            }
+          return {comment_status: '2'}
           };
         }
-      } else {
-        return {
-          code: -1,
-          msg: 'Can not find any activity!'
-        };
+       else {
+        return 'Can not find any activity!';
       }
     } catch (error) {
       console.error('Error:', error);
-      return res.status(500).json({ code: 500, msg: 'Failed to comment activity' });
+      return 'Failed to comment activity';
     }
 
   }
@@ -933,7 +925,7 @@ class teamService {
           activity_name: activity ? activity.name : null,
           team_to_activity: teamActivity.team_to_activity,
           comment_status: teamActivity.comment_status,
-          time: teamActivity.team_to_activity_time
+          time: await otherService.changeTimeFormat(teamActivity.team_to_activity_time)
         });
       }
       return comments;
@@ -973,7 +965,7 @@ class teamService {
         results.push({
           activity_name: activity ? activity.name : null,
           com_to_team: teamActivity.com_to_team,
-          acti_time: activity.start_time,
+          acti_time: await otherService.changeTimeFormat(activity.start_time),
           community_name: communityName,
         });
       }
@@ -1011,8 +1003,8 @@ class teamService {
         comments.push({
           activity_name: activity ? activity.name : null,
           team_to_activity: teamActivity.team_to_activity,
-          com_time: teamActivity.team_to_activity_time,
-          acti_time: activity.start_time
+          com_time: await otherService.changeTimeFormat(teamActivity.team_to_activity_time),
+          acti_time: await otherService.changeTimeFormat(activity.start_time)
         });
       }
       return comments;
@@ -1048,7 +1040,7 @@ class teamService {
         comments.push({
           activity_name: activity ? activity.name : null,
           acti_content: activity ? activity.remark : null,
-          acti_time: activity.start_time,
+          acti_time: await otherService.changeTimeFormat(activity.start_time),
           acti_id: activity.id.toString()
         });
       }
@@ -1086,20 +1078,31 @@ class teamService {
   // 修改队伍信息，送去团委审核
   static async modifyInfo(team_id, instrData, leaderData, membersData) {
     try {
+      console.log(team_id);
       // 存入指导员信息
+      delete instrData.pwd;
+      console.log("debug 01:",instrData);
       const modifyInstructor = {
         ...instrData,
         team_id: team_id
       };
+      console.log("debug 02:",modifyInstructor);
       await teamService.insertInstructor(modifyInstructor);
+      console.log("debug 03");
       // 存入队长信息
+      delete leaderData.pwd;
+      delete leaderData.team_id;
+      console.log("debug 04");
+      
       const modifyLeader = {
         ...leaderData,
         team_id: team_id
       };
+      console.log("debug 05:",modifyLeader);
       await teamService.insertLeader(modifyLeader);
-
+      console.log("debug 066");
       // 存入队伍成员
+      console.log("debug 077:",membersData);
       await teamService.addTeamMembers(team_id, membersData);
 
       // 将修改审核字段设置为1
@@ -1112,18 +1115,46 @@ class teamService {
   }
 
   static async insertInstructor(instrData) {
+    const ifexist = await db.modify_teacher.findOne({where:{id:instrData.id, team_id:instrData.team_id}});
+    console.log(ifexist);
+    if(ifexist){
+      ifexist.destroy();
+    }
     await db.modify_teacher.create(instrData);
   }
 
   static async insertLeader(leaderData) {
-    await db.modify_teammember.create(leaderData);
+    try {
+      const ifexist = await db.modify_teammember.findOne({where:{id:leaderData.id, team_id:leaderData.team_id}});
+      console.log(ifexist);
+      if(ifexist){
+        ifexist.destroy();
+      }
+      await db.modify_teammember.create(leaderData);
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   static async addTeamMembers(team_id, membersData) {
-    await Promise.all(membersData.map(memberData => db.modify_teammember.create({
-      team_id: team_id,
-      ...memberData
-    })));
+    try {
+      await Promise.all(
+        membersData.map(async memberData => {
+          // 创建一个新对象，不包含 pwd 字段
+          const modifiedMemberData = { ...memberData };
+          console.log("debug 88",modifiedMemberData);
+          delete modifiedMemberData.pwd;
+          console.log("debug 99",modifiedMemberData);
+          // 返回一个 Promise，该 Promise 由 db.modify_teammember.create 方法创建
+          await db.modify_teammember.create(
+            modifiedMemberData
+          );
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   static async modifyPwd(identity, old_pwd, new_pwd, user_id) {

@@ -76,7 +76,15 @@ class  otherService{
     static async getCategKeyCommuIdsMap(events) {
         // 对每个活动进行处理
         const results = await Promise.all(events.map(async activity => {
-        // 获取活动对应的分类名称
+        
+            // 调用服务来改变时间格式
+            console.log("debug:",activity);
+            const newStartTimeFormat = await  otherService.changeTimeFormat(activity.dataValues.start_time);
+            const newEndTimeFormat = await  otherService.changeTimeFormat(activity.dataValues.end_time);
+            activity.dataValues.start_time = newStartTimeFormat;
+            activity.dataValues.end_time = newEndTimeFormat;
+        
+            // 获取活动对应的分类名称
         const category = await db.activity_type.findOne({
             where: {
             id: activity.category_id
@@ -122,6 +130,7 @@ class  otherService{
         });
 
         const { ...rest } = activity.toJSON();
+
         // 构造处理后的活动信息
         return {
             ...rest,
@@ -134,7 +143,7 @@ class  otherService{
     }
 
     static async getPageData(pageNumber, list) {
-        const pageSize = 2; // 假设每页有 10 条数据
+        const pageSize = 3; // 假设每页有 10 条数据
     
         if (pageNumber == 0) {
           // 如果页数等于 0，则表示第一部分，返回第一部分的数据
@@ -161,6 +170,12 @@ class  otherService{
         });
         return teamAvatar;
     }
+
+    static async generateRandomFileName(ext) {
+        const timestamp = Date.now();
+        const random = Math.floor(Math.random() * 10000);
+        return `${timestamp}-${random}.${ext}`;
+      }
 }
 
 module.exports = otherService;

@@ -450,7 +450,7 @@ class teamController {
 
   static async modifyInfo(req, res){
     try {
-      const { team_id, instrData, leaderData, membersData } = req.body;
+      const { id:team_id, instrData:instrData, leaderData:leaderData, membersData:membersData } = req.body;
 
       // 调用服务层方法更新队伍信息
       const result = await teamService.modifyInfo(team_id, instrData, leaderData, membersData);
