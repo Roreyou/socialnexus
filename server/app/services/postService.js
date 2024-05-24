@@ -247,7 +247,8 @@ class postService{
     // 给评论点赞/取消点赞
     static async likeCom(comment_id, team_id){
         try { 
-
+            console.log(comment_id);
+            console.log(team_id);//点赞人的id
             // 查看是否点赞过
             const existingLike = await db.likecomment.findOne({
                 where: {
@@ -265,10 +266,11 @@ class postService{
                 const comment = await db.comment.findOne({
                     where:{
                         id: comment_id,
-                        team_id: team_id
+                        //team_id: team_id //本来应该是该评论的评论者的id，但这里不需要，且teamid是点赞人的id
                     }
                 });
                 console.log("debug 5");
+                console.log(comment);
                 if (!comment) {
                     //如果这条评论不存在，会报错
                     throw new Error('Comment not found');
@@ -297,7 +299,7 @@ class postService{
                 const likeCom = await db.comment.findOne({
                     where:{
                         id: comment_id,
-                        team_id: team_id
+                        //team_id: team_id //本来应该是该评论的评论者的id，但这里不需要，且teamid是点赞人的id
                     }
                 });
 

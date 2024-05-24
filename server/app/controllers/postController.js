@@ -109,7 +109,7 @@ class postController{
 
     //点赞/取消点赞评论
     static async likeCom(req, res){
-        const { comment_id, team_id } = req.body;
+        const { comment_id:comment_id, team_id:team_id } = req.body;
         try {
             const updatedCom = await postService.likeCom(comment_id, team_id);
             return res.json(Result.success(updatedCom));
