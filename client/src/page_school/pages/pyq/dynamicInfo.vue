@@ -372,6 +372,10 @@
 					});
 				}
 				else{
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能点赞/取消点赞帖子！`);
+					return;
+				}
 
 				uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/likepost',  //点赞和取消点赞会发请求，后端决定怎么处理
