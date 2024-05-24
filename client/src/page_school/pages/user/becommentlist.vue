@@ -2,6 +2,7 @@
 <template>
     <view>
         <commentlist :list="com_list"></commentlist>
+        <u-empty v-if="com_list.length == 0" text="暂无评价" mode="history" margin-top="30rpx" font-size="35"></u-empty>
     </view>
 </template>
 
