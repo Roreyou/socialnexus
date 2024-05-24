@@ -34,35 +34,7 @@
 	export default {
 		data() {
 			return {
-				acList:[
-					{
-						id: 0,
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{
-						id: 1,
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					},
-					{	
-						id: 2,
-						state: "开展中",
-						title: "5月5日实践活动",
-						time: "2020-05-5",
-						place: "深圳",
-						job: "志愿者",
-						keywords: "支教,教育"
-					}
-				],
+				acList: [],
 				click_but: false
 			}
 		},
