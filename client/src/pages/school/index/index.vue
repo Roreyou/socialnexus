@@ -34,9 +34,9 @@
 				</u-row>
 			</view>
 			<!-- <u-gap height="10"></u-gap> -->
-			<view @click="notice" class="margin-fixed">
-				<u-notice-bar mode="vertical" :list="noticeList" type="primary" more-icon
-				bg-color="#fff" :duration="5000" border-radius="15"></u-notice-bar>
+			<view @click="notice" class="margin-fixed xuanchuan">
+				<u-notice-bar mode="vertical" :list="noticeList" type="primary"
+				bg-color="#fff" :duration="3000" border-radius="15" font-size="30" volume-size="40"></u-notice-bar>
 			</view>
 			<!-- <u-gap height="5"></u-gap> -->
 			<!-- <u-waterfall v-model="flowList" ref="uWaterfall">
@@ -119,8 +119,9 @@
 					},
                 ],
 				noticeList: [
-					'强国有我，青春有为',
-					'行万里路，知中国情',
+					'开社会风气之先，做青年志愿者',
+					'构筑和谐企业，弘扬志愿精神，创建文明社区',
+					'予人玫瑰，手有余香'
 				],
 				navList:[
 				   {name:"我的活动",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover1.png",type:"1"},
@@ -155,54 +156,7 @@
 			uni.$off('findIndexHouseList');
 		},
 		onShow(){
-			// 检测升级
-			// this.checkUpdate();
-			// 流量统计
-			// this.appSysFlowInfo()
 
-			// uni.request({
-			// 	url: this.$url + '/__api.php',
-			// 	method: 'GET',
-			// 	data: {
-			// 		'a': 'list-card',
-			// 		token: this.$userinfo.token
-			// 	},
-			// 	success: res => {
-			// 		this.list = res.data.list;
-			// 		this.net_error = false;
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
-			// console.log("userInfo.verification_status,", this.userInfo)
-			// console.log(typeof this.$url)
-			// console.log(this.$url.BASE_URL + '/m1/schoolteam/getRecommend')
-			// uni.request({
-			// 	url: this.$url.BASE_URL + '/schoolteam/getRecommend',
-			// 	
-				
-			// 	method: 'GET',
-			// 	data: {
-			// 		province: '1',
-			// 		// token: this.$userinfo.token
-			// 	},
-			// 	success: res => {
-			// 		this.acList = res.data.data.acti_list;
-			// 		this.acList[0].keywords = "服务,实践"
-			// 		this.net_error = false;
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
-			if(this.userInfo.province !== ''){
-				return
-			}
 			this.getlocation()
 
 			const data = {
@@ -277,21 +231,31 @@
 			getlocation() {
 				var that=this
 				const _this = this
-				uni.getFuzzyLocation({
-				success: function(res) {
-					_this.longitude=res.longitude
-					_this.latitude=res.latitude
-					console.log(res)
-					_this.locationn()
-				},
-				});
+				if(this.userInfo.province !== ''){
+					this.city = this.userInfo.city
+					this.province = this.userInfo.province
+					const data = {
+						province: this.province,
+						city: this.city,
+						page: 0
+					}
+					this.loadActilist(data)
+					return
+				}else{
+					uni.getFuzzyLocation({
+					success: function(res) {
+						_this.longitude=res.longitude
+						_this.latitude=res.latitude
+						console.log(res)
+						_this.locationn()
+					},
+					});
+				}
 			},
 
 			loadActilist(data){  //加载活动列表
 				uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
-				
-				
 				method: 'GET',
 				data: data,
 				success: res => {

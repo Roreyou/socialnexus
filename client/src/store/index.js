@@ -64,7 +64,9 @@ const store = new Vuex.Store({
 				isUser: false,
 				avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
 				verification_status: 5,
-				isleader: false
+				isleader: false,
+				province: '广东省',
+				city: '珠海市'
 			};
 			state.hasLogin = false;
 		}

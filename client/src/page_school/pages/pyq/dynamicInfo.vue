@@ -39,7 +39,7 @@
 				<view class="bodys">
 					<u-form :model="repModal" :rules="rules" ref="repForm" :errorType="errorType">
 						<u-form-item :border-bottom="false"  prop="replyInfo">
-							<u-input v-model="repModal.replyInfo" type="textarea" placeholder="请输入回复内容~" :border="border"
+							<u-input :style="{ fontSize: '25rpx' }" v-model="repModal.replyInfo" type="textarea" placeholder="请输入回复内容" :border="border"
 								:border-color="borderColor" :height="height" :auto-height="autoHeight" />
 						</u-form-item>
 					</u-form>

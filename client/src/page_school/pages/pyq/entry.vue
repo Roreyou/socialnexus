@@ -147,6 +147,10 @@
 					});
 					return
 				}
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能发布帖子！`);
+					return;
+				}
 				this.$refs.uUpload.upload();
 			},
 			postAll(){
@@ -224,7 +228,11 @@
 					team_id: this.user_id
 				},
 				success: res => {
-					this.notice_num = res.data.data.notice_num;
+					if(res.data.data.notice_num == '0'){
+						this.notice_num = '';
+					}else{
+						this.notice_num = res.data.data.notice_num;
+					}
 					this.net_error = false;
 				},
 				fail: res => {
