@@ -102,11 +102,6 @@ export default {
             that.getmore();
         });
     },
-    // onReachBottom() {
-	// 	uni.$emit('search -- onReachBottom');
-	// 	console.log('search -- onReachBottom')
-
-	// },
 
     methods: {
         getmore(){
@@ -172,10 +167,6 @@ export default {
                 }else{  //空了
                     this.loadmore = false 
                 }
-				// this.modifiedSearchList = res.data.data.activ_list;
-				// console.log("searchlist:",this.modifiedSearchList)
-				// this.TabCur = 0
-				// console.log(this.acList)
 				this.net_error = false;
 			},
 			fail: res => {
