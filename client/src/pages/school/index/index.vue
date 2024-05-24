@@ -112,12 +112,6 @@
 				pageSize: 20,
 				scrollTop: 0,
 				houseList: [],
-				swiperList: [
-					{
-						image: '/static/img/index/swiper/swiper.jpg',
-					    title: '身无彩凤双飞翼，心有灵犀一点通'
-					},
-                ],
 				noticeList: [
 					'开社会风气之先，做青年志愿者',
 					'构筑和谐企业，弘扬志愿精神，创建文明社区',
@@ -127,11 +121,9 @@
 				   {name:"我的活动",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover1.png",type:"1"},
 				   {name:"朋友圈",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover2.png",type:"2"},
 				   {name:"活动推荐",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover3.png",type:"3"},
-				//    {name:"发布房源",src:"/static/img/index/cover/index_cover4.png",type:"2"}
 				],
 				loadStatus: 'loadmore',
 				flowList: [],
-				uvCode: uni.getStorageSync('uvCode'),
 				acList:[
 				],
 				page: 0,
@@ -153,7 +145,7 @@
 		// },
 		onUnload() {
 			// 移除监听事件  
-			uni.$off('findIndexHouseList');
+			// uni.$off('findIndexHouseList');
 		},
 		onShow(){
 
