@@ -21,8 +21,8 @@ const store = new Vuex.Store({
 			avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
 			verification_status: 5,  //认证状态，5是游客视角的
 			isleader: false, // 是否是队长（也就是有全部权限）
-			province: '',
-			city: ''
+			province: '广东省',
+			city: '珠海市'
 		}
 	},
 	mutations: {
@@ -64,7 +64,9 @@ const store = new Vuex.Store({
 				isUser: false,
 				avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
 				verification_status: 5,
-				isleader: false
+				isleader: false,
+				province: '广东省',
+				city: '珠海市'
 			};
 			state.hasLogin = false;
 		}
