@@ -167,6 +167,12 @@
 					});
 				}else{
 					let favor = this.isActive ? 1 : 0;  //1就是要取消收藏，0就是要收藏
+					if(favor == 1){
+						if(!this.userInfo.isleader){
+							this.$u.toast(`只有队长能报名/取消报名活动！`);
+							return;
+						}
+					}
 					uni.request({
 						url: this.$url.BASE_URL + '/schoolteam/favor',
 						header:{

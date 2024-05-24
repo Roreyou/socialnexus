@@ -155,51 +155,6 @@
 			uni.$off('findIndexHouseList');
 		},
 		onShow(){
-			// 检测升级
-			// this.checkUpdate();
-			// 流量统计
-			// this.appSysFlowInfo()
-
-			// uni.request({
-			// 	url: this.$url + '/__api.php',
-			// 	method: 'GET',
-			// 	data: {
-			// 		'a': 'list-card',
-			// 		token: this.$userinfo.token
-			// 	},
-			// 	success: res => {
-			// 		this.list = res.data.list;
-			// 		this.net_error = false;
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
-			// console.log("userInfo.verification_status,", this.userInfo)
-			// console.log(typeof this.$url)
-			// console.log(this.$url.BASE_URL + '/m1/schoolteam/getRecommend')
-			// uni.request({
-			// 	url: this.$url.BASE_URL + '/schoolteam/getRecommend',
-			// 	
-				
-			// 	method: 'GET',
-			// 	data: {
-			// 		province: '1',
-			// 		// token: this.$userinfo.token
-			// 	},
-			// 	success: res => {
-			// 		this.acList = res.data.data.acti_list;
-			// 		this.acList[0].keywords = "服务,实践"
-			// 		this.net_error = false;
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
 			if(this.userInfo.province !== ''){
 				return
 			}

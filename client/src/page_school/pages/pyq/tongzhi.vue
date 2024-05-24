@@ -12,7 +12,7 @@
 			<view class="cu-avatar radius lg" :style="{ 'background-image': 'url(' + item.team_avatar + ')' }"></view>
 			<view class="content">
 				<view class="text-pink"><view class="text-cut">{{item.team_name}}</view></view>
-				<view class="text-gray text-sm flex"> <view class="text-cut">{{item.content}}</view></view>
+				<view class="text-gray text-sm flex"> <view class="text-cut">评论了你的帖子：{{item.content}}</view></view>
 			</view>
 			<view class="action">
 				<view class="text-grey text-xs">{{item.time}}</view>
@@ -20,8 +20,21 @@
 			</view>
 		</view>
 
-		<!-- 点赞 -->
-		<view class="cu-item" v-for="(item,index) in like_list" :key="index" @click="gotopost(item.post_id)">
+		<!-- 回复评论 -->
+			<view class="cu-item" v-for="(item,index) in reply_list" :key="index" @click="gotopost(item.post_id)">
+			<view class="cu-avatar radius lg" :style="{ 'background-image': 'url(' + item.team_avatar + ')' }"></view>
+			<view class="content">
+				<view class="text-pink"><view class="text-cut">{{item.team_name}}</view></view>
+				<view class="text-gray text-sm flex"> <view class="text-cut">回复了你的评论：{{item.content}}</view></view>
+			</view>
+			<view class="action">
+				<view class="text-grey text-xs">{{item.time}}</view>
+				<view class="cu-tag round bg-red sm">1</view>
+			</view>
+		</view>
+
+		<!-- 点赞帖子 -->
+		<view class="cu-item" v-for="(item,index) in likePost_list" :key="index" @click="gotopost(item.post_id)">
 			<view class="cu-avatar radius lg" :style="{ 'background-image': 'url(' + item.team_avatar + ')' }"></view>
 			<view class="content">
 				<view>
@@ -35,6 +48,40 @@
 				<view class="cu-tag round bg-grey sm">1</view>
 			</view>
 		</view>
+
+		<!-- 点赞评论 -->
+		<view class="cu-item" v-for="(item,index) in likeComment_list" :key="index" @click="gotopost(item.post_id)">
+			<view class="cu-avatar radius lg" :style="{ 'background-image': 'url(' + item.team_avatar + ')' }"></view>
+			<view class="content">
+				<view>
+					<view class="text-cut">{{item.team_name}}</view>
+					<!-- <view class="cu-tag round bg-orange sm">断开连接...</view> -->
+				</view>
+				<view class="text-gray text-sm flex"> <view class="text-cut"> 点赞了你的评论</view></view>
+			</view>
+			<view class="action">
+				<view class="text-grey text-xs">{{item.time}}</view>
+				<view class="cu-tag round bg-grey sm">1</view>
+			</view>
+		</view>
+
+		<!-- 点赞回复 -->
+		<view class="cu-item" v-for="(item,index) in likeReply_list" :key="index" @click="gotopost(item.post_id)">
+			<view class="cu-avatar radius lg" :style="{ 'background-image': 'url(' + item.team_avatar + ')' }"></view>
+			<view class="content">
+				<view>
+					<view class="text-cut">{{item.team_name}}</view>
+					<!-- <view class="cu-tag round bg-orange sm">断开连接...</view> -->
+				</view>
+				<view class="text-gray text-sm flex"> <view class="text-cut"> 点赞了你的回复</view></view>
+			</view>
+			<view class="action">
+				<view class="text-grey text-xs">{{item.time}}</view>
+				<view class="cu-tag round bg-grey sm">1</view>
+			</view>
+		</view>
+
+
 
 		<!-- 瓦罗兰大陆-睡衣守护者-新手保护营 -->
 		<!-- <view class="cu-item cur">
@@ -67,7 +114,10 @@
 		data() {
 			return {
 				comment_list: [],
-				like_list: [],
+				likePost_list: [],
+				likeComment_list:[],
+				likeReply_list:[],
+				reply_list: []
 			}
 		},
 		computed: {
@@ -88,7 +138,10 @@
 					if(res.data.code == 200){
 						this.comment_list = res.data.data.comment_list;
 						// console.log(this.acList)
-						this.like_list = res.data.data.like_list;
+						this.likePost_list = res.data.data.likePost_list;
+						this.likeComment_list = res.data.data.likeComment_list;
+						this.likeReply_list = res.data.data.likeReply_list;
+						this.reply_list = res.data.data.reply_list;
 					}else if(res.data.code == 401){
 										console.log("token过期");
 										uni.showModal({
