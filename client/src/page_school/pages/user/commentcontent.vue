@@ -53,6 +53,9 @@ export default {
 					color: '#fff'
 				},
 
+			//评价框
+			borderColor: '#000000',
+			border: true,
             tocom: false,
             com_list: [],
             comModal: {
