@@ -211,21 +211,15 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 			this.acti_id = id;
 			// 获取活动详情
 			uni.request({
-				url: this.$url.BASE_URL + '/schoolteam/getactidetail',
-				
-				// header:{
-				// 	Authorization:uni.getStorageSync("token")
-				// },					
+				url: this.$url.BASE_URL + '/schoolteam/getactidetail',				
 				method: 'GET',
 				data: {
 					acti_id: id,
 					team_id: this.user_id,
-					// token: this.$userinfo.token
 				},
 				success: res => {
 					this.detail = res.data.data.detail;
 					this.isfavor = res.data.data.detail.isfavor;
-					// this.detail.keywords = "服务,实践"
 					this.hasactiid = true;
 					console.log("this.isfavor:",this.isfavor)
 					this.net_error = false;
