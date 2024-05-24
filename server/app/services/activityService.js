@@ -325,7 +325,7 @@ class ActivityService {
 
     // 添加地区筛选条件
     if (location && location.province) {
-      if (location.city) {
+      if (location.city != '') {
         whereCondition.city = location.city;
       }
       whereCondition.province = location.province;
@@ -420,11 +420,11 @@ class ActivityService {
         }else if(actiStatus == 3){
           activity.admission_status = "已驳回";
         }
-        // 调用服务来改变时间格式
+        /*// 调用服务来改变时间格式
         const newStartTimeFormat =await  otherService.changeTimeFormat(activity.start_time);
         const newEndTimeFormat =await  otherService.changeTimeFormat(activity.end_time);
         activity.start_time = newStartTimeFormat;
-        activity.end_time = newEndTimeFormat;
+        activity.end_time = newEndTimeFormat;*/
 
 
         return activity;
@@ -661,12 +661,10 @@ class ActivityService {
     var url;
     //如果数据库里还没有二维码
     if(activity.QRCode == null){
-      console.log("数据库里还没有二维码");
       //获取二维码图片的二进制数据
-      console.log("获取二维码图片的二进制数据");
       const code_picture = await ActivityService.getActivityQRCodePicture(activityId);
       // 将二进制数据写入文件查看
-      const codeUrl = await ActivityService.saveQRCodeImg(code_picture, "QRCodes", `QRCode_${activityId}.jpg`);
+      // const codeUrl = await ActivityService.saveQRCodeImg(code_picture, "QRCodes", `QRCode_${activityId}.jpg`);
       try{
         //获取putsignedurl
         const filename = await otherService.generateRandomFileName('jpg');
@@ -720,7 +718,6 @@ class ActivityService {
       const getTokenUrl = `https://api.weixin.qq.com/cgi-bin/token?grant_type=${grant_type}&appid=${appid}&secret=${secret}`;
 
       const responseToken = await axios.get(getTokenUrl);
-      console.log("http调用获取token响应体:",responseToken);
       const access_token = responseToken.data.access_token;
 
       // http调用获取程序码
@@ -736,9 +733,8 @@ class ActivityService {
       const responseCode = await axios.post(getQRCodeUrl, params, {
         responseType: 'arraybuffer' // 设置响应类型为二进制数组
       });
-      console.log("http调用获取程序码响应体:",responseCode);
-      console.log("http调用获取程序码:",responseCode.data);
-      
+
+      /*
       // 假设 bufferData 是你要保存的 Buffer 对象
       const bufferData = Buffer.from(responseCode.data);
 
@@ -749,7 +745,7 @@ class ActivityService {
       await fs.writeFile(filePath, bufferData, (err) => {
         if (err) throw err;
         console.log('文件已保存');
-      });
+      });*/
 
       return responseCode.data;
 

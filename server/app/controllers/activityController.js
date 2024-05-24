@@ -120,7 +120,7 @@ class ActivityController {
   static async filterActivity(req,res){
     
     try {
-      const { location:location, category_id:category_id, activity_time:activity_time } = req.query;
+      const { location:location, category_id:category_id, activity_time:activity_time } = req.body;
 
       // 调用服务层方法进行活动筛选
       const activities = await activityService.filterActivities(location, category_id, activity_time);

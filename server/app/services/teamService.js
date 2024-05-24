@@ -858,15 +858,7 @@ class teamService {
       }
     });
     const results = await otherService.getCategKeyCommuIdsMap(teamFavorites);
-     // 处理每个 post 的 picture 字段，将其转换为数组
-     const processedResults = await Promise.all(results.map(async result => {
-      const newStartTimeFormat =await  otherService.changeTimeFormat(result.start_time);
-      const newEndTimeFormat =await  otherService.changeTimeFormat(result.end_time);
-      result.start_time = newStartTimeFormat;
-      result.end_time = newEndTimeFormat;
-      return result;
-      }));
-    return processedResults;
+    return results;
   }
 
   static async commentActivity(teamId, activityId, comment) {
