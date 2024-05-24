@@ -27,6 +27,8 @@
 											<view class="text-content"> 省份: {{item.province}}</view>
 											<view class="text-content"> 详细地址: {{item.address}}</view>
 											
+											<view v-if="ismyac" class="text-content"> 录取状态: {{item.admission_status}}</view>
+											
 											<view class="wordcont">	
 												<view class="ackeywords" v-for="(word,index) in item.keywords" :key="index">
 													<view class="cu-tag bg-red light sm round">{{word}}</view>
@@ -187,6 +189,6 @@
  	/* border-radius: 50%; */
 	object-fit: cover; 
  	background-color: #ffffff;
- 	margin-right: 30rpx;
+ 	margin-right: 40rpx;
 	}
 </style>

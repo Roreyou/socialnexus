@@ -47,6 +47,11 @@
                 badge2: true
 			}
 		},
+        mounted(){
+            if(this.notice_num === '0'){
+                this.badgeChange1()
+            }
+        },
 		methods: {
 			tarTap(item){
 				this.$emit("TarTap",item)

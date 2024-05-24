@@ -240,4 +240,17 @@
 	.like_icon{
 		margin-left: 5px;
 	}
+	.cot_flirt_name{
+		margin-left: -15rpx;
+	}
+	.cot_content{
+		margin-top: 22rpx;
+		margin-left: 40rpx
+	}
+
+	// 回复内容
+	.reply_content {
+		margin-left: 95rpx;
+		margin-top: 25rpx
+	}
 </style>

@@ -2,23 +2,16 @@
 <!-- 因为是tab页所以必须放在主包 -->
 <template>
 	<view class="u-p-l-10 u-p-r-10">
-		<u-navbar :is-back="false">
-			<view style="display: flex;justify-content: center;align-items: center;">
-				<!-- <view class="u-p-30"  @click="location">
-					杭州
-					<u-icon name="arrow-down-fill" class="u-p-l-20" color="#515356"></u-icon>
+		<view>
+			<u-navbar :is-back="false">
+				<view style="display: flex;justify-content: center;align-items: center;">
+					<view class="u-p-30">
+						你的位置：{{ province }} {{ city }}
+						<u-icon name="arrow-down-fill" class="u-p-l-20" color="#515356"></u-icon>
+					</view>
 				</view>
-				<u-search placeholder="搜索实践活动" v-model="keyword" input-align="center"  :show-action="false" :clearabled="true"
-:disabled="true" style="width: 565rpx;" @click="search"></u-search> -->
-			</view>
-		</u-navbar>
-		<!-- <view>
-			<picker></picker>
-		</view> -->
-		<!-- 轮播图 -->
-		<!-- <view>
-			<u-swiper :list="swiperList" height="400"></u-swiper>
-		</view>	 -->  
+			</u-navbar>
+		</view> 
 		<view class="cu-list menu-avatar bg-gradual-green padding-lg background">
 			<view class="user-section">
 				<image :src="userInfo.avatar" class="cu-avatar xl round"></image>
@@ -94,7 +87,6 @@
 </template>
 
 <script>
-import picker from '../../../page_school/components/picker/picker.vue'
 	import {
 		mapState,
 		mapMutations
@@ -104,7 +96,6 @@ import picker from '../../../page_school/components/picker/picker.vue'
 	export default {
 		components: {
 			actilist,
-			picker
 		},
 
 		data() {

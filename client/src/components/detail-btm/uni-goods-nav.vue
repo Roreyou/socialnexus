@@ -68,6 +68,7 @@
 
 			team_id: String,
 			acti_id: String,
+			isfavor: Boolean, //已经收藏了就是true
 
 			options: {
 				type: Array,
@@ -116,7 +117,7 @@
 		data() {
 			return {
 				ismyacti: false,
-				isActive: false,
+				isActive: this.isfavor,
 				// shareIcon: require('../../static/icon/fenxiangmian.png'),
 				shareIcon: '',
 				acti_status: 1
@@ -126,7 +127,10 @@
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin','user_id','userInfo'])
 		},
-
+		mounted() {
+			console.log("mounted-this.isfavor:",this.isfavor)
+			this.isActive = this.isfavor
+		},
 		methods: {
 			onClick(index, item) {
 				//生成海报

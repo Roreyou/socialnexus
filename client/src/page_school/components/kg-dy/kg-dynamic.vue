@@ -112,9 +112,6 @@
 					paddingTop: "0",
 					marginTop: "20rpx",
 				},
-				dyInfo:{
-					picture:['']
-				}
 			};
 		},
 		onReady() {
@@ -293,5 +290,15 @@
 	}
 	.like_icon{
 		margin-left: 5px;
+	}
+
+	//地址的字
+	.operate_text{
+		margin-left: 10rpx;
+	}
+
+	//帖子内容
+	.dynamic_cont{
+		margin-left: 25rpx;
 	}
 </style>

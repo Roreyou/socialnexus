@@ -95,8 +95,9 @@ line-height: 60rpx;
 }
 
 .text-content{
-margin: 0 25rpx;
+margin: 0 35rpx;
 height: auto;
+font-size: larger;
 }
 
 .com_time{
@@ -110,13 +111,41 @@ font-size: larger;
     padding-bottom: 15rpx;
 }
 .acti_name{
-    font-size: larger;
+    font-size: 30rpx;
+    line-height: 2.6;
+    margin-bottom: -10rpx;
 }
 
 .ac_time{
     margin: auto;
     /* margin-bottom: 15rpx; */
     color: gray;
+    font-size: 30rpx;
+    line-height: 2.6;
+}
+
+.acti_card{
+    border-radius: 20rpx;
+    /* background-color: #13603e; */
+    /* background-image: linear-gradient(to right top, #86a8e7, #69bff8, #4ad5ff, #41e9fd, #5ffbf1); */
+    /* background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12); */
+    background-image: linear-gradient(to right bottom, #13603e, #258344, #47a642, #73c936, #a8eb12);
+    margin: 15rpx 25rpx;
+    padding-bottom: 15rpx;
+}
+.whitecard{
+    background-color: white;
+}
+.acti_name{
+    font-size: 30rpx;
+    color: white;
+}
+
+.ac_time{
+    margin: auto;
+    /* margin-bottom: 15rpx; */
+    color: white;
+    line-height: 1.8;
 }
 
 /* 评价按钮 */
@@ -134,5 +163,9 @@ font-size: larger;
 .button-container {
   text-align: right;
   margin: 0rpx 25rpx 0 480rpx;
+}
+
+.title{
+
 }
 </style>

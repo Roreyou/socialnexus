@@ -2,7 +2,7 @@
 <template>
 	<view class="content">
 		<view class="cu-item" v-for="(item,index) in acList" :key="index" @click="todetail(item.id)">
-			<view class="cu-card article" :class="isCard?'no-card':''">
+			<view class="cu-card article others" :class="isCard?'no-card':''">
 					<view class="cu-item shadow">
 						<view class="title"><view class="text-cut">{{item.name}}</view></view>
 						<view class="content">
@@ -64,7 +64,8 @@
 						job: "志愿者",
 						keywords: "支教,教育"
 					}
-				]
+				],
+				click_but: false
 			}
 		},
 		computed: {
@@ -119,6 +120,7 @@
 		},
 		methods: {
 			cancelFavorite(likeid){
+				this.click_but = true
 				uni.showModal({
     			    title: '确认取消收藏',
     			    content: '确定取消收藏吗？',
@@ -175,6 +177,10 @@
     			});
 			},
 			todetail(id){
+				if(this.click_but){
+					this.click_but = false;
+					return
+				}
 				console.log("id:", id)
 				// uni.navigateTo({
 				// 	//注意用这个的话page前面有一个斜杠，不然会说找不到这个组件
@@ -226,5 +232,25 @@
 }
 .cancel-favorite{
 	font-size: small;
+}
+.cancel-favorite {
+    background: linear-gradient(to right, #ff4e50, #f9d423);
+    color: white;
+    border: none;
+    padding: 0px 10px;
+    text-align: center;
+    font-size: 11px;
+    border-radius: 20px;
+    margin-top: 100rpx;
+}
+
+/* 卡片样式 */
+.others{
+	background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+  margin-left: 25rpx;
+  margin-right: 25rpx;
+    margin-top: 10rpx;
 }
 </style>
