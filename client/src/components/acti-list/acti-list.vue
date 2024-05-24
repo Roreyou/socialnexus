@@ -24,7 +24,7 @@
 									<view class="content">
 										<view class="desc">
 											<view class="text-content"> 日期: {{item.start_time}}</view>
-											<view class="text-content"> 省份: {{item.province}}</view>
+											<view class="text-content"> 省市: {{item.province}} {{item.city}}</view>
 											<view class="text-content"> 详细地址: {{item.address}}</view>
 											
 											<view v-if="ismyac" class="text-content"> 录取状态: {{item.admission_status}}</view>
