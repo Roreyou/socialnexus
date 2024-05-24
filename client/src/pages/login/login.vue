@@ -389,8 +389,9 @@
 								const verification_status = res.data.data.verification_status;
 								const avatar = res.data.data.avatar;
 								const isleader = res.data.data.isleader;
+								const personName = res.data.data.person_name;
 								console.log("person_identity:", person_identity)
-								this.login2({user_id, user_name, person_identity, person_id, avatar, verification_status, isleader});
+								this.login2({user_id, user_name, person_identity, person_id, avatar, verification_status, isleader, personName});
 								uni.reLaunch({
 									url:'../school/index/index'
 								});
