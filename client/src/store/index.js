@@ -61,6 +61,8 @@ const store = new Vuex.Store({
 			state.user_id = "";
 			state.userName = "游客";
 			state.userInfo = {
+				identity:'',
+				person_id: '',
 				isUser: false,
 				avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
 				verification_status: 5,
