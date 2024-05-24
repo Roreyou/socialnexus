@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const Result = require('../common/Result');
 const jwtConfig=require('../config/jwtConfig');
 
 // 生成 JWT
@@ -7,17 +8,20 @@ const generateToken = (payload) => {
 };
 
 // 验证 JWT 的辅助函数
-const verifyToken = (req, res) => {
+// 验证 JWT 的中间件函数
+const verifyToken = (req, res, next) => {
   const token = req.headers['authorization'];
   if (!token) {
-    return res.status(403).json({ message: 'No token provided' });
+    return res.json(Result.fail('No token provided'));
   }
 
   try {
-    const decoded = jwt.verify(token.split(' ')[1], secretKey);
-    return decoded;
+    const decoded = jwt.verify(token.split(' ')[1], jwtConfig.secretKey);
+    //req.user = decoded; // 将解码后的信息添加到 req 对象上，以便在路由处理程序中使用
+    next(); // 令牌验证成功，继续执行路由处理程序
   } catch (err) {
-    return res.status(500).json({ message: 'Failed to authenticate token' });
+    // 错误处理，例如令牌无效或过期
+    return res.json(Result.fail('Failed to authenticate token'));
   }
 };
 
