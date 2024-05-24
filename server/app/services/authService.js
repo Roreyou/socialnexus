@@ -172,14 +172,28 @@ class AuthService {
             // 在这里可以生成 JWT 
             const token = generateToken(loginData);
 
-
+            //生成用户姓名
+            const person = await db.teammember.findOne({where:{id:loginData.id}});
+            var personName;
+            if(person){
+                if(!person.name){
+                    personName = '';
+                }else{
+                    personName = person.name;
+                }
+            }else{
+                throw new Error('用户不存在');                
+            }
+            
+            
             return {                
                 token: token,
                 verification_status: team.verification_status,
                 team_name: team.team_name,
                 team_id: team.id,
                 avatar: team.avatar,
-                isleader: isleader
+                isleader: isleader,
+                personName: personName
             };
 
         }
