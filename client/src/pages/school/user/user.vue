@@ -6,7 +6,7 @@
 				<image :src="userInfo.avatar" class="cu-avatar xl round" style="margin-top: -26px;align-items: center; "></image>
 				<view class="text-balck text-xl" style="font-weight: bold;">{{userName}}</view>
 				<!-- <view class="text-balck text-xl" style="font-size: 30rpx;">高校队伍</view> -->
-				<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti; border:0.5rpx solid white;" v-if="true">{{ identity }}</view>
+				<view class="cu-btn bg-blue margin-left-sm" v-if="true">{{ identity }}</view>
 				<view class="text-balck comment-container">
 					<navigator class="" hover-class="none" :url="list1[0].url" style="align-items: flex-start;    margin-right: 74rpx; ">
 						<img class="commIcon" style="margin-right: 6rpx;" :src="list1[0].iconUrl" alt="Avatar">
