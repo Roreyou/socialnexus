@@ -23,7 +23,7 @@
 					</view>
 			</view>
 		</view>
-		<u-empty v-if="acList.length == 0" text="暂无收藏，快去浏览活动吧" mode="favor" margin-top="60rpx" font-size="35"></u-empty>
+		<u-empty v-if="acList.length == 0" text="暂无收藏，快去浏览活动吧" mode="favor" margin-top="60" font-size="35"></u-empty>
 	</view>
 </template>
 
