@@ -13,32 +13,23 @@ class commentService{
         try {
             var results;
             // 获取新的评论详情
-            if(!flag){ //只返回ifread字段为1的评论
-                console.log(flag);
-                results = await db.comment.findAll({ where: { post_id: post_id, ifread:1 },
-                    attributes: {
-                        include: [
-                            [
-                            //引用原生mySQL语法，将类型转化
-                            sequelize.literal("cast(id as char)"),
-                            'id'
-                            ],
-                        ]
-                    } 
-                });
-            }else{ // 全返回
-                results = await db.comment.findAll({ where: { post_id: post_id },
-                    attributes: {
-                        include: [
-                            [
-                            //引用原生mySQL语法，将类型转化
-                            sequelize.literal("cast(id as char)"),
-                            'id'
-                            ],
-                        ]
-                    }                
-                });
+            var whereCondition={post_id: post_id};
+            if(!flag){
+                whereCondition={ post_id: post_id, ifread:1 };//只返回ifread字段为1的评论
             }
+            console.log(flag);
+            results = await db.comment.findAll({ where: whereCondition,
+                attributes: {
+                    include: [
+                        [
+                        //引用原生mySQL语法，将类型转化
+                        sequelize.literal("cast(id as char)"),
+                        'id'
+                        ],
+                    ]
+                } 
+            });
+            
             return results;
         } catch (error) {
             console.log(error);
@@ -111,7 +102,8 @@ class commentService{
 
             //获取队伍头像
             const team_avatar = await otherService.getTeamAvatar(comment_detail.team_id);
-                
+            
+            comment_detail.time = await otherService.changeTimeFormat(comment_detail.time);
             // 增加评论详情字段
             const comment_result= {
                 ...comment_detail,
@@ -138,6 +130,7 @@ class commentService{
                     }
                 });
 
+                reply.time = await otherService.changeTimeFormat(reply.time);
                 // 增加回复字段
                 return {
                     ...reply,
@@ -193,6 +186,7 @@ class commentService{
         const commentLists = [];
         for(const post of allPosts){
             const comments = await commentService.getCommentsOfPost(post.id, flag);
+            console.log("debug:comm:",comments);
             commentLists.push(comments)
         }
         return commentLists;
