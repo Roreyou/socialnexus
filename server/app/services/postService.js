@@ -186,7 +186,7 @@ class postService{
     }
 
     // 给帖子点赞/取消点赞
-    static async likePost(post_id, team_id){
+    static async likePost(post_id, team_id){ //teamid是要点赞的队伍
         try { 
 
             // 查看是否点赞过
@@ -207,7 +207,12 @@ class postService{
                 if (!post) {
                     throw new Error('Post not found');
                 }
-                post.like -= 1;
+                if(post.like != 0){
+                    post.like -= 1;
+                }else{
+                    console.log("出错啦 帖子点赞数已经为0啦");
+                }
+                
                 await post.save();
 
                 // 更新通知数        
@@ -276,7 +281,12 @@ class postService{
                     throw new Error('Comment not found');
                 }
                 console.log("debug 06");
-                comment.like -= 1;
+                if(comment.like != 0){
+                    comment.like -= 1;
+                }else{
+                    console.log("出错啦 这条点赞已经为0了")
+                }
+               
                 console.log("debug 077");
                 await comment.save();
                 //更新通知：
@@ -346,7 +356,12 @@ class postService{
                 if (!reply) {
                     throw new Error('Reply not found');
                 }
-                reply.like -= 1;
+                if(reply.like != 0){
+                    reply.like -= 1;
+                }else{
+                    console.log("出错啦 这条点赞已经为0了");
+                }
+                
                 await reply.save();
 
                 // 更新通知

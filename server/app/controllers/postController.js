@@ -97,7 +97,7 @@ class postController{
 
     //点赞/取消点赞帖子
     static async likePost(req, res){
-        const { post_id, team_id } = req.body;
+        const { post_id:post_id, team_id:team_id } = req.body;
         try {
             const updatedPost = await postService.likePost(post_id, team_id);
             return res.json(Result.success(updatedPost));
