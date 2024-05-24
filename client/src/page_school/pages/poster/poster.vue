@@ -401,7 +401,7 @@
 				Data[3].config.text = this.detail.name;	
 				Data[4].config.text = '开始时间：'+ this.detail.begin_time;	
 				Data[5].config.text = '结束时间：'+ this.detail.end_time;
-				Data[6].config.text = '活动地点'+ this.detail.address;	
+				Data[6].config.text = '活动地点：'+ this.detail.address;	
 				Data[7].config.text = '发布基层：'+ this.detail.community_name;
 				this.drawData = Data;
 			}
