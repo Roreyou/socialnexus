@@ -156,11 +156,7 @@
 			uni.$off('findIndexHouseList');
 		},
 		onShow(){
-			if(this.userInfo.province !== ''){
-				this.city = this.userInfo.city
-				this.province = this.userInfo.province
-				return
-			}
+
 			this.getlocation()
 
 			const data = {
@@ -235,21 +231,31 @@
 			getlocation() {
 				var that=this
 				const _this = this
-				uni.getFuzzyLocation({
-				success: function(res) {
-					_this.longitude=res.longitude
-					_this.latitude=res.latitude
-					console.log(res)
-					_this.locationn()
-				},
-				});
+				if(this.userInfo.province !== ''){
+					this.city = this.userInfo.city
+					this.province = this.userInfo.province
+					const data = {
+						province: this.province,
+						city: this.city,
+						page: 0
+					}
+					this.loadActilist(data)
+					return
+				}else{
+					uni.getFuzzyLocation({
+					success: function(res) {
+						_this.longitude=res.longitude
+						_this.latitude=res.latitude
+						console.log(res)
+						_this.locationn()
+					},
+					});
+				}
 			},
 
 			loadActilist(data){  //加载活动列表
 				uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getRecommend',
-				
-				
 				method: 'GET',
 				data: data,
 				success: res => {
