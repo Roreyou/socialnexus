@@ -132,6 +132,7 @@ export default {
 			}
         },
         getmore(){
+			this.$u.toast(`加载更多活动中...`);
 			console.log("getmor--activity_status:",this.index)
 			++ this.page
 			const data = {

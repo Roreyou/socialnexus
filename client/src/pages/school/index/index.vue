@@ -171,6 +171,7 @@
 			// console.log('index -- onReachBottom')
 			++ this.page
 			if(this.loadmore){
+				this.$u.toast(`加载更多活动...`);
 				const data = {
 					province: this.userInfo.province,
 					city: this.userInfo.city,
