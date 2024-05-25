@@ -6,10 +6,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    pwd: {
-      type: DataTypes.STRING(60),
-      allowNull: true
-    },
     name: {
       type: DataTypes.STRING(45),
       allowNull: true
@@ -36,6 +32,14 @@ module.exports = function(sequelize, DataTypes) {
     },
     setup_date: {
       type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    avatar: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    pwd: {
+      type: DataTypes.STRING(255),
       allowNull: true
     }
   }, {
