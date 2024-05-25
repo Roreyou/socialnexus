@@ -253,7 +253,12 @@
 				success: res => {
 					// this.acList = res.data.data.acti_list;
 					if(res.data.data.acti_list.length){
-						this.acList = this.acList.concat(res.data.data.acti_list)
+						if(data.page == 0){//重新回到第一页
+							this.acList = res.data.data.acti_list
+						}else{
+							this.acList = this.acList.concat(res.data.data.acti_list)
+						}
+						
 						// this.acList[0].keywords = "服务,实践"
 						// this.loadmore = false
 					}else{  //空了
