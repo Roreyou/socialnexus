@@ -132,6 +132,7 @@ export default {
 			}
         },
         getmore(){
+			this.$u.toast(`已经到底啦`);
 			console.log("getmor--activity_status:",this.index)
 			++ this.page
 			const data = {
