@@ -41,6 +41,7 @@ export default {
 		onReachBottom() {
 			// uni.$emit('onReachBottom');
 			if(this.loadmore){
+				this.$u.toast(`加载更多活动...`);
 				this.getmore()
 			}else{
 				//到底了
