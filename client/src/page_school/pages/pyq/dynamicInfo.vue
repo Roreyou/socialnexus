@@ -203,6 +203,10 @@
 					});
 					return
 				}
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能回复评论！`);
+					return;
+				}
 				const id = this.repModal.comId
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
@@ -285,6 +289,10 @@
 					});
 					return
 				}
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能评论帖子！`);
+					return;
+				}
 				const id = this.comModal.dyId
 				// console.log("id: ",id)
 					//在这里得到回复内容，发请求
@@ -364,6 +372,10 @@
 					});
 				}
 				else{
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能点赞/取消点赞帖子！`);
+					return;
+				}
 
 				uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/likepost',  //点赞和取消点赞会发请求，后端决定怎么处理
@@ -441,6 +453,10 @@
 						}
 					});
 					return
+				}
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能点赞评论！`);
+					return;
 				}
 				uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/likecom', //点赞和取消点赞 评论
@@ -530,6 +546,10 @@
 					});
 					return
 				}
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能点赞回复！`);
+					return;
+				}
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/pyq/likereply', //点赞和取消点赞 评论
 				header:{
@@ -544,18 +564,6 @@
 				success: res => {
 					let code = res.data.code;
 					if(code == 200){
-						// let index = 0;
-						// let list = this.comList;
-
-						// for (let i = 0; i < this.comList[com_index].reply_list.length; i++) {
-						// 	console.log("this.comList[com_index]:",com_index, this.comList[com_index])
-						// 	if (this.comList[com_index].reply_list[i].id === id) {
-						// 		index = i 
-						// 		// console.log("this.comList[index]: ", this.comList[index])
-						// 		break; 
-						// 	}
-						// }
-						// console.log("this.comList[com_index].reply_list[index].fabulous:", this.comList[com_index].reply_list[index].fabulous)
 						if(this.comList[com_index].reply_list[index2].fabulous){
 							this.$u.toast(`成功取消点赞`);
 							this.comList[com_index].reply_list[index2].like = this.comList[com_index].reply_list[index2].like - 1
@@ -596,7 +604,11 @@
 
 
 			// 删除评论
-			delCom(comId){   
+			delCom(comId){
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能删除帖子！`);
+					return;
+				}   
 				uni.request({
 					url: this.$url.BASE_URL + '/schoolteam/pyq/delcomment', //删除评论
 					header:{
@@ -605,8 +617,6 @@
 					method: 'POST',
 					data: {
 						comment_id: comId,
-						// team_id: "1"
-						// reply_content: this.repModal.replyInfo
 					},
 					success: res => {
 						let code = res.data.code;

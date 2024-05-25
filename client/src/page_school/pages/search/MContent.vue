@@ -92,30 +92,6 @@ export default {
 		
 		uni.$off('myactivity2');
 		uni.$on('myactivity2', this.handleMyactivity2);
-		// uni.$on('myactivity2', function(data) {
-		// 	if(that.index != 2){
-		// 		return;
-		// 	}
-		// 	console.log('收到myactivity2');
-        //     if(!that.loadmore){
-        //         uni.showToast({
-        //             title: '没有更多了',
-        //             icon: 'none',
-        //             duration: 2000
-        //         })
-        //         return
-        //     }
-        //     // if(that.index == 2){that.getmore();}
-		// 	if (that.index == 2) {
-		// 		if (!throttleTimer) {
-		// 		that.getmore();				
-		// 		throttleTimer = setTimeout(() => {
-		// 			// that.getmore();
-		// 			throttleTimer = null;
-		// 		}, 1000);
-		// 		}
-		// 	}
-        // });
 		uni.$off('myactivity3');
 		uni.$on('myactivity3', function(data) {
 			if(that.index != 3){
@@ -152,13 +128,6 @@ export default {
             }
             // if(that.index == 2){that.getmore();}
 			if (that.index == 2) {
-				// if (!throttleTimer) {
-				// that.getmore();				
-				// throttleTimer = setTimeout(() => {
-				// 	// that.getmore();
-				// 	throttleTimer = null;
-				// }, 1000);
-				// }
 				that.getmore();	
 			}
         },
@@ -174,11 +143,6 @@ export default {
 			this.loadMyacti(data)
 		},
 		loadMyacti(data){
-			// if(this.searchlist.length > 0){ //搜索活动但不加载tab=0（在mounted里拦截不了不知道为什么）
-			// 	console.log("data.activity_status:", data.activity_status)
-			// 	console.log("试图拦截")
-			// 	return;
-			// }
 			console.log("searchlist:", this.searchlist)
 			uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/getmyactiv',

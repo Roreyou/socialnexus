@@ -4,8 +4,9 @@
 		<view class="cu-list menu-avatar shadow usercard">
 			<view class="user-section">
 				<image :src="userInfo.avatar" class="cu-avatar xl round" style="margin-top: -26px;align-items: center; "></image>
-				<view class="text-balck text-xl" style="font-weight: bold;">高校队伍: {{userName}}</view>
+				<view class="text-balck text-xl" style="font-weight: bold;">{{userName}}</view>
 				<!-- <view class="text-balck text-xl" style="font-size: 30rpx;">高校队伍</view> -->
+				<view class="cu-btn2 bg-blue margin-left-sm" v-if="true">{{ identity }}</view>
 				<view class="text-balck comment-container">
 					<navigator class="" hover-class="none" :url="list1[0].url" style="align-items: flex-start;    margin-right: 74rpx; ">
 						<img class="commIcon" style="margin-right: 6rpx;" :src="list1[0].iconUrl" alt="Avatar">
@@ -20,43 +21,6 @@
 			</view>
 		</view>
 		<view class="cu-list menu back2" style="margin-top: -36rpx;">
-			<!-- 评价 -->
-				<!-- <view class="custom-container"> -->
-					<!-- <hr class="horizontal-line"> -->
-					<!-- <view class="title" style="text-align: left;"> -->
-						<!-- <uni-icons type="email" color="gray" size="20" style="vertical-align: middle;"></uni-icons> -->
-						<!-- <text style="margin-left: 20rpx;">评价</text> -->
-					<!-- </view> -->
-				<!-- </view> -->
-				<!-- <view class="cu-item arrow com_item" v-for="(item,index) in list1" :key="index">
-					<navigator class="content" hover-class="none" :url="item.url">
-
-						
-						<text class="text-grey">{{item.text}}</text>
-					</navigator>
-				</view> -->
-			<!-- <view class="cu-item com_item">
-				<view class="navigator-wrapper">
-					<navigator class="wrapper-content" hover-class="none" :url="list1[0].url">
-						<text class="text-grey com">{{list1[0].text}}</text>
-						<text class="text-grey down-text">我对活动的评价</text>
-					</navigator>
-				</view>
-				<view class="navigator-wrapper">
-					<navigator class="wrapper-content" hover-class="none" :url="list1[1].url">
-						<text class="text-grey com">{{list1[1].text}}</text>
-						<text class="text-grey down-text">社区基层对我的评价</text>
-					</navigator>
-				</view>
-			</view> -->
-			<!-- 队伍信息管理 -->
-				<!-- <view class="custom-container"> -->
-					<!-- <hr class="horizontal-line"> -->
-					<!-- <view class="title" style="text-align: center;"> -->
-						<!-- <uni-icons type="map-pin-ellipse" color="gray" size="20" style="vertical-align: middle;"></uni-icons> -->
-						<!-- <text style="margin-left: 20rpx;">队伍信息管理</text> -->
-					<!-- </view> -->
-				<!-- </view> -->
 				<view class="cu-item arrow " v-for="(item,index) in list2" :key="index" 
 				style="background-color: white;border-radius: 30rpx; margin-left: 40rpx; margin-right: 40rpx; margin-bottom: 20rpx;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); ">
 					<navigator class="below-container" hover-class="none" :url="item.url">
@@ -81,6 +45,7 @@
 	export default {
     data() {
       return {
+		identity:'',
 				menuArrow: true,
 				userinfo: {},
 				index: 0,
@@ -124,6 +89,9 @@
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin','userName','user_id','userInfo'])
 		},
+		onload(){
+
+		},
 		methods: {
 			...mapMutations(['logout']),
 			bindLogin() {
@@ -133,15 +101,6 @@
 				});
 			},
 			bindLogout() {
-				// this.logout();	
-				/**
-				 * 如果需要强制登录跳转回登录页面
-				 */
-				// if (this.forcedLogin) {
-				// 	uni.reLaunch({
-				// 		url: '../../login/login',
-				// 	});
-				// }
 				this.logout();
 				uni.reLaunch({
 						url: '../../login/login',
@@ -154,29 +113,28 @@
 		mounted(){
 			if(!this.userInfo.isUser){
 				const _this = this;
-				// uni.showModal({
-				// 		title: '',
-				// 		content: '请登录后查看。是否前去登录？',
-				// 		success: function(res) {
-				// 		if (res.confirm) {
-				// 			// 用户点击了确定
-				// 			// console.log('用户点击了确定');
-				// 			_this.$u.route({
-				// 				url: 'pages/login/login',
-				// 			})
-				// 			// 在这里可以编写用户点击确定后的逻辑
-				// 		} else if (res.cancel) {
-				// 			// 用户点击了取消
-				// 			// console.log('用户点击了取消');
-				// 			wx.switchTab({
-				// 				url: '/pages/tabbar-page/tabbar-page'
-				// 			})
-				// 		}
-				// 		}
-				// 	});
 				wx.redirectTo({
 					url: '/pages/login/login'
 				})
+				return
+			}
+			console.log('this.userInfo.personName=', this.userInfo.personName)
+			console.log('this.userInfo.identity=', this.userInfo.identity)
+			if(this.userInfo.identity == '1'){
+				this.identity = '队长'
+				if(this.userInfo.personName !== ''){
+					this.identity = this.identity + ': ' + this.userInfo.personName
+				}
+			}else if(this.userInfo.identity == '2'){
+				this.identity = '队员'
+				if(this.userInfo.personName !== ''){
+					this.identity = this.identity + ': ' + this.userInfo.personName
+				}
+			}else{
+				this.identity = '指导老师'
+				if(this.userInfo.personName !== ''){
+					this.identity = this.identity + ': ' + this.userInfo.personName
+				}
 			}
 		}
 	}
@@ -324,4 +282,30 @@
     cursor: pointer;
     /* margin-bottom: 18rpx; */
 }
+
+/* 身份标签 */
+.cu-btn2{
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.3);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    font-family: pmkaiti;
+    border: 1.0px solid red;
+    color: red;
+    margin-left: 0;
+    font-size: 25rpx;
+    height: 50rpx;
+    margin-top: 10rpx;
+    margin-bottom: 10rpx;
+    line-height: 1.5;
+    /* width: 50rpx; */
+    padding: 10rpx 25rpx;
+	}
+
+	/* 底部按钮 */
+	.cu-btn{
+		border-radius: 15px;
+    	background-color: rgba(255, 255, 255, 0.3);
+    	backdrop-filter: blur(10px);
+	}
 </style>

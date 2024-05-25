@@ -126,18 +126,13 @@ class ActivityController {
       const activities = await activityService.filterActivities(location, category_id, activity_time);
 
       // 构造返回数据
-      const responseData = {
-        code: 200,
-        msg: 'Success',
-        data: { activ_list: activities }
-      };
+      const responseData = { activ_list: activities };
 
       // 发送响应
-      res.json(responseData);
+      res.json(Result.success(responseData));
     } catch (error) {
       console.error(error);
-      const responseData = { code: 500, msg: 'Internal Server Error', data: null };
-      res.status(500).json(responseData);
+      res.json(Result.fail('Internal Server Error'));
     }
   }
 
