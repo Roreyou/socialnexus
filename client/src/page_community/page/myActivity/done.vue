@@ -53,7 +53,7 @@ export default {
   onLoad() {},
   mounted() {
     uni.request({
-      url: this.$url.BASE_URL + "/4142061-0-default/community/activities",
+      url: " http://4ddfdbb6.r21.cpolar.top/community/activities",
       // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
       header: {
         Authorization: uni.getStorageSync("token"),

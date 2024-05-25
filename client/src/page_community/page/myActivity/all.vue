@@ -65,17 +65,19 @@ export default {
   mounted() {
     if (this.searchText !== '') {
 		uni.request({
-        url: this.$url.BASE_URL + "/4142061-0-default/community/queryActivity",
+        url: " http://4ddfdbb6.r21.cpolar.top/community/queryActivity",
+        // url: this.$url.BASE_URL + "/4142061-0-default/community/queryActivity",
         // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
         method: "GET",
         data: {
+          community_id: 1,
           name: this.searchText
         },
         success: (res) => {
-          this.acList = res.data.data.list;
+          this.acList = res.data.data;
           console.log("成功请求-查询活动",this.searchText);
           this.net_error = false;
         },
@@ -86,14 +88,15 @@ export default {
       });
     } else {
       uni.request({
-        url: this.$url.BASE_URL + "/4142061-0-default/community/activities",
+        url: " http://4ddfdbb6.r21.cpolar.top/community/activities",
+        // url: this.$url.BASE_URL + "/4142061-0-default/community/activities",
         // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
         method: "GET",
         data: {
-          community_id: "0",
+          community_id: 1,
           status: 0,
         },
         success: (res) => {

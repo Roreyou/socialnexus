@@ -5,7 +5,7 @@
     <view>
       <view class="part first">
         <view class="de_total_title">
-          {{ detail.name }}
+          <input type="text" v-model="detail.name" class="editable-field"/>
         </view>
         <view class="de_key_value">
           <view class="de_content">
@@ -23,7 +23,7 @@
           <view class="de_content">
             <view class="key"> 活动类别 </view>
             <view class="value">
-              {{ detail.category_id }}
+              {{ detail.category_name }}
             </view>
           </view>
         </view>
@@ -84,7 +84,7 @@
             <view class="de_content">
               <view class="key"> 招募队伍数 </view>
               <view class="value">
-                {{ detail.vacancies }}
+                <input type="text" v-model="detail.vacancies" class="editable-field"/>
               </view>
             </view>
           </view>
@@ -106,9 +106,14 @@
           <view class="de_content">
             <view class="last-key"> 活动内容 </view>
             <view class="value">
-              {{ detail.remark }}
+              <textarea v-model="detail.remark" class="editable-field"></textarea>
             </view>
           </view>
+        </view>
+      </view>
+      <view class="button-group">
+        <view class="button-item">
+          <button type="primary" size="mini" @click="submit">修改</button>
         </view>
       </view>
     </view>
@@ -119,78 +124,113 @@
 import { mapState } from "vuex";
 import bttab from "../../components/detail-btm/uni-goods-nav.vue";
 
-	export default {
-    	components: {
-			bttab,
-		},
-		data(){
-			return{
-				activityId:'',
-        mode:'',
-				detail:{
-					keywords: ""
-				},
-			}
-		},
-		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id'])
-		},
-		mounted(){
-			// 获取query对象
-			const query = this.$mp.query;
-			// const query = this.$route.query;
-			const activityId = query.activityId;
-			this.activityId = activityId;
-      const mode = query.mode;
-      this.mode = mode;
-			uni.request({
-				url: this.$url.BASE_URL + '/community/getActivityDetail',
-				// url: 'https://mock.apifox.coml/m1/community/getActivityDetail',
-				header:{
-					Authorization:uni.getStorageSync("token")
-				},					
-				method: 'GET',
-				data: {
-					activityId: activityId,
-					// token: this.$userinfo.token
-				},
-				success: res => {
-					this.detail = res.data.data.detail;
-					// this.detail.keywords = "服务,实践"
-					this.net_error = false;
-				},
-				fail: res => {
-					this.net_error = true;
-				},
-				complete: () => {
-				}
-			})
-		},
-		onload(option){
-			console.log("onload")
-			const id = option.id;
-			// uni.request({
-			// 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
-			// 	
-				
-			// 	method: 'GET',
-			// 	data: {
-			// 		acti_id: id,
-			// 		// token: this.$userinfo.token
-			// 	},
-			// 	success: res => {
-			// 		this.detail = res.data.data.detail;
-			// 		this.detail.keywords = "服务,实践"
-			// 		this.net_error = false;
-			// 	},
-			// 	fail: res => {
-			// 		this.net_error = true;
-			// 	},
-			// 	complete: () => {
-			// 	}
-			// })
-		}
-	}
+export default {
+  components: {
+    bttab,
+  },
+  data() {
+    return {
+      activityId: "",
+      mode: "",
+      detail: {
+        keywords: "",
+      },
+    };
+  },
+  computed: {
+    ...mapState(["hasLogin", "forcedLogin", "user_id"]),
+  },
+  mounted() {
+    // 获取query对象
+    const query = this.$mp.query;
+    // const query = this.$route.query;
+    const activityId = query.activityId;
+    this.activityId = activityId;
+    const mode = query.mode;
+    this.mode = mode;
+    uni.request({
+      url: "http://4ddfdbb6.r21.cpolar.top/community/activityInfo",
+      // url: this.$url.BASE_URL + "/4142061-0-default/community/activityInfo",
+      // url: 'https://mock.apifox.coml/m1/community/activityInfo',
+      header: {
+        Authorization: uni.getStorageSync("token"),
+      },
+      method: "GET",
+      data: {
+        id: activityId,
+        // token: this.$userinfo.token
+      },
+      success: (res) => {
+        this.detail = res.data.data;
+        // this.detail.keywords = "服务,实践"
+        this.net_error = false;
+      },
+      fail: (res) => {
+        this.net_error = true;
+      },
+      complete: () => {},
+    });
+  },
+  onload(option) {
+    console.log("onload");
+    const id = option.id;
+    // uni.request({
+    // 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
+    //
+
+    // 	method: 'GET',
+    // 	data: {
+    // 		acti_id: id,
+    // 		// token: this.$userinfo.token
+    // 	},
+    // 	success: res => {
+    // 		this.detail = res.data.data.detail;
+    // 		this.detail.keywords = "服务,实践"
+    // 		this.net_error = false;
+    // 	},
+    // 	fail: res => {
+    // 		this.net_error = true;
+    // 	},
+    // 	complete: () => {
+    // 	}
+    // })
+  },
+  methods: {
+    submit() {
+      uni.request({
+        url: "http://4ddfdbb6.r21.cpolar.top/community/activityInfo",
+        // url: this.$url.BASE_URL + '/community/activityInfo',
+        // url: 'https://mock.apifox.coml/m1/community/activityInfo',
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        method: "PUT",
+        data: {
+          id: this.activityId,
+          name: this.detail.name,
+          category_id: this.detail.category_id,
+          province: this.detail.province,
+          city: this.detail.city,
+          address: this.detail.address,
+          start_time: this.detail.start_time,
+          end_time: this.detail.end_time,
+          application_deadline: this.detail.application_deadline,
+          vacancies: this.detail.vacancies,
+          remark: this.detail.remark,
+          keywords: this.detail.keywords,
+        },
+        success: (res) => {
+          // this.detail.keywords = "服务,实践"
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
+    },
+  },
+};
 </script>
 
 <style>
@@ -281,5 +321,21 @@ page {
 .wordcont .ackeywords {
   display: inline-block;
   margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
+}
+.editable-field {
+  border: 1px solid #007bff;
+  padding: 5px;
+  border-radius: 4px;
+  background-color: #e7f3ff;
+  width: 100%; 
+  height: 100%; 
+  font-size: 16px; 
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.button-group {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-around;
 }
 </style>
