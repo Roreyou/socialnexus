@@ -8,13 +8,45 @@ const otherService = require('./otherService');
 const teamService = require('./teamService');
 const CommunityService = require('./communityService');
 const imageService = require('./imageService');
+const short = require('short-uuid');
 
 class ActivityService {
   static async getAllActivities() {
     return await db.activity.findAll();
   }
+  static async getKeywords() {
+    const keywords = await db.keywords.findAll({
+      attributes: ['key_name']
+    });
+    
+    // 提取关键字名称并存入新数组
+    const keywordNames = keywords.map(keyword => keyword.key_name);
+    
+    return keywordNames;
+  }
 
   static async createActivity(activityData) {
+    console.log(activityData)
+    activityData.verification_status = 1
+    activityData.activity_status = 1
+    // 生成当前日期
+    const currentDate = new Date();
+
+    // 获取年月日部分
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // 加1是因为月份是从0开始计数的，padStart用于补齐位数
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    // 构建字符串
+    const formattedDate = `${year}-${month}-${day}`;
+    activityData.setup_date = formattedDate
+
+    // 创建 short-uuid 实例
+    const uuid = short();
+
+    // 自动生成id，生成短UUID
+    const shortId = uuid.new();
+
+    activityData.id = shortId;
     // 切分关键词
     const keywords = (activityData.keywords || '').split(',');
     // 查询关键词并映射为关键词id
@@ -61,6 +93,8 @@ class ActivityService {
       'activity_type.category_name': undefined,
       'community.community_name': undefined,
       'community.tel': undefined,
+      'keywords_id': undefined,
+      'category_id': undefined,
     };
     return formattedInfo;
 
@@ -86,7 +120,7 @@ class ActivityService {
         ]
       }
     });
-    
+
     return activity;
   }
 
@@ -159,7 +193,7 @@ class ActivityService {
   }
 
   static async getActivityByStatus(commu_id, status) {
-    // 这里的status是审核状态
+    // 这里的status是开展
     let activitiesToReturn;
     let whereCondition = {};
 
@@ -404,24 +438,24 @@ class ActivityService {
           team_id: team_id
         }
       });
-      console.log("debug:",activityIds);
+      console.log("debug:", activityIds);
       // 将查询到的活动 ID 转换为数组
       const activityIdsArray = activityIds.map(activity => activity.activity_id);
-      console.log("debug:",activityIdsArray);
+      console.log("debug:", activityIdsArray);
       var whereCondition = {
         id: activityIdsArray,
         activity_status: activity_status
       };
-      if( activity_status == 0){
-        whereCondition = {id: activityIdsArray};
+      if (activity_status == 0) {
+        whereCondition = { id: activityIdsArray };
       }
       // 在团队活动表中根据活动 ID 和活动开展状态返回对应记录
       const myActivList = await db.activity.findAll({
         where: whereCondition
       });
-      console.log("debug:",myActivList);
+      console.log("debug:", myActivList);
       const handledActivityList = await otherService.getCategKeyCommuIdsMap(myActivList)
-      
+
       const ResultActivityList = await Promise.all(handledActivityList.map(async activity => {
         // 获取活动状态
         const status = await this.getActivityStatusMap(activity.activity_status);
@@ -429,14 +463,14 @@ class ActivityService {
         activity.my_state = status;
         activity = await otherService.IdInt2String("id", activity);
         //activity = await otherService.IdInt2String("category_id", activity);
-        
-        const teamact = await db.teamactivity.findOne({where:{activity_id:activity.id, team_id:team_id}});
+
+        const teamact = await db.teamactivity.findOne({ where: { activity_id: activity.id, team_id: team_id } });
         const actiStatus = teamact.admission_status;
-        if(actiStatus == 1){
+        if (actiStatus == 1) {
           activity.admission_status = "待录取";
-        }else if(actiStatus == 2){
+        } else if (actiStatus == 2) {
           activity.admission_status = "已录取";
-        }else if(actiStatus == 3){
+        } else if (actiStatus == 3) {
           activity.admission_status = "已驳回";
         }
         /*// 调用服务来改变时间格式
@@ -449,7 +483,7 @@ class ActivityService {
         return activity;
       }));
       const pageActivityList = await otherService.getPageData(page, ResultActivityList);
-      return {myactiv_list:pageActivityList};
+      return { myactiv_list: pageActivityList };
 
 
     } catch (error) {
@@ -501,13 +535,13 @@ class ActivityService {
           activity = await otherService.IdInt2String("category_id", activity);
 
 
-          const teamact = await db.teamactivity.findOne({where:{activity_id:activity.id, team_id:team_id}});
+          const teamact = await db.teamactivity.findOne({ where: { activity_id: activity.id, team_id: team_id } });
           const actiStatus = teamact.admission_status;
-          if(actiStatus == 1){
+          if (actiStatus == 1) {
             activity.admission_status = "待录取";
-          }else if(actiStatus == 2){
+          } else if (actiStatus == 2) {
             activity.admission_status = "已录取";
-          }else if(actiStatus == 3){
+          } else if (actiStatus == 3) {
             activity.admission_status = "已驳回";
           }
           return activity;
@@ -548,7 +582,7 @@ class ActivityService {
   }
 
   // 获取活动详情的方法
-  static async getactidetail(id,team_id) {
+  static async getactidetail(id, team_id) {
     const activity = await db.activity.findByPk(id);
     const community_id = activity.community_id;
     const activityArray = [activity];
@@ -572,9 +606,9 @@ class ActivityService {
     var result = await otherService.IdInt2String("id", handledActicity);
     result = await otherService.IdInt2String("category_id", result);
     //是否被收藏
-    const favor = await db.favorate.findOne({where:{team_id:team_id, activity_id:id}});
+    const favor = await db.favorate.findOne({ where: { team_id: team_id, activity_id: id } });
     var isfavor = true;
-    if(!favor){
+    if (!favor) {
       isfavor = false;
     }
     handledActicity.isfavor = isfavor;
@@ -611,7 +645,7 @@ class ActivityService {
 
 
   static async getRegisterDetail(teamId, activityId) {
-    const teamInfo = await db.team.findOne({where:{id:teamId}});
+    const teamInfo = await db.team.findOne({ where: { id: teamId } });
     const leader = await teamService.getLeaderById(teamInfo.leader_id);
     const instructor = await teamService.getInstructorById(teamInfo.instructor_id);
     const team_detail = {
@@ -623,12 +657,12 @@ class ActivityService {
     }
 
     const acti_detail = await ActivityService.getActivityInfoById(activityId);
-      // 调用服务来改变时间格式
-      const newStartTimeFormat =await  otherService.changeTimeFormat(acti_detail.start_time);
-      const newEndTimeFormat =await  otherService.changeTimeFormat(acti_detail.end_time);
-      acti_detail.dataValues.start_time = newStartTimeFormat;
-      acti_detail.dataValues.end_time = newEndTimeFormat;
-      
+    // 调用服务来改变时间格式
+    const newStartTimeFormat = await otherService.changeTimeFormat(acti_detail.start_time);
+    const newEndTimeFormat = await otherService.changeTimeFormat(acti_detail.end_time);
+    acti_detail.dataValues.start_time = newStartTimeFormat;
+    acti_detail.dataValues.end_time = newEndTimeFormat;
+
     return { team_detail, acti_detail };
   }
 
@@ -679,42 +713,42 @@ class ActivityService {
 
     var url;
     //如果数据库里还没有二维码
-    if(activity.QRCode == null){
+    if (activity.QRCode == null) {
       //获取二维码图片的二进制数据
       const code_picture = await ActivityService.getActivityQRCodePicture(activityId);
       // 将二进制数据写入文件查看
       // const codeUrl = await ActivityService.saveQRCodeImg(code_picture, "QRCodes", `QRCode_${activityId}.jpg`);
-      try{
+      try {
         //获取putsignedurl
         const filename = await otherService.generateRandomFileName('jpg');
-        const {key, putSignedUrl: putSignedUrl, getUrl: getUrl } = await imageService.upload(filename);
+        const { key, putSignedUrl: putSignedUrl, getUrl: getUrl } = await imageService.upload(filename);
 
         const response = await fetch(putSignedUrl, {
-            method: 'PUT',
-            body: code_picture
+          method: 'PUT',
+          body: code_picture
         });
 
         if (response.ok) {
-            console.log('File uploaded successfully!');
+          console.log('File uploaded successfully!');
         } else {
-            console.error('Failed to upload file:', response.statusText);
+          console.error('Failed to upload file:', response.statusText);
         }
 
         url = getUrl;
 
       } catch (error) {
-          console.error('Error:', error);
-          throw error;
+        console.error('Error:', error);
+        throw error;
       }
-      console.log("debug url:",url);
+      console.log("debug url:", url);
       await db.activity.update(
         { QRCode: url }, // 更新的字段和值
         { where: { id: activityId } } // 指定更新条件
       )
-    }else{
+    } else {
       url = activity.QRCode;
     }
- 
+
     return {
       name: name,
       begin_time: begin_time,

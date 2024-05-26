@@ -18,6 +18,10 @@ router.get('/teams',TeamController.getTeamByStatus);//查询by status（这里�
 router.get('/queryTeamByName',TeamController.queryTeamByName);//模糊查询队伍by队伍名
 router.get('/queryTeamByAct',TeamController.queryTeamByAct);//模糊查询队伍by活动名
 router.put('/approveTeam',TeamController.approveTeam);//审核队伍
+router.get('/getUpdatedTeams',TeamController.getUpdatedTeams);//获得修改队伍信息列表
+router.get('/teamUpdatedInfo',TeamController.getUpdatedTeamInfo);//获得修改队伍信息
+router.put('/approveUpdatedTeam',TeamController.reviewUpdatedTeam);//修改队伍信息
+
 
 //数据墙
 router.get('/datawall_act',DatawallController.getActivityTypeCounts);//活动数据

@@ -11,8 +11,19 @@ class ActivityController {
     }
   }
 
+  static async getKeywords(req, res) {
+    try {
+      const keywords = await activityService.getKeywords();
+      return res.json(Result.success(keywords));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+
   static async createActivity(req, res) {
     try {
+      
       await activityService.createActivity(req.body);
       return res.json(Result.success({status:'活动添加成功'}));
     } catch (error) {
