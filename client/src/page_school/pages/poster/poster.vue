@@ -8,13 +8,7 @@
 			<template v-slot:header>
 				<view></view>
 			</template>
-			<!-- <template v-slot:save>
-				<view @click="saveToAlbum">保存</view>
-			</template> -->
 		</poster>
-		<!-- <view class="wenzi">
-			点击图片生成海报
-		</view> -->
 	</view>
 </template>
 
