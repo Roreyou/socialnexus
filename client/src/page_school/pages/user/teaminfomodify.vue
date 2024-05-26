@@ -42,19 +42,19 @@
 			<view class="example">
 				<uni-forms ref="leaderData" :model="leaderData" labelWidth="80px">
 					<uni-forms-item label="姓名" :rules="[{ required: true, errorMessage: '姓名项必填', trigger: 'blur' }]" name="name">
-						<uni-easyinput v-model="leaderData.name" :placeholder="leader_info.name" />
+						<uni-easyinput v-model="leaderData.name" :placeholder="leader_info.name" disabled="true" />
 					</uni-forms-item>
 					<uni-forms-item label="学号" :rules="[{ required: true, errorMessage: '学号项必填', trigger: 'blur' }]" name="id">
-						<uni-easyinput v-model="leaderData.id" :placeholder="leader_info.id" />
+						<uni-easyinput v-model="leaderData.id" :placeholder="leader_info.id" disabled="true" />
 					</uni-forms-item>
 					<uni-forms-item label="所属院系" :rules="[{ required: true, errorMessage: '所属院系项必填', trigger: 'blur' }]" name="major">
-						<uni-easyinput v-model="leaderData.major" :placeholder="leader_info.major" />
+						<uni-easyinput v-model="leaderData.major" :placeholder="leader_info.major" disabled="true" />
 					</uni-forms-item>
 					<uni-forms-item label="年级" :rules="[{ required: true, errorMessage: '年级项必填', trigger: 'blur' }]" name="grade">
-						<uni-easyinput v-model="leaderData.grade" :placeholder="leader_info.grade" />
+						<uni-easyinput v-model="leaderData.grade" :placeholder="leader_info.grade" disabled="true" />
 					</uni-forms-item>
 					<uni-forms-item label="邮箱" :rules="[{ required: true, errorMessage: '邮箱项必填', trigger: 'blur' }]" name="email">
-						<uni-easyinput v-model="leaderData.email" :placeholder="leader_info.email" />
+						<uni-easyinput v-model="leaderData.email" :placeholder="leader_info.email" disabled="true" />
 					</uni-forms-item>
 				</uni-forms>
 			</view>
