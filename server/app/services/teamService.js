@@ -184,9 +184,10 @@ class teamService {
     });
     try {
         // 修改状态
+        const teamId = await db.modify_teacher.findOne({where:{modified_id:modified_id},attributes: ['team_id']});
         await db.modify_teacher.update({ modified_status: 3 }, { where: { modified_id: modified_id }, transaction });
         await db.modify_teammember.update({ modified_status: 3 }, { where: { modified_id: modified_id }, transaction });
-
+        await db.team.update({ modification_status: 3 }, { where: { id: teamId }, transaction });
         // 提交事务
         await transaction.commit();
 
@@ -242,6 +243,7 @@ class teamService {
       // 修改状态
       await db.modify_teacher.update({ modified_status: 2 }, { where: { modified_id: modified_id }, transaction });
       await db.modify_teammember.update({ modified_status: 2 }, { where: { modified_id: modified_id }, transaction });
+      await db.team.update({ modification_status: 2 }, { where: { id: teamInfo.id }, transaction });
 
       // 如果所有操作都成功，提交事务
       await transaction.commit();
