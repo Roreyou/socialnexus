@@ -390,8 +390,9 @@
 								const avatar = res.data.data.avatar;
 								const isleader = res.data.data.isleader;
 								const personName = res.data.data.personName;
+								const modification_status = res.data.data.modification_status;
 								console.log("personName=", personName)
-								this.login2({user_id, user_name, person_identity, person_id, avatar, verification_status, isleader, personName});
+								this.login2({user_id, user_name, person_identity, person_id, avatar, verification_status, isleader, personName, modification_status});
 								uni.reLaunch({
 									url:'../school/index/index'
 								});
