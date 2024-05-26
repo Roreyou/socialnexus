@@ -317,10 +317,29 @@ class ActivityService {
     return pageResults;
   }
 
-  static async filterActivities(location, categoryId, activityTime) {
+  static async filterActivities(location, categoryName, activityTime) {
     console.log(location);
-    console.log(categoryId);
+    console.log(categoryName);
     console.log(activityTime);
+
+    var categoryId = 1;
+    switch (categoryName) {
+      case '社区经济发展':
+        categoryId = 1;break;
+      case '社区团建工作':
+        categoryId = 2;break;
+      case '社区社会调查':
+        categoryId = 3;break;
+      case '社区文体活动':
+        categoryId = 4;break;
+      case '社区教育服务':
+        categoryId = 5;break;
+      case '社区环境治理':
+        categoryId = 6;break;
+      default:
+        categoryId = 7;
+    }
+    console.log(categoryId);
     let whereCondition = {};
 
     // 添加地区筛选条件
