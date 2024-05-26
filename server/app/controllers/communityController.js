@@ -20,7 +20,7 @@ class CommunityController {
     static async updateCommunity(req, res) {
         const id = req.body.id;
         const newCommunity = req.body;
-        // console.log('newCommunity:',newCommunity);
+        console.log('newCommunity:',newCommunity);
         try {
           const community = await communityService.updateCommunity(id, newCommunity);
           if (!community) {
