@@ -66,7 +66,8 @@ const store = new Vuex.Store({
 				verification_status: 5,
 				isleader: false,
 				province: '广东省',
-				city: '珠海市'
+				city: '珠海市',
+				personName:''
 			};
 			state.hasLogin = false;
 		}
