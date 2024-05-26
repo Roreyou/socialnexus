@@ -13,7 +13,7 @@ const teamactivity = require('../models/teamactivity');
 const ImageService = require('./imageService');
 const { Op } = require('sequelize');
 const { commentOnPost } = require('./commentService');
-const shortUUID = require('short-uuid');
+const short = require('short-uuid');
 const Result = require('../common/Result');
 const moment = require('moment');
 
@@ -1351,32 +1351,62 @@ class teamService {
   // 修改队伍信息，送去团委审核
   static async modifyInfo(team_id, instrData, leaderData, membersData) {
     try {
-      console.log(team_id);
+      //console.log(team_id);
       // 存入指导员信息
       delete instrData.pwd;
-      console.log("debug 01:", instrData);
+      //console.log("debug 01:", instrData);
+      // 创建 short-uuid 实例
+      const uuid = short();
+      // 自动生成id，生成短UUID
+      const shortId = uuid.new();
+      const currentTime = await otherService.getCurrentTime();
       const modifyInstructor = {
         ...instrData,
-        team_id: team_id
+        team_id: team_id,
+        modified_status:1,
+        modified_time:currentTime,
+        modified_id:shortId
       };
-      console.log("debug 02:", modifyInstructor);
+      //console.log("debug 02:", modifyInstructor);
       await teamService.insertInstructor(modifyInstructor);
-      console.log("debug 03");
+      //console.log("debug 03");
       // 存入队长信息
       delete leaderData.pwd;
       delete leaderData.team_id;
-      console.log("debug 04");
+      //console.log("debug 04");
 
       const modifyLeader = {
         ...leaderData,
-        team_id: team_id
+        team_id: team_id,
+        modified_status:1,
+        modified_time:currentTime,
+        modified_id:shortId
       };
       console.log("debug 05:", modifyLeader);
       await teamService.insertLeader(modifyLeader);
       console.log("debug 066");
       // 存入队伍成员
       console.log("debug 077:", membersData);
-      await teamService.addTeamMembers(team_id, membersData);
+      //await teamService.addTeamMembers(team_id, membersData);
+      await Promise.all(
+        membersData.map(async memberData => {
+          // 创建一个新对象，不包含 pwd 字段
+          const modifiedMemberData = 
+          { ...memberData,
+            team_id: team_id,
+            modified_status:1,
+            modified_time:currentTime,
+            modified_id:shortId
+          };
+          console.log("debug 88", modifiedMemberData);
+          delete modifiedMemberData.pwd;
+          console.log("debug 99", modifiedMemberData);
+          // 返回一个 Promise，该 Promise 由 db.modify_teammember.create 方法创建
+          await db.modify_teammember.create(
+            modifiedMemberData
+          );
+        })
+      );
 
       // 将修改审核字段设置为1
       await db.team.update({ modification_status: 1 }, { where: { id: team_id } });
@@ -1415,7 +1445,12 @@ class teamService {
       await Promise.all(
         membersData.map(async memberData => {
           // 创建一个新对象，不包含 pwd 字段
-          const modifiedMemberData = { ...memberData };
+          const modifiedMemberData = 
+          { ...memberData,
+            modified_status:1,
+            modified_time:currentTime,
+            modified_id:shortId
+          };
           console.log("debug 88", modifiedMemberData);
           delete modifiedMemberData.pwd;
           console.log("debug 99", modifiedMemberData);

@@ -90,7 +90,8 @@ router.post('/pyq/likereply', verifyToken, PostController.likeReply); // 需要�
 router.post('/pyq/reply', verifyToken, PostController.Reply); // 需要验证
 router.post('/pyq/delcomment', verifyToken, PostController.delcomment); // 需要验证
 router.post('/pyq/delnotice', verifyToken, PostController.delNotice); // 需要验证
-router.post('/modifyinfo', verifyToken, TeamController.modifyInfo); // 需要验证
+//router.post('/modifyinfo', verifyToken, TeamController.modifyInfo); // 需要验证
+router.post('/modifyinfo', TeamController.modifyInfo);
 router.post('/modifypwd', verifyToken, TeamController.modifyPwd); // 需要验证
 
 router.delete('/cancelRegisterEvent', verifyToken, TeamController.cancelRegisterEvent); // 需要验证
