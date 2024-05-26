@@ -69,6 +69,7 @@ export default {
         address: "",
         setup_date: "",
         remark: "",
+        avatar: "",
       },
       rules: {
         name: {
@@ -140,14 +141,15 @@ export default {
   },
   mounted() {
     uni.request({
+      url:'http://4ddfdbb6.r21.cpolar.top/community/myInfo',
       // url: this.$url.BASE_URL + '/community/myInfo',
-      url: "https://mock.apifox.com/m1/community/myInfo",
+      // url: "https://mock.apifox.com/m1/community/myInfo",
       header: {
         Authorization: uni.getStorageSync("token"),
       },
       method: "GET",
       data: {
-        community_id: "0",
+        id: 1,
       },
       success: (res) => {
         this.baseFormData = res.data.data;
@@ -187,19 +189,26 @@ export default {
     },
     updateInfo() {
       uni.request({
-        url: this.$url.BASE_URL + "/community/myInfo",
-        
+        // url: this.$url.BASE_URL + "/community/myInfo",
+        url:'http://4ddfdbb6.r21.cpolar.top/community/myInfo',
         header: {
           Authorization: uni.getStorageSync("token"),
         },
         method: "PUT",
         data: {
-          community_id: "0",
-          baseFormData: this.baseFormData,
+          id: this.baseFormData.id,
+          name: this.baseFormData.name,
+          tel: this.baseFormData.tel,
+          province: this.baseFormData.province,
+          city: this.baseFormData.city,
+          address: this.baseFormData.address,
+          setup_date: this.baseFormData.setup_date,
+          remark: this.baseFormData.remark,
+          avatar: this.baseFormData.avatar
         },
         success: (res) => {
           console.log("成功请求-更新社区信息");
-          console.log(res.data.data.status);
+          console.log(res.data.data);
           this.net_error = false;
         },
         fail: (res) => {

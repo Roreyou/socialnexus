@@ -68,18 +68,19 @@ export default {
         });
     } else {
       uni.request({
-        url: this.$url.BASE_URL + "/4142061-0-default/community/teams",
+        url:'http://4ddfdbb6.r21.cpolar.top/community/teams',
+        // url: this.$url.BASE_URL + "/4142061-0-default/community/teams",
         // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
         method: "GET",
         data: {
-          community_id: "0",
+          community_id: 1,
           status: 0,
         },
         success: (res) => {
-          this.teamList = res.data.data.list;
+          this.teamList = res.data.data;
           console.log("成功请求-查询队伍信息(全部)");
           this.net_error = false;
         },
@@ -100,13 +101,13 @@ export default {
       return new Promise((resolve, reject) => {
         uni.request({
           url:
-            this.$url.BASE_URL + "/4142061-0-default/community/queryTeamByName",
+            "http://4ddfdbb6.r21.cpolar.top/community/queryTeamByName",
           header: {
             Authorization: uni.getStorageSync("token"),
           },
           method: "GET",
           data: {
-            community_id: "0",
+            community_id: 1,
             team_name: this.searchText,
           },
           success: (res) => {
@@ -127,13 +128,13 @@ export default {
       return new Promise((resolve, reject) => {
         uni.request({
           url:
-            this.$url.BASE_URL + "/4142061-0-default/community/queryTeamByAct",
+            "http://4ddfdbb6.r21.cpolar.top/community/queryTeamByAct",
           header: {
             Authorization: uni.getStorageSync("token"),
           },
           method: "GET",
           data: {
-            community_id: "0",
+            community_id: 1,
             act_name: this.searchText,
           },
           success: (res) => {

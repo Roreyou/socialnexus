@@ -117,7 +117,7 @@ export default {
           district: "",
         },
         activity_time: "",
-        category_id: 0,
+        category_name: "",
       },
       tabIndex: "0",
       currentTabComponent: "0",
@@ -209,7 +209,7 @@ export default {
       this.$refs.typePicker.show();
     },
     getType(e) {
-      this.filterParam.category_id = e;
+      this.filterParam.category_name = e;
       this.getFilter();
     },
     getFilter() {
@@ -226,7 +226,7 @@ export default {
             district: this.filterParam.location.district,
           },
           activity_time: this.filterParam,
-          category_id: this.filterParam.category_id,
+          category_name: this.filterParam.category_name,
         },
         success: (res) => {
           // this.searchlist = res.data.data.acti_list;

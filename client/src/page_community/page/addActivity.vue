@@ -7,7 +7,12 @@
     <uni-section title="新增活动" type="line">
       <view class="example">
         <!-- 基础用法，不包含校验规则 -->
-        <uni-forms ref="baseForm" :model="activityInfo" :rules="rules" labelWidth="80px">
+        <uni-forms
+          ref="baseForm"
+          :model="activityInfo"
+          :rules="rules"
+          labelWidth="80px"
+        >
           <!-- <uni-forms-item label="所属高校" required>
 						<uni-easyinput v-model="activityInfo.name" placeholder="中山大学" ref="inputElement" />
 					</uni-forms-item> -->
@@ -17,47 +22,83 @@
               placeholder="请输入活动名称"
             />
           </uni-forms-item>
+          <uni-forms-item label="报名截止时间" name="application_deadline">
+            <uni-easyinput
+              v-model="activityInfo.application_deadline"
+              placeholder="请输入报名截止时间"
+            />
+            <view class="index">
+              <view class="form-item" @click="showDDLDate">
+                <view
+                  bindtap="goCnCollege"
+                  class="form-field"
+                  hoverClass="form-field-hover"
+                >
+                  <view class="form-field-input">
+                    <view style="color: #808080">选择时间</view>
+                    <view></view>
+                  </view>
+                </view>
+              </view>
+              <datePicker
+                ref="datePicker2"
+                @confirm="getDDLDateTime"
+              ></datePicker>
+            </view>
+          </uni-forms-item>
           <uni-forms-item label="开始时间" name="startTime">
             <uni-easyinput
               v-model="activityInfo.startTime"
               placeholder="请输入活动开始时间"
             />
-			<view class="index">
-            <view class="form-item" @click="showPDate">
-              <view
-                bindtap="goCnCollege"
-                class="form-field"
-                hoverClass="form-field-hover"
-              >
-                <view class="form-field-input">
-                  <view style="color: #808080">选择时间</view>
-                  <view></view>
+            <view class="index">
+              <view class="form-item" @click="showPDate">
+                <view
+                  bindtap="goCnCollege"
+                  class="form-field"
+                  hoverClass="form-field-hover"
+                >
+                  <view class="form-field-input">
+                    <view style="color: #808080">选择时间</view>
+                    <view></view>
+                  </view>
                 </view>
               </view>
+              <datePicker
+                ref="datePicker"
+                @confirm="getStartDateTime"
+              ></datePicker>
             </view>
-            <datePicker ref="datePicker" @confirm="getStartDateTime"></datePicker>
-          </view>
           </uni-forms-item>
           <uni-forms-item label="结束时间" name="endTime">
             <uni-easyinput
               v-model="activityInfo.endTime"
               placeholder="请输入活动结束时间"
             />
-			<view class="index">
-            <view class="form-item" @click="showPDate1">
-              <view
-                bindtap="goCnCollege"
-                class="form-field"
-                hoverClass="form-field-hover"
-              >
-                <view class="form-field-input">
-                  <view style="color: #808080">选择时间</view>
-                  <view></view>
+            <view class="index">
+              <view class="form-item" @click="showPDate1">
+                <view
+                  bindtap="goCnCollege"
+                  class="form-field"
+                  hoverClass="form-field-hover"
+                >
+                  <view class="form-field-input">
+                    <view style="color: #808080">选择时间</view>
+                    <view></view>
+                  </view>
                 </view>
               </view>
+              <datePicker
+                ref="datePicker1"
+                @confirm="getEndDateTime"
+              ></datePicker>
             </view>
-            <datePicker ref="datePicker1" @confirm="getEndDateTime"></datePicker>
-          </view>
+          </uni-forms-item>
+          <uni-forms-item label="招募队伍数" name="vacancies">
+            <uni-easyinput
+              v-model="activityInfo.vacancies"
+              placeholder="请输入招募队伍数"
+            />
           </uni-forms-item>
           <uni-forms-item label="活动省份" name="province">
             <uni-easyinput
@@ -100,9 +141,7 @@
         </uni-forms>
       </view>
       <view class="button-group">
-        <button type="primary" size="mini" @click="submit()">
-          提交
-        </button>
+        <button type="primary" size="mini" @click="submit()">提交</button>
       </view>
     </uni-section>
   </view>
@@ -120,14 +159,17 @@ export default {
       // 基础表单数据
       activityInfo: {
         name: "",
+        application_deadline: "",
         startTime: "",
         endTime: "",
+        vacancies: "",
         province: "",
         city: "",
         address: "",
         activityType: "",
         keywords: "",
         remark: "",
+        picture: "",
       },
       typeData: [
         {
@@ -159,12 +201,20 @@ export default {
           value: "7",
         },
       ],
-	  rules: {
+      rules: {
         name: {
           rules: [
             {
               required: true,
               errorMessage: "请输入姓名",
+            },
+          ],
+        },
+        application_deadline: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入报名截止时间",
             },
           ],
         },
@@ -184,7 +234,15 @@ export default {
             },
           ],
         },
-		province: {
+        vacancies: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入招募队伍数",
+            },
+          ],
+        },
+        province: {
           rules: [
             {
               required: true,
@@ -216,7 +274,7 @@ export default {
             },
           ],
         },
-		activityType: {
+        activityType: {
           rules: [
             {
               required: true,
@@ -224,7 +282,7 @@ export default {
             },
           ],
         },
-		keywords: {
+        keywords: {
           rules: [
             {
               required: true,
@@ -264,35 +322,51 @@ export default {
     showPDate(e) {
       this.$refs.datePicker.show();
     },
-	showPDate1(e) {
+    showPDate1(e) {
       this.$refs.datePicker1.show();
+    },
+    showDDLDate(e) {
+      this.$refs.datePicker2.show();
     },
     getStartDateTime(e) {
       this.activityInfo.startTime = e;
     },
-	getEndDateTime(e) {
-		this.activityInfo.endTime = e;
+    getEndDateTime(e) {
+      this.activityInfo.endTime = e;
+    },
+    getDDLDateTime(e) {
+      this.activityInfo.application_deadline = e;
     },
     submit() {
-		this.$refs.baseForm
+      this.$refs.baseForm
         .validate()
         .then((res) => {
           this.addActivity();
         })
-        .catch((err) => {
-        });
+        .catch((err) => {});
     },
-	addActivity() {
-		uni.request({
-        url: this.$url.BASE_URL + "/community/activityinfo",
-        
+    addActivity() {
+      uni.request({
+        // url: this.$url.BASE_URL + "/community/activityinfo",
+        url: "http://4ddfdbb6.r21.cpolar.top/community/activityinfo",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
         method: "POST",
         data: {
-          community_id: "0",
-          activityInfo: this.activityInfo,
+          community_id: 1,
+          name: this.activityInfo.name,
+          application_deadline: this.activityInfo.application_deadline,
+          start_time: this.activityInfo.startTime,
+          end_time: this.activityInfo.endTime,
+          vacancies: this.activityInfo.vacancies,
+          province: this.activityInfo.province,
+          city: this.activityInfo.city,
+          address: this.activityInfo.address,
+          category_id: this.activityInfo.activityType,
+          keywords: this.activityInfo.keywords,
+          remark: this.activityInfo.remark,
+          picture: this.activityInfo.picture,
         },
         success: (res) => {
           console.log("成功请求-新增活动");
@@ -304,7 +378,7 @@ export default {
         },
         complete: () => {},
       });
-	},
+    },
   },
 };
 </script>
