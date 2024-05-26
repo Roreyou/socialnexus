@@ -153,7 +153,6 @@ class AuthService {
                 }
             });
 
-
             if (team.leader_id == loginData.id) {
                 isleader = true;
             }
@@ -193,7 +192,8 @@ class AuthService {
                 team_id: team.id,
                 avatar: team.avatar,
                 isleader: isleader,
-                personName: personName
+                personName: personName,
+                modification_status:team.modification_status
             };
 
         }
