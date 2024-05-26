@@ -16,9 +16,7 @@
 	import poster from "@/page_school/components/poster/index.vue";
 	export default {
 		props:{
-			// dyinfo:{
-			// 	type:Object,
-			// }
+
 		},
 		components: {
 			poster
