@@ -281,6 +281,7 @@
 				})
     	},
 		methods: {
+			...mapMutations(['setStatu']),
 			onClickItem(e) {
 				console.log(e);
 				this.current = e.currentIndex
@@ -375,6 +376,8 @@
 										uni.showToast({
 											title: `成功提交申请！`
 										})
+										let s = 4
+										this.setStatu({s})
 									}else if(res.data.code == 401){
 										console.log("token过期");
 										uni.showModal({

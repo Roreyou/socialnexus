@@ -624,7 +624,8 @@
 											icon: 'none',
 											duration: 2000
 										});
-										this.setStatu(res.data.status)
+										let s = res.data.status
+										this.setStatu({s})
 									}else if(res.data.code == 401){
 										console.log("token过期");
 										uni.showModal({
