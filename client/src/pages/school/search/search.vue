@@ -225,12 +225,12 @@ export default {
             city: this.filterParam.location.city,
             district: this.filterParam.location.district,
           },
-          activity_time: this.filterParam,
+          activity_time: this.filterParam.activity_time,
           category_name: this.filterParam.category_name,
         },
         success: (res) => {
           // this.searchlist = res.data.data.acti_list;
-          this.searchlist = this.searchlist.concat(res.data.data.acti_list);
+          this.searchlist = this.searchlist.concat(res.data.data.activ_list);
           this.net_error = false;
         },
         fail: (res) => {
