@@ -25,7 +25,19 @@ module.exports = function(sequelize, DataTypes) {
     email: {
       type: DataTypes.STRING(45),
       allowNull: true
-    }
+    },
+    modified_status: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true
+    },
+    modified_time: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    modified_id: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    },
   }, {
     sequelize,
     tableName: 'modify_teacher',

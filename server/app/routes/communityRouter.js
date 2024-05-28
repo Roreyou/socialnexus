@@ -17,10 +17,12 @@ router.put('/activityInfo',ActivityController.updateActivity);//修改
 router.delete('/deleteActivity',ActivityController.deleteActivity);//删除
 router.get('/activities',ActivityController.getActivityByStatus);//查询By社区和status
 router.get('/queryActivity',ActivityController.queryActivity);//模糊查询活动byName
+router.get('/getKeywords',ActivityController.getKeywords);//关键词
+
 
 //我的队伍
 router.get('/teamInfo', TeamController.getTeamById);//查询by队伍ID
-router.get('/teams',TeamController.getTeamByCommu);//查询by社区和status(录取状态和评价状态)
+router.get('/teams',TeamController.getTeamActByCommu);//查询teamActivity
 router.get('/queryTeamByName',TeamController.queryTeamActByName);//模糊查询teamActivity队伍by队伍名
 router.get('/queryTeamByAct',TeamController.queryTeamByAct);//模糊查询队伍by活动名
 router.post('/admitTeam',TeamController.admitTeam);//录取或驳回队伍

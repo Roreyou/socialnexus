@@ -30,7 +30,19 @@ module.exports = function(sequelize, DataTypes) {
     grade: {
       type: DataTypes.STRING(20),
       allowNull: true
-    }
+    },
+    modified_status: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true
+    },
+    modified_time: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    modified_id: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    },
   }, {
     sequelize,
     tableName: 'modify_teammember',

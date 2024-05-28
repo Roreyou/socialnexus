@@ -8,13 +8,7 @@
 			<template v-slot:header>
 				<view></view>
 			</template>
-			<!-- <template v-slot:save>
-				<view @click="saveToAlbum">保存</view>
-			</template> -->
 		</poster>
-		<!-- <view class="wenzi">
-			点击图片生成海报
-		</view> -->
 	</view>
 </template>
 
@@ -22,9 +16,7 @@
 	import poster from "@/page_school/components/poster/index.vue";
 	export default {
 		props:{
-			// dyinfo:{
-			// 	type:Object,
-			// }
+
 		},
 		components: {
 			poster

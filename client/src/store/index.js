@@ -5,10 +5,9 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		forcedLogin: false,
-		hasLogin: false,
 		user_id: "",
 		userName: "游客",
+
 		//高校队伍的其它附加信息
 		userInfo: {
 			identity: '',  //身份，队长、队员、老师
@@ -20,7 +19,10 @@ const store = new Vuex.Store({
 			province: '',  //定位
 			city: '',
 			personName: '', //这个人的姓名
-		}
+			modification_status: 0, // 资料修改状态。。。1是审核中
+		},
+		forcedLogin: false,
+		hasLogin: false,
 	},
 	mutations: {
 		// 团委/社区
@@ -30,7 +32,7 @@ const store = new Vuex.Store({
 			state.userName = userName;
 		},
 		// 高校队伍
-		login2(state, {user_id, user_name, person_identity, person_id, avatar, verification_status, isleader, personName}) {
+		login2(state, {user_id, user_name, person_identity, person_id, avatar, verification_status, isleader, personName, modification_status}) {
 			// 登录
 			state.hasLogin = true;
 			state.userInfo.isUser = true;
@@ -44,10 +46,13 @@ const store = new Vuex.Store({
 			state.userInfo.verification_status = verification_status;
 			state.userInfo.isleader = isleader;
 			state.userInfo.personName = personName;
-			
+			state.userInfo.modification_status = modification_status;
 		},
 		setStatu(state,{verification_status}){
 			state.userInfo.verification_status = verification_status;
+		},
+		setmodificationstatus(state,{modification_status}){
+			state.userInfo.modification_status = modification_status;
 		},
 		setAddress(state, {province, city}) {
 			console.log("setAddress", province, city)
@@ -66,7 +71,9 @@ const store = new Vuex.Store({
 				verification_status: 5,
 				isleader: false,
 				province: '广东省',
-				city: '珠海市'
+				city: '珠海市',
+				personName:'',
+				modification_status: 0,
 			};
 			state.hasLogin = false;
 		}

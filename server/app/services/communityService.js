@@ -2,13 +2,16 @@
 const db = require('../models/index');
 const bcrypt = require('bcrypt');
 const ImageService = require('./imageService');
+const { modifyPwd } = require('./teamService');
 
 class CommunityService{
     static async getCommunityById(id) {
-        let community= await db.community.findByPk(id);
-        if(community){
-            return community;
-        }else{
+        let community = await db.community.findByPk(id);
+        if (community) {
+            let communityObject = community.toJSON();
+            delete communityObject.pwd;
+            return communityObject;
+        } else {
             return null;
         }
     }
@@ -16,7 +19,7 @@ class CommunityService{
     static async updateCommunity(id, communityData) {
         const community = await db.community.findByPk(id);
         //修改密码也在这里
-        communityData.pwd = await bcrypt.hash(communityData.pwd, 10);
+        // communityData.pwd = await bcrypt.hash(communityData.pwd, 10);
         if (!community) {
           return null; // 返回null表示社区不存在
         }

@@ -11,8 +11,19 @@ class ActivityController {
     }
   }
 
+  static async getKeywords(req, res) {
+    try {
+      const keywords = await activityService.getKeywords();
+      return res.json(Result.success(keywords));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+
   static async createActivity(req, res) {
     try {
+      
       await activityService.createActivity(req.body);
       return res.json(Result.success({status:'活动添加成功'}));
     } catch (error) {
@@ -120,10 +131,11 @@ class ActivityController {
   static async filterActivity(req,res){
     
     try {
-      const { location:location, category_id:category_id, activity_time:activity_time } = req.body;
+      console.log("Debug req:",req);
+      const { location:location, category_name:category_name, activity_time:activity_time } = req.body;
 
       // 调用服务层方法进行活动筛选
-      const activities = await activityService.filterActivities(location, category_id, activity_time);
+      const activities = await activityService.filterActivities(location, category_name, activity_time);
 
       // 构造返回数据
       const responseData = { activ_list: activities };
