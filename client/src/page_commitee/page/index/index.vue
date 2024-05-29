@@ -12,9 +12,9 @@
 		<view> 
 			
 		<view class="rowClass">
-        <!-- 点击去高校队伍/社区需求 -->
+        <!-- 点击去高校队伍/社区需求/审核修改 -->
 				<u-row>
-					<u-col span="6" text-align="center" v-for="(item,index) in navList" :key="index" >
+					<u-col span="4" text-align="center" v-for="(item,index) in navList" :key="index" >
 						<view class="u-padding-20" @tap="clickNav(item.type)" hover-class="hoverClass" style="background-color: #ffffff; border-radius: 30rpx; margin-right: 4rpx;">
 							<image :src="item.src" style="width: 90rpx;height: 90rpx;" mode="widthFix"></image>
 							<view class="tabName">{{item.name}}</view>
@@ -143,6 +143,7 @@
 				navList:[
 				   {name:"高校队伍",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/111.png",type:"1"},
 				   {name:"社区需求",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/222.png",type:"2"},
+				   {name:"审核修改",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/222.png",type:"3"},
 				],
 				loadStatus: 'loadmore',
 				flowList: [],

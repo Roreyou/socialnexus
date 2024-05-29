@@ -137,38 +137,6 @@ export default {
         },
       ],
       acList: [
-        {
-          state: "已结束",
-          title: "这是搜索的实践活动",
-          time: "2020-05-15",
-          place: "北京",
-          job: "志愿者",
-          keywords: "服务,实践",
-        },
-        {
-          state: "开展中",
-          title: "5月5日实践活动",
-          time: "2020-05-5",
-          place: "深圳",
-          job: "志愿者",
-          keywords: "支教,教育",
-        },
-        {
-          state: "开展中",
-          title: "5月5日实践活动",
-          time: "2020-05-5",
-          place: "深圳",
-          job: "志愿者",
-          keywords: "支教,教育",
-        },
-        {
-          state: "开展中",
-          title: "5月5日实践活动",
-          time: "2020-05-5",
-          place: "深圳",
-          job: "志愿者",
-          keywords: "支教,教育",
-        },
       ],
       searchcontent: "", //搜索内容
       searchlist: [],
@@ -216,7 +184,7 @@ export default {
       uni.request({
         url:
           this.$url.BASE_URL +
-          "/schoolteam/activsquare/filter",
+          "/4142061-3780993-default/schoolteam/activsquare/filter",
         // url: 'https://mock.apifox.coml/m1/schoolteam/activsquare/filter,
         method: "GET",
         data: {
@@ -225,12 +193,12 @@ export default {
             city: this.filterParam.location.city,
             district: this.filterParam.location.district,
           },
-          activity_time: this.filterParam,
+          activity_time: this.filterParam.activity_time,
           category_name: this.filterParam.category_name,
         },
         success: (res) => {
-          // this.searchlist = res.data.data.acti_list;
-          this.searchlist = this.searchlist.concat(res.data.data.acti_list);
+          this.acList = res.data.data.activ_list;
+          console.log(this.acList);
           this.net_error = false;
         },
         fail: (res) => {
