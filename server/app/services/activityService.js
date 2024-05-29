@@ -352,29 +352,35 @@ class ActivityService {
   }
 
   static async filterActivities(location, categoryName, activityTime) {
-    console.log(location);
-    console.log(categoryName);
-    console.log(activityTime);
+    location = JSON.parse(location);
+    activityTime = JSON.parse(activityTime);
 
-    var categoryId = 1;
-    switch (categoryName) {
-      case '社区经济发展':
-        categoryId = 1;break;
-      case '社区团建工作':
-        categoryId = 2;break;
-      case '社区社会调查':
-        categoryId = 3;break;
-      case '社区文体活动':
-        categoryId = 4;break;
-      case '社区教育服务':
-        categoryId = 5;break;
-      case '社区环境治理':
-        categoryId = 6;break;
-      default:
-        categoryId = 7;
-    }
-    console.log(categoryId);
+
+    const activity_time = activityTime.activity_time;
     let whereCondition = {};
+    if(categoryName != ""){
+      var categoryId = 1;
+      switch (categoryName) {
+        case '社区经济发展':
+          categoryId = 1;break;
+        case '社区团建工作':
+          categoryId = 2;break;
+        case '社区社会调查':
+          categoryId = 3;break;
+        case '社区文体活动':
+          categoryId = 4;break;
+        case '社区教育服务':
+          categoryId = 5;break;
+        case '社区环境治理':
+          categoryId = 6;break;
+        default:
+          categoryId = 7;
+      }
+        // 添加类型筛选条件
+      if (categoryId !== 0) {
+        whereCondition.category_id = categoryId;
+      }
+    }
 
     // 添加地区筛选条件
     if (location && location.province) {
@@ -384,17 +390,15 @@ class ActivityService {
       whereCondition.province = location.province;
     }
 
-    // 添加类型筛选条件
-    if (categoryId !== 0) {
-      whereCondition.category_id = categoryId;
-    }
-
     // 添加时间筛选条件
-    if (activityTime) {
-      whereCondition.start_time = { [db.Sequelize.Op.lte]: activityTime };
-      whereCondition.end_time = { [db.Sequelize.Op.gte]: activityTime };
+    if (activity_time != "") {
+      const isoDateString = activity_time.replace(' ', 'T') + 'Z'; // 转换为 ISO 8601 格式
+      const dateObject = new Date(isoDateString);
+      whereCondition.start_time = { [db.Sequelize.Op.lte]: dateObject };
+      whereCondition.end_time = { [db.Sequelize.Op.gte]: dateObject };
     }
 
+    console.log(whereCondition);
     // 查询符合条件的活动
     const activities = await db.activity.findAll({
       where: whereCondition,
@@ -410,6 +414,7 @@ class ActivityService {
       }
     });
     const results = await otherService.getCategKeyCommuIdsMap(activities);
+    console.log(results);
     return results;
   }
 

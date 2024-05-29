@@ -131,9 +131,8 @@ class ActivityController {
   static async filterActivity(req,res){
     
     try {
-      console.log("Debug req:",req);
-      const { location:location, category_name:category_name, activity_time:activity_time } = req.body;
-
+      const { location:location, category_name:category_name, activity_time:activity_time } = req.query;
+      console.log(req.query);
       // 调用服务层方法进行活动筛选
       const activities = await activityService.filterActivities(location, category_name, activity_time);
 

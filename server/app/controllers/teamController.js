@@ -309,8 +309,7 @@ class teamController {
 
   static async getRecommend(req, res) {
     try {
-      const { province: province, city: city, page: page } = req.query;
-
+      const { province: province, city: city, page: page } = req.query; 
       // 调用服务方法获取活动推荐列表
       const recommendations = await teamService.getRecommend(city, province, page);
 
@@ -492,7 +491,7 @@ class teamController {
   static async modifyInfo(req, res) {
     try {
       const { id: team_id, instrData: instrData, leaderData: leaderData, membersData: membersData } = req.body;
-
+      console.log(typeof instrData);
       // 调用服务层方法更新队伍信息
       const result = await teamService.modifyInfo(team_id, instrData, leaderData, membersData);
 
