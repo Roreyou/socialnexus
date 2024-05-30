@@ -25,7 +25,7 @@
           </view>
         </view>
 
-        <view style="display: flex; flex-direction: row; margin-top: 10rpx">
+        <view style="display: flex; flex-direction: row; margin-top: 10rpx; margin-bottom: 10rpx; background-color: white;">
           <view class="index" style="margin-left: 80rpx">
             <view class="form-item" @click="showPCA01">
               <view
@@ -259,7 +259,7 @@ export default {
   z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
 }
 .accontent {
-  margin-top: 150rpx;
+  margin-top: 160rpx;
 }
 
 .title {
