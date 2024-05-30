@@ -49,6 +49,7 @@ export default {
     watch: {
         searchlist(newValue, oldValue){
             console.log('searchlist 的值已更改：', newValue);
+            this.modifiedSearchList = newValue
         },
         searchcontent(newValue, oldValue) {
             this.modifiedSearchList = []  //清空
@@ -71,10 +72,10 @@ export default {
             }
         },
         modifiedSearchList(newValue, oldValue){
-            // this.isshow = false
-            // this.$nextTick(() => {
-            //     this.isshow = true
-            // });
+            this.isshow = false
+            this.$nextTick(() => {
+                this.isshow = true
+            });
         }
     },
     mounted(){

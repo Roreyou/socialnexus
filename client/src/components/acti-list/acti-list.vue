@@ -23,7 +23,7 @@
 								<view class="conpic">
 									<view class="content">
 										<view class="desc">
-											<view class="text-content"> 日期: {{item.start_time}}</view>
+											<view class="text-content"> 时间: {{item.start_time}}</view>
 											<view class="text-content"> 省市: {{item.province}} {{item.city}}</view>
 											<view class="text-content"> 详细地址: {{item.address}}</view>
 											
@@ -184,11 +184,11 @@
 		padding: 20rpx; /* 内容的内边距，rpx是uni-app中的单位 */
 	}
 	.avatar {
- 	width: 200rpx;
+ 	width: 260rpx;
  	height: 200rpx;
  	/* border-radius: 50%; */
 	object-fit: cover; 
  	background-color: #ffffff;
- 	margin-right: 40rpx;
+ 	margin-right: 10rpx;
 	}
 </style>

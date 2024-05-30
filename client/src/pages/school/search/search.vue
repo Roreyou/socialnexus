@@ -197,8 +197,8 @@ export default {
           category_name: this.filterParam.category_name,
         },
         success: (res) => {
-          this.acList = res.data.data.activ_list;
-          console.log(this.acList);
+          this.searchlist = res.data.data.activ_list;
+          console.log(this.searchlist);
           this.net_error = false;
         },
         fail: (res) => {
