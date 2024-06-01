@@ -34,7 +34,9 @@
                 hoverClass="form-field-hover"
               >
                 <view class="form-field-input">
-                  <view style="color: #808080">{{ region }}</view>
+                  <view style="color: #808080">{{ region }}
+                    <u-icon name="arrow-down-fill" color="#808080" size="25" style="margin-left: 10rpx;"></u-icon>
+                  </view>
                   <view></view>
                 </view>
               </view>
@@ -42,7 +44,7 @@
             <pcaPicker ref="pcaPicker" @confirm="getPCA01"></pcaPicker>
           </view>
 
-          <view class="index" style="margin-left: 200rpx">
+          <view class="index" style="margin-left: 180rpx">
             <view class="form-item" @click="showPDate">
               <view
                 bindtap="goCnCollege"
@@ -50,7 +52,9 @@
                 hoverClass="form-field-hover"
               >
                 <view class="form-field-input">
-                  <view style="color: #808080">{{ dateTime }}</view>
+                  <view style="color: #808080">{{ dateTime }}
+                    <u-icon name="arrow-down-fill" color="#808080" size="25" style="margin-left: 10rpx;"></u-icon>
+                  </view>
                   <view></view>
                 </view>
               </view>
@@ -58,7 +62,7 @@
             <datePicker ref="datePicker" @confirm="getDateTime"></datePicker>
           </view>
 
-          <view class="index" style="margin-left: 200rpx">
+          <view class="index" style="margin-left: 180rpx">
             <view class="form-item" @click="showPType">
               <view
                 bindtap="goCnCollege"
@@ -66,7 +70,9 @@
                 hoverClass="form-field-hover"
               >
                 <view class="form-field-input">
-                  <view style="color: #808080">{{ type }}</view>
+                  <view style="color: #808080">{{ type }}
+                    <u-icon name="arrow-down-fill" color="#808080" size="25" style="margin-left: 10rpx;"></u-icon>
+                  </view>
                   <view></view>
                 </view>
               </view>
@@ -95,6 +101,7 @@ import scontent from "../../../page_school/pages/search/searchcontent.vue";
 import pcaPicker from "@/components/pcaPicker/pcaPicker.vue";
 import datePicker from "@/components/datePicker/datePicker.vue";
 import typePicker from "@/components/typePicker/typePicker.vue";
+import UIcon from '../../../uview-ui/components/u-icon/u-icon.vue';
 
 export default {
   components: {
@@ -103,6 +110,7 @@ export default {
     pcaPicker,
     datePicker,
     typePicker,
+    UIcon,
     // utabsswiper
   },
   data() {
