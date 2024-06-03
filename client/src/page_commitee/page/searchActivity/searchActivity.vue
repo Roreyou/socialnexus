@@ -160,7 +160,7 @@
 							
 							console.log("成功请求-模糊查询社区需求");
 							console.log(all.acList);
-						}, 200); // 1000毫秒等于1秒
+						}, 500); // 1000毫秒等于1秒
 						this.net_error = false;
 					},
 					fail: res => {

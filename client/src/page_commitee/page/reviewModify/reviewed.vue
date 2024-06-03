@@ -2,7 +2,7 @@
  * @Author: happy 2630391116@qq.com
  * @Date: 2024-04-29 14:38:05
  * @LastEditors: happy 2630391116@qq.com
- * @LastEditTime: 2024-05-27 20:41:49
+ * @LastEditTime: 2024-06-03 14:05:12
  * @FilePath: \socialnexus\client\src\pages\committee\searchActivity\reviewed.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -64,7 +64,7 @@
 		methods: {
 			getAllReviewed(){
 				uni.request({
-					url: this.$url.BASE_URL + '/school/approveUpdatedTeam',
+					url: this.$url.BASE_URL + '/school/getUpdatedTeams',
 					
                 	header:{
 						Authorization:uni.getStorageSync("token")
@@ -76,7 +76,7 @@
 						status: 1
 					},
 					success: res => {						
-						this.acList = res.data.data.list;
+						this.acList = res.data.data;
 						console.log("成功请求-查询信息修改列表-已审核");
 						console.log(this.acList);
 						this.net_error = false;
@@ -96,7 +96,7 @@
 				// 	url: '../../page_school/pages/details/details?acti_id=' + id
 				// })
 				uni.navigateTo({
-					url:'/page_commitee/page/details/modifiedDetails?modified_id=' + modified_id
+					url:'/page_commitee/page/details/modifiedDetails?modified_id=' + id
 				});
 				// this.$u.route({
 				// 	url: 'pages/school/details/details?acti_id=' + id

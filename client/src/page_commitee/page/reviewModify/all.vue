@@ -2,7 +2,7 @@
  * @Author: happy 2630391116@qq.com
  * @Date: 2024-04-29 16:32:53
  * @LastEditors: happy 2630391116@qq.com
- * @LastEditTime: 2024-05-27 18:07:00
+ * @LastEditTime: 2024-06-03 13:28:04
  * @FilePath: \socialnexus\client\src\pages\committee\searchSchool\all.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -171,6 +171,7 @@
 			},
 			// 获取全部修改信息的记录
 			getAll(){
+				console.log('获取修改记录列表get all');
 				uni.request({
 					url: this.$url.BASE_URL + '/school/getUpdatedTeams',
 					
@@ -182,7 +183,7 @@
 						status: 0
 					},
 					success: res => {						
-						this.acList = res.data.data.list;
+						this.acList = res.data.data;
 						console.log("成功请求-查询修改信息列表-全部");
 						console.log(this.acList);
 						this.net_error = false;
@@ -203,7 +204,7 @@
 			todetail(id){
 				console.log("id:", id)
 				uni.navigateTo({
-					url:'/page_commitee/page/details/modifiedDetails?modified_id=' + modified_id
+					url:'/page_commitee/page/details/modifiedDetails?modified_id=' + id
 				});
 			},
 		}

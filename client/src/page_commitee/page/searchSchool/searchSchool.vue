@@ -117,6 +117,8 @@
               scrollTop: 0,
               duration: 0
             });
+          this.searchContent = '';
+          	// this.isSearch = false;
         },
         key() {
             return this.TabCur
@@ -137,18 +139,21 @@
 				  	},
 				  	success: res => {
 				  		//不用懒加载
-				  		const allTeams = this.$refs.allTeams;
-				  		// all.updateIsSearch(true); 
-				  		// 是搜索，取消自动调用“获取列表接口”
-				  		// console.log("赋值前：");
-				  		console.log("success设置前: all.isSearch="+allTeams.isSearch);
-				  		allTeams.updateIsSearch(true); // 推荐通过方法更新属性
-				  		console.log("success设置后: all.isSearch="+allTeams.isSearch);
+              this.TabCur = 0 // 设置顶部为“全部”
+						  setTimeout(() => {
+				  	  	const allTeams = this.$refs.allTeams;
+				  	  	// all.updateIsSearch(true); 
+				  	  	// 是搜索，取消自动调用“获取列表接口”
+				  	  	// console.log("赋值前：");
+				  	  	console.log("success设置前: all.isSearch="+allTeams.isSearch);
+				  	  	allTeams.updateIsSearch(true); // 推荐通过方法更新属性
+				  	  	console.log("success设置后: all.isSearch="+allTeams.isSearch);
 
-				  		allTeams.acList = res.data.data;
-				  		this.TabCur = 0 // 设置顶部为“全部”
-				  		console.log("成功请求-模糊查询高校队伍-按队伍名查询");
-				  		console.log(allTeams.acList);
+				  	  	allTeams.acList = res.data.data;
+				  	  	this.TabCur = 0 // 设置顶部为“全部”
+				  	  	console.log("成功请求-模糊查询高校队伍-按队伍名查询");
+				  	  	console.log(allTeams.acList);
+              }, 300); // 1000毫秒等于1秒
 				  		this.net_error = false;
 				  	},
 				  	fail: res => {
@@ -174,18 +179,17 @@
 				  	},
 				  	success: res => {
 				  		//不用懒加载
-				  		const allTeams = this.$refs.allTeams;
-				  		// all.updateIsSearch(true); 
-				  		// 是搜索，取消自动调用“获取列表接口”
-				  		// console.log("赋值前：");
-				  		console.log("success设置前: all.isSearch="+allTeams.isSearch);
-				  		allTeams.updateIsSearch(true); // 推荐通过方法更新属性
-				  		console.log("success设置后: all.isSearch="+allTeams.isSearch);
+              this.TabCur = 0 // 设置顶部为“全部”
+						  setTimeout(() => {
+				  	  	const allTeams = this.$refs.allTeams;
+				  	  	console.log("success设置前: all.isSearch="+allTeams.isSearch);
+				  	  	allTeams.updateIsSearch(true); // 推荐通过方法更新属性
+				  	  	console.log("success设置后: all.isSearch="+allTeams.isSearch);
 
-				  		allTeams.acList = res.data.data;
-				  		this.TabCur = 0 // 设置顶部为“全部”
-				  		console.log("成功请求-模糊查询高校队伍-按活动名查询");
-				  		console.log(allTeams.acList);
+				  	  	allTeams.acList = res.data.data;
+				  	  	console.log("成功请求-模糊查询高校队伍-按活动名查询");
+				  	  	console.log(allTeams.acList);
+              }, 300); // 1000毫秒等于1秒
 				  		this.net_error = false;
 				  	},
 				  	fail: res => {

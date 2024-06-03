@@ -54,7 +54,7 @@
 		methods: {
 			getAllUnreviewed(){
 				uni.request({
-					url: this.$url.BASE_URL + '/school/approveUpdatedTeam',
+					url: this.$url.BASE_URL + '/school/getUpdatedTeams',
 					
                 	header:{
 						Authorization:uni.getStorageSync("token")
@@ -66,7 +66,7 @@
 						status: 2
 					},
 					success: res => {						
-						this.acList = res.data.data.list;
+						this.acList = res.data.data;
 						console.log("成功请求-获取信息修改列表-未审核");
 						console.log(this.acList);
 						this.net_error = false;
@@ -86,7 +86,7 @@
 				// 	url: '../../page_school/pages/details/details?acti_id=' + id
 				// })
 				uni.navigateTo({
-					url:'/page_commitee/page/details/modifiedDetails?modified_id=' + modified_id
+					url:'/page_commitee/page/details/modifiedDetails?modified_id=' + id
 				});
 				// this.$u.route({
 				// 	url: 'pages/school/details/details?acti_id=' + id

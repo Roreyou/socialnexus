@@ -107,7 +107,7 @@
   		</view>
 		<!-- 队员信息 -->
 		<view>
-			<view class="part second">
+			<view class="part second" style="padding-bottom: 144rpx;">
 				<view class="de_total_title sub_title">
 					队员信息
 				</view>
@@ -140,15 +140,15 @@
 			</view>
 		</view>
 
-    <view class="button-container" v-if="team_info.modified_status === 1">
+    <view class="button-container" v-if="team_info.verification_status === 4">
       <button class="status-label passed" @click="handlePass()">通过</button>
 	  <view style="width:20rpx;"></view>
       <button class="status-label rejected" @click="handleReject()" >驳回</button>
     </view>
-    <view class="done-container passed" v-else-if="team_info.modified_status === 2">
+    <view class="done-container passed" v-else-if="team_info.verification_status === 2">
       <text class="status"  >已通过</text>
     </view>
-    <view class="done-container rejected" v-else-if="team_info.modified_status === 3">
+    <view class="done-container rejected" v-else-if="team_info.verification_status === 3">
       <text class="status">已驳回</text>
     </view>
   </view>
@@ -167,8 +167,8 @@
 		},
 		data(){
 			return{
-        	modified_id: '',
-        	team_info: {
+				team_id: '',
+        		team_info: {
 
         	},
         	instructor_info:{
@@ -184,7 +184,7 @@
 		},
 		mounted() {
       		console.log("发出请求");
-			  console.log("modified_id",this.modified_id);
+			  console.log("team_id",this.team_id);
 			uni.request({
 				// url: this.$url.BASE_URL + '/school/teamInfo',
 				url: this.$url.BASE_URL + '/school/teamInfo',
@@ -193,7 +193,7 @@
 					},
 				method: 'GET',
 				data: {
-					modified_id: this.modified_id,
+					id: this.team_id,
 					// token: this.$userinfo.token
 					// activity_status: this.index
 				},
@@ -220,8 +220,8 @@
 				})
     	},
 		onLoad(options) {
-			const modified_id = options.modified_id;
-			this.modified_id = modified_id;
+			const team_id = options.team_id;
+			this.team_id = team_id;
 		},
 		methods:{
 			phoneOn() {
@@ -240,13 +240,13 @@
 				console.log("审核：通过");
 				uni.request({
 					// url: this.$url.BASE_URL + '/school/approveTeam',
-					url: this.$url.BASE_URL + '/school/approveUpdatedTeam',
+					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
 					method: 'PUT',
 					data: {
-						modified_id: this.team_info.modified_id,
+						id: this.team_info.id,
 						approve: 1
 					},
 					success: res => {
@@ -290,13 +290,13 @@
 				console.log("审核：驳回");
 				uni.request({
 					// url: this.$url.BASE_URL + '/school/approveTeam',
-					url: this.$url.BASE_URL + '/school/approveUpdatedTeam',
+					url: this.$url.BASE_URL + '/school/approveTeam',
 					header:{
 						Authorization:uni.getStorageSync("token")
 					},	
 					method: 'PUT',
 					data: {
-						modified_id: this.team_info.modified_id,
+						id: this.team_info.id,
 						approve: 2
 					},
 					success: res => {

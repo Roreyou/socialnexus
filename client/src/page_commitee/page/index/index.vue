@@ -143,7 +143,7 @@
 				navList:[
 				   {name:"高校队伍",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/111.png",type:"1"},
 				   {name:"社区需求",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/222.png",type:"2"},
-				   {name:"审核修改",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/222.png",type:"3"},
+				   {name:"审核修改",src:"https://img.ixintu.com/download/jpg/20200802/378f49bd08f610dda0dea63f25bbb60c_512_512.jpg!con",type:"3"},
 				],
 				loadStatus: 'loadmore',
 				flowList: [],
@@ -363,6 +363,11 @@
 					// this.$u.route('/pages/committee/searchActivity/searchActivity');
 					uni.navigateTo({
 						url:'../searchActivity/searchActivity'
+					});
+				}
+				if(type === "3"){
+					uni.navigateTo({
+						url:'../reviewModify/reviewModify'
 					});
 				}
 			},
