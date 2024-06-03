@@ -35,10 +35,7 @@
 		</view> 
 
     <!-- 红色图片轮播图 -->
-		<!-- <view>
-			<u-swiper :list="swiperList" height="400"></u-swiper>
-		</view>	  -->
-    <view class="uni-margin-wrap margin-fixed" >
+    <view class="uni-margin-wrap" style="margin-right:0rpx; margin-left:20rpx; margin-top:20rpx;">
 			<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
 				:duration="duration">
         <swiper-item v-for="item in swiperList" :key="item.id">
@@ -543,6 +540,9 @@
 	height: 400rpx;
 	line-height: 300rpx;
 	text-align: center;
+	padding: 0;
+	margin: 0;
+	width: 100%;
 }
 // 白色边框
 .border-box {

@@ -34,8 +34,8 @@
 			<view class="action-row" style="margin-top: -17rpx">
 				<navigator url="../reg/reg" style="font-weight: bold; color: darkgreen" v-if="step ===3">注册账号</navigator>
 				<text style="color: white">|</text>
-				<navigator url="../pwd/pwd" style="font-weight: bold; color: darkgreen" >忘记密码</navigator>
-				<text style="color: white;" >|</text>
+				<!-- <navigator url="../pwd/pwd" style="font-weight: bold; color: darkgreen" >忘记密码</navigator>
+				<text style="color: white;" >|</text> -->
 				<navigator url="../school/index/index" open-type="reLaunch" style="font-weight: bold; color: darkgreen">游客模式</navigator>
 			</view>
 		</view>
@@ -80,8 +80,8 @@
 			<view class="action-row" style="margin-top: -17rpx">
 				<navigator url="../reg/reg" style="font-weight: bold; color: darkgreen">注册账号</navigator>
 				<text style="color: white">|</text>
-				<navigator url="../pwd/pwd" style="font-weight: bold; color: darkgreen" >忘记密码</navigator>
-				<text style="color: white;" >|</text>
+				<!-- <navigator url="../pwd/pwd" style="font-weight: bold; color: darkgreen" >忘记密码</navigator>
+				<text style="color: white;" >|</text> -->
 				<navigator url="../school/index/index" open-type="reLaunch" style="font-weight: bold; color: darkgreen">游客模式</navigator>
 			</view>
 		</view>
@@ -120,7 +120,7 @@
 					{
 						name: '我是校团委',
 						id: 1,
-						avatarUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/450.jpg',
+						avatarUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/450.png',
 					},
 					{
 						name: '我是高校队伍',
