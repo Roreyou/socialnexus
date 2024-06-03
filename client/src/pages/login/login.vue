@@ -64,9 +64,14 @@
 			</view>
 			<!-- 2.2 选择登入队伍-->
 			<view v-else-if="step === 2.2">
-    			<view  class="team-box"  :class="selectedTeam == item.team_id ? 'selected' : 'team-box'" v-for="item in teamList" :key="item.team_id" @click="selectTeam(item.team_id)">
-					<img class="avatar" :src="item.avatarUrl" alt="Avatar">
-					<view class="team-name">{{ item.team_name }}</view>
+				<view v-if="teamList.length != 0">
+					<view class="team-box"  :class="selectedTeam == item.team_id ? 'selected' : 'team-box'" v-for="item in teamList" :key="item.team_id" @click="selectTeam(item.team_id)">
+						<img class="avatar" :src="item.avatarUrl" alt="Avatar">
+						<view class="team-name">{{ item.team_name }}</view>
+					</view>
+				</view>
+				<view v-else style="display: flex;justify-content: center;">
+					<view class="team-name">很抱歉，您未加入任何队伍。</view>
 				</view>
 				<view v-if="selectedTeam.length != 0">
 					<m-input class="input-pwd" type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
@@ -74,7 +79,7 @@
 							<button class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
 					</view>
 				</view>
-				<!-- 返回 -->
+								<!-- 返回 -->
 				<view class="back-button" @tap="back"></view>
 			</view>
 			<view class="action-row" style="margin-top: -17rpx">

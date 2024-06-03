@@ -163,6 +163,18 @@
 		onShow(){
 			console.log('this.avatarList', this.avatarList, this.avatarList.length);
 		},
+		onLoad: function(options){
+			console.log('reg option=',options);
+			// const step = JSON.parse(decodeURIComponent(options.fromCommunity));
+			// console.log('reg step=',step);
+			// if(step === 3){
+			// 	this.index = 1;
+			// }
+			// 获取参数的值
+			var itemValue = this.$route.query.item;
+    		console.log('item',itemValue);
+			
+		},
 		methods: {
 			register() {
 				console.log('注册');
@@ -212,13 +224,21 @@
 						success: res => {
 							if(res.data.code == 200){
 								console.log("注册成功-高校队伍",res.data.data);
-								uni.showToast({
-									icon: 'success',
-									title: '注册成功，前往登录界面',
-								});
-								uni.navigateTo({
-									url:'../login/login'
-								});
+								uni.showModal({
+								    title: '成功',
+								    content: '注册成功，是否直接去登录？',
+								    success: function (res) {
+								        if (res.confirm) {
+								            console.log('确定去登录');
+											uni.navigateTo({
+												url:'../login/login'
+											});
+								        } 
+										else if (res.cancel) {
+								            console.log('取消去登录');
+								        }
+								    }
+								});	
 							}
 							else if(res.data.code == 500){
 								console.log("注册失败-用户已存在",res.data);
@@ -293,13 +313,21 @@
 						success: res => {
 							if(res.data.code == 200){
 								console.log("注册成功-社区基层",res.data.data);
-								uni.showToast({
-									icon: 'success',
-									title: '注册成功，前往登录界面',
-								});
-								uni.navigateTo({
-									url:'../login/login'
-								});
+								uni.showModal({
+								    title: '成功',
+								    content: '注册成功，是否直接去登录？',
+								    success: function (res) {
+								        if (res.confirm) {
+								            console.log('确定去登录');
+											uni.navigateTo({
+												url:'../login/login'
+											});
+								        } 
+										else if (res.cancel) {
+								            console.log('取消去登录');
+								        }
+								    }
+								});	
 							}
 							else if(res.data.code == 500){
 								uni.showModal({
@@ -431,6 +459,8 @@
 	background-image: url(https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603160026.png);
 	background-size: cover;
     background-attachment: fixed;
+	/* position: fixed; */
+	bottom: 0;
 }
 .container {
   display: flex;
@@ -438,25 +468,13 @@
   align-items: center;
   margin-top: 30rpx;
 }
-/* .slot-btn {
-	width: 329rpx;
-	height: 140rpx;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: rgb(244, 245, 246);
-	border-radius: 10rpx;
-}
-
-.slot-btn__hover {
-	background-color: rgb(235, 236, 238);
-} */
 .city_btn{
 	font-size: inherit;
     padding-left: 24rpx;
     padding-right: 24rpx;
-    margin-left: 11rpx;
+    /* margin-left: 11rpx; */
     padding-top: 11rpx;
+	margin-right: 5rpx;
 }
 .input {
 	margin-top: 25rpx;
