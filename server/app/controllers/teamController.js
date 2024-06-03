@@ -39,14 +39,15 @@ class teamController {
     const id=req.query.modified_id
     try {
       const teams = await teamService.getUpdatedTeamInfo(id);
-      return res.json(Result.success(teams));
+      return res.json(Result.success(teams[0]));
     } catch (error) {
       return res.json(Result.fail(error.message));
     }
   }
   static async reviewUpdatedTeam(req, res) {
-    const id=req.query.modified_id
-    const approve=req.query.approve
+    const id=req.body.modified_id
+    const approve=req.body.approve
+    console.log(id,approve)
     try {
       await teamService.reviewUpdatedTeam(id,approve);
       return res.json(Result.success("审核成功"));
@@ -166,6 +167,20 @@ class teamController {
     const team_name = req.query.team_name;
     try {
       const teams = await teamService.queryTeamByName(commu_id, team_name);
+      if (!teams) {
+        return res.json(Result.fail('队伍不存在'));
+      }
+      return res.json(Result.success(teams));
+    } catch (error) {
+      return res.json(Result.fail(error.message));
+    }
+  }
+
+  static async queryTeamActByAct(req, res) {
+    const commu_id = req.query.community_id;
+    const act_name = req.query.act_name;
+    try {
+      const teams = await teamService.queryTeamActByAct(commu_id, act_name);
       if (!teams) {
         return res.json(Result.fail('队伍不存在'));
       }
