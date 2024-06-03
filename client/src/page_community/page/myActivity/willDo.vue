@@ -61,7 +61,7 @@ export default {
       method: "GET",
       data: {
         community_id: "0",
-		status: 1
+		    status: 1
       },
       success: (res) => {
         this.acList = res.data.data;

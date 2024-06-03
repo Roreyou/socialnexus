@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -138,18 +139,20 @@ export default {
       if (this.current === 1) return "top";
       return "left";
     },
+    ...mapState([
+      "user_id"
+    ]),
   },
   mounted() {
     uni.request({
-      url:'http://4ddfdbb6.r21.cpolar.top/community/myInfo',
-      // url: this.$url.BASE_URL + '/community/myInfo',
+      url: this.$url.BASE_URL + 'community/myInfo',
       // url: "https://mock.apifox.com/m1/community/myInfo",
       header: {
         Authorization: uni.getStorageSync("token"),
       },
       method: "GET",
       data: {
-        id: 1,
+        id: this.user_id,
       },
       success: (res) => {
         this.baseFormData = res.data.data;

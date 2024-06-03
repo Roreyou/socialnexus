@@ -21,11 +21,18 @@ const store = new Vuex.Store({
 			personName: '', //这个人的姓名
 			modification_status: 0, // 资料修改状态。。。1是审核中
 		},
+
+		communityInfo:{
+			province: '',  //定位
+			city: '',
+			avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
+			isUser: false,  //是否是正式用户
+		},
 		forcedLogin: false,
 		hasLogin: false,
 	},
 	mutations: {
-		// 团委/社区
+		// 团委
 		login1(state, {user_id, userName}){
 			state.hasLogin = true;
 			state.user_id = user_id;
@@ -47,6 +54,15 @@ const store = new Vuex.Store({
 			state.userInfo.isleader = isleader;
 			state.userInfo.personName = personName;
 			state.userInfo.modification_status = modification_status;
+		},
+		// 社区
+		login3(state, {user_id, userName, avatar}){
+			state.hasLogin = true;
+			state.user_id = user_id;
+			state.userName = userName;
+			const a = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7';  // 游客的默认头像
+			state.communityInfo.avatar = avatar || a;
+			state.communityInfo.isUser = true;
 		},
 		setStatu(state,{verification_status}){
 			state.userInfo.verification_status = verification_status;

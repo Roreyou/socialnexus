@@ -324,6 +324,7 @@
 								uni.setStorageSync('token', res.data.data.token);
 								const user_id = this.account;
 								let username = '';
+								let avatar = '';
 								if(identity === 'school'){
 									username = '校团委';
 									this.login1({user_id, username, });
@@ -332,8 +333,9 @@
 									});
 								}
 								else if(identity === 'community'){
-									username = '社区基层';
-									this.login1({user_id, username, });
+									username = res.data.data.communityName;
+									avatar = res.data.data.avatar;
+									this.login3({user_id, username, avatar});
 									uni.reLaunch({
 										url:'../../page_community/page/index'
 									});
