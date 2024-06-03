@@ -115,7 +115,7 @@
 
 		data() {
 			return {
-				avatar:'https://bkimg.cdn.bcebos.com/smart/4afbfbedab64034f78f004bd468b6e310a55b319b77d-bkimg-process,v_1,rw_1,rh_1,pad_1,color_ffffff?x-bce-process=image/format,f_auto',
+				avatar:'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/sysu.png',
 				keyword: '',
 				pageNum: 1,
 				pageSize: 20,
@@ -128,12 +128,12 @@
 				houseList: [],
 				// 轮播图图片
 				swiperList: [
-        		  { id: 1, imageSrc: 'https://img.zcool.cn/community/012a2f5f9cce0f11013fdcc7329e32.jpg@1280w_1l_2o_100sh.jpg' },
-        		  { id: 2, imageSrc: 'https://p4.img.cctvpic.com/photoworkspace/contentimg/2021/11/08/2021110810083211648.jpg' },
-        		  { id: 3, imageSrc: 'https://picnew7.photophoto.cn/20130724/hongsegemingtupian-18805580_1.jpg' }, 
-				  { id: 4, imageSrc: 'http://scu5azomr.hn-bkt.clouddn.com/static/2.png' },
-				  { id: 5, imageSrc: 'http://scu5azomr.hn-bkt.clouddn.com/static/3.png' },
-				  { id: 6, imageSrc: 'http://scu5azomr.hn-bkt.clouddn.com/static/4.png' }
+        		  { id: 1, imageSrc: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/hongsegemingtupian-18805580_1.jpg' },
+        		  { id: 2, imageSrc: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/2021110810083211648.jpg' },
+        		  { id: 3, imageSrc: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603195626.png' }, 
+				  { id: 4, imageSrc: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603195642.png' },
+				  { id: 5, imageSrc: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603195651.png' },
+				  { id: 6, imageSrc: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/012a2f5f9cce0f11013fdcc7329e32.jpg%401280w_1l_2o_100sh.jpg' }
         		],
 				// 通知
 				noticeList: [
@@ -143,7 +143,7 @@
 				navList:[
 				   {name:"高校队伍",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/111.png",type:"1"},
 				   {name:"社区需求",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/upload/images/222.png",type:"2"},
-				   {name:"审核修改",src:"https://img.ixintu.com/download/jpg/20200802/378f49bd08f610dda0dea63f25bbb60c_512_512.jpg!con",type:"3"},
+				   {name:"审核修改",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603.png",type:"3"},
 				],
 				loadStatus: 'loadmore',
 				flowList: [],
@@ -567,7 +567,7 @@
 	background-size: 300px 110px;
 }
 .background{
-	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+	background-image: url(https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603195726.png);
     // background-size: 730rpx 350rpx;
     height: 350rpx;
     border-radius: 30rpx;
@@ -586,7 +586,7 @@
 }
 .dataWallBG{
 	height: 400rpx;
-	background-image: url('http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/333.png');
+	background-image: url('https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603195751.jpg');
 	background-size: 100% 100%;
 }
 .roseBG{

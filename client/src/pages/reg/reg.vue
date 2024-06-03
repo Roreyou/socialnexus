@@ -12,7 +12,7 @@
 			<u-upload :class="{ 'banner': avatar === '' }" @on-success="handleSuccess" @on-remove="handleRemove" :custom-btn="true" :max-count="1" ref="uUpload" 
 						:action="action" :file-list="avatarList" :auto-upload="true" style="display: flex; align-items: center; ">
 				<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
-					<image :class="{ 'banner': avatar === '' } " src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/upload.png"></image>
+					<image :class="{ 'banner': avatar === '' } " src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/upload.png"></image>
 				</view>
 			</u-upload>
 		</view>
@@ -428,7 +428,7 @@
 	line-height: 40px;
   }
   .back{
-	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/11.png);
+	background-image: url(https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603160026.png);
 	background-size: cover;
     background-attachment: fixed;
 }

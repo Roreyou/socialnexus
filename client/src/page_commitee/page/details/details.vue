@@ -499,4 +499,9 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
     height: 50rpx;
     margin: 20rpx auto;
 }
+.img{
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+}
 </style>

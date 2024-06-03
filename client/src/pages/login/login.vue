@@ -120,22 +120,22 @@
 					{
 						name: '我是校团委',
 						id: 1,
-						avatarUrl: 'https://imagepphcloud.thepaper.cn/pph/image/294/493/450.jpg',
+						avatarUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/450.jpg',
 					},
 					{
 						name: '我是高校队伍',
 						id: 2,
-						avatarUrl: 'https://bpic.588ku.com/element_pic/23/04/23/aaecb8696eb1b5818cbe3d3b296ee5bd.png!/fw/150/unsharp/true/compress/true',
+						avatarUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/true.png',
 					},
 					{
 						name: '我是基层工作人员',
 						id: 3,
-						avatarUrl: 'https://pic.616pic.com/ys_img/00/82/30/uBXdSziguA.jpg',
+						avatarUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/uBXdSziguA.png',
 					}, 
 					{
 						name: '我只是一名游客',
 						id: 4,
-						avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn6i34jCCfME1TIH_gJK7Kr-JKWFe3VGlPXQ&usqp=CAU',
+						avatarUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/images.png',
 					},
 				],
 
@@ -568,19 +568,8 @@
   border-color: balck;
   height: 30px;
 }
-.next{
-  background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/Next.png);
-//   background-image: url('https://w7.pngwing.com/pngs/444/482/png-transparent-computer-icons-next-button-miscellaneous-angle-number.png');
-  background-size: cover;
-  background-color: transparent;
-  width: 30px; /* 设置按钮的宽度 */
-  height: 30px; /* 设置按钮的高度 */
-  border: 0; /* 去除按钮的边框 */
-//   margin-right: 10px;
-  border-color: white ;
-}
 .back{
-	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/bg_img/11.png);
+	background-image: url(https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603160026.png);
 	background-size: 100% 100%;
     height: 100vh;
 	background-attachment: fixed;
@@ -602,7 +591,7 @@
 .back-button {
   background-color: transparent;
   cursor: pointer;
-  background-image: url('https://img-bsy.txrpic.com/Element/00/79/77/49/7dcb6948_E797749_7ba3cab7XZ.png?imageMogr2/quality/90/thumbnail/!800x%3E');
+  background-image: url('https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/7dcb6948_E797749_7ba3cab7XZ.png');
   background-size: 100% 100%;
   height: 100rpx;
   width: 100rpx;

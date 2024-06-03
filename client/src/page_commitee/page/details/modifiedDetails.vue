@@ -496,4 +496,9 @@ margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
     height: 50rpx;
     margin: 20rpx auto;
 }
+.img{
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+}
 </style>
