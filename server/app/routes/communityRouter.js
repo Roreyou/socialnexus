@@ -24,7 +24,7 @@ router.get('/getKeywords',ActivityController.getKeywords);//关键词
 router.get('/teamInfo', TeamController.getTeamById);//查询by队伍ID
 router.get('/teams',TeamController.getTeamActByCommu);//查询teamActivity
 router.get('/queryTeamByName',TeamController.queryTeamActByName);//模糊查询teamActivity队伍by队伍名
-router.get('/queryTeamByAct',TeamController.queryTeamByAct);//模糊查询队伍by活动名
+router.get('/queryTeamByAct',TeamController.queryTeamActByAct);//模糊查询队伍by活动名
 router.post('/admitTeam',TeamController.admitTeam);//录取或驳回队伍
 router.post('/commentTeam',TeamController.commentTeam);//评价队伍的成果
 

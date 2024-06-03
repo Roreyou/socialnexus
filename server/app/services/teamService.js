@@ -179,12 +179,15 @@ class teamService {
 
 
   static async rejectUpdatedTeam(modified_id) {
+    console.log("modified_id", modified_id);
     const transaction = await db.sequelize.transaction({
         isolationLevel: sequelize.Transaction.ISOLATION_LEVELS.REPEATABLE_READ, // 可选，设置隔离级别
     });
     try {
         // 修改状态
-        const teamId = await db.modify_teacher.findOne({where:{modified_id:modified_id},attributes: ['team_id']});
+        const team = await db.modify_teacher.findOne({where:{modified_id:modified_id},attributes: ['team_id']});
+        const teamId = team.team_id;
+        console.log("teamId", teamId);
         await db.modify_teacher.update({ modified_status: 3 }, { where: { modified_id: modified_id }, transaction });
         await db.modify_teammember.update({ modified_status: 3 }, { where: { modified_id: modified_id }, transaction });
         await db.team.update({ modification_status: 3 }, { where: { id: teamId }, transaction });
@@ -196,7 +199,7 @@ class teamService {
         await transaction.rollback();
         throw error;
     }
-}
+  }
 
 
   static async approveUpdatedTeam(modified_id) {
@@ -732,7 +735,7 @@ class teamService {
     return teamsFiltered;
   }
 
-  static async queryTeamByAct(commu_id, act_name) {
+  static async queryTeamActByAct(commu_id, act_name) {
     let whereCondition_commu = {};
     let whereCondition_act = {};
     if (commu_id !== '0') {
@@ -802,6 +805,57 @@ class teamService {
     }));
 
     return teamsToReturn;
+
+  }
+
+  static async queryTeamByAct(commu_id, act_name) {
+    let whereCondition_act = {};
+    let whereCondition_teamactivity = {};
+
+    //用活动名模糊查询
+    whereCondition_act.name = {
+      [Op.like]: '%' + act_name + '%'
+    };
+
+    const activities = await db.activity.findAll({
+      where: whereCondition_act,
+      attributes: ['id']
+    });
+
+    const activityIds = activities.map(activity => activity.id);
+    // console.log("activityIds:",activityIds);
+
+    if (activityIds.length === 0) {
+      return null;
+    }
+
+    whereCondition_teamactivity.activity_id = {
+      [Op.in]: activityIds
+    }
+
+    const teamactivities = await db.teamactivity.findAll({
+      where: whereCondition_teamactivity,
+      attributes: ['team_id']
+    });
+
+    const teamIds= teamactivities.map(teamactivity => teamactivity.team_id);
+    // console.log("teamIDs:",teamIds);
+
+    const teams_by_commu = await this.getTeamByCommu(commu_id, 0);
+    if (!teams_by_commu)
+      return null;
+
+
+    // console.log("teamsByCommu",teams_by_commu)
+    const teamsFiltered = teams_by_commu.filter(team => teamIds.includes(team.id));
+    // console.log("teamsFiltered",teamsFiltered)
+
+
+
+    if (teamsFiltered.length == 0)
+      return null;
+
+    return teamsFiltered;
 
   }
 
