@@ -225,9 +225,7 @@ export default {
     },
     reject() {
       uni.request({
-        url:'http://4ddfdbb6.r21.cpolar.top/community/admitTeam',
-        // url: this.$url.BASE_URL + "/4142061-0-default/community/admitTeam",
-        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+        url: this.$url.BASE_URL + '/community/admitTeam',
         header: {
           Authorization: uni.getStorageSync("token"),
         },

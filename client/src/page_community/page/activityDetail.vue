@@ -149,7 +149,7 @@ export default {
     const mode = query.mode;
     this.mode = mode;
     uni.request({
-      url: this.$url.BASE_URL + "community/activityInfo",
+      url: this.$url.BASE_URL + "/community/activityInfo",
       // url: this.$url.BASE_URL + "/4142061-0-default/community/activityInfo",
       // url: 'https://mock.apifox.coml/m1/community/activityInfo',
       header: {

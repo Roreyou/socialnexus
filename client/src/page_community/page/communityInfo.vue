@@ -145,7 +145,7 @@ export default {
   },
   mounted() {
     uni.request({
-      url: this.$url.BASE_URL + 'community/myInfo',
+      url: this.$url.BASE_URL + '/community/myInfo',
       // url: "https://mock.apifox.com/m1/community/myInfo",
       header: {
         Authorization: uni.getStorageSync("token"),

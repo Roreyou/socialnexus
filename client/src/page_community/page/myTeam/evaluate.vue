@@ -127,7 +127,7 @@ export default {
     const teamId = query.teamId;
     this.teamId = teamId;
     uni.request({
-      url: "http://4ddfdbb6.r21.cpolar.top/community/activityInfo",
+      url: this.$url.BASE_URL + "/community/activityInfo",
       // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
       header: {
         Authorization: uni.getStorageSync("token"),
@@ -146,8 +146,7 @@ export default {
       complete: () => {},
     });
     uni.request({
-      url: "http://4ddfdbb6.r21.cpolar.top/community/teamInfo",
-      // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+      url: this.$url.BASE_URL + '/community/teamInfo',
       header: {
         Authorization: uni.getStorageSync("token"),
       },
@@ -157,7 +156,7 @@ export default {
         // token: this.$userinfo.token
       },
       success: (res) => {
-        this.detail.team = res.data.data.team_info;
+        this.detail.team = res.data.data;
         this.net_error = false;
       },
       fail: (res) => {
@@ -201,9 +200,7 @@ export default {
     },
     evaluate() {
       uni.request({
-        url:'http://4ddfdbb6.r21.cpolar.top/community/commentTeam',
-        // url: this.$url.BASE_URL + "/4142061-0-default/community/commentTeam",
-        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+        url: this.$url.BASE_URL + "/community/commentTeam",
         header: {
           Authorization: uni.getStorageSync("token"),
         },

@@ -300,7 +300,7 @@ export default {
     loadActilist() {
       //加载活动列表
       uni.request({
-        url: this.$url.BASE_URL + "community/activities",
+        url: this.$url.BASE_URL + "/community/activities",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
@@ -386,7 +386,7 @@ export default {
             },
           });
         } else {
-          this.$u.route("/pages/community/addActivity");
+          this.$u.route("/page_community/page/addActivity");
           uni.navigateTo({
             url: "../page/addActivity",
           });
@@ -410,7 +410,7 @@ export default {
             },
           });
         } else {
-          this.$u.route("/pages/community/myActivity");
+          this.$u.route("/page_community/page/myActivity/myActivity");
           uni.navigateTo({
             url: "../page/myActivity/myActivity",
           });
@@ -434,7 +434,7 @@ export default {
             },
           });
         } else {
-          this.$u.route("/pages/community/myTeam");
+          this.$u.route("/page_community/page/myTeam/myTeam");
           uni.navigateTo({
             url: "../page/myTeam/myTeam",
           });
@@ -481,7 +481,7 @@ export default {
           },
         });
       } else {
-        this.$u.route("/pages/community/myInfo");
+        this.$u.route("/page_community/page/communityInfo");
         this.$u.route({
           url: "page_community/page/communityInfo",
         });

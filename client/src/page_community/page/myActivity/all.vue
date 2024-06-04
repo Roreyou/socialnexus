@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -59,21 +60,24 @@ export default {
 	    searchText:''
     };
   },
+  computed: {
+    ...mapState([
+      "user_id"
+    ]),
+  },
   onLoad(e) {
     this.searchText = e.searchText;
   },
   mounted() {
     if (this.searchText !== '') {
 		uni.request({
-        url: " http://4ddfdbb6.r21.cpolar.top/community/queryActivity",
-        // url: this.$url.BASE_URL + "/4142061-0-default/community/queryActivity",
-        // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
+        url: this.$url.BASE_URL + "/community/queryActivity",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
         method: "GET",
         data: {
-          community_id: 1,
+          community_id: this.user_id,
           name: this.searchText
         },
         success: (res) => {
@@ -88,15 +92,13 @@ export default {
       });
     } else {
       uni.request({
-        url: " http://4ddfdbb6.r21.cpolar.top/community/activities",
-        // url: this.$url.BASE_URL + "/4142061-0-default/community/activities",
-        // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
+        url: this.$url.BASE_URL + "/community/activities",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
         method: "GET",
         data: {
-          community_id: 1,
+          community_id: this.user_id,
           status: 0,
         },
         success: (res) => {

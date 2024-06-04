@@ -25,7 +25,8 @@
           <uni-forms-item label="报名截止时间" name="application_deadline">
             <uni-easyinput
               v-model="activityInfo.application_deadline"
-              placeholder="请输入报名截止时间"
+              placeholder="请选择报名截止时间"
+              disabled='true'
             />
             <view class="index">
               <view class="form-item" @click="showDDLDate">
@@ -35,7 +36,9 @@
                   hoverClass="form-field-hover"
                 >
                   <view class="form-field-input">
-                    <view style="color: #808080">选择时间</view>
+                    <view style="color: #808080">选择时间
+                      <u-icon name="arrow-down-fill" color="#808080" size="25" style="margin-left: 10rpx;"></u-icon>
+                    </view>
                     <view></view>
                   </view>
                 </view>
@@ -49,7 +52,8 @@
           <uni-forms-item label="开始时间" name="startTime">
             <uni-easyinput
               v-model="activityInfo.startTime"
-              placeholder="请输入活动开始时间"
+              placeholder="请选择活动开始时间"
+              disabled='true'
             />
             <view class="index">
               <view class="form-item" @click="showPDate">
@@ -59,7 +63,9 @@
                   hoverClass="form-field-hover"
                 >
                   <view class="form-field-input">
-                    <view style="color: #808080">选择时间</view>
+                    <view style="color: #808080">选择时间
+                      <u-icon name="arrow-down-fill" color="#808080" size="25" style="margin-left: 10rpx;"></u-icon>
+                    </view>
                     <view></view>
                   </view>
                 </view>
@@ -73,7 +79,8 @@
           <uni-forms-item label="结束时间" name="endTime">
             <uni-easyinput
               v-model="activityInfo.endTime"
-              placeholder="请输入活动结束时间"
+              placeholder="请选择活动结束时间"
+              disabled='true'
             />
             <view class="index">
               <view class="form-item" @click="showPDate1">
@@ -83,7 +90,9 @@
                   hoverClass="form-field-hover"
                 >
                   <view class="form-field-input">
-                    <view style="color: #808080">选择时间</view>
+                    <view style="color: #808080">选择时间
+                      <u-icon name="arrow-down-fill" color="#808080" size="25" style="margin-left: 10rpx;"></u-icon>
+                    </view>
                     <view></view>
                   </view>
                 </view>
@@ -139,6 +148,18 @@
             />
           </uni-forms-item>
         </uni-forms>
+
+        <uni-forms-item label="图片" name="picture">
+          <view>
+          <u-upload :class="{ 'banner': activityInfo.picture === '' }" @on-success="handleSuccess" @on-remove="handleRemove" :custom-btn="true" :max-count="1" ref="uUpload" 
+						:action="action" :file-list="pictureList" :auto-upload="true" style="display: flex; align-items: center; ">
+				<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
+					<image :class="{ 'banner': activityInfo.picture === '' } " src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/upload.png"></image>
+				</view>
+			</u-upload>
+        </view>
+        </uni-forms-item>
+  
       </view>
       <view class="button-group">
         <button type="primary" size="mini" @click="submit()">提交</button>
@@ -149,6 +170,7 @@
 
 <script>
 import datePicker from "@/components/datePicker/datePicker.vue";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -171,6 +193,8 @@ export default {
         remark: "",
         picture: "",
       },
+      pictureList:[],
+      action: this.$url.BASE_URL + '/uploadImage',
       typeData: [
         {
           text: "社区经济发展",
@@ -308,6 +332,9 @@ export default {
       if (this.current === 1) return "top";
       return "left";
     },
+    ...mapState([
+      "user_id"
+    ]),
   },
   // mounted() {
   // 	this.$refs.inputElement.placeholder = "中山大学";
@@ -346,15 +373,22 @@ export default {
         .catch((err) => {});
     },
     addActivity() {
+      if(this.activityInfo.picture == ''){
+						uni.showToast({
+							icon: 'error',
+							title: '请上传图片！'
+						}); 
+						return ;
+					}
       uni.request({
-        // url: this.$url.BASE_URL + "/community/activityinfo",
-        url: "http://4ddfdbb6.r21.cpolar.top/community/activityinfo",
+        url: this.$url.BASE_URL + "/community/activityinfo",
+        // url: "http://4ddfdbb6.r21.cpolar.top/community/activityinfo",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
         method: "POST",
         data: {
-          community_id: 1,
+          community_id: this.user_id,
           name: this.activityInfo.name,
           application_deadline: this.activityInfo.application_deadline,
           start_time: this.activityInfo.startTime,
@@ -379,6 +413,23 @@ export default {
         complete: () => {},
       });
     },
+    handleSuccess(data, index, lists, index2){
+				console.log('上传图片成功，链接为',data);
+				console.log('index',index);
+				console.log('lists',lists);
+				console.log('index2',index2);
+				console.log('picture',this.pictureList);
+				if(index ===0 ){
+					this.activityInfo.picture = data;
+				}
+			},
+			//删除时自动调用
+			handleRemove(index, lists, name){
+				console.log('删除图片',index,lists,name);
+				console.log('删除图片',index,lists,name);
+				this.activityInfo.picture = ''; //要设置为空
+				console.log('删除图片',index,lists,name);
+			},
   },
 };
 </script>
@@ -443,4 +494,9 @@ page {
 .button-group button {
   margin-bottom: 15px;
 }
+.banner {
+    margin-top: 10rpx;
+    width: 200rpx !important;
+    height: 200rpx !important;
+  }
 </style>

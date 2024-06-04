@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -52,6 +53,11 @@ export default {
       teamListAct: [],
       searchText: "",
     };
+  },
+  computed: {
+    ...mapState([
+      "user_id"
+    ]),
   },
   onLoad(e) {
     this.searchText = e.searchText;
@@ -68,19 +74,17 @@ export default {
         });
     } else {
       uni.request({
-        url:'http://4ddfdbb6.r21.cpolar.top/community/teams',
-        // url: this.$url.BASE_URL + "/4142061-0-default/community/teams",
-        // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
+        url: this.$url.BASE_URL + "/community/teams",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
         method: "GET",
         data: {
-          community_id: 1,
+          community_id: this.user_id,
           status: 0,
         },
         success: (res) => {
-          this.teamList = res.data.data;
+          this.teamList = res.data.data.list;
           console.log("成功请求-查询队伍信息(全部)");
           this.net_error = false;
         },
@@ -100,14 +104,14 @@ export default {
     queryTeamByName() {
       return new Promise((resolve, reject) => {
         uni.request({
-          url:
-            "http://4ddfdbb6.r21.cpolar.top/community/queryTeamByName",
+          url: this.$url.BASE_URL +
+            "/community/queryTeamByName",
           header: {
             Authorization: uni.getStorageSync("token"),
           },
           method: "GET",
           data: {
-            community_id: 1,
+            community_id: this.user_id,
             team_name: this.searchText,
           },
           success: (res) => {
@@ -127,14 +131,14 @@ export default {
     queryTeamByAct() {
       return new Promise((resolve, reject) => {
         uni.request({
-          url:
-            "http://4ddfdbb6.r21.cpolar.top/community/queryTeamByAct",
+          url: this.$url.BASE_URL +
+            "/community/queryTeamByAct",
           header: {
             Authorization: uni.getStorageSync("token"),
           },
           method: "GET",
           data: {
-            community_id: 1,
+            community_id: this.user_id,
             act_name: this.searchText,
           },
           success: (res) => {

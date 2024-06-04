@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -50,18 +51,22 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapState([
+      "user_id"
+    ]),
+  },
   onLoad() {},
   mounted() {
     uni.request({
-      url: " http://4ddfdbb6.r21.cpolar.top/community/activities",
-      // url: "https://mock.apifox.com/m1/4142061-3780993-default/community/myInfo",
+      url: this.$url.BASE_URL + "/community/activities",
       header: {
         Authorization: uni.getStorageSync("token"),
       },
       method: "GET",
       data: {
-        community_id: "0",
-		status: 3
+        community_id: this.user_id,
+		    status: 3
       },
       success: (res) => {
         this.acList = res.data.data;
