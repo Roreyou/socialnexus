@@ -4,6 +4,16 @@
     <uni-section title="社区基本信息认证" type="line">
       <view class="example">
         <uni-forms ref="baseForm" :model="baseFormData" :rules="rules" labelWidth="80px">
+          <uni-forms-item label="社区头像" name="avatar" style='max-width: 100%; !important'>
+            <view>
+          <u-upload class='banner' @on-success="handleSuccess" @on-remove="handleRemove" :custom-btn="true" :max-count="1" ref="uUpload" 
+						:action="action" :file-list="avatarList" :auto-upload="true" style="display: flex; align-items: center">
+				<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
+					<image class='banner' :src="computedSrc"></image>
+				</view>
+			</u-upload>
+        </view>
+          </uni-forms-item>
           <uni-forms-item label="社区名字" name="name">
             <uni-easyinput
               v-model="baseFormData.name"
@@ -57,7 +67,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -72,6 +82,8 @@ export default {
         remark: "",
         avatar: "",
       },
+      avatarList: [],
+      action: this.$url.BASE_URL + "/uploadImage",
       rules: {
         name: {
           rules: [
@@ -142,6 +154,9 @@ export default {
     ...mapState([
       "user_id"
     ]),
+    computedSrc() {
+      return this.baseFormData.avatar === '' ? 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/upload.png' : this.baseFormData.avatar;
+    }
   },
   mounted() {
     uni.request({
@@ -171,6 +186,7 @@ export default {
     // this.$refs.customForm.setRules(this.customRules)
   },
   methods: {
+    ...mapMutations(["setCommunityInfo"]),
     onClickItem(e) {
       console.log(e);
       this.current = e.currentIndex;
@@ -191,9 +207,15 @@ export default {
         });
     },
     updateInfo() {
+      if (this.baseFormData.avatar == "") {
+        uni.showToast({
+          icon: "error",
+          title: "请上传头像！",
+        });
+        return;
+      }
       uni.request({
-        // url: this.$url.BASE_URL + "/community/myInfo",
-        url:'http://4ddfdbb6.r21.cpolar.top/community/myInfo',
+        url: this.$url.BASE_URL + '/community/myInfo',
         header: {
           Authorization: uni.getStorageSync("token"),
         },
@@ -211,6 +233,9 @@ export default {
         },
         success: (res) => {
           console.log("成功请求-更新社区信息");
+          const userName = this.baseFormData.name;
+          const avatar = this.baseFormData.avatar;
+          this.setCommunityInfo({ userName, avatar });
           console.log(res.data.data);
           this.net_error = false;
         },
@@ -219,6 +244,23 @@ export default {
         },
         complete: () => {},
       });
+    },
+    handleSuccess(data, index, lists, index2) {
+      console.log("上传图片成功，链接为", data);
+      console.log("index", index);
+      console.log("lists", lists);
+      console.log("index2", index2);
+      console.log("picture", this.avatarList);
+      if (index === 0) {
+        this.baseFormData.avatar = data;
+      }
+    },
+    //删除时自动调用
+    handleRemove(index, lists, name) {
+      console.log("删除图片", index, lists, name);
+      console.log("删除图片", index, lists, name);
+      this.baseFormData.avatar = ""; //要设置为空
+      console.log("删除图片", index, lists, name);
     },
   },
 };
@@ -284,4 +326,9 @@ page {
 .button-group button {
   margin-bottom: 15px;
 }
+.banner {
+    margin-top: 10rpx;
+    width: 200rpx !important;
+    height: 200rpx !important;
+  }
 </style>

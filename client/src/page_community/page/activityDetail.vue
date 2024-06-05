@@ -5,7 +5,12 @@
     <view>
       <view class="part first">
         <view class="de_total_title">
-          <input type="text" v-model="detail.name" class="editable-field"/>
+          <input
+            type="text"
+            v-model="detail.name"
+            class="editable-field"
+            style="font-size: px"
+          />
         </view>
         <view class="de_key_value">
           <view class="de_content">
@@ -84,7 +89,11 @@
             <view class="de_content">
               <view class="key"> 招募队伍数 </view>
               <view class="value">
-                <input type="text" v-model="detail.vacancies" class="editable-field"/>
+                <input
+                  type="text"
+                  v-model="detail.vacancies"
+                  class="editable-field"
+                />
               </view>
             </view>
           </view>
@@ -106,7 +115,43 @@
           <view class="de_content">
             <view class="last-key"> 活动内容 </view>
             <view class="value">
-              <textarea v-model="detail.remark" class="editable-field"></textarea>
+              <textarea
+                v-model="detail.remark"
+                class="editable-field"
+              ></textarea>
+            </view>
+          </view>
+        </view>
+        <view class="de_key_value">
+          <view class="de_content">
+            <view class="key"> 活动图片 </view>
+            <view class="value">
+              <view>
+                <u-upload
+                  :class="{ banner: detail.picture === '' }"
+                  @on-success="handleSuccess"
+                  @on-remove="handleRemove"
+                  :custom-btn="true"
+                  :max-count="1"
+                  ref="uUpload"
+                  :action="action"
+                  :file-list="pictureList"
+                  :auto-upload="true"
+                  style="display: flex; align-items: center"
+                >
+                  <view
+                    slot="addBtn"
+                    class="slot-btn"
+                    hover-class="slot-btn__hover"
+                    hover-stay-time="150"
+                  >
+                    <image
+                      :class="{ banner: detail.picture === '' }"
+                      :src="computedSrc"
+                    ></image>
+                  </view>
+                </u-upload>
+              </view>
             </view>
           </view>
         </view>
@@ -135,10 +180,15 @@ export default {
       detail: {
         keywords: "",
       },
+      pictureList: [],
+      action: this.$url.BASE_URL + "/uploadImage",
     };
   },
   computed: {
     ...mapState(["hasLogin", "forcedLogin", "user_id"]),
+    computedSrc() {
+      return this.detail.picture === '' ? 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/upload.png' : this.detail.picture;
+    }
   },
   mounted() {
     // 获取query对象
@@ -197,10 +247,26 @@ export default {
   },
   methods: {
     submit() {
+      if (
+        this.detail.name === "" ||
+        this.detail.vacancies === "" ||
+        this.detail.remark === ""
+      ) {
+        uni.showToast({
+          icon: "error",
+          title: "信息不完整！",
+        });
+        return;
+      }
+      if (this.detail.picture == "") {
+        uni.showToast({
+          icon: "error",
+          title: "请上传图片！",
+        });
+        return;
+      }
       uni.request({
-        url: "http://4ddfdbb6.r21.cpolar.top/community/activityInfo",
-        // url: this.$url.BASE_URL + '/community/activityInfo',
-        // url: 'https://mock.apifox.coml/m1/community/activityInfo',
+        url: this.$url.BASE_URL + "/community/activityInfo",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
@@ -228,6 +294,23 @@ export default {
         },
         complete: () => {},
       });
+    },
+    handleSuccess(data, index, lists, index2) {
+      console.log("上传图片成功，链接为", data);
+      console.log("index", index);
+      console.log("lists", lists);
+      console.log("index2", index2);
+      console.log("picture", this.pictureList);
+      if (index === 0) {
+        this.detail.picture = data;
+      }
+    },
+    //删除时自动调用
+    handleRemove(index, lists, name) {
+      console.log("删除图片", index, lists, name);
+      console.log("删除图片", index, lists, name);
+      this.detail.picture = ""; //要设置为空
+      console.log("删除图片", index, lists, name);
     },
   },
 };
@@ -323,13 +406,9 @@ page {
   margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 }
 .editable-field {
-  border: 1px solid #007bff;
-  padding: 5px;
+  border: 1px solid #000000;
   border-radius: 4px;
-  background-color: #e7f3ff;
-  width: 100%; 
-  height: 100%; 
-  font-size: 16px; 
+  font-size: 16px;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -338,4 +417,9 @@ page {
   display: flex;
   justify-content: space-around;
 }
+.banner {
+    margin-top: 10rpx;
+    width: 200rpx !important;
+    height: 200rpx !important;
+  }
 </style>

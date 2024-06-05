@@ -135,11 +135,8 @@
             ></uni-data-picker>
           </uni-forms-item>
           <uni-forms-item label="活动关键词" name="keywords">
-            <uni-easyinput
-              v-model="activityInfo.keywords"
-              placeholder="请输入活动关键词(用逗号隔开)"
-            />
-          </uni-forms-item>
+ 
+    </uni-forms-item>
           <uni-forms-item label="活动简介" name="remark">
             <uni-easyinput
               type="textarea"
@@ -225,6 +222,8 @@ export default {
           value: "7",
         },
       ],
+      keywordList: [],
+      selectedKeywords: [],
       rules: {
         name: {
           rules: [
@@ -335,11 +334,20 @@ export default {
     ...mapState([
       "user_id"
     ]),
+    formattedKeywords() {
+    // 将选中的关键词用逗号隔开展示在页面上
+    return this.selectedKeywords.join(", ");
+  }
   },
-  // mounted() {
-  // 	this.$refs.inputElement.placeholder = "中山大学";
-  // 	this.$refs.inputElement.readOnly = true;
-  // },
+  watch: {
+  // 监听选中关键词的变化，将其存入 activityInfo.keywords 中
+  selectedKeywords(newVal) {
+    this.activityInfo.keywords = newVal.join(", ");
+  }
+},
+  mounted() {
+  	this.getKeywords();
+  },
   onLoad() {},
   onReady() {
     // 设置自定义表单校验规则，必须在节点渲染完毕后执行
@@ -371,6 +379,26 @@ export default {
           this.addActivity();
         })
         .catch((err) => {});
+    },
+    getKeywords() {
+      uni.request({
+        url: this.$url.BASE_URL + "/community/getKeywords",
+        header: {
+          Authorization: uni.getStorageSync("token"),
+        },
+        method: "GET",
+        success: (res) => {
+          console.log("成功请求-获取关键词列表");
+          const keywords = res.data.data.split(" ");
+          this.keywordList = keywords;
+          console.log(this.keywordList);
+          this.net_error = false;
+        },
+        fail: (res) => {
+          this.net_error = true;
+        },
+        complete: () => {},
+      });
     },
     addActivity() {
       if(this.activityInfo.picture == ''){
