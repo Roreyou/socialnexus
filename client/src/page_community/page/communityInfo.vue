@@ -29,13 +29,32 @@
           <uni-forms-item label="省" name="province">
             <uni-easyinput
               v-model="baseFormData.province"
-              placeholder="请输入社区所在省"
+              placeholder="请选择社区所在省"
+              disabled='true'
             />
+            <view class="index" style="margin-top: 30rpx">
+            <view class="form-item" @click="showPCA01">
+              <view
+                bindtap="goCnCollege"
+                class="form-field"
+                hoverClass="form-field-hover"
+              >
+                <view class="form-field-input">
+                  <view style="color: #808080">选择所在地
+                    <u-icon name="arrow-down-fill" color="#808080" size="25" style="margin-left: 10rpx;"></u-icon>
+                  </view>
+                  <view></view>
+                </view>
+              </view>
+            </view>
+            <pcaPicker ref="pcaPicker" @confirm="getPCA01"></pcaPicker>
+          </view>
           </uni-forms-item>
           <uni-forms-item label="市" name="city">
             <uni-easyinput
               v-model="baseFormData.city"
-              placeholder="请输入社区所在市"
+              placeholder="请选择社区所在市"
+              disabled='true'
             />
           </uni-forms-item>
           <uni-forms-item label="详细地址" name="address">
@@ -68,7 +87,11 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import pcaPicker from "@/components/pcaPicker/pcaPicker.vue";
 export default {
+  components: {
+    pcaPicker
+  },
   data() {
     return {
       // 基础表单数据
@@ -187,6 +210,13 @@ export default {
   },
   methods: {
     ...mapMutations(["setCommunityInfo"]),
+    showPCA01(e) {
+      this.$refs.pcaPicker.show();
+    },
+    getPCA01(e) {
+      this.baseFormData.province = e.province;
+      this.baseFormData.city = e.city;
+    },
     onClickItem(e) {
       console.log(e);
       this.current = e.currentIndex;

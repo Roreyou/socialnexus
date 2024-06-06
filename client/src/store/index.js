@@ -75,6 +75,11 @@ const store = new Vuex.Store({
 			state.userInfo.province = province;
 			state.userInfo.city = city;
 		},
+		setCommunityInfo(state, { userName, avatar }) {
+			console.log("setCommunityInfo", userName, avatar)
+			state.userName = userName;
+			state.communityInfo.avatar = avatar;
+		},
 		logout(state) {
 			// 登出
 			state.user_id = "";

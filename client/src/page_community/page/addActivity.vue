@@ -112,13 +112,33 @@
           <uni-forms-item label="活动省份" name="province">
             <uni-easyinput
               v-model="activityInfo.province"
-              placeholder="请输入活动省份"
+              placeholder="请选择活动省份"
+              disabled='true'
             />
+
+            <view class="index" style="margin-top: 30rpx">
+            <view class="form-item" @click="showPCA01">
+              <view
+                bindtap="goCnCollege"
+                class="form-field"
+                hoverClass="form-field-hover"
+              >
+                <view class="form-field-input">
+                  <view style="color: #808080">选择所在地
+                    <u-icon name="arrow-down-fill" color="#808080" size="25" style="margin-left: 10rpx;"></u-icon>
+                  </view>
+                  <view></view>
+                </view>
+              </view>
+            </view>
+            <pcaPicker ref="pcaPicker" @confirm="getPCA01"></pcaPicker>
+          </view>
           </uni-forms-item>
           <uni-forms-item label="活动城市" name="city">
             <uni-easyinput
               v-model="activityInfo.city"
-              placeholder="请输入活动城市"
+              placeholder="请选择活动城市"
+              disabled='true'
             />
           </uni-forms-item>
           <uni-forms-item label="活动地址" name="address">
@@ -135,8 +155,17 @@
             ></uni-data-picker>
           </uni-forms-item>
           <uni-forms-item label="活动关键词" name="keywords">
- 
-    </uni-forms-item>
+    <uni-section>
+        <view class="uni-px-5 uni-pb-5">
+            <uni-data-checkbox 
+                multiple 
+                v-model="selectedValues" 
+                :localdata="keywordList"
+                @change="handleCheckboxChange">
+            </uni-data-checkbox>
+        </view>
+    </uni-section>
+</uni-forms-item>
           <uni-forms-item label="活动简介" name="remark">
             <uni-easyinput
               type="textarea"
@@ -167,11 +196,13 @@
 
 <script>
 import datePicker from "@/components/datePicker/datePicker.vue";
+import pcaPicker from "@/components/pcaPicker/pcaPicker.vue";
 import { mapState } from "vuex";
 
 export default {
   components: {
     datePicker,
+    pcaPicker
   },
   data() {
     return {
@@ -223,6 +254,7 @@ export default {
         },
       ],
       keywordList: [],
+      selectedValues: [],
       selectedKeywords: [],
       rules: {
         name: {
@@ -269,7 +301,7 @@ export default {
           rules: [
             {
               required: true,
-              errorMessage: "请输入社区所在省",
+              errorMessage: "请选择社区所在省",
             },
           ],
         },
@@ -277,7 +309,7 @@ export default {
           rules: [
             {
               required: true,
-              errorMessage: "请输入社区所在市",
+              errorMessage: "请选择社区所在市",
             },
           ],
         },
@@ -302,14 +334,6 @@ export default {
             {
               required: true,
               errorMessage: "请输入活动类型",
-            },
-          ],
-        },
-        keywords: {
-          rules: [
-            {
-              required: true,
-              errorMessage: "请输入活动关键词",
             },
           ],
         },
@@ -354,6 +378,13 @@ export default {
     // this.$refs.customForm.setRules(this.customRules)
   },
   methods: {
+    showPCA01(e) {
+      this.$refs.pcaPicker.show();
+    },
+    getPCA01(e) {
+      this.activityInfo.province = e.province;
+      this.activityInfo.city = e.city;
+    },
     showPDate(e) {
       this.$refs.datePicker.show();
     },
@@ -390,7 +421,9 @@ export default {
         success: (res) => {
           console.log("成功请求-获取关键词列表");
           const keywords = res.data.data.split(" ");
-          this.keywordList = keywords;
+          this.keywordList = keywords.map((keyword, index) => {
+        return { text: keyword, value: index };
+      });
           console.log(this.keywordList);
           this.net_error = false;
         },
@@ -426,7 +459,7 @@ export default {
           city: this.activityInfo.city,
           address: this.activityInfo.address,
           category_id: this.activityInfo.activityType,
-          keywords: this.activityInfo.keywords,
+          keywords: this.selectedKeywords.join(","),
           remark: this.activityInfo.remark,
           picture: this.activityInfo.picture,
         },
@@ -458,7 +491,18 @@ export default {
 				this.activityInfo.picture = ''; //要设置为空
 				console.log('删除图片',index,lists,name);
 			},
+      handleCheckboxChange() {
+      this.selectedKeywords = this.selectedValues.map(value => {
+        const keywordObj = this.keywordList.find(item => item.value === value);
+        return keywordObj ? keywordObj.text : '';
+      });
+    }
   },
+  watch: {
+    selectedValues() {
+      this.handleCheckboxChange();
+    }
+  }
 };
 </script>
 
@@ -527,4 +571,12 @@ page {
     width: 200rpx !important;
     height: 200rpx !important;
   }
+  .text {
+		font-size: 12px;
+		color: #666;
+	}
+	.uni-px-5 {
+	    padding-left: 10px;
+	    padding-right: 10px;
+	}
 </style>
