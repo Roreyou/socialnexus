@@ -25,7 +25,7 @@
           </view>
         </view>
 
-        <view style="display: flex; flex-direction: row; margin-top: 10rpx; margin-bottom: 10rpx; background-color: white;">
+        <view style="display: flex; flex-direction: row; margin-bottom: 10rpx; background-color: white;">
           <view class="index" style="margin-left: 80rpx">
             <view class="form-item" @click="showPCA01">
               <view
@@ -87,6 +87,7 @@
         :acList="acList"
         :searchlist="searchlist"
         :searchcontent="newontent"
+        :empty_flag = "empty_flag"
       ></scontent>
     </view>
   </view>
@@ -115,6 +116,7 @@ export default {
   },
   data() {
     return {
+      empty_flag: false,
       region: "地区",
       dateTime: "时段",
       type: "类型",
@@ -206,8 +208,10 @@ export default {
         },
         success: (res) => {
           this.searchlist = res.data.data.activ_list;
+          this.empty_flag = true
           console.log(this.searchlist);
           this.net_error = false;
+          this.empty_flag = false
         },
         fail: (res) => {
           this.net_error = true;
@@ -225,7 +229,13 @@ export default {
         data: data,
         success: (res) => {
           // this.searchlist = res.data.data.acti_list;
-          this.searchlist = this.searchlist.concat(res.data.data.acti_list);
+          // this.searchlist = this.searchlist.concat(res.data.data.acti_list);  //试图修改懒加载后刷回最上面的bug
+          
+          this.searchlist = res.data.data.acti_list
+          if(data.page == 0){
+            this.empty_flag = true
+          }
+
           this.net_error = false;
         },
         fail: (res) => {

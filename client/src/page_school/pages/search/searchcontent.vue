@@ -23,7 +23,11 @@ export default {
         searchcontent: {
             type: String,
             default: ''
-        }  //改成在这里用搜索内容请求
+        },  //改成在这里用搜索内容请求
+        empty_flag: {
+            type: Boolean,
+            default: false
+        }
     },
     components: {
         actilist
@@ -47,9 +51,15 @@ export default {
         }
     },
     watch: {
+        empty_flag(newValue, oldValue){
+            if(newValue==true){
+                this.modifiedSearchList = []
+            }
+        },
         searchlist(newValue, oldValue){
             console.log('searchlist 的值已更改：', newValue);
-            this.modifiedSearchList = newValue
+            // this.modifiedSearchList = newValue
+            this.modifiedSearchList = this.modifiedSearchList.concat(newValue)
         },
         searchcontent(newValue, oldValue) {
             this.modifiedSearchList = []  //清空
