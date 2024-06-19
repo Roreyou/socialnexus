@@ -28,7 +28,7 @@
 			};
 		},
 
-		mounted() {
+		mounted(){
 			uni.$off('pyqReMen');
 			let that = this;
 			uni.$on('pyqReMen', function(data) {

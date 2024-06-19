@@ -134,11 +134,11 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				memberList:[
 					{
 						name: "第一个队员",
-						id: "21311212"
+						// id: "21311212"
 					},
 					{
 						name: "第二个队员",
-						id: "21311988"
+						// id: "21311988"
 					},
 				],
 				instructorList:[
