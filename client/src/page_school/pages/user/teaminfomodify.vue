@@ -125,7 +125,7 @@
 
 <script>
 	import {
-		mapState,
+		mapState, mapMutations
 	} from 'vuex'
 	export default {
 		data() {

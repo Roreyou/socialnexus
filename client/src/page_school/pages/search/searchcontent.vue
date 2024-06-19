@@ -23,7 +23,11 @@ export default {
         searchcontent: {
             type: String,
             default: ''
-        }  //改成在这里用搜索内容请求
+        },  //改成在这里用搜索内容请求
+        empty_flag: {
+            type: Boolean,
+            default: false
+        }
     },
     components: {
         actilist
@@ -47,6 +51,11 @@ export default {
         }
     },
     watch: {
+        empty_flag(newValue, oldValue){
+            if(newValue==true){
+                this.modifiedSearchList = []
+            }
+        },
         searchlist(newValue, oldValue){
             console.log('searchlist 的值已更改：', newValue);
             // this.modifiedSearchList = newValue
@@ -80,6 +89,12 @@ export default {
         }
     },
     mounted(){
+        uni.$on('filter', (obj) => {
+			// 获取数据
+			this.modifiedSearchList = []
+		})
+
+
         if(this.content === ''){
             const data = {
                 province: this.userInfo.province,
