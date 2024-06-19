@@ -176,6 +176,9 @@
 				uni.request({
 				url: this.$url.BASE_URL + '/schoolteam/pyq/delnotice',				
 				method: 'POST',
+				header:{
+					Authorization:uni.getStorageSync("token")
+				},	
 				data: {
 					team_id: this.user_id,
 					post_id: id,
