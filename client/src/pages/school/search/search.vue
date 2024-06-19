@@ -158,6 +158,8 @@ export default {
 			...mapState(['userInfo'])
 		},
   mounted() {
+
+
     const data = {
       province: this.userInfo.province,
       city: this.userInfo.city,
@@ -212,6 +214,7 @@ export default {
           console.log(this.searchlist);
           this.net_error = false;
           this.empty_flag = false
+          uni.$emit('filter');
         },
         fail: (res) => {
           this.net_error = true;

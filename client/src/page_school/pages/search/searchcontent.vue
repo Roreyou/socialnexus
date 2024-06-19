@@ -89,6 +89,12 @@ export default {
         }
     },
     mounted(){
+        uni.$on('filter', (obj) => {
+			// 获取数据
+			this.modifiedSearchList = []
+		})
+
+
         if(this.content === ''){
             const data = {
                 province: this.userInfo.province,
