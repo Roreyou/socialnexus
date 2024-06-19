@@ -64,7 +64,7 @@
 			</view>
 			<!-- 2.2 选择登入队伍-->
 			<view v-else-if="step === 2.2">
-				<view v-if="teamList.length != 0">
+				<view v-if="teamList != null">
 					<view class="team-box"  :class="selectedTeam == item.team_id ? 'selected' : 'team-box'" v-for="item in teamList" :key="item.team_id" @click="selectTeam(item.team_id)">
 						<img class="avatar" :src="item.avatarUrl" alt="Avatar">
 						<view class="team-name">{{ item.team_name }}</view>
@@ -73,7 +73,7 @@
 				<view v-else style="display: flex;justify-content: center;">
 					<view class="team-name">很抱歉，您未加入任何队伍。</view>
 				</view>
-				<view v-if="selectedTeam.length != 0">
+				<view v-if="selectedTeam != ''">
 					<m-input class="input-pwd" type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
 					<view class="btn-row">
 							<button class="cu-btn bg-green block lg" @tap="bindLogin">登录</button>
@@ -161,7 +161,7 @@
 			wx.hideHomeButton();
 		},
 		methods: {
-			...mapMutations(['login1','login2']),
+			...mapMutations(['login1','login2','login3']),
 			teamNext(){
 				console.log("this.member_iden",this.member_iden);
 				if(this.account.length === 0){
@@ -267,7 +267,7 @@
 				 * 客户端对账号信息进行一些必要的校验。
 				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
 				 */
-				 if( Math.floor(this.step)=== 2 && this.selectedTeam.length === 0){
+				 if( Math.floor(this.step)=== 2 && this.selectedTeam === ''){
 					uni.showToast({
 						icon: 'none',
 						title: '请选择要登录的队伍'

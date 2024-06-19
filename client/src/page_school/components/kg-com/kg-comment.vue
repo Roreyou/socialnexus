@@ -10,7 +10,7 @@
 				<view class="cot_flirt_name">
 					{{item.comment_detail.my_name}}
 				</view>
-				<image v-if="item.comment_detail.del_flag" @click="delCom(item.comment_detail.id)" class="cot_flirt_shanchu" src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/shanchu.png"></image>
+				<image v-if="item.comment_detail.del_flag" @click="delCom(item.comment_detail.id)" class="cot_flirt_shanchu" src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/shanchu.png"></image>
 			</view>
 			<view class="cot_content">
 				{{item.comment_detail.content}}
@@ -28,11 +28,11 @@
 					{{item.comment_detail.time}}
 				</view>
 				<view class="cot_operate_icon">
-					<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/pinglun1.png" mode="" @click="replyContent(item.comment_detail.id)" ></image>
+					<image src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/pinglun1.png" mode="" @click="replyContent(item.comment_detail.id)" ></image>
 					<view class="" @click="replyContent(item.comment_detail.id)">
 						{{item.comment_detail.reply_list_length}}
 					</view>
-					<image class="like_icon" :src="item.comment_detail.fabulous?'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_fil.png':'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_ufil.png'"
+					<image class="like_icon" :src="item.comment_detail.fabulous?'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/like_fil.png':'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/like_ufil.png'"
 					 mode=""  @click="replyLike(item.comment_detail.id)"></image>
 					<view class="" @click="replyLike(item.comment_detail.id)">
 						{{item.comment_detail.like}}
@@ -109,7 +109,7 @@
 		},
 		methods: {
 			getChildSrc(parentItem, childItem) {
-				return childItem.fabulous ? 'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_fil.png' : 'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_ufil.png';
+				return childItem.fabulous ? 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/like_fil.png' : 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/like_ufil.png';
 			},
 			delCom(comId){
 				this.$emit('delCom',comId)

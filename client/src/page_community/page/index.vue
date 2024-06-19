@@ -163,17 +163,17 @@ export default {
       navList: [
         {
           name: "新增活动",
-          src: "http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover1.png",
+          src: "https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/img/index/cover/index_cover1.png",
           type: "1",
         },
         {
           name: "我的活动",
-          src: "http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover2.png",
+          src: "https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/img/index/cover/index_cover2.png",
           type: "2",
         },
         {
           name: "我的队伍",
-          src: "http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover3.png",
+          src: "https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/img/index/cover/index_cover3.png",
           type: "3",
         },
       ],
@@ -669,7 +669,7 @@ export default {
   font-size: small;
 }
 .background {
-  background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+  background-image: url(https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/1.png);
   // background-size: 730rpx 350rpx;
   height: 350rpx;
   border-radius: 30rpx;

@@ -20,10 +20,10 @@
 					</view>
 					<u-upload @on-success="handleSuccess" :custom-btn="true" max-count="4" ref="uUpload" :action="action" :file-list="comModal.comImgs" :auto-upload="false">
 						<!-- <view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
-							<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/upload.png"></image>
+							<image src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/upload.png"></image>
 						</view> -->
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
-							<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/yuanquanjiahao.png"></image>
+							<image src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/yuanquanjiahao.png"></image>
 						</view>
 					</u-upload>
 					<view class="bodys_btn">

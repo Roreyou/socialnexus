@@ -63,17 +63,17 @@
 
 			<view class="operate">
 				<view class="operate_icon">
-					<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/address.png" mode=""></image>
+					<image src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/address.png" mode=""></image>
 					<view class="operate_text">
 						{{ dyInfo.province }} {{ dyInfo.city }}
 					</view>
 				</view>
 				<view class="operate_icon">
-					<image src="http://scu5azomr.hn-bkt.clouddn.com/static/icon/pinglun1.png" mode="" @click="isInfo?comContent(dyInfo.id):''"></image>
+					<image src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/pinglun1.png" mode="" @click="isInfo?comContent(dyInfo.id):''"></image>
 					<view class="" @click="isInfo?comContent(dyInfo.id):''">
 						{{dyInfo.com_num}}
 					</view>
-					<image class="like_icon" :src="dyInfo.fabulous?'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_fil.png':'http://scu5azomr.hn-bkt.clouddn.com/static/icon/like_ufil.png'"
+					<image class="like_icon" :src="dyInfo.fabulous?'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/like_fil.png':'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/icon/like_ufil.png'"
 					 mode="" @click="isInfo?comLike(dyInfo.id):''"></image>
 					<view class="" @click="isInfo?comLike(dyInfo.id):''">
 						{{dyInfo.like}}

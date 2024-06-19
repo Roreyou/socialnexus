@@ -38,7 +38,7 @@
 									</view>
 									<view class="pic">
 										<img class="avatar" :src="item.picture" alt="Avatar">
-										<!-- <img class="avatar" src="http://scu5azomr.hn-bkt.clouddn.com/static/4.png" alt="Avatar"> -->
+										<!-- <img class="avatar" src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/4.png" alt="Avatar"> -->
 									</view>
 								</view>
 							</view>

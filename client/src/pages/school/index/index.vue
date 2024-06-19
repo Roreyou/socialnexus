@@ -118,9 +118,9 @@
 					'予人玫瑰，手有余香'
 				],
 				navList:[
-				   {name:"我的活动",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover1.png",type:"1"},
-				   {name:"朋友圈",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover2.png",type:"2"},
-				   {name:"活动推荐",src:"http://scu5azomr.hn-bkt.clouddn.com/static/img/index/cover/index_cover3.png",type:"3"},
+				   {name:"我的活动",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/img/index/cover/index_cover1.png",type:"1"},
+				   {name:"朋友圈",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/img/index/cover/index_cover2.png",type:"2"},
+				   {name:"活动推荐",src:"https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/img/index/cover/index_cover3.png",type:"3"},
 				],
 				loadStatus: 'loadmore',
 				flowList: [],
@@ -552,7 +552,7 @@
 	font-size: small;
 }
 .background{
-	background-image: url(http://scu5azomr.hn-bkt.clouddn.com/static/1.png);
+	background-image: url(https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/1.png);
     // background-size: 730rpx 350rpx;
     height: 350rpx;
     border-radius: 30rpx;
