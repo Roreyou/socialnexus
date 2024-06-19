@@ -186,68 +186,75 @@ class postService{
     }
 
     // 给帖子点赞/取消点赞
-    static async likePost(post_id, team_id){ //teamid是要点赞的队伍
-        try { 
-
+    static async likePost(post_id, team_id) {
+        const t = await db.sequelize.transaction(); // Start a transaction
+    
+        try {
             // 查看是否点赞过
             const existingLike = await db.likepost.findOne({
                 where: {
                     post_id: post_id,
                     team_id: team_id
-                }
+                },
+                transaction: t // Include the transaction in the query
             });
-
+    
             // 检查点赞状态
             if (existingLike) {
                 // 如果已经点赞，则取消点赞，删除点赞记录，减少点赞数
-                await existingLike.destroy();
-                
+                await existingLike.destroy({ transaction: t }); // Include the transaction in the destroy
+    
                 // 更新帖子点赞数
-                const post = await db.post.findByPk(post_id);
+                const post = await db.post.findByPk(post_id, { transaction: t }); // Include the transaction in the query
                 if (!post) {
                     throw new Error('Post not found');
                 }
-                if(post.like != 0){
+                if (post.like != 0) {
                     post.like -= 1;
-                }else{
+                } else {
                     console.log("出错啦 帖子点赞数已经为0啦");
                 }
                 
-                await post.save();
-
+                await post.save({ transaction: t }); // Include the transaction in the save
+    
                 // 更新通知数        
                 const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id,ownerTeam_id, false);
-
+                await otherService.updateNotification(post_id, ownerTeam_id, false, t); // Pass transaction to the service method
+    
+                await t.commit(); // Commit the transaction if all operations succeed
                 return "unlike successfully!";
             } else {
-
                 // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
                 const newLike = await db.likepost.create({
                     post_id: post_id,
                     team_id: team_id,
                     ifread: 1,
                     liketime: await otherService.getCurrentTime()
-                });
-                
-                console.log("debug post_id00:",post_id);
+                }, { transaction: t }); // Include the transaction in the create
+    
+                console.log("debug post_id00:", post_id);
                 // 更新帖子点赞数
-                const post = await db.post.findByPk(post_id);
+                const post = await db.post.findByPk(post_id, { transaction: t }); // Include the transaction in the query
                 if (!post) {
                     throw new Error('Post not found');
                 }
                 post.like += 1;
-                await post.save();
-
+                await post.save({ transaction: t }); // Include the transaction in the save
+    
                 // 更新通知数
                 const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id,ownerTeam_id, true);
+                await otherService.updateNotification(post_id, ownerTeam_id, true, t); // Pass transaction to the service method
+    
+                await t.commit(); // Commit the transaction if all operations succeed
                 return "like successfully!";
             }
         } catch (error) {
+            await t.rollback(); // Rollback the transaction in case of an error
+            console.error("Transaction failed:", error);
             throw new Error('Error liking post');
         }
     }
+    
 
     // 给评论点赞/取消点赞
     static async likeCom(comment_id, team_id){
@@ -857,69 +864,91 @@ class postService{
             throw error;
         }
     }
+ //原子:
+   static async delNotice(team_id, post_id) {
+    const t = await db.sequelize.transaction(); // Start a transaction
 
-    static async delNotice(team_id, post_id){
+    try {
         const notification = await db.notification.findOne({
-            where:{
-                team_id : team_id, 
-                post_id : post_id
-            }
+            where: {
+                team_id: team_id,
+                post_id: post_id
+            },
+            transaction: t // Include the transaction in the query
         });
-        console.log("debug 通知数量:",notification.num);
-        if(notification.num == 0){
+
+        if (!notification) {
+            throw new Error('Notification not found'); // Handle case where notification is not found
+        }
+
+        console.log("debug 通知数量:", notification.num);
+        
+        if (notification.num == 0) {
+            await t.rollback(); // Rollback transaction if no update is needed
             return;
         }
 
         // -更新通知
         notification.num = 0;
-        notification.save();
-        
+        await notification.save({ transaction: t }); // Include the transaction in the save
+
         // -点赞帖子的ifread全部置0
         await db.likepost.update(
-            {ifread : 0}, 
+            { ifread: 0 },
             {
-                where:{
-                    post_id : post_id
-                }
-            });
-              
+                where: {
+                    post_id: post_id
+                },
+                transaction: t // Include the transaction in the update
+            }
+        );
+
         // -点赞评论的ifread全部置0
-        const allComments = await commentService.getCommentsOfPost(post_id); 
-            //console.log(allComments);
-        const allCommentLikes = await this.getCommentLikesByComments(allComments);  
-            //console.log(allCommentLikes);
+        const allComments = await commentService.getCommentsOfPost(post_id, { transaction: t });
+
+        const allCommentLikes = await this.getCommentLikesByComments(allComments, { transaction: t });
+
         for (const commentLikeArray of allCommentLikes) {
             for (const like of commentLikeArray) {
                 like.ifread = 0;
-                like.save();
+                await like.save({ transaction: t }); // Include the transaction in the save
             }
         }
+
         // -评论的ifread全部置0
-        for(const comment of allComments){
+        for (const comment of allComments) {
             comment.ifread = 0;
-            comment.save();
+            await comment.save({ transaction: t }); // Include the transaction in the save
         }
 
         // -点赞回复的ifread全部置0
-        const allReplies = await replyService.getAllRepliesFromComments(allComments);
-            //console.log(allReplies);
-        const allReplyLikes = await replyService.getReplyLikesFromReplies(allReplies);
-            //console.log(allReplyLikes);
-        for(const replies of allReplyLikes){
-            for(const like of replies){
+        const allReplies = await replyService.getAllRepliesFromComments(allComments, { transaction: t });
+
+        const allReplyLikes = await replyService.getReplyLikesFromReplies(allReplies, { transaction: t });
+
+        for (const replies of allReplyLikes) {
+            for (const like of replies) {
                 like.ifread = 0;
-                like.save();
+                await like.save({ transaction: t }); // Include the transaction in the save
             }
         }
 
         // -回复的ifread全部置0
-        for(const repliesOfAComment of allReplies){
-            for(const reply of repliesOfAComment){
+        for (const repliesOfAComment of allReplies) {
+            for (const reply of repliesOfAComment) {
                 reply.ifread = 0;
-                reply.save();
+                await reply.save({ transaction: t }); // Include the transaction in the save
             }
         }
-    } 
+
+        await t.commit(); // Commit the transaction if all operations succeed
+    } catch (error) {
+        await t.rollback(); // Rollback the transaction in case of an error
+        console.error("Transaction failed:", error);
+        throw error; // Optionally rethrow the error to be handled by the caller
+    }
+}
+
 }
 
 module.exports = postService;
