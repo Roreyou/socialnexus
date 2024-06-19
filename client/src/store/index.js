@@ -96,6 +96,12 @@ const store = new Vuex.Store({
 				personName:'',
 				modification_status: 0,
 			};
+			state.communityInfo = {
+				avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.EPIY3c3pIwRgAK_vOVUjngHaHa?rs=1&pid=ImgDetMain',
+				isUser: false,
+				province: '广东省',
+				city: '珠海市',
+			}
 			state.hasLogin = false;
 		}
 	}
