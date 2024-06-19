@@ -25,7 +25,7 @@
           </view>
         </view>
 
-        <view style="display: flex; flex-direction: row; margin-top: 10rpx; margin-bottom: 10rpx; background-color: white;">
+        <view style="display: flex; flex-direction: row; margin-bottom: 10rpx; background-color: white;">
           <view class="index" style="margin-left: 80rpx">
             <view class="form-item" @click="showPCA01">
               <view
