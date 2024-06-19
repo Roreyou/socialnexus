@@ -352,11 +352,11 @@ class ActivityService {
   }
 
   static async filterActivities(location, categoryName, activityTime) {
+    console.log(typeof location)
+    console.log(typeof activityTime)
     location = JSON.parse(location);
-    activityTime = JSON.parse(activityTime);
 
-
-    const activity_time = activityTime.activity_time;
+    const activity_time = activityTime;
     let whereCondition = {};
     if(categoryName != ""){
       var categoryId = 1;
@@ -394,6 +394,7 @@ class ActivityService {
     if (activity_time != "") {
       const isoDateString = activity_time.replace(' ', 'T') + 'Z'; // 转换为 ISO 8601 格式
       const dateObject = new Date(isoDateString);
+      //const dateObject = new Date(activity_time);
       whereCondition.start_time = { [db.Sequelize.Op.lte]: dateObject };
       whereCondition.end_time = { [db.Sequelize.Op.gte]: dateObject };
     }
