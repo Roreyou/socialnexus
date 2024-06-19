@@ -225,7 +225,8 @@ export default {
         data: data,
         success: (res) => {
           // this.searchlist = res.data.data.acti_list;
-          this.searchlist = this.searchlist.concat(res.data.data.acti_list);
+          // this.searchlist = this.searchlist.concat(res.data.data.acti_list);  //试图修改懒加载后刷回最上面的bug
+          this.searchlist = res.data.data.acti_list
           this.net_error = false;
         },
         fail: (res) => {

@@ -49,7 +49,8 @@ export default {
     watch: {
         searchlist(newValue, oldValue){
             console.log('searchlist 的值已更改：', newValue);
-            this.modifiedSearchList = newValue
+            // this.modifiedSearchList = newValue
+            this.modifiedSearchList = this.modifiedSearchList.concat(newValue)
         },
         searchcontent(newValue, oldValue) {
             this.modifiedSearchList = []  //清空
