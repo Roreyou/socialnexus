@@ -55,13 +55,13 @@
 						icon: 'cuIcon-lock text-red',
 						text: '我的评价',
 						url: '../../../page_school/pages/user/mycomment',
-						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/bg_img/9.png',
+						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/p1.png',
 					},
 					{
 						icon: 'cuIcon-attention text-green',
 						text: '收到评价',
 						url: '../../../page_school/pages/user/becomment',
-						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/bg_img/8.png',
+						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/p2.png',
 					}
 				],
 				list2: [
@@ -69,19 +69,19 @@
 						icon: 'cuIcon-usefull text-cyan',
 						text: '修改密码',
 						url: '../../../page_school/pages/user/password',
-						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/bg_img/10.png'
+						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/p3.png'
 					},
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '队伍资料',
 						url: '../../../page_school/pages/user/teaminfo',
-						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/bg_img/6.png'
+						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/p4.png'
 					},
 					{
 						icon: 'cuIcon-usefull text-cyan',
 						text: '活动收藏',
 						url: '../../../page_school/pages/user/like',
-						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/bg_img/7.png'
+						iconUrl: 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/p5.png'
 					},
 				]
 			};
@@ -149,7 +149,7 @@
 	background-attachment: fixed;
 }
 .back1{
-	background-image: url(https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/static/bg_img/33.png);
+	background-image: url(https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/bg.png);
 	border-radius: 30rpx;
 	background-size: 100% 47%;
 }
