@@ -47,6 +47,7 @@ class  otherService{
     }
 
     // 更新通知
+ /*   
     static async updateNotification(post_id, ownerTeam_id, ifadd){
         // post_id：该帖子的id
         // ownerTeam_id:该帖子所属的队伍
@@ -70,6 +71,40 @@ class  otherService{
         }
 
         await notification.save();
+    }
+*/
+    static async updateNotification(post_id, ownerTeam_id, ifadd, transaction) {
+        // post_id：该帖子的id
+        // ownerTeam_id:该帖子所属的队伍
+        // ifadd：这条通知是要增加还是应该删除
+
+        // 更新在notification表里面
+        // 在 notification 表中找到对应的记录并将 num 字段加 1
+        var notification = await db.notification.findOne({
+            where: { post_id: post_id, team_id: ownerTeam_id },
+            transaction: transaction // Include the transaction in the query
+        });
+
+        if (!notification) {
+            // 创建新的通知记录
+            notification = await db.notification.create({
+                post_id,
+                team_id: ownerTeam_id,
+                num: 0
+            }, { transaction: transaction }); // Include the transaction in the create
+        }
+
+        if (ifadd) {
+            // 更新 num 字段
+            console.log("debug ifadd:", ifadd);
+            notification.num += 1;
+        } else {
+            // 更新 num 字段
+            console.log("debug ifadd01:", ifadd);
+            notification.num -= 1;
+        }
+
+        await notification.save({ transaction: transaction }); // Include the transaction in the save
     }
 
       //获取ids->名称的映射

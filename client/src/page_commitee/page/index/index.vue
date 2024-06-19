@@ -47,11 +47,23 @@
     <u-gap height="10"></u-gap>
 		
 	<!-- 数据墙-数字部分-->
-	<view class="dataWallBG margin-fixed grid-container">
+	<!-- <view class="dataWallBG margin-fixed grid-container">
 		<view class="grid-item" v-for="(item,index) in wallDataList" :key="index">
   		  <view class="text-num">{{item.number}}</view>
   		  <view class="description" :class="{ 'black-font': index === 2 }" >{{item.description}}</view>
   		</view>
+	</view> -->
+	<view class="countdownBG margin-fixed grid-container">
+		<view class="logo">
+		</view>
+		<view class="timer">
+			<view style="color: white;">倒计时</view>
+			<view style="display: flex; flex-direction: flex;" >
+				<view class="text-num">{{ days }}</view>
+				<view style="color: white;margin-top: 88rpx; ">天</view>
+			</view>
+          
+        </view>
 	</view>
 	
 	<!-- 玫瑰图 高校院系比例 -->
@@ -163,6 +175,8 @@
 						description:'国家级研究机构'
 					}
 				],
+				targetDate: new Date("2024-11-12"),
+				days: null,//倒计时天数
 
 				// 图表数据
 				teamChartData:{
@@ -271,7 +285,15 @@
 		},
 
 		onLoad() {
+			// 计算倒计时天数
+			const currentDate = new Date();
+      		const timeDifference = this.targetDate.getTime() - currentDate.getTime();
+			this.days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+      		// setTimeout(this.updateCountdown, 1000);
+
+			// 数据墙
 			this.getChartData();
+
 		},
 		onUnload() {
 
@@ -586,8 +608,32 @@
 }
 .dataWallBG{
 	height: 400rpx;
-	background-image: url('https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603195751.jpg');
+	// background-image: url('https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/20240603195751.jpg');
+	background-image: url('https://sysu100.sysu.edu.cn/images/logo.png');
 	background-size: 100% 100%;
+}
+.countdownBG{
+	height: 400rpx;
+	background-image: url('https://sysu100.sysu.edu.cn/images/ba3.jpg');
+	// background-image: url('https://sysu100.sysu.edu.cn/images/logo.png');
+	background-size: 100% 100%;
+	display: flex;
+    align-items: center;
+}
+.logo{
+	background-image: url('https://sysu100.sysu.edu.cn/images/logo.png');
+	height: 122rpx;
+    background-size: 100% 100%;
+    margin-left: 40rpx;
+    // margin-top: 126rpx;
+    width: 412rpx;
+}
+.timer {
+	display: flex;
+  flex-direction: column;
+  margin-top: 32rpx;
+//   align-items: center;
+//   text-align: center;
 }
 .roseBG{
 	height: 400rpx;
@@ -608,8 +654,8 @@
 // 数据墙数据部分的数字样式
 .text-num{
 	font-family: 'number';
-	font-size: 80rpx;
-	color: black;
+	font-size: 121rpx;
+    color: white;
 }
 .grid-container {
   display: grid;
