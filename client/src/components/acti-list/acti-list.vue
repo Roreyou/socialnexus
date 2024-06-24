@@ -132,6 +132,7 @@
 
 	.text-content{
 	height: auto;
+	width: 330rpx;
 	}
 
 	/* tag */
