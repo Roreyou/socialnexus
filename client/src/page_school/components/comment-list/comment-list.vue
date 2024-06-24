@@ -28,7 +28,7 @@
                                         </view>
                                     </view>
                                 </view>
-                                <view class="button-container" v-if="list_type=='1'">
+                                <view class="button-container" v-if="list_type=='1' && userInfo.identity == 1">
                                     <button class="custom-button" @click="handleClick(item.acti_id)">去评价</button>
                                 </view>
                             </view>
