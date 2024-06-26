@@ -56,10 +56,10 @@ const store = new Vuex.Store({
 			state.userInfo.modification_status = modification_status;
 		},
 		// 社区
-		login3(state, {user_id, userName, avatar}){
+		login3(state, {user_id, username, avatar}){
 			state.hasLogin = true;
 			state.user_id = user_id;
-			state.userName = userName;
+			state.userName = username;
 			const a = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.8Zujx-NGIfUypDUetU95JwHaHv?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7';  // 游客的默认头像
 			state.communityInfo.avatar = avatar || a;
 			state.communityInfo.isUser = true;

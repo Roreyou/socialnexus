@@ -68,7 +68,7 @@ export default {
         status: 1,
       },
       success: (res) => {
-        this.teamList = res.data.data;
+        this.teamList = res.data.data.list;
         console.log("成功请求-查询队伍信息(待录取)");
         this.net_error = false;
       },

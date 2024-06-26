@@ -21,7 +21,7 @@
     <view class="cu-list menu-avatar bg-gradual-green padding-lg background">
       <view class="user-section">
         <image :src="communityInfo.avatar" class="cu-avatar xl round"></image>
-        <view class="text-white text-xl padding">{{ userName }}</view>
+        <view class="text-white text-xl padding" style="width:300rpx">{{ userName }}</view>
         <view class="cu-btn-group">
           <view class="cu-btn bg-blue" @click="handleAuthentication"
             >编辑信息</view
@@ -614,7 +614,6 @@ export default {
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
   margin-bottom: 10px;
-  margin-left: 190rpx;
 }
 
 //活动推荐列表
