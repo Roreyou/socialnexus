@@ -208,6 +208,10 @@ export default {
         },
         success: (res) => {
           console.log("成功录取", res.data.data.status);
+          uni.showToast({
+							icon: 'success',
+							title: '录取成功！'
+						});
           this.net_error = false;
         },
         fail: (res) => {
@@ -231,6 +235,10 @@ export default {
         },
         success: (res) => {
           console.log("拒绝录取", res.data.data.status);
+          uni.showToast({
+							icon: 'success',
+							title: '驳回成功！'
+						});
           this.net_error = false;
         },
         fail: (res) => {

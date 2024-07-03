@@ -213,6 +213,10 @@ export default {
         },
         success: (res) => {
           console.log("成功评价", res.data.data.status);
+          uni.showToast({
+							icon: 'success',
+							title: '评价成功！'
+						});
           this.net_error = false;
         },
         fail: (res) => {
