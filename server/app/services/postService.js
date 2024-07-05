@@ -28,7 +28,7 @@ class postService{
             throw new Error('Error creating post');
         }
     }
-    static async getPostDetails(postId){
+    static async getPostDetails(postId, team_id){
         try {
             const post = await db.post.findByPk(postId);
             post.picture = post.picture.split(','); // 将逗号分隔的图片链接字符串转换为数组
@@ -38,7 +38,7 @@ class postService{
             //查看有无点赞
             const flag = await db.likepost.findOne({
                 where: {
-                    team_id: post.team_id,
+                    team_id: team_id,
                     post_id: postId
                 }
             });
@@ -257,126 +257,145 @@ class postService{
     
 
     // 给评论点赞/取消点赞
-    static async likeCom(comment_id, team_id){
-        try { 
-            console.log(comment_id);
-            console.log(team_id);//点赞人的id
-            // 查看是否点赞过
-            const existingLike = await db.likecomment.findOne({
+static async likeCom(comment_id, team_id) {
+    const t = await db.sequelize.transaction(); // Start a transaction
+
+    try {
+        console.log(comment_id);
+        console.log(team_id); // 点赞人的id
+
+        // 查看是否点赞过
+        const existingLike = await db.likecomment.findOne({
+            where: {
+                comment_id: comment_id,
+                team_id: team_id
+            },
+            transaction: t // Include the transaction in the query
+        });
+        console.log("debug 04");
+
+        // 检查点赞状态
+        if (existingLike) {
+            // 如果已经点赞，则取消点赞，删除点赞记录，减少点赞数
+            await existingLike.destroy({ transaction: t }); // Include the transaction in the destroy
+
+            // 更新评论点赞数
+            const comment = await db.comment.findOne({
                 where: {
-                    comment_id: comment_id,
-                    team_id: team_id
-                }
+                    id: comment_id,
+                    // team_id: team_id // 本来应该是该评论的评论者的id，但这里不需要，且teamid是点赞人的id
+                },
+                transaction: t // Include the transaction in the query
             });
-            console.log("debug 04");
-            // 检查点赞状态
-            if (existingLike) {
-                // 如果已经点赞，则取消点赞，删除点赞记录，减少点赞数
-                await existingLike.destroy();
-                
-                // 更新评论点赞数
-                const comment = await db.comment.findOne({
-                    where:{
-                        id: comment_id,
-                        //team_id: team_id //本来应该是该评论的评论者的id，但这里不需要，且teamid是点赞人的id
-                    }
-                });
-                console.log("debug 5");
-                console.log(comment);
-                if (!comment) {
-                    //如果这条评论不存在，会报错
-                    throw new Error('Comment not found');
-                }
-                console.log("debug 06");
-                if(comment.like != 0){
-                    comment.like -= 1;
-                }else{
-                    console.log("出错啦 这条点赞已经为0了")
-                }
-               
-                console.log("debug 077");
-                await comment.save();
-                //更新通知：
-                console.log("debug 08");
-                const post_id = await postService.getPostIdByCommentId(comment_id);
-                const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id, ownerTeam_id, false);
-                return "unlike successfully!";
-
-            } else {
-                // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
-                await db.likecomment.create({
-                    comment_id: comment_id,
-                    team_id: team_id,
-                    ifread: 1,
-                    liketime: await otherService.getCurrentTime()
-                });
-                
-                // 更新评论点赞数
-                const likeCom = await db.comment.findOne({
-                    where:{
-                        id: comment_id,
-                        //team_id: team_id //本来应该是该评论的评论者的id，但这里不需要，且teamid是点赞人的id
-                    }
-                });
-
-                if (!likeCom) {
-                    throw new Error('Comment not found');
-                }
-                likeCom.like += 1;
-                await likeCom.save();
-
-                //更新通知：
-                const post_id = await postService.getPostIdByCommentId(comment_id);
-                const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id, ownerTeam_id, true);
-                return "like successfully!";
+            console.log("debug 5");
+            console.log(comment);
+            if (!comment) {
+                // 如果这条评论不存在，会报错
+                throw new Error('Comment not found');
             }
-        } catch (error) {
-            throw new Error('Error liking post');
-        }
-    }
+            console.log("debug 06");
+            if (comment.like != 0) {
+                comment.like -= 1;
+            } else {
+                console.log("出错啦 这条点赞已经为0了");
+            }
 
-    //给回复点赞/取消点赞
-    static async likeReply(reply_id, team_id){
+            console.log("debug 077");
+            await comment.save({ transaction: t }); // Include the transaction in the save
+
+            // 更新通知
+            console.log("debug 08");
+            const post_id = await postService.getPostIdByCommentId(comment_id);
+            const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
+            await otherService.updateNotification(post_id, ownerTeam_id, false, t); // Pass transaction to the service method
+
+            await t.commit(); // Commit the transaction if all operations succeed
+            return "unlike successfully!";
+        } else {
+            // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
+            await db.likecomment.create({
+                comment_id: comment_id,
+                team_id: team_id,
+                ifread: 1,
+                liketime: await otherService.getCurrentTime()
+            }, { transaction: t }); // Include the transaction in the create
+
+            // 更新评论点赞数
+            const likeCom = await db.comment.findOne({
+                where: {
+                    id: comment_id,
+                    // team_id: team_id // 本来应该是该评论的评论者的id，但这里不需要，且teamid是点赞人的id
+                },
+                transaction: t // Include the transaction in the query
+            });
+
+            if (!likeCom) {
+                throw new Error('Comment not found');
+            }
+            likeCom.like += 1;
+            await likeCom.save({ transaction: t }); // Include the transaction in the save
+
+            // 更新通知
+            const post_id = await postService.getPostIdByCommentId(comment_id);
+            const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
+            await otherService.updateNotification(post_id, ownerTeam_id, true, t); // Pass transaction to the service method
+
+            await t.commit(); // Commit the transaction if all operations succeed
+            return "like successfully!";
+        }
+    } catch (error) {
+        await t.rollback(); // Rollback the transaction in case of an error
+        console.error("Transaction failed:", error);
+        throw new Error('Error liking post');
+    }
+}
+
+
+    // 给回复点赞/取消点赞
+    static async likeReply(reply_id, team_id) {
+        const t = await db.sequelize.transaction(); // Start a transaction
+
         try {
             // 检查是否存在点赞记录
             const existingLike = await db.likereply.findOne({
                 where: {
                     reply_id: reply_id,
                     team_id: team_id
-                }
+                },
+                transaction: t // Include the transaction in the query
             });
-    
+
             // 检查点赞状态
             if (existingLike) {
                 // 如果已经点赞，则取消点赞，删除点赞记录，减少点赞数
-                await existingLike.destroy();
-                
+                await existingLike.destroy({ transaction: t }); // Include the transaction in the destroy
+
                 // 更新回复点赞数
                 const reply = await db.reply.findOne({
-                    where:{
+                    where: {
                         id: reply_id
-                    }
+                    },
+                    transaction: t // Include the transaction in the query
                 });
-    
+
                 if (!reply) {
                     throw new Error('Reply not found');
                 }
-                if(reply.like != 0){
+                if (reply.like != 0) {
                     reply.like -= 1;
-                }else{
+                } else {
                     console.log("出错啦 这条点赞已经为0了");
                 }
-                
-                await reply.save();
+
+                await reply.save({ transaction: t }); // Include the transaction in the save
 
                 // 更新通知
                 const comment_id = await commentService.getCommentIdByReplyId(reply_id);
                 const post_id = await postService.getPostIdByCommentId(comment_id);
                 const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id, ownerTeam_id, false);
-    
+                await otherService.updateNotification(post_id, ownerTeam_id, false, t); // Pass transaction to the service method
+
+                await t.commit(); // Commit the transaction if all operations succeed
                 return "unlike successfully!";
             } else {
                 // 如果未点赞，则进行点赞，创建点赞记录，增加点赞数
@@ -385,13 +404,14 @@ class postService{
                     team_id: team_id,
                     ifread: 1,
                     liketime: await otherService.getCurrentTime()
-                });
-                
+                }, { transaction: t }); // Include the transaction in the create
+
                 // 更新回复点赞数
                 const reply = await db.reply.findOne({
-                    where:{
+                    where: {
                         id: reply_id
-                    }
+                    },
+                    transaction: t // Include the transaction in the query
                 });
                 console.log("Debug 01");
                 if (!reply) {
@@ -399,18 +419,24 @@ class postService{
                 }
                 console.log("Debug 02");
                 reply.like += 1;
-                await reply.save();
-                //更新通知：
+                await reply.save({ transaction: t }); // Include the transaction in the save
+
+                // 更新通知
                 const comment_id = await commentService.getCommentIdByReplyId(reply_id);
                 const post_id = await postService.getPostIdByCommentId(comment_id);
                 const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id, ownerTeam_id, true);
+                await otherService.updateNotification(post_id, ownerTeam_id, true, t); // Pass transaction to the service method
+
+                await t.commit(); // Commit the transaction if all operations succeed
                 return "like successfully!";
             }
         } catch (error) {
+            await t.rollback(); // Rollback the transaction in case of an error
+            console.error("Transaction failed:", error);
             throw new Error('Error liking reply');
         }
     }
+
 
     static async getPostLikesByPostId(postId,flag=true){
         //如果flag为false，则仅获取isfread字段为1的
@@ -658,54 +684,65 @@ class postService{
         }
     }
 
-    static async createReply(comment_id, reply_content, team_id){
+    static async createReply(comment_id, reply_content, team_id) {
+        const t = await db.sequelize.transaction(); // Start a transaction
+    
         try {
+            // 创建回复
             const reply = await db.reply.create({
                 comment_id: comment_id,
                 reply_id: team_id,
                 content: reply_content,
                 time: await otherService.getCurrentTime(),
                 like: 0,
-                ifread:1
-            });
-            //更新通知
-            //找到comment id对应的帖子id，在帖子中找到该帖子拥有者的id
+                ifread: 1
+            }, { transaction: t }); // Include the transaction in the create
+    
+            // 更新通知
             const post_id = await postService.getPostIdByCommentId(comment_id);
             const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-            await otherService.updateNotification(post_id, ownerTeam_id, true);
+            await otherService.updateNotification(post_id, ownerTeam_id, true, t); // Pass transaction to the service method
+    
             // 获取该评论的新的回复列表
-            const newReply = await replyService.getReplyOfAComment(comment_id);
+            const newReply = await replyService.getReplyOfAComment(comment_id, t); // Pass transaction if required
+    
             // 遍历回复列表
             const reply_result = await Promise.all(newReply.map(async reply => {
-            //获取队伍信息
-            const team = await db.team.findOne({
-                where: {
-                id: reply.reply_id
-                } 
-            });
-
-            //查看有没有点赞回复
-            const flag = await db.likereply.findOne({
-                where: {
-                    team_id: reply.reply_id,
-                    reply_id: reply.id
-                }
-            });
-
-            // 增加回复字段
-            return {
-                ...reply.dataValues,
-                team_avatar: team ? team.avatar : null, 
-                reply_name:team ? team.team_name : null,
-                fabulous: flag ? true : false, 
-            }; 
-        }));
-
+                // 获取队伍信息
+                const team = await db.team.findOne({
+                    where: {
+                        id: reply.reply_id
+                    },
+                    transaction: t // Include the transaction in the query
+                });
+    
+                // 查看有没有点赞回复
+                const flag = await db.likereply.findOne({
+                    where: {
+                        team_id: reply.reply_id,
+                        reply_id: reply.id
+                    },
+                    transaction: t // Include the transaction in the query
+                });
+    
+                // 增加回复字段
+                return {
+                    ...reply.dataValues,
+                    team_avatar: team ? team.avatar : null,
+                    reply_name: team ? team.team_name : null,
+                    fabulous: flag ? true : false,
+                };
+            }));
+    
+            await t.commit(); // Commit the transaction if all operations succeed
             return reply_result;
         } catch (error) {
-            throw error;
+            await t.rollback(); // Rollback the transaction in case of an error
+            console.error("Transaction failed:", error);
+            throw new Error('Error creating reply');
         }
     }
+    
 
     static async getCommentLikesByAcomment(commentId, flag=true){
         console.log("debug comId:",commentId);
@@ -740,20 +777,31 @@ class postService{
         return commentLikes; // 结构：[[{},{},...,{}],[{},{},...,{}]...[{},{},...,{}]]
     }
 
-    static async deleteCommentNotification(relatedLikeComments){
-        for (const likeComment of relatedLikeComments) {
-            const ifread = likeComment.ifread;
-            // 删除点赞信息
-            await likeComment.destroy();
-
-            // 如果点赞信息的 ifread 字段为 1，则更新通知
-            if (ifread  === 1) {
-                const post_id = await postService.getPostIdByCommentId(likeComment.comment_id);
-                const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id, ownerTeam_id, false);
+    static async deleteCommentNotification(relatedLikeComments) {
+        const t = await db.sequelize.transaction(); // Start a transaction
+    
+        try {
+            for (const likeComment of relatedLikeComments) {
+                const ifread = likeComment.ifread;
+                // 删除点赞信息
+                await likeComment.destroy({ transaction: t }); // Include the transaction in the destroy
+    
+                // 如果点赞信息的 ifread 字段为 1，则更新通知
+                if (ifread === 1) {
+                    const post_id = await postService.getPostIdByCommentId(likeComment.comment_id);
+                    const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
+                    await otherService.updateNotification(post_id, ownerTeam_id, false, t); // Pass transaction to the service method
+                }
             }
+    
+            await t.commit(); // Commit the transaction if all operations succeed
+        } catch (error) {
+            await t.rollback(); // Rollback the transaction in case of an error
+            console.error("Transaction failed:", error);
+            throw new Error('Error deleting comment notification');
         }
     }
+    
 
     static async deletelikeComment(commentId){
         // 删除与该评论相关的所有点赞信息，并检查每个点赞信息的 ifread 字段
@@ -761,20 +809,31 @@ class postService{
         await this.deleteCommentNotification(relatedLikeComments);     
     }
 
-    static async deleteReplyNotification(relatedLikeReply){
-        for (const likeReply of relatedLikeReply) {
-            const ifread = likeReply.ifread;
-            // 删除点赞信息
-            await likeReply.destroy();
-
-            // 如果点赞信息的 ifread 字段为 1，则更新通知
-            if (ifread === 1) {
-                const post_id = await postService.getPostIdByCommentId(likeReply.comment_id);
-                const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id, ownerTeam_id, false);
+    static async deleteReplyNotification(relatedLikeReply) {
+        const t = await db.sequelize.transaction(); // Start a transaction
+    
+        try {
+            for (const likeReply of relatedLikeReply) {
+                const ifread = likeReply.ifread;
+                // 删除点赞信息
+                await likeReply.destroy({ transaction: t }); // Include the transaction in the destroy
+    
+                // 如果点赞信息的 ifread 字段为 1，则更新通知
+                if (ifread === 1) {
+                    const post_id = await postService.getPostIdByCommentId(likeReply.comment_id);
+                    const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
+                    await otherService.updateNotification(post_id, ownerTeam_id, false, t); // Pass transaction to the service method
+                }
             }
+    
+            await t.commit(); // Commit the transaction if all operations succeed
+        } catch (error) {
+            await t.rollback(); // Rollback the transaction in case of an error
+            console.error("Transaction failed:", error);
+            throw new Error('Error deleting reply notification');
         }
     }
+    
 
     static async deleteLikeReply(replyId){
         // 删除与该评论相关的所有点赞信息，并检查每个点赞信息的 ifread 字段
@@ -786,41 +845,55 @@ class postService{
         await this.deleteReplyNotification(relatedLikeReply);
     }
 
-    static async deleteAllRealtedReply(commentId){
-        // 删除与该评论相关的所有回复，并检查每个回复的 ifread 字段
-        const relatedReplies = await db.reply.findAll({
-            where: {
-                comment_id: commentId
+    static async deleteAllRealtedReply(commentId) {
+        const t = await db.sequelize.transaction(); // Start a transaction
+    
+        try {
+            // 删除与该评论相关的所有回复，并检查每个回复的 ifread 字段
+            const relatedReplies = await db.reply.findAll({
+                where: {
+                    comment_id: commentId
+                },
+                transaction: t // Include the transaction in the findAll query
+            });
+    
+            for (const reply of relatedReplies) {
+                const ifread = reply.ifread;
+                const replyId = reply.id;
+    
+                // 如果回复的 ifread 字段为 1，则更新通知
+                if (ifread === 1) {
+                    const post_id = await postService.getPostIdByCommentId(commentId);
+                    const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
+                    await otherService.updateNotification(post_id, ownerTeam_id, false, t); // Pass transaction to the service method
+                }
+    
+                // 删除回复相关的点赞信息
+                await this.deleteLikeReply(replyId, t); // Pass transaction to the deleteLikeReply method
+                
+                // 删除回复
+                await reply.destroy({ transaction: t }); // Include the transaction in the destroy
             }
-        });
-
-        for (const reply of relatedReplies) {
-            const ifread = reply.ifread;
-            const replyId = reply.id;
-
-            // 如果回复的 ifread 字段为 1，则更新通知
-            if (ifread === 1) {
-                const post_id = await postService.getPostIdByCommentId(commentId);
-                const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id, ownerTeam_id, false);
-            }
-
-            // 删除回复相关的点赞信息
-            await this.deleteLikeReply(replyId);
-            
-            // 删除回复
-            await reply.destroy();
+    
+            await t.commit(); // Commit the transaction if all operations succeed
+        } catch (error) {
+            await t.rollback(); // Rollback the transaction in case of an error
+            console.error("Transaction failed:", error);
+            throw new Error('Error deleting all related replies');
         }
     }
+    
 
     static async deleteComment(commentId) {
+        const t = await db.sequelize.transaction(); // Start a transaction
+    
         try {
             // 检查是否存在该评论
-            const comment = await db.comment.findByPk(commentId);
+            const comment = await db.comment.findByPk(commentId, { transaction: t });
             if (!comment) {
                 throw new Error('Comment not found');
             }
-
+    
             // 获取评论的 ifread 字段的值
             const ifread = comment.ifread;
     
@@ -828,28 +901,33 @@ class postService{
             if (ifread === 1) {
                 const post_id = await postService.getPostIdByCommentId(commentId);
                 const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
-                await otherService.updateNotification(post_id, ownerTeam_id, false);
+                await otherService.updateNotification(post_id, ownerTeam_id, false, t); // Pass transaction to the service method
             }
-
+    
             // 删除与该评论相关的所有点赞信息
-            await this.deletelikeComment(commentId);
+            await this.deletelikeComment(commentId, t); // Pass transaction to the deletelikeComment method
     
             // 删除与该评论相关的所有回复
-            await this.deleteAllRealtedReply(commentId);
-
+            await this.deleteAllRealtedReply(commentId, t); // Pass transaction to the deleteAllRealtedReply method
+    
             // 删除评论
             const deletedComment = await db.comment.destroy({
                 where: {
                     id: commentId
-                }
+                },
+                transaction: t // Include the transaction in the destroy
             });
-
+    
+            await t.commit(); // Commit the transaction if all operations succeed
+    
             return deletedComment;
         } catch (error) {
-            throw error;
+            await t.rollback(); // Rollback the transaction in case of an error
+            console.error("Transaction failed:", error);
+            throw new Error('Error deleting comment and related data');
         }
     }
-
+    
     static async getNoticeNum(team_id) {
         try {
             // 在这里查询数据库，计算通知的数量

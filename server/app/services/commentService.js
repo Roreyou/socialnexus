@@ -85,17 +85,17 @@ class commentService{
     }
 
     static async getCommentHandled(commentLists, team_id){
-         console.log("debug commentLists:", commentLists);
+         //console.log("debug commentLists:", commentLists);
          // 遍历评论列表
          const results = await Promise.all(commentLists.map(async commentList => {
             console.log("debug commentList111:", commentList);
             const comment_detail = commentList.comment_detail;
             const reply_list = commentList.reply_list;
             
-            //查看有没有该评论的点赞信息
+            //查看有没有该队伍评论的点赞信息
             const flag = await db.likecomment.findOne({
                 where: {
-                    team_id: comment_detail.team_id,
+                    team_id: team_id,
                     comment_id: comment_detail.id
                 }
             });
@@ -125,7 +125,7 @@ class commentService{
                 //查看有没有点赞回复
                 const flag = await db.likereply.findOne({
                     where: {
-                        team_id: reply.reply_id,
+                        team_id: team_id,
                         reply_id: reply.id
                     }
                 });
@@ -153,31 +153,36 @@ class commentService{
         return results;
     }
 
-    static async commentOnPost(post_id, team_id, text){
+    static async commentOnPost(post_id, team_id, text) {
+        const t = await db.sequelize.transaction(); // Start a transaction
+    
         try {
             // 创建新的评论
-             await db.comment.create({
+            await db.comment.create({
                 post_id: post_id,
                 team_id: team_id,
                 content: text,
                 time: new Date(),
                 like: 0,
                 ifread: 1
-            });
-
+            }, { transaction: t }); // Include the transaction in the create
+    
             // 更新在notification表里面
-            const ownerTeam_id =  await otherService.getOwnerTeamIdByPostId(post_id);
-            await otherService.updateNotification(post_id, ownerTeam_id, true);
-
+            const ownerTeam_id = await otherService.getOwnerTeamIdByPostId(post_id);
+            await otherService.updateNotification(post_id, ownerTeam_id, true, t); // Pass transaction to the service method
+    
             // 获取新的评论详情以及相关的回复详情
-            const newCommentList = commentService.getCommentsForPost(post_id);
-
+            const newCommentList = await commentService.getCommentsForPost(post_id, { transaction: t }); // Include the transaction in the query if necessary
+    
+            await t.commit(); // Commit the transaction if all operations succeed
             return newCommentList;
         } catch (error) {
-            console.log(error)
+            await t.rollback(); // Rollback the transaction in case of an error
+            console.log(error);
             throw new Error('Error commenting on post');
         }
     }
+    
 
     static async getCommentsofAllPosts(allPosts, flag=true){
         //返回结构：[[{comment},...,{commnet}],...,[{comment},...,{commnet}]]

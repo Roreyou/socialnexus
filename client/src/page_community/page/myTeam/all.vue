@@ -18,7 +18,7 @@
             <view class="action">
               <text class="cuIcon-titles text-green"></text>
               <text class="text-xl text-bold">{{
-                getStatusText(item.admisson_status, item.comment_status)
+                item.status
               }}</text>
             </view>
           </view>
@@ -97,8 +97,10 @@ export default {
   },
   methods: {
     getStatusText(admisson_status, comment_status) {
-      if (admisson_status == 1) return "待录取";
-      if (comment_status == 1) return "待评价";
+      if (admisson_status == 1 && comment_status == 1 ) {
+        console.log("待录取");
+        return "待录取";}
+      if (admisson_status == 2 && comment_status == 1) return "待评价";
       if (comment_status == 2) return "已评价";
     },
     queryTeamByName() {

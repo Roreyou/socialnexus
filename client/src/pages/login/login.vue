@@ -392,7 +392,7 @@ export default {
                   url: "../../page_commitee/page/index/index",
                 });
               } else if (identity === "community") {
-                username = res.data.data.communityName;
+                username = res.data.data.name;
                 avatar = res.data.data.avatar;
                 this.login3({ user_id, username, avatar });
                 uni.reLaunch({
