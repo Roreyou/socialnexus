@@ -1279,7 +1279,10 @@ class teamService {
       // 在数据库中查找符合条件的所有记录
       const teamActivities = await db.teamactivity.findAll({
         where: {
-          team_id: team_id
+          team_id: team_id,
+          com_to_team: {
+            [Op.ne]: null // 确保com_to_team字段不为空
+          }
         }
       });
 
@@ -1322,7 +1325,8 @@ class teamService {
       const teamActivities = await db.teamactivity.findAll({
         where: {
           team_id: teamId,
-          comment_status: 2
+          comment_status: 2,
+          admission_status:2
         }
       });
 
@@ -1359,7 +1363,8 @@ class teamService {
       const teamActivities = await db.teamactivity.findAll({
         where: {
           team_id: teamId,
-          comment_status: 1
+          comment_status: 1,
+          admission_status:2
         }
       });
 
