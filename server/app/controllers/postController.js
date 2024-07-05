@@ -27,7 +27,7 @@ class postController{
             const {post_id, team_id} = req.query;
 
             // 调用服务层方法获取帖子详情和评论列表
-            const post = await postService.getPostDetails(post_id);
+            const post = await postService.getPostDetails(post_id, team_id);
             const comments = await commentService.getDetailedCommentsForPost(post_id,team_id);
             
             // 构造响应对象
