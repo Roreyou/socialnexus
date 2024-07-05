@@ -2,7 +2,7 @@
 // const BASE_URL = 'https://5ff6244.r15.cpolar.top'
 // const BASE_URL = 'http://7c97e5ed.r11.cpolar.top' //穿透-团委
 // const BASE_URL = 'https://25cc4892.r22.cpolar.top' //穿透-高校
-const BASE_URL = 'https://4217a432.r11.cpolar.top' //穿透-社区
+const BASE_URL = 'https://77a2e99b.r10.cpolar.top' //穿透-社区
 
 export default {
 	BASE_URL

@@ -28,7 +28,7 @@
                                         </view>
                                     </view>
                                 </view>
-                                <view class="button-container" v-if="list_type=='1' && userInfo.identity == 1">
+                                <view class="button-container" v-if="list_type=='1' && userInfo.isleader">
                                     <button class="custom-button" @click="handleClick(item.acti_id)">去评价</button>
                                 </view>
                             </view>
@@ -40,6 +40,10 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
 export default {
     props: {
         list: Array,
@@ -60,6 +64,9 @@ export default {
         return {
         }
     },
+    computed: {
+			...mapState(['userInfo']),
+		},
     onLoad() {
 
     },

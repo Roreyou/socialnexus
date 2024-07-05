@@ -111,7 +111,7 @@
 </script>
 <style scoped>
 	.others-all{
-		margin-top: 10rpx;
+		margin-top: -20rpx;
 	}
 	/* 活动推荐列表 */
 	.cu-item .shadow{
