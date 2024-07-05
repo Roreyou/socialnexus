@@ -49,7 +49,7 @@ class AuthService {
             return { token, status }; // 返回认证状态字段和生成的 JWT
         }
 
-        return { "token": token };
+        return {"name":user.name,"avatar":user.avatar,"token": token };
     };
 
     static register = async (registerData) => {

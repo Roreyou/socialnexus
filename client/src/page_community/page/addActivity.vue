@@ -420,7 +420,7 @@ export default {
         method: "GET",
         success: (res) => {
           console.log("成功请求-获取关键词列表");
-          const keywords = res.data.data.split(" ");
+          const keywords = res.data.data;
           this.keywordList = keywords.map((keyword, index) => {
         return { text: keyword, value: index };
       });
@@ -466,6 +466,10 @@ export default {
         success: (res) => {
           console.log("成功请求-新增活动");
           console.log(res.data.data);
+          uni.showToast({
+							icon: 'success',
+							title: '新增活动成功！'
+						}); 
           this.net_error = false;
         },
         fail: (res) => {

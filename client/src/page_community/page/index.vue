@@ -21,13 +21,13 @@
     <view class="cu-list menu-avatar bg-gradual-green padding-lg background">
       <view class="user-section">
         <image :src="communityInfo.avatar" class="cu-avatar xl round"></image>
-        <view class="text-white text-xl padding">{{ userName }}</view>
-        <view
-          class="cu-btn bg-blue margin-left-sm"
-          @click="handleAuthentication"
-          >编辑信息</view
-        >
-        <!-- <view class="cu-btn bg-blue margin-left-sm" @click="handleAuthentication" style="font-family: pmkaiti;">认证信息</view> -->
+        <view class="text-white text-xl padding" style="width:300rpx">{{ userName }}</view>
+        <view class="cu-btn-group">
+          <view class="cu-btn bg-blue" @click="handleAuthentication"
+            >编辑信息</view
+          >
+          <view class="cu-btn bg-blue" @click="bindLogout">退出登录</view>
+        </view>
       </view>
     </view>
     <view>
@@ -244,7 +244,7 @@ export default {
   // 	uni.stopPullDownRefresh();
   // },
   methods: {
-    ...mapMutations(["setAddress"]),
+    ...mapMutations(["setAddress", "logout"]),
     //转义为省市
     locationn() {
       console.log(this.longitude);
@@ -487,6 +487,12 @@ export default {
         });
       }
     },
+    bindLogout() {
+      this.logout();
+      uni.reLaunch({
+        url: "../../pages/login/login",
+      });
+    },
   },
 };
 </script>
@@ -607,6 +613,7 @@ export default {
   border-radius: 15px;
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
+  margin-bottom: 10px;
 }
 
 //活动推荐列表
@@ -685,5 +692,10 @@ export default {
   margin-right: 20rpx;
   margin-top: 20rpx;
   // margin-bottom: 20rpx;
+}
+.cu-btn-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10rpx; /* 可以根据需要调整上边距 */
 }
 </style>

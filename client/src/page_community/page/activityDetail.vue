@@ -1,16 +1,53 @@
-<!--社区 - 活动详情 -->
 <template>
   <view class="container">
+    <view class="img">
+      <image :src="detail.picture" mode="aspectFill" v-if="!isPictureChanged"></image>
+      <view class="container" v-if="isModify">
+        <u-upload
+          :class="{ banner: detail.picture === '' || !isPictureChanged }"
+          @on-success="handleSuccess"
+          @on-remove="handleRemove"
+          :custom-btn="true"
+          :max-count="1"
+          ref="uUpload"
+          :action="action"
+          :file-list="avatarList"
+          :auto-upload="true"
+          style="display: flex; align-items: center"
+        >
+          <view
+            slot="addBtn"
+            class="slot-btn"
+            hover-class="slot-btn__hover"
+            hover-stay-time="150"
+          >
+            <image
+              :class="{ banner: detail.picture === '' || !isPictureChanged }"
+              src="https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/upload.png"
+            ></image>
+          </view>
+        </u-upload>
+      </view>
+    </view>
     <!-- 第一块 -->
     <view>
       <view class="part first">
         <view class="de_total_title">
-          <input
-            type="text"
-            v-model="detail.name"
-            class="editable-field"
-            style="font-size: px"
-          />
+          <view v-if="isModify">
+            <input v-model="detail.name" class="editable" />
+          </view>
+          <view v-else>
+            <span class="editable">{{ detail.name }}</span>
+          </view>
+          <view class="wordcont">
+            <view
+              class="ackeywords"
+              v-for="(word, index) in detail.keywords.split(',')"
+              :key="index"
+            >
+              <view class="cu-tag bg-red light sm round">{{ word }}</view>
+            </view>
+          </view>
         </view>
         <view class="de_key_value">
           <view class="de_content">
@@ -22,7 +59,7 @@
           <view class="de_content">
             <view class="key"> 活动编号 </view>
             <view class="value">
-              {{ detail.id }}
+              {{ activityId }}
             </view>
           </view>
           <view class="de_content">
@@ -32,15 +69,11 @@
             </view>
           </view>
         </view>
-        <view class="wordcont">
-          <view
-            class="ackeywords"
-            v-for="(word, index) in detail.keywords.split(',')"
-            :key="index"
-          >
-            <view class="cu-tag bg-red light sm round">{{ word }}</view>
-          </view>
-        </view>
+        <!-- <view class="wordcont">
+					<view class="ackeywords" v-for="(word,index) in detail.keywords.split(',')" :key="index">
+						<view class="cu-tag bg-red light sm round">{{word}}</view>
+					</view>
+				</view> -->
       </view>
     </view>
     <view class="custom-container">
@@ -61,11 +94,33 @@
               {{ detail.address }}
             </view>
           </view>
+        </view>
+      </view>
+    </view>
+    <view class="custom-container">
+      <hr class="horizontal-line" />
+    </view>
+    <!-- 第三块 -->
+    <view>
+      <view class="part second">
+        <view class="de_total_title sub_title"> 志愿者招募详情 </view>
+        <view class="de_key_value">
           <view class="de_content">
-            <view class="key"> 活动时间 </view>
+            <view class="key"> 时间段 </view>
             <view class="value">
               <text>{{ detail.start_time }} 开始</text><br />
               <text>{{ detail.end_time }} 结束</text>
+            </view>
+          </view>
+          <view class="de_content">
+            <view class="key">招募队伍数</view>
+            <view class="value">
+              <view v-if="isModify">
+                <input v-model="detail.vacancies" class="editable" />
+              </view>
+              <view v-else>
+                <span class="editable">{{ detail.vacancies }}</span>
+              </view>
             </view>
           </view>
         </view>
@@ -74,104 +129,82 @@
     <view class="custom-container">
       <hr class="horizontal-line" />
     </view>
-
+    <!-- 第四块 -->
     <view>
-      <view>
-        <view class="part second">
-          <view class="de_total_title sub_title"> 志愿者招募详情 </view>
-          <view class="de_key_value">
-            <view class="de_content">
-              <view class="key"> 报名截止时间 </view>
-              <view class="value">
-                <text>{{ detail.application_deadline }}</text>
+      <view class="part">
+        <view class="de_total_title sub_title"> 报名须知 </view>
+        <view class="de_key_value">
+          <view class="de_content">
+            <view class="key"> 报名限制 </view>
+            <view class="value"> 无限制 </view>
+          </view>
+          <view class="de_content">
+            <view class="key"> 报名截止时间： </view>
+            <view class="value">
+              {{ detail.application_deadline }}
+            </view>
+          </view>
+
+          <view class="index" style="margin-left: 240rpx" v-if="isModify">
+            <view class="form-item" @click="showDDLDate">
+              <view
+                bindtap="goCnCollege"
+                class="form-field"
+                hoverClass="form-field-hover"
+              >
+                <view class="form-field-input">
+                  <view style="color: #009688" size="30"
+                    >选择时间
+                    <u-icon
+                      name="arrow-down-fill"
+                      color="#009688"
+                      size="30"
+                      style="margin-left: 10rpx"
+                    ></u-icon>
+                  </view>
+                  <view></view>
+                </view>
               </view>
             </view>
-            <view class="de_content">
-              <view class="key"> 招募队伍数 </view>
-              <view class="value">
-                <input
-                  type="text"
-                  v-model="detail.vacancies"
-                  class="editable-field"
-                />
-              </view>
-            </view>
+            <datePicker ref="datePicker" @confirm="getDDLDateTime"></datePicker>
           </view>
         </view>
       </view>
-      <view class="custom-container">
-        <hr class="horizontal-line" />
-      </view>
-
-      <view class="custom-container">
-        <hr class="horizontal-line" />
-      </view>
     </view>
-
+    <view class="custom-container">
+      <hr class="horizontal-line" />
+    </view>
     <view>
       <view class="part">
         <view class="de_total_title sub_title"> 活动介绍 </view>
         <view class="de_key_value">
           <view class="de_content">
-            <view class="last-key"> 活动内容 </view>
+            <view class="last-key">活动内容</view>
             <view class="value">
-              <textarea
-                v-model="detail.remark"
-                class="editable-field"
-              ></textarea>
-            </view>
-          </view>
-        </view>
-        <view class="de_key_value">
-          <view class="de_content">
-            <view class="key"> 活动图片 </view>
-            <view class="value">
-              <view>
-                <u-upload
-                  :class="{ banner: detail.picture === '' }"
-                  @on-success="handleSuccess"
-                  @on-remove="handleRemove"
-                  :custom-btn="true"
-                  :max-count="1"
-                  ref="uUpload"
-                  :action="action"
-                  :file-list="pictureList"
-                  :auto-upload="true"
-                  style="display: flex; align-items: center"
-                >
-                  <view
-                    slot="addBtn"
-                    class="slot-btn"
-                    hover-class="slot-btn__hover"
-                    hover-stay-time="150"
-                  >
-                    <image
-                      :class="{ banner: detail.picture === '' }"
-                      :src="computedSrc"
-                    ></image>
-                  </view>
-                </u-upload>
+              <view v-if="isModify">
+                <textarea v-model="detail.remark" class="editable"></textarea>
+              </view>
+              <view v-else>
+                <span class="editable">{{ detail.remark }}</span>
               </view>
             </view>
           </view>
         </view>
       </view>
-      <view class="button-group">
-        <view class="button-item">
-          <button type="primary" size="mini" @click="submit">修改</button>
-        </view>
-      </view>
+    </view>
+    <view style="position: fixed; bottom: 0; width: 100%">
+      <button @click="Modify">{{ buttonText }}</button>
     </view>
   </view>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import bttab from "../../components/detail-btm/uni-goods-nav.vue";
+import datePicker from "@/components/datePicker/datePicker.vue";
 
 export default {
   components: {
-    bttab,
+    datePicker,
   },
   data() {
     return {
@@ -180,15 +213,19 @@ export default {
       detail: {
         keywords: "",
       },
+      hasactiid: false,
+      isfavor: false,
+      isModify: false,
       pictureList: [],
       action: this.$url.BASE_URL + "/uploadImage",
+      isPictureChanged: false
     };
   },
   computed: {
     ...mapState(["hasLogin", "forcedLogin", "user_id"]),
-    computedSrc() {
-      return this.detail.picture === '' ? 'https://socialnexus.oss-cn-shenzhen.aliyuncs.com/app/images/upload.png' : this.detail.picture;
-    }
+    buttonText() {
+      return this.isModify ? "确认修改" : "修改信息";
+    },
   },
   mounted() {
     // 获取query对象
@@ -198,21 +235,18 @@ export default {
     this.activityId = activityId;
     const mode = query.mode;
     this.mode = mode;
+    // 获取活动详情
     uni.request({
       url: this.$url.BASE_URL + "/community/activityInfo",
-      // url: this.$url.BASE_URL + "/4142061-0-default/community/activityInfo",
-      // url: 'https://mock.apifox.coml/m1/community/activityInfo',
       header: {
         Authorization: uni.getStorageSync("token"),
       },
       method: "GET",
       data: {
         id: activityId,
-        // token: this.$userinfo.token
       },
       success: (res) => {
         this.detail = res.data.data;
-        // this.detail.keywords = "服务,实践"
         this.net_error = false;
       },
       fail: (res) => {
@@ -246,56 +280,66 @@ export default {
     // })
   },
   methods: {
-    submit() {
-      if (
-        this.detail.name === "" ||
-        this.detail.vacancies === "" ||
-        this.detail.remark === ""
-      ) {
-        uni.showToast({
-          icon: "error",
-          title: "信息不完整！",
+    showDDLDate(e) {
+      this.$refs.datePicker.show();
+    },
+    getDDLDateTime(e) {
+      this.detail.application_deadline = e;
+    },
+    Modify() {
+      if (this.isModify) {
+        if (
+          this.detail.name === "" ||
+          this.detail.vacancies === "" ||
+          this.detail.remark === ""
+        ) {
+          uni.showToast({
+            icon: "error",
+            title: "信息不完整！",
+          });
+          return;
+        }
+        if (this.detail.picture == "") {
+          uni.showToast({
+            icon: "error",
+            title: "请上传图片！",
+          });
+          return;
+        }
+        uni.request({
+          url: this.$url.BASE_URL + "/community/activityInfo",
+          header: {
+            Authorization: uni.getStorageSync("token"),
+          },
+          method: "PUT",
+          data: {
+            id: this.activityId,
+            name: this.detail.name,
+            category_id: this.detail.category_id,
+            province: this.detail.province,
+            city: this.detail.city,
+            address: this.detail.address,
+            start_time: this.detail.start_time,
+            end_time: this.detail.end_time,
+            application_deadline: this.detail.application_deadline,
+            vacancies: this.detail.vacancies,
+            remark: this.detail.remark,
+            keywords: this.detail.keywords,
+            picture: this.detail.picture
+          },
+          success: (res) => {
+            this.net_error = false;
+          },
+          fail: (res) => {
+            this.net_error = true;
+          },
+          complete: () => {},
         });
-        return;
       }
-      if (this.detail.picture == "") {
-        uni.showToast({
-          icon: "error",
-          title: "请上传图片！",
-        });
-        return;
-      }
-      uni.request({
-        url: this.$url.BASE_URL + "/community/activityInfo",
-        header: {
-          Authorization: uni.getStorageSync("token"),
-        },
-        method: "PUT",
-        data: {
-          id: this.activityId,
-          name: this.detail.name,
-          category_id: this.detail.category_id,
-          province: this.detail.province,
-          city: this.detail.city,
-          address: this.detail.address,
-          start_time: this.detail.start_time,
-          end_time: this.detail.end_time,
-          application_deadline: this.detail.application_deadline,
-          vacancies: this.detail.vacancies,
-          remark: this.detail.remark,
-          keywords: this.detail.keywords,
-        },
-        success: (res) => {
-          // this.detail.keywords = "服务,实践"
-          this.net_error = false;
-        },
-        fail: (res) => {
-          this.net_error = true;
-        },
-        complete: () => {},
-      });
+      this.isModify = !this.isModify;
     },
     handleSuccess(data, index, lists, index2) {
+      this.isPictureChanged = true;
       console.log("上传图片成功，链接为", data);
       console.log("index", index);
       console.log("lists", lists);
@@ -405,21 +449,39 @@ page {
   display: inline-block;
   margin-right: 10rpx; /* 可以调整标签之间的水平间距 */
 }
-.editable-field {
-  border: 1px solid #000000;
-  border-radius: 4px;
-  font-size: 16px;
-  box-sizing: border-box;
-  overflow: hidden;
+
+.phone {
+  color: red;
 }
-.button-group {
-  margin-top: 15px;
-  display: flex;
-  justify-content: space-around;
+
+/* 大图 */
+.img {
+  margin-right: 20rpx;
+  margin-left: 20rpx;
+  border-radius: 30rpx;
+}
+.editable {
+  display: inline-block;
+  width: 100%;
+  background-color: #e0f7fa; /* 背景颜色变化 */
+  border: 1px solid #009688; /* 边框颜色变化 */
+  box-sizing: border-box; /* 包含内边距和边框在宽度和高度内 */
+}
+input.editable,
+textarea.editable {
+  width: calc(100% - 12px); /* 减去 padding 和 border 的宽度 */
+}
+span.editable {
+  background-color: transparent; /* 透明背景 */
+  border: none; /* 无边框 */
+  display: inline-block; /* 内联块 */
 }
 .banner {
-    margin-top: 10rpx;
-    width: 200rpx !important;
-    height: 200rpx !important;
-  }
+  margin: 10rpx auto;
+  width: 100rpx;
+  height: 100rpx;
+  align-items: center;
+  max-width: 100%;
+  max-height: 100%;
+}
 </style>

@@ -92,14 +92,10 @@
     </view>
     <view class="button-group">
       <view class="button-item">
-        <button type="primary" size="mini" @click="reject">
-          驳回
-        </button>
+        <button type="primary" size="mini" @click="reject">驳回</button>
       </view>
       <view class="button-item">
-        <button type="primary" size="mini" @click="admit">
-          录取
-        </button>
+        <button type="primary" size="mini" @click="admit">录取</button>
       </view>
     </view>
   </view>
@@ -115,8 +111,8 @@ export default {
   },
   data() {
     return {
-      activityId: '',
-      teamId: '',
+      activityId: "",
+      teamId: "",
       detail: {
         activity: {},
         team: {},
@@ -135,8 +131,7 @@ export default {
     const teamId = query.teamId;
     this.teamId = teamId;
     uni.request({
-      url: "http://4ddfdbb6.r21.cpolar.top/community/activityInfo",
-      // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+      url: this.$url.BASE_URL + "/community/activityInfo",
       header: {
         Authorization: uni.getStorageSync("token"),
       },
@@ -154,8 +149,7 @@ export default {
       complete: () => {},
     });
     uni.request({
-      url: "http://4ddfdbb6.r21.cpolar.top/community/teamInfo",
-      // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+      url: this.$url.BASE_URL + "/community/teamInfo",
       header: {
         Authorization: uni.getStorageSync("token"),
       },
@@ -165,7 +159,7 @@ export default {
         // token: this.$userinfo.token
       },
       success: (res) => {
-        this.detail.team = res.data.data.team_info;
+        this.detail.team = res.data.data;
         this.net_error = false;
       },
       fail: (res) => {
@@ -179,7 +173,7 @@ export default {
     const id = option.id;
     // uni.request({
     // 	url: this.$url.BASE_URL + '/schoolteam/getactidetail',
-    // 	
+    //
 
     // 	method: 'GET',
     // 	data: {
@@ -201,8 +195,7 @@ export default {
   methods: {
     admit() {
       uni.request({
-        url:'http://4ddfdbb6.r21.cpolar.top/community/admitTeam',
-        // url: 'https://mock.apifox.coml/m1/4142061-3780993-default/community/admit',
+        url: this.$url.BASE_URL + "/community/admitTeam",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
@@ -215,6 +208,10 @@ export default {
         },
         success: (res) => {
           console.log("成功录取", res.data.data.status);
+          uni.showToast({
+							icon: 'success',
+							title: '录取成功！'
+						});
           this.net_error = false;
         },
         fail: (res) => {
@@ -225,7 +222,7 @@ export default {
     },
     reject() {
       uni.request({
-        url: this.$url.BASE_URL + '/community/admitTeam',
+        url: this.$url.BASE_URL + "/community/admitTeam",
         header: {
           Authorization: uni.getStorageSync("token"),
         },
@@ -238,6 +235,10 @@ export default {
         },
         success: (res) => {
           console.log("拒绝录取", res.data.data.status);
+          uni.showToast({
+							icon: 'success',
+							title: '驳回成功！'
+						});
           this.net_error = false;
         },
         fail: (res) => {
@@ -245,8 +246,8 @@ export default {
         },
         complete: () => {},
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

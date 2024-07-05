@@ -164,15 +164,15 @@
 			console.log('this.avatarList', this.avatarList, this.avatarList.length);
 		},
 		onLoad: function(options){
-			console.log('reg option=',options);
+			// console.log('reg option=',options);
 			// const step = JSON.parse(decodeURIComponent(options.fromCommunity));
 			// console.log('reg step=',step);
 			// if(step === 3){
 			// 	this.index = 1;
 			// }
 			// 获取参数的值
-			var itemValue = this.$route.query.item;
-    		console.log('item',itemValue);
+			// var itemValue = this.$route.query.item;
+    		// console.log('item',itemValue);
 			
 		},
 		methods: {

@@ -84,7 +84,7 @@ export default {
           status: 0,
         },
         success: (res) => {
-          this.teamList = res.data.data.list;
+          this.teamList = res.data.data;
           console.log("成功请求-查询队伍信息(全部)");
           this.net_error = false;
         },

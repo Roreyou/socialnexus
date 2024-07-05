@@ -151,6 +151,6 @@ export default {
   z-index: 999; /* 可选：如果需要在其他元素之上显示导航栏，可以设置一个较高的 z-index 值 */
 }
 .accontent {
-  margin-top: 77px;
+  margin-top: 90px;
 }
 </style>

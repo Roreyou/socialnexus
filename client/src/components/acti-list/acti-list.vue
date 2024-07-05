@@ -132,6 +132,7 @@
 
 	.text-content{
 	height: auto;
+	width: 330rpx;
 	}
 
 	/* tag */
@@ -184,7 +185,7 @@
 		padding: 20rpx; /* 内容的内边距，rpx是uni-app中的单位 */
 	}
 	.avatar {
- 	width: 260rpx;
+ 	width: 220rpx;
  	height: 200rpx;
  	/* border-radius: 50%; */
 	object-fit: cover; 

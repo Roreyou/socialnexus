@@ -8,7 +8,7 @@
 					队伍基本信息
 				</view>
 				<view class="modify">
-					<view class="cu-btn bg-blue margin-left-sm" @click="modifyInfo" style="font-family: pmkaiti;" v-if="userInfo.verification_status==2 && userInfo.modification_status!==1">修改资料</view>
+					<view class="cu-btn bg-blue margin-left-sm" @click="modifyInfo" style="font-family: pmkaiti;" v-if="userInfo.verification_status==2 && userInfo.modification_status!==1 && userInfo.identity == 1">修改资料</view>
 				</view>
 				<view class="modify">
 					<view class="cu-btn bg-blue margin-left-sm" style="font-family: pmkaiti;" v-if="userInfo.verification_status==2 && userInfo.modification_status==1">资料修改审核中</view>
@@ -134,11 +134,11 @@ import bttab from '../../../components/detail-btm/uni-goods-nav.vue';
 				memberList:[
 					{
 						name: "第一个队员",
-						id: "21311212"
+						// id: "21311212"
 					},
 					{
 						name: "第二个队员",
-						id: "21311988"
+						// id: "21311988"
 					},
 				],
 				instructorList:[
