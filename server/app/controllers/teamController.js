@@ -142,7 +142,7 @@ class teamController {
     try {
       const teams = await teamService.queryTeamActByName(commu_id, team_name);
       if (!teams) {
-        return res.json(Result.fail('队伍不存在'));
+        return res.json(Result.fail([]));
       }
       return res.json(Result.success(teams));
     } catch (error) {
@@ -155,7 +155,7 @@ class teamController {
     try {
       const teams = await teamService.getTeamActByCommu(commu_id, status);
       if (!teams) {
-        return res.json(Result.fail('队伍不存在'));
+        return res.json(Result.fail([]));
       }
       return res.json(Result.success(teams));
     } catch (error) {
@@ -168,7 +168,7 @@ class teamController {
     try {
       const teams = await teamService.queryTeamByName(commu_id, team_name);
       if (!teams) {
-        return res.json(Result.fail('队伍不存在'));
+        return res.json(Result.fail([]));
       }
       return res.json(Result.success(teams));
     } catch (error) {
@@ -182,7 +182,7 @@ class teamController {
     try {
       const teams = await teamService.queryTeamActByAct(commu_id, act_name);
       if (!teams) {
-        return res.json(Result.fail('队伍不存在'));
+        return res.json(Result.fail([]));
       }
       return res.json(Result.success(teams));
     } catch (error) {
@@ -196,7 +196,7 @@ class teamController {
     try {
       const teams = await teamService.queryTeamByAct(commu_id, act_name);
       if (!teams) {
-        return res.json(Result.fail('队伍不存在'));
+        return res.json(Result.fail([]));
       }
       return res.json(Result.success(teams));
     } catch (error) {

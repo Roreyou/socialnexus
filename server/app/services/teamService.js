@@ -544,6 +544,7 @@ class teamService {
         leader_name: team["teammember.leader_name"],
         instructor_name: team["teacher.instructor_name"],
         school_name: schoolName,
+        status: status,
 
         'teammember.leader_name': undefined,
         'teacher.instructor_name': undefined,
@@ -633,12 +634,19 @@ class teamService {
       // 获取学校名称
       const school = await db.school.findOne({ where: { id: team['schoolteam.school_id'] } });
       const schoolName = school ? school.name : null;
+      let status;
+      if(team.admission_status==1) status='待录取';
+      if(team.admission_status==2&&team.comment_status==1) status='待评价';
+      if(team.comment_status==2) status='已评价';
+      if(team.admission_status==3) status='未通过';
+
 
       return {
         ...team,
         team_name: team["schoolteam.team_name"],
         activity_name: team["activity.activity_name"],
         school_name: schoolName,
+        status: status,
         // 删除原始的字段名
         // 如果还有其他字段需要删除，也可以在这里添加
         // 这样返回的对象中将只包含你想要的字段名
