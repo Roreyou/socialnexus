@@ -454,14 +454,25 @@ class teamService {
       whereCondition_commu.community_id = commu_id;
     }
     if (status != 0) {
-      if (status == 4 || status == 5) {
-        whereCondition_status.comment_status = status - 3
+      // 待评价和已评价
+      if (status == 5) {
+        whereCondition_status.comment_status = 2
+      }
+      if (status == 4) {
+        whereCondition_status.admission_status = 2
+        whereCondition_status.comment_status = 1
+      }
+      // 待录取和已录取
+      if (status == 1 ) {
+        whereCondition_status.admission_status = 1
+      }
+      if (status == 2 ) {
         whereCondition_status.admission_status = 2
       }
-      if (status == 1 || status == 2 || status == 3) {
-        whereCondition_status.admission_status = status
+      if (status == 3 ) {
+        whereCondition_status.admission_status = 3
       }
-    }
+        }
 
 
     const activities = await db.activity.findAll({
@@ -523,18 +534,6 @@ class teamService {
     console.log(teams)
 
     let teamsToReturn
-    // teamsToReturn = teams.map(team => ({
-    //   ...team,
-    //   veri_status: team.verification_status === 4 ? '未审核' : '已审核', // 根据 verification_status 设置 veri_status
-    //   leader_name: team["teammember.leader_name"], // 将 "teammember.leader_name" 改为 "leader_name"
-    //   instructor_name: team["teacher.instructor_name"],
-    //   // 删除原始的字段名
-    //   // 如果还有其他字段需要删除，也可以在这里添加
-    //   // 这样返回的对象中将只包含你想要的字段名
-    //   'teammember.leader_name': undefined,
-    //   'teacher.instructor_name': undefined,
-    // }));
-    // // 根据 status 设置不同的状态值
     teamsToReturn = await Promise.all(teams.map(async team => {
       const school = await db.school.findOne({ where: { id: team.school_id } });
       const schoolName = school ? school.name : null;
@@ -590,7 +589,7 @@ class teamService {
   }
 
   static async getTeamActByCommu(commu_id, status) {
-    const teams_by_commu = await this.getTeamByCommu(commu_id, status);
+    const teams_by_commu = await this.getTeamByCommu(commu_id, 0);
     // console.log(teams_by_commu)
 
     let idList = [];
@@ -629,7 +628,7 @@ class teamService {
       raw: true // 返回原始 JSON 对象
     });
 
-    // console.log(teamActivities)
+    console.log(teamActivities)
     const teamsToReturn = await Promise.all(teamActivities.map(async team => {
       // 获取学校名称
       const school = await db.school.findOne({ where: { id: team['schoolteam.school_id'] } });
@@ -655,8 +654,17 @@ class teamService {
         'school.school_id': undefined
       };
     }));
-
-    return teamsToReturn;
+    let s;
+    if(status==1) s='待录取';
+    if(status==4) s='待评价';
+    if(status==5) s='已评价';
+    if(status==3) s='未通过';
+    if(status==0) return teamsToReturn;
+    const filtered = teamsToReturn.filter(team => {
+      return team.status ==s;
+    });
+  
+    return filtered;
   }
 
   static async queryTeamActByName(commu_id, team_name) {
