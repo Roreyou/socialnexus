@@ -373,7 +373,7 @@ class teamController {
         const activList = await activityService.searchMyActiv(team_id, activity_name);
 
         // 返回成功响应
-        return res.json(Result.success(activList));
+        return res.json(Result.success({activ_list:activList}));
       } else {
         return res.json(Result.fail("Can not find the team!"));
       }
