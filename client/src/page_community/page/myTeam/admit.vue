@@ -159,7 +159,7 @@ export default {
         // token: this.$userinfo.token
       },
       success: (res) => {
-        this.detail.team = res.data.data;
+        this.detail.team = res.data.data.team_info;
         this.net_error = false;
       },
       fail: (res) => {
