@@ -39,7 +39,7 @@
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id'])
+			...mapState(['hasLogin', 'forcedLogin','user_id', 'userInfo'])
 		},
 		onLoad() {
 			uni.request({
@@ -90,6 +90,11 @@
 		},
 		methods: {
 			cancelFavorite(likeid){
+				if(!this.userInfo.isleader){
+					this.$u.toast(`只有队长能收藏活动和取消收藏！`);
+					return;
+				}
+
 				this.click_but = true
 				uni.showModal({
     			    title: '确认取消收藏',
