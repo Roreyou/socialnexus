@@ -90,10 +90,23 @@
 		},
 		methods: {
 			cancelFavorite(likeid){
-				if(!this.userInfo.isleader){
-					this.$u.toast(`只有队长能收藏活动和取消收藏！`);
-					return;
-				}
+				if(!this.userInfo.isUser){
+			 		const _this = this;
+			 		uni.showModal({
+			 		        title: '',
+			 		        content: '目前为游客模式，请登录后操作。是否前去登录？',
+			 		        success: function(res) {
+			 		        if (res.confirm) {
+			 		            // 用户点击了确定
+			 		            uni.reLaunch({
+			 		                url: '/pages/login/login'
+			 		            })
+			 		        } else if (res.cancel) {
+			 		            return;
+			 		        }
+			 		        }
+			 		    });
+			 	}
 
 				this.click_but = true
 				uni.showModal({
