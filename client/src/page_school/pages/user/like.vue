@@ -39,7 +39,7 @@
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin','user_id'])
+			...mapState(['hasLogin', 'forcedLogin','user_id', 'userInfo'])
 		},
 		onLoad() {
 			uni.request({
@@ -90,6 +90,24 @@
 		},
 		methods: {
 			cancelFavorite(likeid){
+				if(!this.userInfo.isUser){
+			 		const _this = this;
+			 		uni.showModal({
+			 		        title: '',
+			 		        content: '目前为游客模式，请登录后操作。是否前去登录？',
+			 		        success: function(res) {
+			 		        if (res.confirm) {
+			 		            // 用户点击了确定
+			 		            uni.reLaunch({
+			 		                url: '/pages/login/login'
+			 		            })
+			 		        } else if (res.cancel) {
+			 		            return;
+			 		        }
+			 		        }
+			 		    });
+			 	}
+
 				this.click_but = true
 				uni.showModal({
     			    title: '确认取消收藏',
